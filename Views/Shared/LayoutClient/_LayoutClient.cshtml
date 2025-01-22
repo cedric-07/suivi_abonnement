@@ -1,0 +1,240 @@
+@model suivi_abonnement.Models.AbonnementViewModel
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <title>@ViewData["Title"]</title>
+  <meta name="description" content="">
+  <meta name="keywords" content="">
+
+  <!-- Favicons -->
+  <link href="../assets/img/logo_omnis.png" rel="icon">
+  <link href="../assetsUser/img/apple-touch-icon.png" rel="apple-touch-icon">
+
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com" rel="preconnect">
+  <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&family=Montserrat:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+
+  <!-- Vendor CSS Files -->
+  <link href="../assetsUser/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link href="../assetsUser/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+  <link href="../assetsUser/vendor/aos/aos.css" rel="stylesheet">
+  <link href="../assetsUser/vendor/glightbox/css/glightbox.min.css" rel="stylesheet">
+  <link href="../assetsUser/vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
+
+  <!-- Main CSS File -->
+  <link href="../assetsUser/css/main.css" rel="stylesheet">
+
+  <!-- =======================================================
+  * Template Name: Impact
+  * Template URL: https://bootstrapmade.com/impact-bootstrap-business-website-template/
+  * Updated: Aug 07 2024 with Bootstrap v5.3.3
+  * Author: BootstrapMade.com
+  * License: https://bootstrapmade.com/license/
+  ======================================================== -->
+  <style>
+    .blog-page{
+      font-family: Montserrat ,sans-serif !important;
+      background-color: #0d2d5a !important;
+    }
+    .navbar-brand-img{
+      width:  150px;
+      height: 800px;
+    }
+    .header{
+      background: linear-gradient(to left, #0d2d5a, #424abd) !important;
+    }
+    #navmenu {
+        background-color: #0d2d5a; /* Couleur de fond */
+        padding: 10px;
+    }
+
+    #navmenu ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        display: flex;
+        align-items: center;
+    }
+
+    #navmenu ul li {
+        margin-right: 20px;
+    }
+
+    #navmenu ul li a {
+        text-decoration: none;
+        color: #fff;
+        font-size: 16px;
+        position: relative;
+    }
+
+    #navmenu ul li a.notification .badge {
+        background-color: red;
+        color: white;
+        padding: 3px 7px;
+        border-radius: 50%;
+        position: absolute;
+        top: -5px;
+        right: -10px;
+        font-size: 12px;
+    }
+
+    #navmenu ul li a.logout {
+        color: #f44336; /* Rouge pour déconnexion */
+        font-weight: bold;
+    }
+
+    #navmenu ul li a:hover {
+        color: #00bcd4; /* Couleur d'effet de survol */
+    }
+
+  </style>
+</head>
+
+<body class="blog-page">
+
+  <header id="header" class="header fixed-top">
+    <div class="branding d-flex align-items-cente">
+      <div class="container position-relative d-flex align-items-center justify-content-between">
+        <a href="index.html" class="logo d-flex align-items-center">
+          <!-- Uncomment the line below if you also wish to use an image logo -->
+          <!-- <img src="../assetsUser/img/logo.png" alt=""> -->
+          <h1 class="sitename">
+                <img src="../assets/img/logo_omnis.png" class="navbar-brand-img " alt="main_logo">
+          </h1>
+        </a>
+
+        <nav id="navmenu" class="navmenu">
+          <ul>
+            <li><a href="@Url.Action("Index", "Home")">Accueil</a></li>
+            <li class="dropdown"><a href="@Url.Action("IndexPage", "Home")"><span>Liste Abonnement</span></a></li>
+            <li><a href="@Url.Action("ContactPage" , "Home")">Contact</a></li>
+            <li class="dropdown">
+              <a href="#" class="notification">
+                <span>Notifications</span>
+                <span class="badge">3</span> <!-- Badge de notification -->
+              </a>
+            </li>
+            <li><a href="#logoutModal" data-bs-toggle="modal" class="logout">Déconnexion</a></li>
+          </ul>
+          <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
+        </nav><!-- .nav-menu -->
+
+
+      </div>
+
+    </div>
+
+  </header>
+
+  <main class="main">
+      @RenderBody()
+      @RenderSection("scripts", required: false)
+  </main>
+
+  <!--Modal de déconnexion-->
+  <div class="modal fade" id="logoutModal" tabindex="-1" aria-labelledby="logoutModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="logoutModalLabel">Confirmation de Déconnexion</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          Êtes-vous sûr de vouloir vous déconnecter?
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+          <a href="@Url.Action("Logout", "AuthCLient")" class="btn btn-danger">Déconnexion</a>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!--End Modal de déconnexion-->
+
+  <footer id="footer" class="footer accent-background">
+
+    <div class="container footer-top">
+      <div class="row gy-4">
+        <div class="col-lg-5 col-md-12 footer-about">
+          <a href="index.html" class="logo d-flex align-items-center">
+            <span class="sitename">OMNIS</span>
+          </a>
+          <p>OMNIS est un fournisseur leader dans la gestion d'abonnements, offrant des solutions adaptées pour un suivi efficace et performant de vos services stratégiques.</p>
+          <div class="social-links d-flex mt-4">
+            <a href="https://twitter.com/OMNIS"><i class="bi bi-twitter"></i></a>
+            <a href="https://www.facebook.com/OmnisMadagascar"><i class="bi bi-facebook"></i></a>
+            <a href="https://instagram.com/OMNIS"><i class="bi bi-instagram"></i></a>
+            <a href="https://linkedin.com/company/OMNIS"><i class="bi bi-linkedin"></i></a>
+          </div>
+        </div>
+
+        <div class="col-lg-2 col-6 footer-links">
+          <h4>Liens Utiles</h4>
+          <ul>
+            <li><a href="#">Accueil</a></li>
+            <li><a href="#">À propos</a></li>
+            <li><a href="#">Services</a></li>
+            <li><a href="#">Conditions d'utilisation</a></li>
+            <li><a href="#">Politique de confidentialité</a></li>
+          </ul>
+        </div>
+
+        <div class="col-lg-2 col-6 footer-links">
+          <h4>Nos Services</h4>
+          <ul>
+            <li><a href="#">Suivi d'abonnement</a></li>
+            <li><a href="#">Analyse de données</a></li>
+            <li><a href="#">Gestion de projet</a></li>
+            <li><a href="#">Support client</a></li>
+            <li><a href="#">Consulting</a></li>
+          </ul>
+        </div>
+
+        <div class="col-lg-3 col-md-12 footer-contact text-center text-md-start">
+          <h4>Contactez-nous</h4>
+          <p>123 Rue des Mines</p>
+          <p>Antananarivo, 101</p>
+          <p>Madagascar</p>
+          <p class="mt-4"><strong>Téléphone :</strong> <span>+261 34 12 345 67</span></p>
+          <p><strong>Email :</strong> <span>contact@omnis.mg</span></p>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="container copyright text-center mt-4">
+      <p>© <span>Copyright</span> <strong class="px-1 sitename">OMNIS</strong> <span>Tous droits réservés</span></p>
+      <div class="credits">
+        Conçu par <a href="https://bootstrapmade.com/">BootstrapMade</a>
+      </div>
+    </div>
+
+  </footer>
+
+
+  <!-- Scroll Top -->
+  <a href="#" id="scroll-top" class="scroll-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+
+  <!-- Preloader -->
+  <div id="preloader"></div>
+
+  <!-- Vendor JS Files -->
+  <script src="../assetsUser/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script src="../assetsUser/vendor/php-email-form/validate.js"></script>
+  <script src="../assetsUser/vendor/aos/aos.js"></script>
+  <script src="../assetsUser/vendor/glightbox/js/glightbox.min.js"></script>
+  <script src="../assetsUser/vendor/swiper/swiper-bundle.min.js"></script>
+  <script src="../assetsUser/vendor/purecounter/purecounter_vanilla.js"></script>
+  <script src="../assetsUser/vendor/imagesloaded/imagesloaded.pkgd.min.js"></script>
+  <script src="../assetsUser/vendor/isotope-layout/isotope.pkgd.min.js"></script>
+
+  <!-- Main JS File -->
+  <script src="../assetsUser/js/main.js"></script>
+
+</body>
+
+</html>

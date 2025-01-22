@@ -1,0 +1,480 @@
+﻿@{
+    ViewData["Title"] = "Acceuil";
+    Layout = "~/Views/Shared/LayoutClient/_LayoutClient.cshtml";
+}
+<body class="index-page">
+  <main class="main">
+    <!-- Hero Section -->
+          <!-- Page Title -->
+    <div class="page-title">
+      <div class="heading">
+        <div class="container">
+          <div class="row d-flex justify-content-center text-center">
+            <div class="col-lg-8">
+              <h1>Acceuil</h1>
+                    <p class="lead">Nous sommes ravis de vous accueillir. Explorez nos fonctionnalités et découvrez nos services.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div><!-- End Page Title -->
+
+    <!-- About Section -->
+    <section id="about" class="about section">
+
+        <!-- Section Title -->
+        <div class="container section-title" data-aos="fade-up">
+            <h2>À Propos de Nous</h2>
+            <p>OMNIS, leader dans la gestion des abonnements pour les fournisseurs, vous accompagne avec des solutions innovantes et adaptées à vos besoins.</p>
+        </div><!-- End Section Title -->
+
+        <div class="container">
+
+            <div class="row gy-4">
+            <div class="col-lg-6" data-aos="fade-up" data-aos-delay="100">
+                <h3>Gestion efficace et simplifiée de vos abonnements</h3>
+                <img src="../assetsUser/img/about.jpg" class="img-fluid rounded-4 mb-4" alt="Gestion des abonnements">
+                <p>Chez OMNIS, nous facilitons la gestion de vos abonnements en vous offrant une plateforme intuitive et performante. Suivez vos abonnements, gérez vos clients et accédez à des analyses détaillées pour prendre des décisions éclairées.</p>
+                <p>Notre solution vous permet de rester concentré sur l'essentiel en automatisant les tâches récurrentes. Améliorez votre productivité et réduisez les erreurs avec nos outils de gestion avancés.</p>
+            </div>
+            <div class="col-lg-6" data-aos="fade-up" data-aos-delay="250">
+                <div class="content ps-0 ps-lg-5">
+                <p class="fst-italic">
+                    OMNIS est dédiée à offrir une expérience utilisateur fluide et une gestion efficace des ressources stratégiques pour le Ministère des Mines et des Ressources Stratégiques.
+                </p>
+                <ul>
+                    <li><i class="bi bi-check-circle-fill"></i> <span>Suivi en temps réel des abonnements.</span></li>
+                    <li><i class="bi bi-check-circle-fill"></i> <span>Gestion centralisée des clients et des fournisseurs.</span></li>
+                    <li><i class="bi bi-check-circle-fill"></i> <span>Accès à des rapports détaillés pour une meilleure prise de décision.</span></li>
+                </ul>
+                <p>
+                    Découvrez comment OMNIS peut transformer la gestion de vos abonnements et vous aider à atteindre vos objectifs stratégiques.
+                </p>
+
+                <div class="position-relative mt-4">
+                    <img src="../assetsUser/img/about-2.jpg" class="img-fluid rounded-4" alt="Vidéo OMNIS">
+                    <a href="https://www.youtube.com/watch?v=Y7f98aduVJ8" class="glightbox pulsating-play-btn"></a>
+                </div>
+                </div>
+            </div>
+            </div>
+
+        </div>
+
+    </section><!-- /About Section -->
+
+
+    <!-- Clients Section -->
+    <section id="clients" class="clients section">
+
+      <div class="container">
+
+        <div class="swiper init-swiper">
+          <script type="application/json" class="swiper-config">
+            {
+              "loop": true,
+              "speed": 600,
+              "autoplay": {
+                "delay": 5000
+              },
+              "slidesPerView": "auto",
+              "pagination": {
+                "el": ".swiper-pagination",
+                "type": "bullets",
+                "clickable": true
+              },
+              "breakpoints": {
+                "320": {
+                  "slidesPerView": 2,
+                  "spaceBetween": 40
+                },
+                "480": {
+                  "slidesPerView": 3,
+                  "spaceBetween": 60
+                },
+                "640": {
+                  "slidesPerView": 4,
+                  "spaceBetween": 80
+                },
+                "992": {
+                  "slidesPerView": 6,
+                  "spaceBetween": 120
+                }
+              }
+            }
+          </script>
+          <div class="swiper-wrapper align-items-center">
+            <div class="swiper-slide"><img src="../assetsUser/img/clients/client-1.png" class="img-fluid" alt=""></div>
+            <div class="swiper-slide"><img src="../assetsUser/img/clients/client-2.png" class="img-fluid" alt=""></div>
+            <div class="swiper-slide"><img src="../assetsUser/img/clients/client-3.png" class="img-fluid" alt=""></div>
+            <div class="swiper-slide"><img src="../assetsUser/img/clients/client-4.png" class="img-fluid" alt=""></div>
+            <div class="swiper-slide"><img src="../assetsUser/img/clients/client-5.png" class="img-fluid" alt=""></div>
+            <div class="swiper-slide"><img src="../assetsUser/img/clients/client-6.png" class="img-fluid" alt=""></div>
+            <div class="swiper-slide"><img src="../assetsUser/img/clients/client-7.png" class="img-fluid" alt=""></div>
+            <div class="swiper-slide"><img src="../assetsUser/img/clients/client-8.png" class="img-fluid" alt=""></div>
+          </div>
+        </div>
+
+      </div>
+
+    </section><!-- /Clients Section -->
+
+    <!-- Stats Section -->
+    <section id="stats" class="stats section">
+
+      <div class="container" data-aos="fade-up" data-aos-delay="100">
+
+        <div class="row gy-4 align-items-center">
+
+          <div class="col-lg-5">
+            <img src="../assetsUser/img/stats-img.svg" alt="" class="img-fluid">
+          </div>
+
+          <div class="col-lg-7">
+
+            <div class="row gy-4">
+
+              <div class="col-lg-6">
+                <div class="stats-item d-flex">
+                  <i class="bi bi-emoji-smile flex-shrink-0"></i>
+                  <div>
+                    <span data-purecounter-start="0" data-purecounter-end="232" data-purecounter-duration="1" class="purecounter"></span>
+                    <p><strong>Happy Clients</strong> <span>consequuntur quae</span></p>
+                  </div>
+                </div>
+              </div><!-- End Stats Item -->
+
+              <div class="col-lg-6">
+                <div class="stats-item d-flex">
+                  <i class="bi bi-journal-richtext flex-shrink-0"></i>
+                  <div>
+                    <span data-purecounter-start="0" data-purecounter-end="521" data-purecounter-duration="1" class="purecounter"></span>
+                    <p><strong>Projects</strong> <span>adipisci atque cum quia aut</span></p>
+                  </div>
+                </div>
+              </div><!-- End Stats Item -->
+
+              <div class="col-lg-6">
+                <div class="stats-item d-flex">
+                  <i class="bi bi-headset flex-shrink-0"></i>
+                  <div>
+                    <span data-purecounter-start="0" data-purecounter-end="1453" data-purecounter-duration="1" class="purecounter"></span>
+                    <p><strong>Hours Of Support</strong> <span>aut commodi quaerat</span></p>
+                  </div>
+                </div>
+              </div><!-- End Stats Item -->
+
+              <div class="col-lg-6">
+                <div class="stats-item d-flex">
+                  <i class="bi bi-people flex-shrink-0"></i>
+                  <div>
+                    <span data-purecounter-start="0" data-purecounter-end="32" data-purecounter-duration="1" class="purecounter"></span>
+                    <p><strong>Hard Workers</strong> <span>rerum asperiores dolor</span></p>
+                  </div>
+                </div>
+              </div><!-- End Stats Item -->
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </section><!-- /Stats Section -->
+
+    <!-- Call To Action Section -->
+    <section id="call-to-action" class="call-to-action section dark-background">
+        <div class="container">
+            <img src="../assetsUser/img/subscription-bg.jpg" alt="Background image for subscription">
+            <div class="content row justify-content-center" data-aos="zoom-in" data-aos-delay="100">
+            <div class="col-xl-10">
+                <div class="text-center">
+                <a href="https://www.youtube.com/watch?v=Y7f98aduVJ8" class="glightbox play-btn"></a>
+                <h3>Gestion des Abonnements</h3>
+                <p>Gérez facilement vos abonnements avec notre plateforme. Suivez vos souscriptions, recevez des rappels et optimisez votre expérience.</p>
+                <a class="cta-btn" href="#">Voir les Abonnements</a>
+                </div>
+            </div>
+            </div>
+        </div>
+    </section><!-- /Section Suivi Abonnement -->
+
+
+    <!-- Services Section -->
+    <section id="services" class="services section">
+
+        <!-- Section Title -->
+        <div class="container section-title" data-aos="fade-up">
+            <h2>Suivi d'Abonnement</h2>
+            <p>Gérez efficacement vos abonnements avec notre système de suivi personnalisé.</p>
+        </div><!-- End Section Title -->
+
+        <div class="container">
+
+            <div class="row gy-4">
+
+            <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="100">
+                <div class="service-item  position-relative">
+                <div class="icon">
+                    <i class="bi bi-card-checklist"></i>
+                </div>
+                <h3>Gestion des Abonnements</h3>
+                <p>Surveillez et gérez tous vos abonnements en un seul endroit, avec des mises à jour en temps réel.</p>
+                <a href="abonnement-details.html" class="readmore stretched-link">En savoir plus <i class="bi bi-arrow-right"></i></a>
+                </div>
+            </div><!-- End Service Item -->
+
+            <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="200">
+                <div class="service-item position-relative">
+                <div class="icon">
+                    <i class="bi bi-clock-history"></i>
+                </div>
+                <h3>Suivi des abonnements disponibles</h3>
+                <p>Restez informé de vos abonnements et ne manquez aucune date importante.</p>
+                <a href="paiements-details.html" class="readmore stretched-link">En savoir plus <i class="bi bi-arrow-right"></i></a>
+                </div>
+            </div><!-- End Service Item -->
+
+            <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="300">
+                <div class="service-item position-relative">
+                <div class="icon">
+                    <i class="bi bi-envelope-open"></i>
+                </div>
+                <h3>Notifications Personnalisées</h3>
+                <p>Recevez des notifications personnalisées sur vos abonnements pour ne jamais manquer une date importante.</p>
+                <a href="notifications-details.html" class="readmore stretched-link">En savoir plus <i class="bi bi-arrow-right"></i></a>
+                </div>
+            </div><!-- End Service Item -->
+
+            <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="400">
+                <div class="service-item position-relative">
+                <div class="icon">
+                    <i class="bi bi-shield-lock"></i>
+                </div>
+                <h3>Sécurité Avancée</h3>
+                <p>Protégez vos informations personnelles avec des mesures de sécurité avancées et un suivi rigoureux.</p>
+                <a href="securite-details.html" class="readmore stretched-link">En savoir plus <i class="bi bi-arrow-right"></i></a>
+                </div>
+            </div><!-- End Service Item -->
+
+            <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="500">
+                <div class="service-item position-relative">
+                <div class="icon">
+                    <i class="bi bi-bar-chart"></i>
+                </div>
+                <h3>Rapports Détaillés</h3>
+                <p>Générez des rapports détaillés sur l'utilisation de vos abonnements pour optimiser vos dépenses.</p>
+                <a href="rapports-details.html" class="readmore stretched-link">En savoir plus <i class="bi bi-arrow-right"></i></a>
+                </div>
+            </div><!-- End Service Item -->
+
+            <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="600">
+                <div class="service-item position-relative">
+                <div class="icon">
+                    <i class="bi bi-phone-vibrate"></i>
+                </div>
+                <h3>Support 24/7</h3>
+                <p>Bénéficiez d'un support client disponible 24/7 pour toutes vos questions et préoccupations.</p>
+                <a href="support-details.html" class="readmore stretched-link">En savoir plus <i class="bi bi-arrow-right"></i></a>
+                </div>
+            </div><!-- End Service Item -->
+
+            </div>
+
+        </div>
+
+    </section><!-- /Services Section -->
+
+
+    <!-- Testimonials Section -->
+    
+
+    <!-- Team Section -->
+    
+
+    <!-- Pricing Section -->
+    
+
+    <!-- Faq Section -->
+    <section id="faq" class="faq section">
+
+      <div class="container">
+
+        <div class="row gy-4">
+
+          <div class="col-lg-4" data-aos="fade-up" data-aos-delay="100">
+            <div class="content px-xl-5">
+              <h3><span>Informations de </span><strong>Suivi d'Abonnement</strong></h3>
+              <p>
+                Retrouvez ici toutes les réponses à vos questions concernant la gestion de vos abonnements, les services offerts, et bien plus encore. Nous sommes à votre écoute pour vous aider.
+              </p>
+            </div>
+          </div>
+
+          <div class="col-lg-8" data-aos="fade-up" data-aos-delay="200">
+
+            <div class="faq-container">
+              <div class="faq-item faq-active">
+                <h3><span class="num">1.</span> <span>Comment puis-je m'inscrire à un nouvel abonnement ?</span></h3>
+                <div class="faq-content">
+                  <p>Pour vous inscrire à un nouvel abonnement, accédez à la section "S'inscrire" de notre site, choisissez le plan qui vous convient, et suivez les instructions pour compléter l'inscription.</p>
+                </div>
+                <i class="faq-toggle bi bi-chevron-right"></i>
+              </div><!-- End Faq item-->
+
+              <div class="faq-item">
+                <h3><span class="num">2.</span> <span>Comment puis-je modifier ou annuler mon abonnement ?</span></h3>
+                <div class="faq-content">
+                  <p>Pour modifier ou annuler votre abonnement, rendez-vous dans votre compte, sélectionnez "Mes Abonnements", et suivez les options prévues pour la modification ou l'annulation.</p>
+                </div>
+                <i class="faq-toggle bi bi-chevron-right"></i>
+              </div><!-- End Faq item-->
+
+              <div class="faq-item">
+                <h3><span class="num">3.</span> <span>Quels sont les modes de paiement acceptés ?</span></h3>
+                <div class="faq-content">
+                  <p>Nous acceptons les paiements via carte bancaire, virement bancaire, et certains portefeuilles électroniques. Consultez notre page "Paiement" pour plus de détails.</p>
+                </div>
+                <i class="faq-toggle bi bi-chevron-right"></i>
+              </div><!-- End Faq item-->
+
+              <div class="faq-item">
+                <h3><span class="num">4.</span> <span>Comment puis-je consulter l'historique de mes abonnements ?</span></h3>
+                <div class="faq-content">
+                  <p>Accédez à votre compte, puis à la section "Historique des Abonnements" pour consulter tous les détails de vos abonnements passés et actuels.</p>
+                </div>
+                <i class="faq-toggle bi bi-chevron-right"></i>
+              </div><!-- End Faq item-->
+
+              <div class="faq-item">
+                <h3><span class="num">5.</span> <span>Qui contacter en cas de problème avec mon abonnement ?</span></h3>
+                <div class="faq-content">
+                  <p>Pour toute assistance, veuillez contacter notre service client via la section "Contact" sur notre site ou appelez-nous directement. Nous sommes là pour vous aider.</p>
+                </div>
+                <i class="faq-toggle bi bi-chevron-right"></i>
+              </div><!-- End Faq item-->
+
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+
+    </section><!-- /Faq Section -->
+
+
+    <!-- Recent Posts Section -->
+    
+
+    <!-- Contact Section -->
+    <section id="contact" class="contact section">
+
+      <!-- Section Title -->
+      <div class="container section-title" data-aos="fade-up">
+        <h2>Suivi Abonnement</h2>
+        <p>Pour toute question concernant votre abonnement, contactez-nous aux informations ci-dessous.</p>
+      </div><!-- End Section Title -->
+
+      <div class="container" data-aos="fade-up" data-aos-delay="100">
+
+        <div class="row gx-lg-0 gy-4">
+
+          <div class="col-lg-4">
+            <div class="info-container d-flex flex-column align-items-center justify-content-center">
+              <div class="info-item d-flex" data-aos="fade-up" data-aos-delay="200">
+                <i class="bi bi-geo-alt flex-shrink-0"></i>
+                <div>
+                  <h3>Adresse</h3>
+                  <p>Rue de tunnel Ambohijatovo, Antananarivo, Madagascar</p>
+                </div>
+              </div><!-- End Info Item -->
+
+              <div class="info-item d-flex" data-aos="fade-up" data-aos-delay="300">
+                <i class="bi bi-telephone flex-shrink-0"></i>
+                <div>
+                  <h3>Appelez-nous</h3>
+                  <p>+261 34 12 345 67</p>
+                </div>
+              </div><!-- End Info Item -->
+
+              <div class="info-item d-flex" data-aos="fade-up" data-aos-delay="400">
+                <i class="bi bi-envelope flex-shrink-0"></i>
+                <div>
+                  <h3>Email</h3>
+                  <p>support@omnis.mg</p>
+                </div>
+              </div><!-- End Info Item -->
+
+              <div class="info-item d-flex" data-aos="fade-up" data-aos-delay="500">
+                <i class="bi bi-clock flex-shrink-0"></i>
+                <div>
+                  <h3>Heures d'ouverture:</h3>
+                  <p>Lun-Sam: 8h00 - 16h00</p>
+                </div>
+              </div><!-- End Info Item -->
+
+            </div>
+
+          </div>
+
+          <div class="col-lg-8">
+            <form action="forms/contact.php" method="post" class="php-email-form" data-aos="fade" data-aos-delay="100">
+              <div class="row gy-4">
+
+                <div class="col-md-6">
+                  <input type="text" name="name" class="form-control" placeholder="Votre Nom" required="">
+                </div>
+
+                <div class="col-md-6 ">
+                  <input type="email" class="form-control" name="email" placeholder="Votre Email" required="">
+                </div>
+
+                <div class="col-md-12">
+                  <input type="text" class="form-control" name="subject" placeholder="Sujet" required="">
+                </div>
+
+                <div class="col-md-12">
+                  <textarea class="form-control" name="message" rows="8" placeholder="Message" required=""></textarea>
+                </div>
+
+              </div>
+            </form>
+          </div><!-- End Contact Form -->
+
+        </div>
+
+      </div>
+
+    </section><!-- /Contact Section -->
+
+  </main><!-- End #main -->
+  <!-- Scroll Top -->
+  <a href="#" id="scroll-top" class="scroll-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+
+  <!-- Preloader -->
+
+  <!-- Vendor JS Files -->
+  <script src="../assetsUser/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script src="../assetsUser/vendor/php-email-form/validate.js"></script>
+  <script src="../assetsUser/vendor/aos/aos.js"></script>
+  <script src="../assetsUser/vendor/glightbox/js/glightbox.min.js"></script>
+  <script src="../assetsUser/vendor/swiper/swiper-bundle.min.js"></script>
+  <script src="../assetsUser/vendor/purecounter/purecounter_vanilla.js"></script>
+  <script src="../assetsUser/vendor/imagesloaded/imagesloaded.pkgd.min.js"></script>
+  <script src="../assetsUser/vendor/isotope-layout/isotope.pkgd.min.js"></script>
+
+  <!-- Main JS File -->
+  <script src="../assetsUser/js/main.js"></script>
+    <style>
+    .page-title {
+      background: linear-gradient(to left, #0d2d5a, #424abd);
+      color: #fff;
+      padding: 50px 0;
+  }
+</style>
+</body>
+
+</html>

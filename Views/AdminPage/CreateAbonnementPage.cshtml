@@ -1,0 +1,247 @@
+﻿@model suivi_abonnement.Models.AbonnementViewModel
+
+@{
+    ViewData["Title"] = "Formulaire d'Abonnement";
+    Layout = "~/Views/Shared/Index.cshtml";
+}
+
+    <div class="modal fade" id="successModal" tabindex="-1" aria-labelledby="successModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header bg-success text-white">
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body text-center">
+                    <h4>Succés</h4>
+                    <i class="fas fa-check-circle fa-3x mb-3 " style="color: #3cb80b;"></i>
+                    <p style="color: #2c3e50;">@TempData["Message"]</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal pour le message d'erreur -->
+    <div class="modal fade" id="errorModal" tabindex="-1" aria-labelledby="errorModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header bg-danger text-white">
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body text-center">
+                <h4>Erreur</h4>
+                    <i class="fas fa-times-circle fa-3x mb-3" style="color: #e90e0e;"></i>
+                    <p style="color: #2c3e50;">@TempData["Error"]</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container-fluid mb-4">
+    <div class="row align-items-center">
+        <div class="col">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb bg-transparent mb-0">
+                    <li class="breadcrumb-item"><a href="#">Pages</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Formulaire d'abonnement</li>
+                </ol>
+                <h3 class="title ">Formulaire d'abonnement</h3>
+            </nav>
+        </div>
+    </div>
+
+    <!-- Bouton Liste des abonnements -->
+    <div class="col text-end">
+        <a href="@Url.Action("AbonnementPage", "Abonnements")" class="btn btn-animate text-uppercase" style="font-size: 15px;  gap: 8px;">
+            Liste des abonnements
+            <i class="fa fa-list" style="font-size: 1.5rem; color:#0d2d5a;"></i>
+        </a>
+    </div>
+
+    <!-- Formulaire encapsulé dans une carte -->
+    <div class="card shadow-lg ">
+        <div class="card-header text-white" style="background-color: #0d2d5a;">
+            <h5 class="title mb-0">Nouveau abonnement</h5>
+        </div>
+        <div class="card-body ">
+            <form method="post" asp-action="Create" class="needs-validation" novalidate>
+                <!-- Informations générales -->
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label for="nom" class="form-label fw-bold">Nom</label>
+                        <input type="text" class="form-control input-custom" id="nom" name="Nom" placeholder="Entrez le nom" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="description" class="form-label fw-bold">Description</label>
+                        <textarea class="form-control input-custom" id="description" name="Description" rows="2" placeholder="Entrez une description" required></textarea>
+                    </div>
+                </div>
+
+                <!-- Informations financières -->
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label for="prix" class="form-label fw-bold">Prix</label>
+                        <input type="number" class="form-control input-custom" id="prix" name="Prix" placeholder="0.00" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="typeAbonnement" class="form-label fw-bold">Type d'abonnement</label>
+                        <select class="form-select input-custom" id="typeAbonnement" name="Type" required>
+                            <option disabled selected hidden>--Choisir un type--</option>
+                            <option value="Annuel">Annuel</option>
+                            <option value="Mensuel">Mensuel</option>
+                            <option value="Semaine">Semaine</option>
+                            <option value="Jour">Jour</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Dates -->
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label for="dateDebut" class="form-label fw-bold">Date de début</label>
+                        <input type="datetime-local" class="form-control input-custom" id="dateDebut" name="DateDebut" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="expirationDate" class="form-label fw-bold">Date d'expiration</label>
+                        <input type="datetime-local" class="form-control input-custom" id="expirationDate" name="ExpirationDate" required>
+                    </div>
+                </div>
+
+                <!-- Fournisseur, Catégorie, Département -->
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label for="idfournisseur" class="form-label fw-bold">Fournisseur</label>
+                        <select class="form-select input-custom" id="idfournisseur" name="idfournisseur" required>
+                            <option disabled selected hidden>--Choisir un fournisseur--</option>
+                            @foreach (var fournisseur in Model.Fournisseurs)
+                            {
+                                <option value="@fournisseur.Id">@fournisseur.Nom</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="idcategorie" class="form-label fw-bold">Catégorie</label>
+                        <select class="form-select input-custom" id="idcategorie" name="idcategorie" required>
+                            <option disabled selected hidden>--Choisir une catégorie--</option>
+                            @foreach (var categorie in Model.Categories)
+                            {
+                                <option value="@categorie.Id">@categorie.Nom</option>
+                            }
+                        </select>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <label for="idDepartement" class="form-label fw-bold">Département</label>
+                        <select class="form-select input-custom" id="idDepartement" name="idDepartement" required>
+                            <option disabled selected hidden>--Choisir un département--</option>
+                            @foreach (var departement in Model.Departements)
+                            {
+                                <option value="@departement.Id">@departement.Nom</option>
+                            }
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Bouton d'enregistrement -->
+              <div class="text-start mt-4">
+                <button type="submit" class="btn text-uppercase fw-bold  " style="font-size: 10px; background-color: #3cb80b; color: white;">Enregistrer</button>
+            </div>
+
+            </form>
+        </div>
+
+    </div>
+</div>
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+
+<style>
+     .input-custom {
+        border: 2px solid #ced4da;
+        border-radius: 8px;
+        padding: 10px 12px;
+        font-size: 14px;
+        transition: border-color 0.3s, box-shadow 0.3s;
+    }
+
+    .input-custom:focus {
+        border-color: #0d6efd;
+        box-shadow: 0 0 5px rgba(13, 110, 253, 0.5);
+        outline: none;
+    }
+
+    .form-label {
+        color: #495057;
+        font-weight: 600;
+    }
+
+    textarea.input-custom {
+        resize: none; /* Empêche le redimensionnement */
+    }
+    /* Animation pour faire apparaître les sections avec un effet de fondu */
+    .fade-in {
+        opacity: 0;
+        transform: translateY(20px);
+        transition: opacity 1s, transform 1s;
+    }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+    .card-header{
+        background-color: #0d2d5a;
+    }
+    .card-header h5{
+        color: white;
+    }
+
+            .btn-animate {
+        position: relative;
+        overflow: hidden;
+        transition: transform 0.3s ease, color 0.3s ease;
+    }
+
+    .btn-animate:hover {
+        color: #0d2d5a;
+        transform: scale(1.05); /* Agrandit légèrement le bouton */
+    }
+
+    .btn-animate i {
+        transition: transform 0.3s ease, color 0.3s ease;
+    }
+
+    .btn-animate:hover i {
+        transform: translateX(5px); /* Fait glisser l'icône vers la droite */
+        color: #007bff; /* Change la couleur de l'icône */
+    }
+
+    .title{
+        font-weight: bold;
+        font-size: 1.1rem;
+    }
+</style>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Ajouter la classe "visible" à toutes les sections du formulaire lorsque la page est chargée
+        document.querySelectorAll('.fade-in').forEach(function (section) {
+            section.classList.add('visible');
+        });
+    });
+
+    document.addEventListener('DOMContentLoaded', function () {
+        if (@(TempData["Message"] != null ? "true" : "false")) {
+            var successModal = new bootstrap.Modal(document.getElementById('successModal'));
+            successModal.show();
+        }
+
+        if (@(TempData["Error"] != null ? "true" : "false")) {
+            var errorModal = new bootstrap.Modal(document.getElementById('errorModal'));
+            errorModal.show();
+        }
+    });
+</script>

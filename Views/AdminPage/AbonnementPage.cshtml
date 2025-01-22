@@ -1,0 +1,536 @@
+﻿@model suivi_abonnement.Models.AbonnementViewModel
+@{
+    ViewData["Title"] = "Liste des Abonnements";
+    Layout = "~/Views/Shared/Index.cshtml";
+}
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+
+<!-- Modal pour le message de succès -->
+<!-- Modal pour le message de succès -->
+<div class="modal fade" id="successModal" tabindex="-1" aria-labelledby="successModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content shadow border-0 rounded-4">
+            <div class="modal-body text-center py-5">
+                <div class="icon-container mb-4">
+                    <div class="icon-circle bg-light d-flex align-items-center justify-content-center mx-auto" style="width: 80px; height: 80px; border-radius: 50%;">
+                        <i class="bi bi-check-circle-fill" style="font-size: 40px; color: #28a745;"></i>
+                    </div>
+                </div>
+                <h4 class="text-success fw-bold">Succès</h4>
+                <p class="text-muted fs-6 mt-3">@TempData["Message"]</p>
+                <button type="button" class="btn btn-dark px-5 py-2 rounded-pill text-uppercase mt-4" data-bs-dismiss="modal">
+                    OK
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal pour le message d'erreur -->
+<div class="modal fade" id="errorModal" tabindex="-1" aria-labelledby="errorModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content shadow border-0 rounded-4">
+            <div class="modal-body text-center py-5">
+                <div class="icon-container mb-4">
+                    <div class="icon-circle bg-light d-flex align-items-center justify-content-center mx-auto" style="width: 80px; height: 80px; border-radius: 50%;">
+                        <i class="bi bi-x-circle-fill" style="font-size: 40px; color: #dc3545;"></i>
+                    </div>
+                </div>
+                <h4 class="text-danger fw-bold">Erreur</h4>
+                <p class="text-muted fs-6 mt-3">@TempData["Error"]</p>
+                <button type="button" class="btn btn-dark px-5 py-2 rounded-pill text-uppercase mt-4" data-bs-dismiss="modal">
+                    OK
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="container-fluid fade-in visible">
+    <div class="row align-items-center">
+        <div class="col">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb bg-transparent mb-0">
+                    <li class="breadcrumb-item"><a href="#">Pages</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Liste des abonnements</li>
+                </ol>
+                <h3 class="title">Liste des Abonnements</h3>
+            </nav>
+        </div>
+    </div>
+
+    <div class="row my-3">
+        <div class="col-md-4">
+            <form asp-action="AbonnementPage" method="get">
+                <div class="input-group">
+                    <span class="input-group-text"><i class="bi bi-search"></i></span>
+                    <input type="text" class="form-control" placeholder="Recherche..." name="keyword">
+                </div>
+            </form>
+        </div>
+
+        <div class="col-md-4">
+            <div class="dropdown">
+                <button class="btn dropdown-toggle text-uppercase fw-bold shadow-sm" 
+                        type="button" 
+                        id="filterDropdown" 
+                        data-bs-toggle="dropdown" 
+                        aria-expanded="false" 
+                        style="background-color: white; color: #0d2d5a; padding: 8px 15px; border: 1px solid #0d2d5a; border-radius: 50px; font-size: 14px;">
+                    <i class="bi bi-funnel" style="font-size: 1.2rem; margin-right: 8px; color: #0d2d5a;"></i> Filtrer
+                </button>
+                <ul class="dropdown-menu p-3 rounded border-0 shadow-lg" aria-labelledby="filterDropdown" style="width: 300px;">
+                    <form asp-action="AbonnementPage" method="get">
+                        <li class="mb-3">
+                            <label for="dateDebutFilter" class="form-label text-dark fw-bold" style="font-size: 13px;">Date de début</label>
+                            <input type="datetime-local" class="form-control form-control-sm rounded-pill shadow-sm" id="dateDebutFilter" name="DateDebut" style="font-size: 12px;">
+                        </li>
+                        <li class="mb-3">
+                            <label for="dateExpirationFilter" class="form-label text-dark fw-bold" style="font-size: 13px;">Date d'expiration</label>
+                            <input type="datetime-local" class="form-control form-control-sm rounded-pill shadow-sm" id="dateExpirationFilter" name="ExpirationDate" style="font-size: 12px;">
+                        </li>
+                        <li class="mb-3">
+                            <label for="categoryFilter" class="form-label text-dark fw-bold" style="font-size: 13px;">Catégorie</label>
+                            <select class="form-select form-select-sm rounded-pill shadow-sm" id="categoryFilter" name="idcategorie" style="font-size: 12px;">
+                                <option disabled selected>--Choisir une catégorie--</option>
+                                @foreach (var categorie in Model.Categories)
+                                {
+                                    <option value="@categorie.Id">@categorie.Nom</option>
+                                }
+                            </select>
+                        </li>
+                        <li class="mb-3">
+                            <label for="TypeFilter" class="form-label text-dark fw-bold" style="font-size: 13px;">Type</label>
+                            <select class="form-select form-select-sm rounded-pill shadow-sm" id="TypeFilter" name="type" style="font-size: 12px;">
+                                <option disabled selected>--Choisir une type--</option>
+                                @foreach (var abonnement in Model.Abonnements)
+                                {
+                                    <option value="@abonnement.Type">@abonnement.Type</option>
+                                }
+                            </select>
+                        </li>
+                        <li>
+                            <button type="submit" class="btn btn-outline-success w-100 rounded-pill text-uppercase fw-bold" style="font-size: 13px; padding: 8px;">Appliquer</button>
+                        </li>
+                    </form>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bouton pour ajouter un nouvel abonnement -->
+    <div class="col text-end">
+        <a href="@Url.Action("Create", "Abonnements")" class="btn btn-animate text-uppercase" style="font-size: 15px;gap: 8px;">
+            Nouvel Abonnement
+            <i class="fa fa-plus-circle" style="font-size: 1.5rem; color:#0d2d5a;"></i>
+        </a>
+    </div>
+
+
+    <div class="card">
+        <div class="card-header text-white" >
+            <h5 class="title-card">Liste des Abonnements</h5>
+        </div>
+        <div class="table-responsive">
+            <table class="table">
+                <thead >
+                    <tr>
+                        <th class="text-uppercase">Nom</th>
+                        <th class="text-uppercase">Prix (Ariary)</th>
+                        <th class="text-uppercase">Fournisseur</th>
+                        <th class="text-uppercase">Date début</th>
+                        <th class="text-uppercase">Date expiration</th>
+                        <th class="text-uppercase">Statut</th>
+                        <th class="text-uppercase">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var abonnement in Model.Abonnements)
+                    {
+                        <tr
+                            data_id="@abonnement.Id"
+                            data_nom="@abonnement.Nom"
+                            data_type="@abonnement.Type"
+                            data_prix="@abonnement.Prix"
+                            data_dateDebut="@abonnement.DateDebut"
+                            data_expirationDate="@abonnement.ExpirationDate"
+                            data_nomcategorie="@abonnement.NomCategorie"
+                            data_nomfournisseur="@abonnement.NomFournisseur"
+                            data_description="@abonnement.Description"
+                            data_datedebut="@abonnement.DateDebut"
+                            data_expirationdate="@abonnement.ExpirationDate"
+                            data_nomdepartement="@abonnement.NomDepartement">
+                            <td>@abonnement.Nom</td>
+                            <td>@abonnement.Prix.ToString("N2")</td>
+                            <td>@abonnement.NomFournisseur</td>
+                            <td>@abonnement.DateDebut.ToString("d MMM yyyy")</td>
+                            <td>@abonnement.ExpirationDate.ToString("d MMM yyyy")</td>
+                            <td>
+                                @if (abonnement.DateDebut > DateTime.Now)
+                                {
+                                    <span class="badge bg-warning">En attente</span>
+                                }
+                                else if (abonnement.ExpirationDate < DateTime.Now)
+                                {
+                                    <span class="badge bg-danger">Expiré</span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-success">Actif</span>
+                                }
+                            </td>
+                               <td>
+                                    <span class="action-icons">
+                                        <i class="fas fa-eye view" title="Voir les détails" data-bs-toggle="modal" data-bs-target="#modalView-@abonnement.Id"></i>
+                                        <i class="fas fa-edit edit" title="Modifier" data-bs-toggle="modal" data-bs-target="#modalEdit-@abonnement.Id"></i>
+                                        <i class="fas fa-trash delete" title="Supprimer" data-bs-toggle="modal" data-bs-target="#modalDelete-@abonnement.Id"></i>
+                                    </span>
+                                </td>
+                        </tr>
+                        <!--Modal pour modifier un abonnement-->
+                        <div class="modal fade" id="modalEdit-@abonnement.Id" tabindex="-1" aria-labelledby="editModalLabel-@abonnement.Id" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered modal-lg">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="editModalLabel-@abonnement.Id">Modifier l'abonnement</h5>
+                                    </div>
+                                    <div class="modal-body">
+                                        <form asp-action="Edit" method="post">
+                                            <input type="hidden" name="Id" value="@abonnement.Id" />
+
+                                            <!-- Section 1: Informations générales -->
+                                            <div class="row mb-3">
+                                                <div class="col-md-6">
+                                                    <label for="nom-@abonnement.Id" class="form-label">Nom</label>
+                                                    <input type="text" class="form-control" id="nom-@abonnement.Id" name="Nom" value="@abonnement.Nom" required>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <label for="type-@abonnement.Id" class="form-label">Type</label>
+                                                    <select name="Type" class="form-select" id="type-@abonnement.Id"  value="@abonnement.Type" required>
+                                                        <option value="Mensuel">Mensuel</option>
+                                                        <option value="Annuel">Annuel</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+
+                                            <!-- Section 2: Informations financières -->
+                                            <div class="row mb-3">
+                                                <div class="col-md-6">
+                                                    <label for="prix-@abonnement.Id" class="form-label">Prix</label>
+                                                    <input type="number" class="form-control" id="prix-@abonnement.Id" name="Prix" value="@abonnement.Prix" required>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <label for="description-@abonnement.Id" class="form-label">Description</label>
+                                                    <textarea class="form-control text-wrap" id="description-@abonnement.Id" name="Description" rows="3" required>@abonnement.Description</textarea>
+
+                                                </div>
+                                            </div>
+
+                                            <!-- Section 3: Dates -->
+                                            <div class="row mb-3">
+                                                <div class="col-md-6">
+                                                    <label for="expirationDate-@abonnement.Id" class="form-label">Date d'expiration</label>
+                                                    <input type="datetime-local" class="form-control" id="expirationDate-@abonnement.Id" name="ExpirationDate" value="@abonnement.ExpirationDate.ToString("yyyy-MM-ddTHH:mm")" required>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <label for="dateDebut-@abonnement.Id" class="form-label">Date de début</label>
+                                                    <input type="datetime-local" class="form-control" id="dateDebut-@abonnement.Id" name="DateDebut" value="@abonnement.DateDebut.ToString("yyyy-MM-ddTHH:mm")" required>
+                                                </div>
+                                            </div>
+                                            <!-- Section 4 : categorie , fournisseurs , departement-->
+
+                                            <div class="row mb-3">
+                                                <div class="col-md-6">
+                                                    <label for="categorie-@abonnement.Id" class="form-label">Catégorie</label>
+                                                    <select class="form-select" id="idcategorie-@abonnement.Id" name="idcategorie"  value="@abonnement.NomCategorie" required>
+                                                        <option disabled selected hidden>--Choisir une catégorie--</option>
+                                                        @foreach (var categorie in Model.Categories)
+                                                        {
+                                                            <option value="@categorie.Id">@categorie.Nom</option>
+                                                        }
+                                                    </select>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <label for="fournisseur-@abonnement.Id" class="form-label">Fournisseur</label>
+                                                    <select class="form-select" id="fournisseur-@abonnement.Id" name="idfournisseur" value="@abonnement.NomFournisseur" required>
+                                                        <option disabled selected hidden>--Choisir un fournisseur--</option>
+                                                        @foreach (var fournisseur in Model.Fournisseurs)
+                                                        {
+                                                            <option value="@fournisseur.Id">@fournisseur.Nom</option>
+                                                        }
+                                                    </select>
+                                                </div>
+                                                
+                                            </div>
+                                            <div class="row mb-3">
+                                                <div class="col-md-6">
+                                                    <label for="departement-@abonnement.Id" class="form-label">Département</label>
+                                                    <select class="form-select" id="departement-@abonnement.Id" name="idDepartement" value="@abonnement.NomDepartement" required>
+                                                        <option disabled selected hidden>--Choisir un département--</option>
+                                                        @foreach (var departement in Model.Departements)
+                                                        {
+                                                            <option value="@departement.Id">@departement.Nom</option>
+                                                        }
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="d-flex justify-content-start gap-3 mt-3">
+                                                <button type="submit" class="btn" style="background-color: #0b3d91; color: white; padding: 6px 15px; font-size: 13px; border-radius: 5px;">
+                                                    MODIFIER
+                                                </button>
+                                                <button type="button" class="btn" data-bs-dismiss="modal" style="background-color: #4e70ac; color: white; padding: 6px 15px; font-size: 13px; border-radius: 5px;">
+                                                    ANNULER
+                                                </button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Modal pour la suppression d'un abonnement -->
+                        <div class="modal fade" id="modalDelete-@abonnement.Id" tabindex="-1" aria-labelledby="deleteModalLabel-@abonnement.Id" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered">
+                                <div class="modal-content">
+                                    <div class="modal-header  text-white" style="background-color: #0d2d5a;">
+                                        <h5 class="modal-title" id="deleteModalLabel-@abonnement.Id">Confirmation de suppression</h5>
+                                    </div>
+                                    <div class="modal-body">
+                                            <p>Êtes-vous sûr de vouloir supprimer <strong class="text-danger">@abonnement.Nom</strong>?</p>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn" data-bs-dismiss="modal" style="background-color: #3263a8; color: white;">NON</button>
+                                        <form asp-action="Delete" method="post">
+                                            <input type="hidden" name="Id" value="@abonnement.Id" />
+                                            <button type="submit" class="btn " style="background-color: #0d2d5a; color: white;">OUI</button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Modal pour afficher les détails de l'abonnement sous forme de carte -->
+                        <div class="modal fade" id="modalView-@abonnement.Id" tabindex="-1" aria-labelledby="viewModalLabel-@abonnement.Id" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered modal-lg">
+                                <div class="modal-content">
+                                    <!-- En-tête -->
+                                    <div class="modal-header text-white">
+                                        <h5 class="modal-title" id="viewModalLabel-@abonnement.Id">
+                                            <i class="fas fa-info-circle me-2"></i> Détails de l'abonnement
+                                        </h5>
+                                    </div>
+
+                                    <!-- Corps -->
+                                    <div class="modal-body">
+                                        <div class="card border-0 shadow-sm rounded-4">
+                                            <div class="card-body">
+                                                <!-- Section 1 : Informations générales -->
+                                                <h6 class="fw-bold text-uppercase mb-3" style="color: #0d2d5a;">Informations générales</h6>
+                                                <div class="row mb-3">
+                                                    <div class="col-md-6">
+                                                        <p><strong><i class="fas fa-user me-2"></i>Nom :</strong> @abonnement.Nom</p>
+                                                        <p><strong><i class="fas fa-id-card me-2"></i>Type :</strong> @abonnement.Type</p>
+                                                        <p><strong><i class="fas fa-dollar-sign me-2"></i>Prix :</strong> @abonnement.Prix.ToString("N2") Ariary</p>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <p><strong><i class="fas fa-calendar-alt me-2"></i>Date de début :</strong> @abonnement.DateDebut.ToString("d MMM yyyy")</p>
+                                                        <p><strong><i class="fas fa-hourglass-end me-2"></i>Date d'expiration :</strong> @abonnement.ExpirationDate.ToString("d MMM yyyy")</p>
+                                                        <p><strong><i class="fas fa-circle-notch me-2"></i>Statut :</strong>
+                                                            @if (abonnement.DateDebut > DateTime.Now)
+                                                            {
+                                                                <span class="badge bg-warning text-dark">En attente</span>
+                                                            }
+                                                            else if (abonnement.ExpirationDate < DateTime.Now)
+                                                            {
+                                                                <span class="badge bg-danger">Expiré</span>
+                                                            }
+                                                            else
+                                                            {
+                                                                <span class="badge bg-success">Actif</span>
+                                                            }
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                                <hr />
+
+                                                <!-- Section 2 : Informations supplémentaires -->
+                                                <h6 class="fw-bold text-uppercase mb-3" style="color: #0d2d5a;">Informations supplémentaires</h6>
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <p><strong><i class="fas fa-tags me-2"></i>Catégorie :</strong> @abonnement.NomCategorie</p>
+                                                        <p><strong><i class="fas fa-truck me-2"></i>Fournisseur :</strong> @abonnement.NomFournisseur</p>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <p><strong><i class="fas fa-building me-2"></i>Département :</strong> @abonnement.NomDepartement</p>
+                                                        <p><strong><i class="fas fa-info-circle me-2"></i>Description :</strong> @abonnement.Description</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Pied -->
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn  rounded-pill px-4" data-bs-dismiss="modal" style="background-color: #3263a8; color: white;">
+                                            <i class="fas fa-times me-2"></i>FERMER
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+                    }
+                    @if (Model.Abonnements.Count == 0)
+                    {
+                        <tr>
+                            <td colspan="7" class="text-center">Aucun abonnement trouvé</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="d-flex justify-content-center mt-4">
+        <nav>
+            <!-- Affichage du nombre total de pages -->
+            <p class="text-center mb-3" style="color: #0d2d5a;">
+                Pages @ViewBag.CurrentPage sur @ViewBag.TotalPages
+            </p>
+            <ul class="pagination" style="margin: 0; padding: 0; list-style: none;">
+                <!-- Bouton Précédent -->
+                <li class="page-item @(ViewBag.CurrentPage == 1 ? "disabled" : "")">
+                    <a class="page-link" style="border-radius: 0; padding: 10px 15px;" href="@Url.Action("AbonnementPage", new { pageNumber = Math.Max(1, ViewBag.CurrentPage - 1) })">&laquo;</a>
+                </li>
+                <!-- Pages dynamiques -->
+                @for (int i = 1; i <= ViewBag.TotalPages; i++)
+                {
+                    <li class="page-item @(i == ViewBag.CurrentPage ? "active" : "")">
+                        <a class="page-link" 
+                        style="border-radius: 0; padding: 10px 15px; border: 1px solid #0d2d5a; color: @(i == ViewBag.CurrentPage ? "white" : "#0d2d5a"); background-color: @(i == ViewBag.CurrentPage ? "#0d2d5a" : "transparent");">
+                            @i
+                        </a>
+                    </li>
+                }
+                <!-- Bouton Suivant -->
+                <li class="page-item @(ViewBag.CurrentPage == ViewBag.TotalPages ? "disabled" : "")">
+                    <a class="page-link" style="border-radius: 0; padding: 10px 15px;" href="@Url.Action("AbonnementPage", new { pageNumber = Math.Min(ViewBag.TotalPages, ViewBag.CurrentPage + 1) })">&raquo;</a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+
+
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        if (@(TempData["Message"] != null ? "true" : "false")) {
+            new bootstrap.Modal(document.getElementById('successModal')).show();
+        }
+
+        if (@(TempData["Error"] != null ? "true" : "false")) {
+            new bootstrap.Modal(document.getElementById('errorModal')).show();
+        }
+    });
+
+    
+</script>
+<style>
+    
+    .table th {
+        text-align: left;
+        color: rgba(0, 0, 0, 0.5);
+    }
+    .table td {
+        text-align: left; /* Alignement gauche pour les contenus */
+        color: #0d2d5a;
+        font-weight: bold;
+        font-size: small;
+    }
+    .card-header {
+        background-color: #0d2d5a;
+    }
+    .title-card {
+        color: white;
+    }
+    .action-icons i {
+        font-size: 1.1rem; /* Taille ajustée des icônes */
+        margin-right: 8px;
+        cursor: pointer;
+    }
+    .action-icons .edit {
+        color: #17a2b8; /* Couleur pour "modifier" */
+    }
+    .action-icons .delete {
+        color: #e3342f; /* Couleur pour "supprimer" */
+    }
+    .modal-header{
+        background-color: #0d2d5a;
+    }
+    .modal-header h5{
+        color: white;
+    }
+
+
+        .btn-animate {
+        position: relative;
+        overflow: hidden;
+        transition: transform 0.3s ease, color 0.3s ease;
+    }
+
+    .btn-animate:hover {
+        color: #0d2d5a;
+        transform: scale(1.05); /* Agrandit légèrement le bouton */
+    }
+
+    .btn-animate i {
+        transition: transform 0.3s ease, color 0.3s ease;
+    }
+
+    .btn-animate:hover i {
+        transform: translateX(5px); /* Fait glisser l'icône vers la droite */
+        color: #007bff; /* Change la couleur de l'icône */
+    }
+
+    .modal-content {
+        padding: 0;
+        border: none;
+        border-radius: 20px;
+    }
+
+    .icon-container .icon-circle {
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .modal-body h4 {
+        font-weight: bold;
+        font-size: 24px;
+    }
+
+    .modal-body p {
+        color: #6c757d; /* Gris clair pour le texte */
+        margin-top: 15px;
+        font-size: 16px;
+    }
+
+    .modal-body button {
+        font-weight: bold;
+        font-size: 14px;
+        letter-spacing: 1px;
+    }
+
+    .modal-header{
+        background-color: #0d2d5a;
+    }
+    .modal-header h5{
+        color: white;
+    }
+    .title{
+        font-weight: bold;
+        font-size: 1.1em;
+        color: #0d2d5a;
+    }
+</style>
+
+

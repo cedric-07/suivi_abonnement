@@ -1,0 +1,150 @@
+﻿@model suivi_abonnement.Models.User
+@{
+    ViewData["Title"] = "Connexion";
+    Layout = "~/Views/Shared/AuthentificationLayout/LayoutSignin.cshtml";
+}
+<section>
+    <div class="page-header min-vh-75">
+        <div class="container">
+            <div class="row">
+                <div class="col-xl-4 col-lg-5 col-md-6 d-flex flex-column mx-auto">
+                    <div class="card card-plain mt-8">
+                        <div class="card-header pb-0 text-left bg-transparent">
+                            <h3 class="font-weight-bolder" style="color: #0d2d5a;">Bienvenue</h3>
+                            <p class="mb-0">Connecter en tant que <strong style="color: red; font-weight: bold;">ADMINISTRATEUR</strong></p>
+                        </div>
+                        <div class="card-body">
+                            @if (TempData["Error"] != null)
+                            {
+                                <div class="text-danger text-center">
+                                    @TempData["Error"]
+                                </div>
+                            }
+                            @if (TempData["Message"] != null)
+                            {
+                                <div class="text-center" style="color: rgb(27, 170, 14);">
+                                    @TempData["Message"]
+                                </div>
+                            }
+                        </div>
+                        <div class="card-body">
+                            <form asp-action="Login" method="post">
+                                <label>Email</label>
+                                <div class="mb-3">
+                                    <input type="email" class="form-control" asp-for="Email" placeholder="Email" aria-label="Email" aria-describedby="email-addon">
+                                    <span asp-validation-for="Email" class="text-danger"></span>
+                                </div>
+                                <label>Mot de Passe</label>
+                                <div class="mb-3 position-relative">
+                                    <input type="password" class="form-control" asp-for="Password" placeholder="Mot de passe" aria-label="Password" aria-describedby="password-addon" id="passwordInput">
+                                    <i class="fas fa-eye position-absolute" id="togglePassword" style="right: 10px; top: 50%; transform: translateY(-50%); cursor: pointer;"></i>
+                                    <span asp-validation-for="Password" class="text-danger"></span>
+                                </div>
+                                <div class="text-center">
+                                    <button type="submit" class="btn w-100 mt-4 mb-0" style="color: azure; background-color: #0d2d5a;">SE CONNECTER</button>
+                                </div>
+                            </form>
+                            <!-- Lien pour mot de passe oublié -->
+                            <div class="text-center mt-3">
+                                <a href="#" data-bs-toggle="modal" data-bs-target="#resetPasswordModal" style="color: red;">Mot de passe oublié ?</a>
+                            </div>
+                        </div>
+                        @* <div class="card-footer text-center pt-0 px-lg-2 px-1">
+                            <p class="mb-4 text-sm mx-auto">
+                                Vous n'avez pas de compte?
+                                <a href="@Url.Action("Register", "Authentification")" class="font-weight-bold" style="color:#0d2d5a ;">S'inscrire</a>
+                            </p>
+                        </div> *@
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="oblique position-absolute top-0 h-100 d-md-block d-none me-n8">
+                        <div class="oblique-image bg-cover position-absolute fixed-top ms-auto h-100 z-index-0 ms-n6" style="background-image:url('../assets/img/curved-images/curved11-small.jpg')"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Modale pour réinitialisation de mot de passe -->
+<div class="modal fade" id="resetPasswordModal" tabindex="-1" aria-labelledby="resetPasswordModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header" style="Background-color: #0d2d5a;">
+                <h5 class="modal-title" id="resetPasswordModalLabel" style="color: white;">Réinitialiser votre mot de passe</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                @if (TempData["Message"] != null)
+                {
+                    <div class="alert alert-danger" style="color: white;" role="alert" id="errorAlert">
+                        @TempData["Message"]
+                    </div>
+                    <script>
+                        // Fermer l'alerte après 5 secondes
+                        setTimeout(function() {
+                            $('#errorAlert').fadeOut('slow');
+                        }, 5000);
+                    </script>
+                }
+                <form asp-action="ForgotPassword" method="post">
+                    <div class="mb-3">
+                        <label for="resetEmail" class="form-label">Entrez votre adresse e-mail</label>
+                        <input type="email" class="form-control" id="resetEmail" name="Email" placeholder="Email" required>
+                    </div>
+                    <div class="text-center">
+                        <button type="submit" class="btn w-100 mt-4 mb-0" style="color: azure; background-color: #0d2d5a;">Réinitialiser</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    document.getElementById('togglePassword').addEventListener('click', function (e) {
+        const passwordField = document.getElementById('passwordInput');
+        const icon = document.getElementById('togglePassword');
+
+        if (passwordField.type === "password") {
+            passwordField.type = "text";
+            icon.classList.remove('fa-eye');
+            icon.classList.add('fa-eye-slash');
+        } else {
+            passwordField.type = "password";
+            icon.classList.remove('fa-eye-slash');
+            icon.classList.add('fa-eye');
+        }
+    });
+
+
+    // Vérifiez si ShowModal est défini dans TempData et si c'est vrai, affichez le modal
+    @if (TempData["ShowModal"] != null && TempData["ShowModal"].ToString() == "true")
+    {
+        <text>
+            $(document).ready(function() {
+                // Ouvrir le modal
+                $('#resetPasswordModal').modal('show');
+
+                // Fermer le modal après 5 secondes (5000 millisecondes)
+                setTimeout(function() {
+                    $('#resetPasswordModal').modal('hide');
+                }, 5000);
+            });
+        </text>
+    }
+
+
+</script>
+
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
+
+

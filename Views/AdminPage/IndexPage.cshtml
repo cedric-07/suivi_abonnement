@@ -1,0 +1,251 @@
+﻿@model suivi_abonnement.Models.AbonnementStatViewModel
+@{
+    ViewData["Title"] = "Liste des Abonnements";
+    Layout = "~/Views/Shared/Index.cshtml";
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Premium</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        /* Style général pour les cartes */
+        .card {
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 6px 8px rgba(0, 0, 0, 0.12);
+        }
+
+        .card-title {
+            font-size: 1rem;
+            font-weight: bold;
+        }
+
+        .titre {
+            color: #2c3e50;
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+
+        .icon {
+            font-size: 1.5rem;
+            margin-right: 8px;
+        }
+
+        .icon-actif {
+            color: rgb(0, 0, 0);
+        }
+
+        .icon-expire {
+            color: rgb(0, 0, 0);
+        }
+
+        .icon-suspendu {
+            color: rgb(255, 255, 255);
+        }
+
+        /* Nouvelle disposition des sections avec box-shadow */
+        .section-container {
+            margin-bottom: 20px;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            background-color: #fff;
+        }
+
+        .chart-container {
+            display: flex;
+            justify-content: space-between;
+            gap: 15px;
+        }
+
+        canvas {
+            width: 100% !important;
+            height: auto !important;
+            max-width: 100%;
+            max-height: 350px;
+        }
+
+        .section-title {
+            margin-bottom: 10px;
+            font-size: 1rem;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+
+        /* Flexbox pour diviser la page en deux colonnes */
+        .main-section {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .left-section,
+        .right-section {
+            width: 48%;
+        }
+    </style>
+</head>
+<body class="g-sidenav-show bg-gray-100">
+    <div class="container-fluid mb-10">
+        <div class="col-12">
+            <nav class="navbar navbar-main navbar-expand-lg px-0 shadow-none border-radius-xl " id="navbarBlur" navbar-scroll="true">
+                <div class="container-fluid  d-flex">
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb bg-transparent mb-0 pb-0 pt-1 px-0 me-sm-6">
+                            <li class="breadcrumb-item text-sm"><a class="opacity-5 text-dark" href="javascript:;">Pages</a></li>
+                            <li class="breadcrumb-item text-sm text-dark active" aria-current="page">Tableau de bord</li>
+                        </ol>
+                        <h6 class="font-weight-bolder">Tableau de bord</h6>
+                    </nav>
+                </div>
+            </nav>
+
+            <!-- Section Top Cards -->
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="card mb-3 text-dark">
+                        <div class="card-body d-flex justify-content-between align-items-center">
+                            <div>
+                                <h5 class="card-title">Abonnements Actifs</h5>
+                                <p>@Model.Actifs</p>
+                            </div>
+                            <i class="fas fa-users icon icon-actif text-dark" style="font-size: 2rem;"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card mb-3 text-dark">
+                        <div class="card-body d-flex justify-content-between align-items-center">
+                            <div>
+                                <h5 class="card-title">Abonnements Expirés</h5>
+                                <p>@Model.Expirés</p>
+                            </div>
+                            <i class="fas fa-calendar-times icon icon-expire text-dark" style="font-size: 2rem;"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card mb-3 text-dark">
+                        <div class="card-body d-flex justify-content-between align-items-center">
+                            <div>
+                                <h5 class="card-title">Abonnements Suspendus</h5>
+                                <p>@Model.Suspendus</p>
+                            </div>
+                            <i class="fas fa-pause-circle icon icon-suspendu text-dark" style="font-size: 2rem;"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Section avec graphique revenues -->
+            <div class="main-section">
+                <!-- Section Gauche : Revenus Année -->
+                <div class="left-section">
+                    <div class="section-container">
+                        <div class="section-title">Revenus Année</div>
+                        <div class="chart-container">
+                            <canvas id="revenusAnneeChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Section Droite : Revenus Mensuel -->
+                <div class="right-section">
+                    <div class="section-container">
+                        <div class="section-title">Revenus Mensuel</div>
+                        <div class="chart-container">
+                            <canvas id="revenusMoisChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Revenus par Année
+        var revenusAnneeData = @Html.Raw(Json.Serialize(Model.RevenusAnnuels));
+        var labelsAnnee = revenusAnneeData.map(r => r.annee);
+        var dataRevenusAnnee = revenusAnneeData.map(r => r.revenus);
+
+        var ctx1 = document.getElementById('revenusAnneeChart').getContext('2d');
+        var revenusAnneeChart = new Chart(ctx1, {
+            type: 'doughnut',
+            data: {
+                labels: labelsAnnee,
+                datasets: [{
+                    label: 'Revenus Année',
+                    data: dataRevenusAnnee,
+                   backgroundColor: [
+                        'rgba(255, 99, 132, 1)',  // Couleur plus saturée pour le premier élément
+                        'rgba(54, 162, 235, 1)',  // Couleur plus saturée pour le second élément
+                        'rgba(55, 206, 86, 1)',   // Couleur plus saturée pour le troisième élément
+                        'rgba(75, 192, 192, 1)',  // Couleur plus saturée pour le quatrième élément
+                        'rgba(153, 102, 255, 1)', // Couleur plus saturée pour le cinquième élément
+                        'rgba(255, 159, 64, 1)'   // Couleur plus saturée pour le sixième élément
+                    ],
+                    borderColor: [
+                        'rgba(255, 99, 132, 1)',  // Bordure plus marquée pour le premier élément
+                        'rgba(54, 162, 235, 1)',  // Bordure plus marquée pour le second élément
+                        'rgba(55, 206, 86, 1)',   // Bordure plus marquée pour le troisième élément
+                        'rgba(75, 192, 192, 1)',  // Bordure plus marquée pour le quatrième élément
+                        'rgba(153, 102, 255, 1)', // Bordure plus marquée pour le cinquième élément
+                        'rgba(255, 159, 64, 1)'   // Bordure plus marquée pour le sixième élément
+                    ],
+                    borderWidth: 2 // Augmenter la largeur de la bordure pour un effet plus prononcé
+
+                }]
+            }
+        });
+
+        // Revenus par Mois
+        var revenusMoisData = @Html.Raw(Json.Serialize(Model.RevenusMensuels));
+        var labelsMois = revenusMoisData.map(r => {
+            var mois = r.mois;
+            var moisNom = ["Janvier", "Février", "Mars", "Avril", "Mai", "Juin", "Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre"];
+            return moisNom[mois - 1];
+        });
+        var dataRevenusMois = revenusMoisData.map(r => r.revenus);
+
+        var moisColors = [
+            'rgba(255, 99, 132, 1)',  // Rouge vif
+            'rgba(54, 162, 235, 1)',  // Bleu vif
+            'rgba(55, 206, 86, 1)',   // Vert vif
+            'rgba(75, 192, 192, 1)',  // Turquoise vif
+            'rgba(153, 102, 255, 1)', // Violet vif
+            'rgba(255, 159, 64, 1)',  // Orange vif
+            'rgba(255, 99, 132, 1)',  // Rouge vif (répétition pour d'autres segments)
+            'rgba(54, 162, 235, 1)',  // Bleu vif (répétition)
+            'rgba(255, 206, 86, 1)',  // Jaune vif
+            'rgba(75, 192, 192, 1)',  // Turquoise vif (répétition)
+            'rgba(153, 102, 255, 1)', // Violet vif (répétition)
+            'rgba(255, 159, 64, 1)'   // Orange vif (répétition)
+        ];
+
+
+        var ctx2 = document.getElementById('revenusMoisChart').getContext('2d');
+        var revenusMoisChart = new Chart(ctx2, {
+            type: 'doughnut',
+            data: {
+                labels: labelsMois,
+                datasets: [{
+                    label: 'Revenus Mensuel',
+                    data: dataRevenusMois,
+                    backgroundColor: moisColors,
+                    borderColor: moisColors,
+                    borderWidth: 1
+                }]
+            }
+        });
+    </script>
+</body>
+</html>

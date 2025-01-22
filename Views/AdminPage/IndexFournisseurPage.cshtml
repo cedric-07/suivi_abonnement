@@ -1,0 +1,245 @@
+@model IEnumerable<suivi_abonnement.Models.Fournisseur>
+@{
+    ViewData["Title"] = "Liste des Fournisseurs";
+    Layout = "~/Views/Shared/Index.cshtml";
+}
+<!-- Modal pour le message de succès -->
+<div class="modal fade" id="successModal" tabindex="-1" aria-labelledby="successModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content shadow border-0 rounded-4">
+            <div class="modal-body text-center py-5">
+                <div class="icon-container mb-4">
+                    <div class="icon-circle bg-light d-flex align-items-center justify-content-center mx-auto" style="width: 80px; height: 80px; border-radius: 50%;">
+                        <i class="bi bi-check-circle-fill" style="font-size: 40px; color: #28a745;"></i>
+                    </div>
+                </div>
+                <h4 class="text-success fw-bold">Succès</h4>
+                <p class="text-muted fs-6 mt-3">@TempData["Message"]</p>
+                <button type="button" class="btn btn-dark px-5 py-2 rounded-pill text-uppercase mt-4" data-bs-dismiss="modal">
+                    OK
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal pour le message d'erreur -->
+<div class="modal fade" id="errorModal" tabindex="-1" aria-labelledby="errorModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content shadow border-0 rounded-4">
+            <div class="modal-body text-center py-5">
+                <div class="icon-container mb-4">
+                    <div class="icon-circle bg-light d-flex align-items-center justify-content-center mx-auto" style="width: 80px; height: 80px; border-radius: 50%;">
+                        <i class="bi bi-x-circle-fill" style="font-size: 40px; color: #dc3545;"></i>
+                    </div>
+                </div>
+                <h4 class="text-danger fw-bold">Erreur</h4>
+                <p class="text-muted fs-6 mt-3">@TempData["Error"]</p>
+                <button type="button" class="btn btn-dark px-5 py-2 rounded-pill text-uppercase mt-4" data-bs-dismiss="modal">
+                    OK
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container-fluid  fade-in visible">
+    <!-- Navbar (fil d'ariane) -->
+    <div class="row align-items-start mb-4">
+        <div class="col">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb bg-transparent mb-0">
+                    <li class="breadcrumb-item"><a href="javascript:;">Pages</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Liste des fournisseurs</li>
+                </ol>
+            </nav>
+            <!-- Titre -->
+            <h3 class="title-header mb-2">Liste des fournisseurs</h3>
+            <!-- Bouton de retour placé sous le titre -->
+            
+        </div>
+    </div>
+
+    <!-- Titre de la page -->
+    <div class="col text-end">
+        <a href="@Url.Action("Create" , "fournisseurs")" class="btn btn-animate text-uppercase" style="font-size: 15px;  gap: 8px;">
+            Nouveau fournisseur
+            <i class="fa fa-plus-circle" style="font-size: 1.5rem; color:#0d2d5a;"></i>
+        </a>
+    </div>
+
+    <!-- Table des fournisseurs -->
+    <div class="card">
+        <div class="card-header text-white" >
+            <h5 class="title-card">Liste des fournisseurs</h5>
+        </div>
+        <div class="table-responsive">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th class="text-uppercase">Fournisseur</th>
+                        <th class="text-uppercase">Email</th>
+                        <th class="text-uppercase">Téléphone</th>
+                        <th class="text-uppercase">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var fournisseur in Model)
+                    {
+                        <tr>
+                            <td>@fournisseur.Nom</td>
+                            <td>@fournisseur.Email</td>
+                            <td>@fournisseur.Telephone</td>
+                            <td>
+                                    <span class="action-icons">
+                                        <i class="fas fa-eye view" title="Voir les détails" data-bs-toggle="modal" data-bs-target="#modalView-@fournisseur.Id"></i>
+                                        <i class="fas fa-edit edit" title="Modifier" data-bs-toggle="modal" data-bs-target="#modalEdit-@fournisseur.Id"></i>
+                                        <i class="fas fa-trash delete" title="Supprimer" data-bs-toggle="modal" data-bs-target="#modalDelete-@fournisseur.Id"></i>
+                                    </span>
+                                </td>
+                        </tr>
+                    }
+                    
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="d-flex justify-content-center mt-4">
+        <nav>
+            <!-- Affichage du nombre total de pages -->
+            <p class="text-center mb-3" style="color: #0d2d5a;">
+                Pages @ViewBag.CurrentPage sur @ViewBag.TotalPages
+            </p>
+            <ul class="pagination" style="margin: 0; padding: 0; list-style: none;">
+                <!-- Bouton Précédent -->
+                <li class="page-item @(ViewBag.CurrentPage == 1 ? "disabled" : "")">
+                    <a class="page-link" style="border-radius: 0; padding: 10px 15px;" href="@Url.Action("Index", new { pageNumber = Math.Max(1, ViewBag.CurrentPage - 1) })">&laquo;</a>
+                </li>
+                <!-- Pages dynamiques -->
+                @for (int i = 1; i <= ViewBag.TotalPages; i++)
+                {
+                    <li class="page-item @(i == ViewBag.CurrentPage ? "active" : "")">
+                        <a class="page-link" 
+                        style="border-radius: 0; padding: 10px 15px; border: 1px solid #0d2d5a; color: @(i == ViewBag.CurrentPage ? "white" : "#0d2d5a"); background-color: @(i == ViewBag.CurrentPage ? "#0d2d5a" : "transparent");">
+                            @i
+                        </a>
+                    </li>
+                }
+                <!-- Bouton Suivant -->
+                <li class="page-item @(ViewBag.CurrentPage == ViewBag.TotalPages ? "disabled" : "")">
+                    <a class="page-link" style="border-radius: 0; padding: 10px 15px;" href="@Url.Action("Index", new { pageNumber = Math.Min(ViewBag.TotalPages, ViewBag.CurrentPage + 1) })">&raquo;</a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+
+
+</div>
+
+<!-- Style CSS -->
+<style>
+    .table th {
+        text-align: left;
+        color: rgba(0, 0, 0, 0.5);
+    }
+    .table td {
+        text-align: left; /* Alignement gauche pour les contenus */
+        color: #0d2d5a;
+        font-weight: bold;
+        font-size: small;
+    }
+    
+    .card-header {
+        background-color: #0d2d5a;
+    }
+    .title-card {
+        color: white;
+    }
+    .action-icons i {
+        font-size: 1.1rem; /* Taille ajustée des icônes */
+        margin-right: 8px;
+        cursor: pointer;
+    }
+    .action-icons .edit {
+        color: #17a2b8; /* Couleur pour "modifier" */
+    }
+    .action-icons .delete {
+        color: #e3342f; /* Couleur pour "supprimer" */
+    }
+    .modal-header{
+        background-color: #0d2d5a;
+    }
+    .modal-header h5{
+        color: white;
+    }
+
+
+        .btn-animate {
+        position: relative;
+        overflow: hidden;
+        transition: transform 0.3s ease, color 0.3s ease;
+    }
+
+    .btn-animate:hover {
+        color: #0d2d5a;
+        transform: scale(1.05); /* Agrandit légèrement le bouton */
+    }
+
+    .btn-animate i {
+        transition: transform 0.3s ease, color 0.3s ease;
+    }
+
+    .btn-animate:hover i {
+        transform: translateX(5px); /* Fait glisser l'icône vers la droite */
+        color: #007bff; /* Change la couleur de l'icône */
+    }
+
+    .modal-content {
+        padding: 0;
+        border: none;
+        border-radius: 20px;
+    }
+
+    .icon-container .icon-circle {
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .modal-body h4 {
+        font-weight: bold;
+        font-size: 24px;
+    }
+
+    .modal-body p {
+        color: #6c757d; /* Gris clair pour le texte */
+        margin-top: 15px;
+        font-size: 16px;
+    }
+
+    .modal-body button {
+        font-weight: bold;
+        font-size: 14px;
+        letter-spacing: 1px;
+    }
+
+    .modal-header{
+        background-color: #0d2d5a;
+    }
+    .modal-header h5{
+        color: white;
+    }
+    .title{
+        font-weight: bold;
+        font-size: 1.1em;
+        color: #0d2d5a;
+    }
+.title-header{
+        font-size: 1.1em;
+        font-weight: bold;
+    }
+
+</style>
+
+<!-- Inclure FontAwesome pour les icônes -->
+<script src="https://kit.fontawesome.com/a076d05399.js"></script>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">

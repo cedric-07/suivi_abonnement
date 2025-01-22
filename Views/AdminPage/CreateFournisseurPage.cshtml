@@ -1,0 +1,164 @@
+@model suivi_abonnement.Models.Fournisseur
+@{
+    ViewData["Title"] = "Ajout d'un fournisseur";
+    Layout = "~/Views/Shared/Index.cshtml";
+}
+
+<div class="container-fluid  fade-in visible">
+    <!-- Navigation (fil d'ariane) -->
+    <div class="row align-items-start mb-4">
+        <div class="col">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb bg-transparent mb-0">
+                    <li class="breadcrumb-item"><a href="javascript:;">Pages</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Formulaire de fournisseur</li>
+                </ol>
+            </nav>
+            <!-- Titre -->
+            <h3 class="title-header mb-2">Formulaire de fournisseur</h3>
+            <!-- Bouton de retour placé sous le titre -->
+            <a href="@Url.Action("Index", "Fournisseurs")" class="btn  text-uppercase mt-2" style="font-size: 14px; margin-left: 91%; ; gap: 8px; background-color: #0d2d5a; color: white;">
+                <i class="fas fa-arrow-left" style="font-size: 1rem; color: white;"></i> Retour
+            </a>
+        </div>
+    </div>
+
+
+    <!-- Card pour le formulaire -->
+    <div class="card shadow-lg">
+        <div class="card-header text-white" style="background-color: #0d2d5a;">
+            <h5 class="title-card mb-0">Nouvel Fournisseur</h5>
+        </div>
+        <div class="card-body">
+            <form method="post" asp-action="Create" class="needs-validation" novalidate>
+                <!-- Informations générales -->
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label for="Nom" class="form-label fw-bold">Nom du Fournisseur</label>
+                        <input type="text" class="form-control input-custom" id="Nom" name="Nom" required />
+                    </div>
+                    <div class="col-md-6">
+                        <label for="Email" class="form-label fw-bold">Email</label>
+                        <input type="email" class="form-control input-custom" id="Email" name="Email" required />
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label for="Telephone" class="form-label fw-bold">Téléphone</label>
+                        <input type="tel" class="form-control input-custom" id="Telephone" name="Telephone" required />
+                    </div>
+                </div>
+
+                <!-- Boutons d'action -->
+                <div class="text-start mt-4">
+                    <button type="submit" class="btn text-uppercase fw-bold" style="font-size: 12px; background-color: #3cb80b; color: white;">Enregistrer</button>
+                    <button type="button" class="btn text-uppercase fw-bold" style="font-size: 12px; background-color: #0d2d5a; color: white;" data-bs-toggle="modal" data-bs-target="#categoryModal">
+                        <i class="fas fa-plus" style="color: white;"></i> Nouveau categorie
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Modal pour ajouter une catégorie -->
+<div class="modal fade" id="categoryModal" tabindex="-1" aria-labelledby="categoryModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header" style="background-color: #0d2d5a;">
+                <h5 class="modal-title" id="categoryModalLabel" style=" color: white;">Nouveau categorie</h5>
+            </div>
+            <div class="modal-body">
+                <form method="post" asp-action="Create" asp-controller="Categories" class="needs-validation" novalidate>
+                    <div class="mb-3">
+                        <label for="CategoryName" class="form-label">Nom de nouvau catégorie</label>
+                        <input type="text" class="form-control input-custom" id="CategoryName" name="Nom" required />
+                    </div>
+                    <div class="d-flex justify-content-start gap-3 mt-3">
+                        <button type="submit" class="btn" style="background-color: #0d2d5a; color: white; padding: 6px 15px; font-size: 13px; border-radius: 5px;">
+                            ENREGISTRER
+                        </button>
+                        <button type="button" class="btn" data-bs-dismiss="modal" style="background-color: #244c83; color: white; padding: 6px 15px; font-size: 13px; border-radius: 5px;">
+                            ANNULER
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Styles et scripts -->
+<style>
+    .input-custom {
+        border: 2px solid #ced4da;
+        border-radius: 8px;
+        padding: 10px 12px;
+        font-size: 14px;
+        transition: border-color 0.3s, box-shadow 0.3s;
+    }
+
+    .input-custom:focus {
+        border-color: #0d6efd;
+        box-shadow: 0 0 5px rgba(13, 110, 253, 0.5);
+        outline: none;
+    }
+
+    .form-label {
+        color: #495057;
+        font-weight: 600;
+    }
+
+    .btn-animate {
+        position: relative;
+        overflow: hidden;
+        transition: transform 0.3s ease, color 0.3s ease;
+    }
+
+    .btn-animate:hover {
+        color: #0d2d5a;
+        transform: scale(1.05);
+    }
+
+    .btn-animate i {
+        transition: transform 0.3s ease, color 0.3s ease;
+    }
+
+    .btn-animate:hover i {
+        transform: translateX(5px);
+        color: #007bff;
+    }
+
+    .fade-in {
+        opacity: 0;
+        transform: translateY(20px);
+        transition: opacity 1s, transform 1s;
+    }
+
+    .fade-in.visible {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    .card-header {
+        background-color: #0d2d5a;
+    }
+
+    .card-header h5 {
+        color: white;
+        font-weight: bold;
+        font-size: 1.1em;
+    }
+    .title-header{
+        font-size: 1.1em;
+        font-weight: bold;
+    }
+    
+</style>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Ajouter la classe "visible" pour afficher avec l'animation fade-in
+        document.querySelector('.fade-in').classList.add('visible');
+    });
+</script>
