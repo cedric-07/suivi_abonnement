@@ -108,5 +108,10 @@ namespace suivi_abonnement.Service
         {
             return _abonnementRepository.FiltreType(type, userId);
         }
+
+        public List<VAbonnementClient> getListAbonnementByUser(int userId)
+        {
+            return _abonnementRepository.getListAbonnementByUser(userId);
+        }
     }
 }

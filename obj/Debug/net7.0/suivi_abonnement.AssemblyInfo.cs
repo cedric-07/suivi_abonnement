@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("suivi_abonnement")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+2cb662ce90a6e6f00914f62942828305c1a1774b")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+5b0d050cf4eafbccf8dbfb0c32c0202105f2a646")]
 [assembly: System.Reflection.AssemblyProductAttribute("suivi_abonnement")]
 [assembly: System.Reflection.AssemblyTitleAttribute("suivi_abonnement")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

@@ -12,7 +12,7 @@
         public DateTime DateFin { get; set; }
         public string Description { get; set; }
         public string Type { get; set; }
-        public string Founisseur { get; set; }
+        public string Fournisseur { get; set; }
         public string Departement { get; set; }
 
 

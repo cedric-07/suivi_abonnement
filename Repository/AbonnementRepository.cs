@@ -18,7 +18,7 @@ namespace suivi_abonnement.Repository
         }
 
         //ADMINISTRATEUR
-        public List<Abonnement> getAbonnements(int pageNumber , int pageSize)
+        public List<Abonnement> getAbonnements(int pageNumber, int pageSize)
         {
             List<Abonnement> abonnements = new List<Abonnement>();
             try
@@ -33,10 +33,10 @@ namespace suivi_abonnement.Repository
                                 JOIN categories c ON a.idcategorie = c.categorie_id
                                 JOIN fournisseurs f ON a.idfournisseur = f.fournisseur_id
                                 LIMIT @offset, @pageSize";
-                    using (var command = new MySqlCommand(query , connection))
+                    using (var command = new MySqlCommand(query, connection))
                     {
-                        command.Parameters.AddWithValue("@pageSize" , pageSize);
-                        command.Parameters.AddWithValue("@offset" , (pageNumber - 1) * pageSize);
+                        command.Parameters.AddWithValue("@pageSize", pageSize);
+                        command.Parameters.AddWithValue("@offset", (pageNumber - 1) * pageSize);
 
                         using (var reader = command.ExecuteReader())
                         {
@@ -70,7 +70,7 @@ namespace suivi_abonnement.Repository
             return abonnements;
         }
 
-        
+
 
         public int CountTotalAbonnements()
         {
@@ -82,7 +82,7 @@ namespace suivi_abonnement.Repository
                 {
                     connection.Open();
                     string query = "SELECT COUNT(*) AS total FROM abonnements";
-                    
+
                     using (var command = new MySqlCommand(query, connection))
                     {
                         count = Convert.ToInt32(command.ExecuteScalar());
@@ -510,7 +510,7 @@ namespace suivi_abonnement.Repository
                 {
                     connection.Open();
                     string query = "SELECT COUNT(*) AS total FROM abonnements WHERE expiration_date > NOW()";
-                    
+
                     using (var command = new MySqlCommand(query, connection))
                     {
                         count = Convert.ToInt32(command.ExecuteScalar());
@@ -796,7 +796,7 @@ namespace suivi_abonnement.Repository
         }
 
         //CLIENT
-        public List<Abonnement> getAbonnementByUser(int pageNumber , int pageSize , int userId)
+        public List<Abonnement> getAbonnementByUser(int pageNumber, int pageSize, int userId)
         {
             List<Abonnement> abonnements = new List<Abonnement>();
             try
@@ -835,11 +835,11 @@ namespace suivi_abonnement.Repository
 
                                 LIMIT @offset, @pageSize";
 
-                    using (var command = new MySqlCommand(query , connection))
+                    using (var command = new MySqlCommand(query, connection))
                     {
-                        command.Parameters.AddWithValue("@pageSize" , pageSize);
-                        command.Parameters.AddWithValue("@offset" , (pageNumber - 1) * pageSize);
-                        command.Parameters.AddWithValue("@userId" , userId);
+                        command.Parameters.AddWithValue("@pageSize", pageSize);
+                        command.Parameters.AddWithValue("@offset", (pageNumber - 1) * pageSize);
+                        command.Parameters.AddWithValue("@userId", userId);
 
                         using (var reader = command.ExecuteReader())
                         {
@@ -875,7 +875,7 @@ namespace suivi_abonnement.Repository
         }
 
         //recherche par mot clé
-        public List<Abonnement> searchMultiplyMot(string keyword , int userId)
+        public List<Abonnement> searchMultiplyMot(string keyword, int userId)
         {
             List<Abonnement> abonnements = new List<Abonnement>();
 
@@ -896,7 +896,7 @@ namespace suivi_abonnement.Repository
                     using (var command = new MySqlCommand(query, connection))
                     {
                         command.Parameters.AddWithValue("@keyword", "%" + keyword + "%");
-                        command.Parameters.AddWithValue("@userId" , userId);
+                        command.Parameters.AddWithValue("@userId", userId);
                         using (var reader = command.ExecuteReader())
                         {
                             while (reader.Read())
@@ -929,7 +929,7 @@ namespace suivi_abonnement.Repository
         }
 
         //filtre par date
-        public List<Abonnement> FiltreDate(DateTime date_debut, DateTime expiration_date , int userId)
+        public List<Abonnement> FiltreDate(DateTime date_debut, DateTime expiration_date, int userId)
         {
             List<Abonnement> abonnements = new List<Abonnement>();
 
@@ -957,7 +957,7 @@ namespace suivi_abonnement.Repository
                         // Paramétrage des dates pour éviter les injections SQL
                         command.Parameters.AddWithValue("@date_debut", date_debut);
                         command.Parameters.AddWithValue("@expiration_date", expiration_date);
-                        command.Parameters.AddWithValue("@userId" , userId);
+                        command.Parameters.AddWithValue("@userId", userId);
 
                         using (var reader = command.ExecuteReader())
                         {
@@ -991,7 +991,7 @@ namespace suivi_abonnement.Repository
         }
 
         //filtre par categorie
-        public List<Abonnement> FiltreCategorie(int idcategorie , int userId)
+        public List<Abonnement> FiltreCategorie(int idcategorie, int userId)
         {
             List<Abonnement> abonnements = new List<Abonnement>();
 
@@ -1010,7 +1010,7 @@ namespace suivi_abonnement.Repository
                     using (var command = new MySqlCommand(query, connection))
                     {
                         command.Parameters.AddWithValue("@idcategorie", idcategorie);
-                        command.Parameters.AddWithValue("@userId" , userId);
+                        command.Parameters.AddWithValue("@userId", userId);
                         using (var reader = command.ExecuteReader())
                         {
                             while (reader.Read())
@@ -1043,7 +1043,7 @@ namespace suivi_abonnement.Repository
         }
 
         //filtre par type
-        public List<Abonnement> FiltreType(string type , int userId)
+        public List<Abonnement> FiltreType(string type, int userId)
         {
             List<Abonnement> abonnements = new List<Abonnement>();
             try
@@ -1061,7 +1061,7 @@ namespace suivi_abonnement.Repository
                     using (var command = new MySqlCommand(query, connection))
                     {
                         command.Parameters.AddWithValue("@type", type);
-                        command.Parameters.AddWithValue("@userId" , userId);
+                        command.Parameters.AddWithValue("@userId", userId);
 
                         using (var reader = command.ExecuteReader())
                         {
@@ -1094,5 +1094,50 @@ namespace suivi_abonnement.Repository
             return abonnements;
         }
 
+        //ADMIN
+        public List<VAbonnementClient> getListAbonnementByUser(int userId)
+        {
+            List<VAbonnementClient> abonnementList = new List<VAbonnementClient>();
+            try
+            {
+                using (var connection = new MySqlConnection(_connectionString))
+                {
+                    connection.Open();
+                    string query = "SELECT * FROM v_abonnements_client WHERE idclient = @userId";
+                    using (var command = new MySqlCommand(query, connection))
+                    {
+                        command.Parameters.AddWithValue("@userId", userId);
+                        using (var reader = command.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                VAbonnementClient abonnement = new VAbonnementClient();
+                                abonnement.Id = reader.GetInt32("idclient");
+                                abonnement.Client = reader.GetString("nomclient");
+                                abonnement.Email = reader.GetString("emailclient");
+                                abonnement.AbonnementId = reader.GetInt32("abonnement_id");
+                                abonnement.Abonnement = reader.GetString("nomabonnement");
+                                abonnement.Prix = reader.GetDecimal("prix");
+                                abonnement.DateDebut = reader.GetDateTime("date_debut");
+                                abonnement.DateFin = reader.GetDateTime("expiration_date");
+                                abonnement.Description = reader.GetString("description");
+                                abonnement.Type = reader.GetString("type");
+                                abonnement.Fournisseur = reader.GetString("nomfournisseur");
+                                abonnement.Departement = reader.GetString("nomdepartement");
+                                abonnementList.Add(abonnement);
+                            }
+                        }
+                    }
+                    connection.Close();
+
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+            return abonnementList;
+
+        }
     }
 }
