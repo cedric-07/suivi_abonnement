@@ -28,6 +28,8 @@ namespace suivi_abonnement.Repository
                             departement.Id = reader.GetInt32("departement_id");
                             departement.Nom = reader.GetString("nom");
                             departements.Add(departement);
+
+                            
                         }
                     }
                 }

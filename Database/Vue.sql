@@ -3,6 +3,7 @@ SELECT
     u.id AS user_id,
     u.username,
     u.email,
+    u.role,
     dep.nom AS departement,
     a.abonnement_id,
     a.nom AS abonnement_nom,
@@ -71,6 +72,7 @@ SELECT
     u.id AS idclient,
     u.username AS nomclient,
     u.email AS emailclient,
+    u.role AS roleclient,
     a.abonnement_id,
     a.type AS type,
     a.prix AS prix,
@@ -87,9 +89,8 @@ JOIN
 JOIN 
     suivi_abonnement_omnis_db.departements d ON du.iddepartement = d.departement_id
 JOIN 
-    suivi_abonnement_omnis_db.abonnements a ON a.departement_id = du.id
+    suivi_abonnement_omnis_db.abonnements a ON a.departement_id = du.iddepartement  -- Correction ici
 JOIN
     suivi_abonnement_omnis_db.fournisseurs f ON a.idfournisseur = f.fournisseur_id
 ORDER BY u.id, a.abonnement_id;
-GROUP BY u.id, a.abonnement_id
-;
+

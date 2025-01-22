@@ -109,9 +109,17 @@ namespace suivi_abonnement.Service
             return _abonnementRepository.FiltreType(type, userId);
         }
 
-        public List<VAbonnementClient> getListAbonnementByUser(int userId)
+        public List<VAbonnementClient> getListVAbonnement(int pageNumber, int pageSize)
         {
-            return _abonnementRepository.getListAbonnementByUser(userId);
+            return _abonnementRepository.getListVAbonnement(pageNumber, pageSize);
+        }
+        public int CountTotalVAbonnement()
+        {
+            return _abonnementRepository.CountTotalVAbonnement();
+        }
+        public int NbrClientAbonne()
+        {
+            return _abonnementRepository.NbrClientAbonne();
         }
     }
 }

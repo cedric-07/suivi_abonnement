@@ -1095,7 +1095,7 @@ namespace suivi_abonnement.Repository
         }
 
         //ADMIN
-        public List<VAbonnementClient> getListAbonnementByUser(int userId)
+        public List<VAbonnementClient> getListVAbonnement(int pageNumber, int pageSize)
         {
             List<VAbonnementClient> abonnementList = new List<VAbonnementClient>();
             try
@@ -1103,10 +1103,11 @@ namespace suivi_abonnement.Repository
                 using (var connection = new MySqlConnection(_connectionString))
                 {
                     connection.Open();
-                    string query = "SELECT * FROM v_abonnements_client WHERE idclient = @userId";
+                    string query = "SELECT * FROM v_abonnements_par_client WHERE roleclient = 'user' LIMIT @offset , @pageSize ";
                     using (var command = new MySqlCommand(query, connection))
                     {
-                        command.Parameters.AddWithValue("@userId", userId);
+                        command.Parameters.AddWithValue("@offset", (pageNumber - 1) * pageSize);
+                        command.Parameters.AddWithValue("@pageSize", pageSize);
                         using (var reader = command.ExecuteReader())
                         {
                             while (reader.Read())
@@ -1117,7 +1118,7 @@ namespace suivi_abonnement.Repository
                                 abonnement.Email = reader.GetString("emailclient");
                                 abonnement.AbonnementId = reader.GetInt32("abonnement_id");
                                 abonnement.Abonnement = reader.GetString("nomabonnement");
-                                abonnement.Prix = reader.GetDecimal("prix");
+                                abonnement.Prix = reader.GetInt32("prix");
                                 abonnement.DateDebut = reader.GetDateTime("date_debut");
                                 abonnement.DateFin = reader.GetDateTime("expiration_date");
                                 abonnement.Description = reader.GetString("description");
@@ -1135,9 +1136,55 @@ namespace suivi_abonnement.Repository
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
+                return null;
             }
             return abonnementList;
 
+        }
+
+        public int CountTotalVAbonnement()
+        {
+            int count = 0;
+            try
+            {
+                using (var connection = new MySqlConnection(_connectionString))
+                {
+                    connection.Open();
+                    string query = "SELECT COUNT(*) AS total FROM v_abonnements_par_client WHERE roleclient = 'user'";
+                    using (var command = new MySqlCommand(query, connection))
+                    {
+                        count = Convert.ToInt32(command.ExecuteScalar());
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+            }
+            return count;
+
+        }
+
+        public int NbrClientAbonne()
+        {
+            int count = 0;
+            try
+            {
+                using (var connection = new MySqlConnection(_connectionString))
+                {
+                    connection.Open();
+                    string query = "SELECT COUNT(DISTINCT idclient) AS total FROM v_abonnements_par_client WHERE roleclient = 'user'";
+                    using (var command = new MySqlCommand(query, connection))
+                    {
+                        count = Convert.ToInt32(command.ExecuteScalar());
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+            }
+            return count;
         }
     }
 }

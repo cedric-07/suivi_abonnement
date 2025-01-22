@@ -253,12 +253,43 @@ namespace suivi_abonnement.Controllers
 
 
         //Controllers pour le cote client
-        
 
-        public IActionResult AcceuilPage()
+
+        public IActionResult HistoriquePage(int pageNumber = 1)
         {
-            return View("~/Views/ClientPage/AcceuilPage.cshtml");
+            try
+            {
+                int pageSize = 6;
+
+                // Vérifier si le service est initialisé
+                if (_abonnementService == null)
+                {
+                    throw new Exception("Le service d'abonnement n'est pas disponible.");
+                }
+
+                // Récupération des abonnements
+                List<VAbonnementClient> abonnement = _abonnementService.getListVAbonnement(pageNumber, pageSize) ?? new List<VAbonnementClient>();
+                int nbrlcient = _abonnementService.NbrClientAbonne();
+                int totalAbonnements = _abonnementService.CountTotalVAbonnement();
+
+                ViewBag.CurrentPage = pageNumber;
+                ViewBag.TotalPages = (int)Math.Ceiling((double)totalAbonnements / pageSize);
+                ViewBag.TotalAbonnements = totalAbonnements;
+                ViewBag.NbrClientAbonne = nbrlcient;
+                Console.WriteLine("Total abonnements : " + totalAbonnements);
+                Console.WriteLine("Current page : " + pageNumber);
+                Console.WriteLine("Total pages : " + ViewBag.TotalPages);
+                return View("~/Views/AdminPage/HistoriquePage.cshtml", abonnement);
+            }
+            catch (Exception ex)
+            {
+                TempData["Error"] = "Une erreur s'est produite : " + ex.Message;
+                return RedirectToAction("Index");
+            }
         }
+
+
+
 
     }
 }

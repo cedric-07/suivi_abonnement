@@ -31,8 +31,8 @@ namespace suivi_abonnement.Service.Interface
         List<Abonnement> FiltreDate(DateTime date_debut, DateTime expiration_date , int userId);
         List<Abonnement> FiltreCategorie(int idcategorie , int userId);
         List<Abonnement> FiltreType(string type , int userId);
-        List<VAbonnementClient> getListAbonnementByUser(int userId);
-
-
+        List<VAbonnementClient> getListVAbonnement(int pageNumber, int pageSize);
+        int CountTotalVAbonnement();
+        int NbrClientAbonne();
     }
 }
