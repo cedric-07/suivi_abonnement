@@ -76,18 +76,7 @@ namespace suivi_abonnement.Service
         {
             return _abonnementRepository.RevenusFictifsParMois();
         }
-        public List<Abonnement> getListAbonnementExpirer()
-        {
-            return _abonnementRepository.getListAbonnementExpirer();
-        }
-        public List<Abonnement> getListAbonnementActif()
-        {
-            return _abonnementRepository.getListAbonnementActif();
-        }
-        public List<Abonnement> getListAbonnementEnAttente()
-        {
-            return _abonnementRepository.getListAbonnementEnAttente();
-        }
+        
         public List<Abonnement> getAbonnementByUser(int pageNumber, int pageSize, int userId)
         {
             return _abonnementRepository.getAbonnementByUser(pageNumber, pageSize, userId);
@@ -121,5 +110,10 @@ namespace suivi_abonnement.Service
         {
             return _abonnementRepository.NbrClientAbonne();
         }
+        public (List<Abonnement> actifs, List<Abonnement> expires, List<Abonnement> enAttente) getListAbonnementStatus(int pageNumber, int pageSize)
+        {
+            return _abonnementRepository.getListAbonnementStatus(pageNumber , pageSize);
+        }
+    
     }
 }

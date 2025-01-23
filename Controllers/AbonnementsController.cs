@@ -32,10 +32,6 @@ namespace suivi_abonnement.Controllers
             int abonnementsActifs = _abonnementService.CountTotalAbonnementsActif();
             int abonnementsExpirés = _abonnementService.CountTotalAbonnementsInactif(); // Implémentez cette méthode
             int abonnementsSuspendus = _abonnementService.CountTotalAbonnementsEnAttente(); // Implémentez cette méthode
-            List<Abonnement> listeAbonnementActif = _abonnementService.getListAbonnementActif();
-            List<Abonnement> listeAbonnementExpiré = _abonnementService.getListAbonnementExpirer();
-            List<Abonnement> listeAbonnementEnAttente = _abonnementService.getListAbonnementEnAttente();
-
 
             // Appel des méthodes pour obtenir les revenus fictifs
             List<Dictionary<string, object>> revenusAnnuels = _abonnementService.RevenusFictifsParAnnee();
@@ -48,10 +44,7 @@ namespace suivi_abonnement.Controllers
                 Expirés = abonnementsExpirés,
                 Suspendus = abonnementsSuspendus,
                 RevenusAnnuels = revenusAnnuels,
-                RevenusMensuels = revenusMensuels,
-                listeAbonnementActif = listeAbonnementActif,
-                listeAbonnementExpiré = listeAbonnementExpiré,
-                listeAbonnementEnAttente = listeAbonnementEnAttente
+                RevenusMensuels = revenusMensuels
             };
 
             return View("~/Views/AdminPage/IndexPage.cshtml", model);
@@ -269,9 +262,13 @@ namespace suivi_abonnement.Controllers
 
                 // Récupération des abonnements
                 List<VAbonnementClient> abonnement = _abonnementService.getListVAbonnement(pageNumber, pageSize) ?? new List<VAbonnementClient>();
+                var (actifs, expires, enAttente) = _abonnementService.getListAbonnementStatus(pageNumber , pageSize);
                 int nbrlcient = _abonnementService.NbrClientAbonne();
                 int totalAbonnements = _abonnementService.CountTotalVAbonnement();
 
+                ViewBag.AbonnementsActifs = actifs;
+                ViewBag.AbonnementsExpirés = expires;
+                ViewBag.AbonnementsEnAttente = enAttente;
                 ViewBag.CurrentPage = pageNumber;
                 ViewBag.TotalPages = (int)Math.Ceiling((double)totalAbonnements / pageSize);
                 ViewBag.TotalAbonnements = totalAbonnements;

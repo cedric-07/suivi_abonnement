@@ -509,7 +509,7 @@ namespace suivi_abonnement.Repository
                 using (var connection = new MySqlConnection(_connectionString))
                 {
                     connection.Open();
-                    string query = "SELECT COUNT(*) AS total FROM abonnements WHERE expiration_date > NOW()";
+                    string query = "SELECT COUNT(*) AS total FROM abonnements WHERE expiration_date > NOW() AND date_debut < NOW()";
 
                     using (var command = new MySqlCommand(query, connection))
                     {
@@ -647,153 +647,7 @@ namespace suivi_abonnement.Repository
             }
             return revenus;
         }
-
-        //liste abonnement expiré
-        public List<Abonnement> getListAbonnementExpirer()
-        {
-            List<Abonnement> abonnements = new List<Abonnement>();
-            try
-            {
-                using (var connection = new MySqlConnection(_connectionString))
-                {
-                    connection.Open();
-                    string query = @"
-                                SELECT a.*, c.nom AS nom_categorie, f.nom AS nom_fournisseur , d.nom AS nom_departement
-                                FROM abonnements a
-                                JOIN departements d ON a.departement_id = d.departement_id
-                                JOIN categories c ON a.idcategorie = c.categorie_id
-                                JOIN fournisseurs f ON a.idfournisseur = f.fournisseur_id
-                                WHERE expiration_date < NOW()";
-                    using (var command = new MySqlCommand(query, connection))
-                    {
-                        using (var reader = command.ExecuteReader())
-                        {
-                            while (reader.Read())
-                            {
-                                Abonnement abonnement = new Abonnement();
-                                abonnement.Id = reader.GetInt32("abonnement_id");
-                                abonnement.Nom = reader.GetString("nom");
-                                abonnement.Description = reader.GetString("description");
-                                abonnement.Prix = reader.GetInt32("prix");
-                                abonnement.DateDebut = reader.GetDateTime("date_debut");
-                                abonnement.ExpirationDate = reader.GetDateTime("expiration_date");
-                                abonnement.Type = reader.GetString("type");
-                                abonnement.idfournisseur = reader.GetInt32("idfournisseur");
-                                abonnement.idcategorie = reader.GetInt32("idcategorie");
-                                abonnement.NomDepartement = reader.GetString("nom_departement");
-                                abonnement.NomCategorie = reader.GetString("nom_categorie");
-                                abonnement.NomFournisseur = reader.GetString("nom_fournisseur");
-                                abonnements.Add(abonnement); // Ajout de l'abonnement à la liste
-                            }
-                        }
-                    }
-                    connection.Close();
-                }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-            }
-            return abonnements;
-        }
-
-        //liste abonnement actif
-        public List<Abonnement> getListAbonnementActif()
-        {
-            List<Abonnement> abonnements = new List<Abonnement>();
-            try
-            {
-                using (var connection = new MySqlConnection(_connectionString))
-                {
-                    connection.Open();
-                    string query = @"
-                                SELECT a.*, c.nom AS nom_categorie, f.nom AS nom_fournisseur , d.nom AS nom_departement
-                                FROM abonnements a
-                                JOIN departements d ON a.departement_id = d.departement_id
-                                JOIN categories c ON a.idcategorie = c.categorie_id
-                                JOIN fournisseurs f ON a.idfournisseur = f.fournisseur_id
-                                WHERE expiration_date > NOW()";
-                    using (var command = new MySqlCommand(query, connection))
-                    {
-                        using (var reader = command.ExecuteReader())
-                        {
-                            while (reader.Read())
-                            {
-                                Abonnement abonnement = new Abonnement();
-                                abonnement.Id = reader.GetInt32("abonnement_id");
-                                abonnement.Nom = reader.GetString("nom");
-                                abonnement.Description = reader.GetString("description");
-                                abonnement.Prix = reader.GetInt32("prix");
-                                abonnement.DateDebut = reader.GetDateTime("date_debut");
-                                abonnement.ExpirationDate = reader.GetDateTime("expiration_date");
-                                abonnement.Type = reader.GetString("type");
-                                abonnement.idfournisseur = reader.GetInt32("idfournisseur");
-                                abonnement.idcategorie = reader.GetInt32("idcategorie");
-                                abonnement.NomDepartement = reader.GetString("nom_departement");
-                                abonnement.NomCategorie = reader.GetString("nom_categorie");
-                                abonnement.NomFournisseur = reader.GetString("nom_fournisseur");
-                                abonnements.Add(abonnement); // Ajout de l'abonnement à la liste
-                            }
-                        }
-                    }
-                    connection.Close();
-                }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-            }
-            return abonnements;
-        }
-
-        //liste abonnement en attente
-        public List<Abonnement> getListAbonnementEnAttente()
-        {
-            List<Abonnement> abonnements = new List<Abonnement>();
-            try
-            {
-                using (var connection = new MySqlConnection(_connectionString))
-                {
-                    connection.Open();
-                    string query = @"
-                                SELECT a.*, c.nom AS nom_categorie, f.nom AS nom_fournisseur , d.nom AS nom_departement
-                                FROM abonnements a
-                                JOIN departements d ON a.departement_id = d.departement_id
-                                JOIN categories c ON a.idcategorie = c.categorie_id
-                                JOIN fournisseurs f ON a.idfournisseur = f.fournisseur_id
-                                WHERE date_debut > NOW()";
-                    using (var command = new MySqlCommand(query, connection))
-                    {
-                        using (var reader = command.ExecuteReader())
-                        {
-                            while (reader.Read())
-                            {
-                                Abonnement abonnement = new Abonnement();
-                                abonnement.Id = reader.GetInt32("abonnement_id");
-                                abonnement.Nom = reader.GetString("nom");
-                                abonnement.Description = reader.GetString("description");
-                                abonnement.Prix = reader.GetInt32("prix");
-                                abonnement.DateDebut = reader.GetDateTime("date_debut");
-                                abonnement.ExpirationDate = reader.GetDateTime("expiration_date");
-                                abonnement.Type = reader.GetString("type");
-                                abonnement.idfournisseur = reader.GetInt32("idfournisseur");
-                                abonnement.idcategorie = reader.GetInt32("idcategorie");
-                                abonnement.NomDepartement = reader.GetString("nom_departement");
-                                abonnement.NomCategorie = reader.GetString("nom_categorie");
-                                abonnement.NomFournisseur = reader.GetString("nom_fournisseur");
-                                abonnements.Add(abonnement); // Ajout de l'abonnement à la liste
-                            }
-                        }
-                    }
-                    connection.Close();
-                }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-            }
-            return abonnements;
-        }
+        
 
         //CLIENT
         public List<Abonnement> getAbonnementByUser(int pageNumber, int pageSize, int userId)
@@ -1165,7 +1019,7 @@ namespace suivi_abonnement.Repository
 
         }
 
-        public int NbrClientAbonne()
+        public int NbrClientAbonne( )
         {
             int count = 0;
             try
@@ -1186,5 +1040,90 @@ namespace suivi_abonnement.Repository
             }
             return count;
         }
+
+        //liste abonnement en attente
+        public (List<Abonnement> actifs, List<Abonnement> expires, List<Abonnement> enAttente) getListAbonnementStatus(int pageNumber, int pageSize)
+        {
+            List<Abonnement> actifs = new List<Abonnement>();
+            List<Abonnement> expires = new List<Abonnement>();
+            List<Abonnement> enAttente = new List<Abonnement>();
+
+            try
+            {
+                using (var connection = new MySqlConnection(_connectionString))
+                {
+                    connection.Open();
+                        string query = @"
+                                        SELECT 
+                                            a.*, 
+                                            c.nom AS nom_categorie, 
+                                            f.nom AS nom_fournisseur, 
+                                            d.nom AS nom_departement,
+                                            CASE 
+                                                WHEN a.date_debut > NOW() THEN 'En attente'
+                                                WHEN a.expiration_date < NOW() THEN 'Expiré'
+                                                ELSE 'Actif'
+                                            END AS status
+                                        FROM 
+                                            abonnements a
+                                        JOIN 
+                                            departements d ON a.departement_id = d.departement_id
+                                        JOIN 
+                                            categories c ON a.idcategorie = c.categorie_id
+                                        JOIN 
+                                            fournisseurs f ON a.idfournisseur = f.fournisseur_id 
+                                        LIMIT @offset, @pageSize";
+                    using (var command = new MySqlCommand(query, connection))
+                    {
+                        command.Parameters.AddWithValue("@offset", (pageNumber - 1) * pageSize);
+                        command.Parameters.AddWithValue("@pageSize", pageSize);
+                        using (var reader = command.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                Abonnement abonnement = new Abonnement
+                                {
+                                    Id = reader.GetInt32("abonnement_id"),
+                                    Nom = reader.GetString("nom"),
+                                    Description = reader.GetString("description"),
+                                    Prix = reader.GetInt32("prix"),
+                                    DateDebut = reader.GetDateTime("date_debut"),
+                                    ExpirationDate = reader.GetDateTime("expiration_date"),
+                                    Type = reader.GetString("type"),
+                                    idfournisseur = reader.GetInt32("idfournisseur"),
+                                    idcategorie = reader.GetInt32("idcategorie"),
+                                    NomDepartement = reader.GetString("nom_departement"),
+                                    NomCategorie = reader.GetString("nom_categorie"),
+                                    NomFournisseur = reader.GetString("nom_fournisseur")
+                                };
+
+                                string status = reader.GetString("status");
+                                switch (status)
+                                {
+                                    case "Actif":
+                                        actifs.Add(abonnement);
+                                        break;
+                                    case "Expiré":
+                                        expires.Add(abonnement);
+                                        break;
+                                    case "En attente":
+                                        enAttente.Add(abonnement);
+                                        break;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+
+            return (actifs, expires, enAttente);
+        }
+
+
+        
     }
 }

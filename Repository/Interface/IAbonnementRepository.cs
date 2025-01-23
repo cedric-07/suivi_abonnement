@@ -22,9 +22,6 @@ namespace suivi_abonnement.Repository.Interface
         int CountTotalAbonnementsEnAttente();
         List<Dictionary<string, object>> RevenusFictifsParAnnee();
         List<Dictionary<string, object>> RevenusFictifsParMois();
-        List<Abonnement> getListAbonnementExpirer();
-        List<Abonnement> getListAbonnementActif();
-        List<Abonnement> getListAbonnementEnAttente();
         List<Abonnement> getAbonnementByUser(int pageNumber , int pageSize , int userId);
         List<Abonnement> searchMultiplyMot(string keyword , int userId);
         List<Abonnement> FiltreDate(DateTime date_debut, DateTime expiration_date , int userId);
@@ -32,7 +29,8 @@ namespace suivi_abonnement.Repository.Interface
         List<Abonnement> FiltreType(string type , int userId);
         List<VAbonnementClient> getListVAbonnement(int pageNumber, int pageSize);
         int CountTotalVAbonnement();
-
         int NbrClientAbonne();
+        (List<Abonnement> actifs, List<Abonnement> expires, List<Abonnement> enAttente) getListAbonnementStatus(int pageNumber, int pageSize);
+
     }
 }

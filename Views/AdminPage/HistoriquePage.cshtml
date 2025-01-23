@@ -59,42 +59,182 @@
             </nav>
         </div>
     </div>
-   <div class="card mt-8">
-    <div class="card-header text-white">
-        <h5 class="title-card">Liste des Clients par abonnements</h5>
-    </div>
-    <div class="table-responsive">
-        <table class="table">
-            <div class=" mt-3 bg-light p-2">
-                <strong style="color: #0d2d5a;">Total des Clients par abonnements : @ViewBag.NbrClientAbonne</strong>
-            </div>
-            <br>
-            <thead>
-                <tr>
-                    <th class="text-uppercase">Client</th>
-                    <th class="text-uppercase">Email</th>
-                    <th class="text-uppercase">Departement</th>
-                    <th class="text-uppercase">Abonnement</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var abonnement in Model)
-                {
+    <div class="card mt-8">
+        <div class="card-header text-white">
+            <h5 class="title-card">Liste des Clients par abonnements</h5>
+        </div>
+        <div class="table-responsive">
+            @if(@Model != null && Model.Count()> 0)
+            {
+                <table class="table">
+                <div class=" mt-3 bg-light p-2">
+                    <strong style="color: #0d2d5a;">Total des Clients par abonnements : @ViewBag.NbrClientAbonne</strong>
+                </div>
+                <br>
+                <thead>
                     <tr>
-                        <td>@abonnement.Client</td>
-                        <td>@abonnement.Email</td>
-                        <td>@abonnement.Departement</td>
-                        <td>@abonnement.Abonnement</td>
+                        <th class="text-uppercase">Client</th>
+                        <th class="text-uppercase">Email</th>
+                        <th class="text-uppercase">Departement</th>
+                        <th class="text-uppercase">Abonnement</th>
                     </tr>
-                }
-            </tbody>
-        </table>
-        
-        <!-- Affichage du total sous la table -->
-        
+                </thead>
+                <tbody>
+                    @foreach (var abonnement in Model)
+                    {
+                        <tr>
+                            <td>@abonnement.Client</td>
+                            <td>@abonnement.Email</td>
+                            <td>@abonnement.Departement</td>
+                            <td>@abonnement.Abonnement</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+            }
+            else
+            {
+                <div class="alert alert-warning" role="alert">
+                    Aucun abonnement trouvé
+                </div>
+            } 
+            
+        </div>
     </div>
-</div>
 
+    <!-- Section actif -->
+    <div class="card mt-8">
+        <div class="card-header text-white">
+            <h5 class="title-card">Liste abonnements <strong class="text-uppercase">ACTIF</strong></h5>
+        </div>
+        <div class="table-responsive">
+            @if(@ViewBag.AbonnementsActifs  != null && ViewBag.AbonnementsActifs .Count > 0)
+            {
+                <table class="table">
+                <br>
+                <thead>
+                    <tr>
+                        <th class="text-uppercase">Nom</th>
+                        <th class="text-uppercase">Prix (Ariary)</th>
+                        <th class="text-uppercase">Fournisseur</th>
+                        <th class="text-uppercase">Date début</th>
+                        <th class="text-uppercase">Date expiration</th>
+                        <th class="text-uppercase">Statut</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var abonnement in (List<Abonnement>)ViewBag.AbonnementsActifs )
+                    {
+                        <tr>
+                            <td>@abonnement.Nom</td>
+                            <td>@abonnement.Prix.ToString("N2")</td>
+                            <td>@abonnement.NomFournisseur</td>
+                            <td>@abonnement.DateDebut.ToString("d MMM yyyy")</td>
+                            <td>@abonnement.ExpirationDate.ToString("d MMM yyyy")</td>
+                            <td><span class="badge bg-success">Actif</span></td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+            }
+            else
+            {
+                <div class="alert alert-warning" role="alert">
+                    Aucun abonnement trouvé
+                </div>
+            } 
+            
+        </div>
+    </div>
+
+    <!-- Section inactif -->
+    <div class="card mt-8">
+        <div class="card-header text-white">
+            <h5 class="title-card">Liste abonnements <strong class="text-uppercase">EXPIRER</strong></h5>
+        </div>
+        <div class="table-responsive">
+            @if(@ViewBag.AbonnementsExpirés != null && ViewBag.AbonnementsExpirés .Count > 0)
+            {
+                <table class="table">
+                <br>
+                <thead>
+                    <tr>
+                        <th class="text-uppercase">Nom</th>
+                        <th class="text-uppercase">Prix (Ariary)</th>
+                        <th class="text-uppercase">Fournisseur</th>
+                        <th class="text-uppercase">Date début</th>
+                        <th class="text-uppercase">Date expiration</th>
+                        <th class="text-uppercase">Statut</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var abonnement in (List<Abonnement>)ViewBag.AbonnementsExpirés )
+                    {
+                        <tr>
+                            <td>@abonnement.Nom</td>
+                            <td>@abonnement.Prix.ToString("N2")</td>
+                            <td>@abonnement.NomFournisseur</td>
+                            <td>@abonnement.DateDebut.ToString("d MMM yyyy")</td>
+                            <td>@abonnement.ExpirationDate.ToString("d MMM yyyy")</td>
+                            <td><span class="badge bg-danger">Expiré</span></td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+            }
+            else
+            {
+                <div class="alert alert-warning" role="alert">
+                    Aucun abonnement trouvé
+                </div>
+            } 
+            
+        </div>
+    </div>
+    <!--Section attente-->
+    <div class="card mt-8">
+        <div class="card-header text-white">
+            <h5 class="title-card">Liste abonnements <strong class="text-uppercase">EN ATTENTE</strong></h5>
+        </div>
+        <div class="table-responsive">
+            @if(@ViewBag.AbonnementsEnAttente!= null && ViewBag.AbonnementsEnAttente .Count > 0)
+            {
+                <table class="table">
+                <br>
+                <thead>
+                    <tr>
+                        <th class="text-uppercase">Nom</th>
+                        <th class="text-uppercase">Prix (Ariary)</th>
+                        <th class="text-uppercase">Fournisseur</th>
+                        <th class="text-uppercase">Date début</th>
+                        <th class="text-uppercase">Date expiration</th>
+                        <th class="text-uppercase">Statut</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var abonnement in (List<Abonnement>)ViewBag.AbonnementsEnAttente )
+                    {
+                        <tr>
+                            <td>@abonnement.Nom</td>
+                            <td>@abonnement.Prix.ToString("N2")</td>
+                            <td>@abonnement.NomFournisseur</td>
+                            <td>@abonnement.DateDebut.ToString("d MMM yyyy")</td>
+                            <td>@abonnement.ExpirationDate.ToString("d MMM yyyy")</td>
+                            <td><span class="badge bg-info">En attente</span></td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+            }
+            else
+            {
+                <div class="alert alert-warning" role="alert">
+                    Aucun abonnement trouvé
+                </div>
+            } 
+            
+        </div>
+    </div>
 
     <div class="d-flex justify-content-center mt-4">
         <nav>
