@@ -110,9 +110,9 @@ namespace suivi_abonnement.Service
         {
             return _abonnementRepository.NbrClientAbonne();
         }
-        public (List<Abonnement> actifs, List<Abonnement> expires, List<Abonnement> enAttente) getListAbonnementStatus(int pageNumber, int pageSize)
+        public  (List<VStatusAbonnement> actifs, List<VStatusAbonnement> enAttente, List<VStatusAbonnement> expires) getListAbonnementByStatus(int pageNumberActifs , int pageNumberEnAttente, int pageNumberExpires, int pageSize)
         {
-            return _abonnementRepository.getListAbonnementStatus(pageNumber , pageSize);
+            return _abonnementRepository.getListAbonnementByStatus(pageNumberActifs, pageNumberEnAttente, pageNumberExpires, pageSize);
         }
     
     }

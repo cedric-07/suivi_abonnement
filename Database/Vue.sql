@@ -94,3 +94,23 @@ JOIN
     suivi_abonnement_omnis_db.fournisseurs f ON a.idfournisseur = f.fournisseur_id
 ORDER BY u.id, a.abonnement_id;
 
+
+CREATE OR REPLACE VIEW v_status_abonnements AS
+SELECT 
+    a.*, 
+    c.nom AS nom_categorie, 
+    f.nom AS nom_fournisseur, 
+    d.nom AS nom_departement,
+    CASE 
+        WHEN expiration_date > NOW() AND date_debut < NOW() THEN 'Actif'
+        WHEN expiration_date < NOW() THEN 'Expire'
+        ELSE 'En attente' 
+    END AS statut
+FROM 
+    abonnements a
+JOIN 
+    departements d ON a.departement_id = d.departement_id
+JOIN 
+    categories c ON a.idcategorie = c.categorie_id
+JOIN 
+    fournisseurs f ON a.idfournisseur = f.fournisseur_id;

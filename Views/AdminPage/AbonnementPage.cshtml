@@ -438,21 +438,30 @@
 </script>
 <style>
     
+    /* Alignement du texte dans les en-têtes de colonnes (th) */
     .table th {
-        text-align: left;
-        color: rgba(0, 0, 0, 0.5);
+        text-align: left; /* Aligne le texte à gauche dans les cellules d'en-tête */
+        margin-left: 15px;
+        color: rgba(0, 0, 0, 0.5); /* Couleur gris clair pour les en-têtes */
+        font-weight: bold; /* Texte en gras pour les en-têtes */
+        font-size: 1rem; /* Taille de police plus grande pour les en-têtes */
     }
+
+    /* Alignement du texte dans les cellules de données (td) */
     .table td {
-        text-align: left; /* Alignement gauche pour les contenus */
-        color: #0d2d5a;
-        font-weight: bold;
-        font-size: small;
+        text-align: left; /* Aligne le texte à gauche dans les cellules de données */
+        color: #0d2d5a; /* Couleur bleue pour les données */
+        font-weight: bold; /* Texte en gras dans les cellules de données */
+        font-size: small; /* Taille de police petite pour les données */
+        padding-left: 15px; /* Ajoute un peu d'espace à gauche pour une meilleure lisibilité */
     }
+
     .card-header {
         background-color: #0d2d5a;
     }
     .title-card {
         color: white;
+        letter-spacing: 1px;
     }
     .action-icons i {
         font-size: 1.1rem; /* Taille ajustée des icônes */
@@ -473,7 +482,7 @@
     }
 
 
-        .btn-animate {
+    .btn-animate {
         position: relative;
         overflow: hidden;
         transition: transform 0.3s ease, color 0.3s ease;
@@ -530,6 +539,7 @@
         font-weight: bold;
         font-size: 1.1em;
         color: #0d2d5a;
+        letter-spacing: 1px;
     }
 </style>
 

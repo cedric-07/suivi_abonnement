@@ -1019,7 +1019,7 @@ namespace suivi_abonnement.Repository
 
         }
 
-        public int NbrClientAbonne( )
+        public int NbrClientAbonne()
         {
             int count = 0;
             try
@@ -1041,89 +1041,130 @@ namespace suivi_abonnement.Repository
             return count;
         }
 
-        //liste abonnement en attente
-        public (List<Abonnement> actifs, List<Abonnement> expires, List<Abonnement> enAttente) getListAbonnementStatus(int pageNumber, int pageSize)
+        public (List<VStatusAbonnement> actifs, List<VStatusAbonnement> enAttente, List<VStatusAbonnement> expires) getListAbonnementByStatus(int pageNumberActifs , int pageNumberEnAttente, int pageNumberExpires, int pageSize)
         {
-            List<Abonnement> actifs = new List<Abonnement>();
-            List<Abonnement> expires = new List<Abonnement>();
-            List<Abonnement> enAttente = new List<Abonnement>();
+            // Initialisation des listes pour chaque statut
+            List<VStatusAbonnement> actifs = new List<VStatusAbonnement>();
+            List<VStatusAbonnement> enAttente = new List<VStatusAbonnement>();
+            List<VStatusAbonnement> expires = new List<VStatusAbonnement>();
 
             try
             {
                 using (var connection = new MySqlConnection(_connectionString))
                 {
                     connection.Open();
-                        string query = @"
-                                        SELECT 
-                                            a.*, 
-                                            c.nom AS nom_categorie, 
-                                            f.nom AS nom_fournisseur, 
-                                            d.nom AS nom_departement,
-                                            CASE 
-                                                WHEN a.date_debut > NOW() THEN 'En attente'
-                                                WHEN a.expiration_date < NOW() THEN 'Expiré'
-                                                ELSE 'Actif'
-                                            END AS status
-                                        FROM 
-                                            abonnements a
-                                        JOIN 
-                                            departements d ON a.departement_id = d.departement_id
-                                        JOIN 
-                                            categories c ON a.idcategorie = c.categorie_id
-                                        JOIN 
-                                            fournisseurs f ON a.idfournisseur = f.fournisseur_id 
-                                        LIMIT @offset, @pageSize";
+                    
+                    // Requête SQL avec un filtre de statut
+                    string query = @"
+                        SELECT * 
+                        FROM v_status_abonnements
+                        WHERE statut = 'Actif'
+                        LIMIT @offsetActif, @pageSize";
+
                     using (var command = new MySqlCommand(query, connection))
                     {
-                        command.Parameters.AddWithValue("@offset", (pageNumber - 1) * pageSize);
+                        command.Parameters.AddWithValue("@offsetActif", (pageNumberActifs - 1) * pageSize);
                         command.Parameters.AddWithValue("@pageSize", pageSize);
+
                         using (var reader = command.ExecuteReader())
                         {
                             while (reader.Read())
                             {
-                                Abonnement abonnement = new Abonnement
+                                actifs.Add(new VStatusAbonnement
                                 {
                                     Id = reader.GetInt32("abonnement_id"),
                                     Nom = reader.GetString("nom"),
                                     Description = reader.GetString("description"),
                                     Prix = reader.GetInt32("prix"),
+                                    Status = reader.GetString("statut"),
                                     DateDebut = reader.GetDateTime("date_debut"),
-                                    ExpirationDate = reader.GetDateTime("expiration_date"),
+                                    DateFin = reader.GetDateTime("expiration_date"),
                                     Type = reader.GetString("type"),
-                                    idfournisseur = reader.GetInt32("idfournisseur"),
-                                    idcategorie = reader.GetInt32("idcategorie"),
-                                    NomDepartement = reader.GetString("nom_departement"),
-                                    NomCategorie = reader.GetString("nom_categorie"),
-                                    NomFournisseur = reader.GetString("nom_fournisseur")
-                                };
-
-                                string status = reader.GetString("status");
-                                switch (status)
-                                {
-                                    case "Actif":
-                                        actifs.Add(abonnement);
-                                        break;
-                                    case "Expiré":
-                                        expires.Add(abonnement);
-                                        break;
-                                    case "En attente":
-                                        enAttente.Add(abonnement);
-                                        break;
-                                }
+                                    Departement = reader.GetString("nom_departement"),
+                                    Categorie = reader.GetString("nom_categorie"),
+                                    Fournisseur = reader.GetString("nom_fournisseur")
+                                });
                             }
                         }
                     }
+
+                    string queryEnAttente = @"
+                        SELECT * 
+                        FROM v_status_abonnements
+                        WHERE statut = 'En attente'
+                        LIMIT @offsetenAttente, @pageSize";
+
+                    using (var command = new MySqlCommand(queryEnAttente, connection))
+                    {
+                        command.Parameters.AddWithValue("@offsetenAttente", (pageNumberEnAttente - 1) * pageSize);
+                        command.Parameters.AddWithValue("@pageSize", pageSize);
+
+                        using (var reader = command.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                enAttente.Add(new VStatusAbonnement
+                                {
+                                    Id = reader.GetInt32("abonnement_id"),
+                                    Nom = reader.GetString("nom"),
+                                    Description = reader.GetString("description"),
+                                    Prix = reader.GetInt32("prix"),
+                                    Status = reader.GetString("statut"),
+                                    DateDebut = reader.GetDateTime("date_debut"),
+                                    DateFin = reader.GetDateTime("expiration_date"),
+                                    Type = reader.GetString("type"),
+                                    Departement = reader.GetString("nom_departement"),
+                                    Categorie = reader.GetString("nom_categorie"),
+                                    Fournisseur = reader.GetString("nom_fournisseur")
+                                });
+                            }
+                        }
+                    }
+
+                    string queryExpires = @"
+                        SELECT *
+                        FROM v_status_abonnements
+                        WHERE statut = 'Expiré'
+                        LIMIT @offsetExpires, @pageSize";
+
+                    using (var command = new MySqlCommand(queryExpires, connection))
+                    {
+                        command.Parameters.AddWithValue("@offsetExpires", (pageNumberExpires - 1) * pageSize);
+                        command.Parameters.AddWithValue("@pageSize", pageSize);
+
+                        using (var reader = command.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                expires.Add(new VStatusAbonnement
+                                {
+                                    Id = reader.GetInt32("abonnement_id"),
+                                    Nom = reader.GetString("nom"),
+                                    Description = reader.GetString("description"),
+                                    Prix = reader.GetInt32("prix"),
+                                    Status = reader.GetString("statut"),
+                                    DateDebut = reader.GetDateTime("date_debut"),
+                                    DateFin = reader.GetDateTime("expiration_date"),
+                                    Type = reader.GetString("type"),
+                                    Departement = reader.GetString("nom_departement"),
+                                    Categorie = reader.GetString("nom_categorie"),
+                                    Fournisseur = reader.GetString("nom_fournisseur")
+                                });
+                            }
+                        }
+                    }
+                  
+                    connection.Close();
+                    
+
                 }
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
             }
-
-            return (actifs, expires, enAttente);
+            // Retourner les listes d'abonnements filtrées par statut
+            return (actifs, enAttente, expires);
         }
-
-
-        
     }
 }

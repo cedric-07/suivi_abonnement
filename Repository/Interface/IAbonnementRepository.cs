@@ -30,7 +30,6 @@ namespace suivi_abonnement.Repository.Interface
         List<VAbonnementClient> getListVAbonnement(int pageNumber, int pageSize);
         int CountTotalVAbonnement();
         int NbrClientAbonne();
-        (List<Abonnement> actifs, List<Abonnement> expires, List<Abonnement> enAttente) getListAbonnementStatus(int pageNumber, int pageSize);
-
+        (List<VStatusAbonnement> actifs, List<VStatusAbonnement> enAttente, List<VStatusAbonnement> expires) getListAbonnementByStatus(int pageNumberActifs , int pageNumberEnAttente, int pageNumberExpires, int pageSize);
     }
 }

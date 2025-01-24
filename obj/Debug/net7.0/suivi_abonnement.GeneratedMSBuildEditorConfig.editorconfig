@@ -36,6 +36,10 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5QYWdlXENyZWF0ZUZvdXJuaXNzZXVyUGFnZS5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
+[D:/STAGE_L3/suivi_abonnement/Views/AdminPage/HistoriqueDetail.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5QYWdlXEhpc3RvcmlxdWVEZXRhaWwuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
 [D:/STAGE_L3/suivi_abonnement/Views/AdminPage/HistoriquePage.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5QYWdlXEhpc3RvcmlxdWVQYWdlLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 

@@ -1,0 +1,469 @@
+@model suivi_abonnement.Models.HistoriqueViewModel
+@{
+    ViewData["Title"] = "Liste des Abonnements";
+    Layout = "~/Views/Shared/Index.cshtml";
+}
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+    <title>Document</title>
+    <style>
+     #scrollTopBtn {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 100;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            padding: 10px;
+            cursor: pointer;
+            display: none; /* Caché par défaut */
+            font-size: 20px;
+    
+    }
+    #scrollTopBtn:hover {
+            background-color: #0056b3;
+    }
+
+    .table th {
+        text-align: center;
+        color: rgba(0, 0, 0, 0.5);
+    }
+    .table td {
+        text-align: center; /* Alignement gauche pour les contenus */
+        color: #0d2d5a;
+        font-weight: bold;
+        font-size: small;
+    }
+    .card-header {
+        background-color: #0d2d5a;
+    }
+    .title-card {
+        color: white;
+    }
+    .action-icons i {
+        font-size: 1.1rem; /* Taille ajustée des icônes */
+        margin-right: 8px;
+        cursor: pointer;
+    }
+    .action-icons .edit {
+        color: #17a2b8; /* Couleur pour "modifier" */
+    }
+    .action-icons .delete {
+        color: #e3342f; /* Couleur pour "supprimer" */
+    }
+    .modal-header{
+        background-color: #0d2d5a;
+    }
+    .modal-header h5{
+        color: white;
+    }
+
+
+        .btn-animate {
+        position: relative;
+        overflow: hidden;
+        transition: transform 0.3s ease, color 0.3s ease;
+    }
+
+    .btn-animate:hover {
+        color: #0d2d5a;
+        transform: scale(1.05); /* Agrandit légèrement le bouton */
+    }
+
+    .btn-animate i {
+        transition: transform 0.3s ease, color 0.3s ease;
+    }
+
+    .btn-animate:hover i {
+        transform: translateX(5px); /* Fait glisser l'icône vers la droite */
+        color: #007bff; /* Change la couleur de l'icône */
+    }
+    .btn {
+        font-weight: bold;
+        font-size: 14px;
+        background-color: #0d2d5a;
+        color: white;
+    }
+
+    .modal-content {
+        padding: 0;
+        border: none;
+        border-radius: 20px;
+    }
+
+    .icon-container .icon-circle {
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .modal-body h4 {
+        font-weight: bold;
+        font-size: 24px;
+    }
+
+    .modal-body p {
+        color: #6c757d; /* Gris clair pour le texte */
+        margin-top: 15px;
+        font-size: 16px;
+    }
+
+    .modal-body button {
+        font-weight: bold;
+        font-size: 14px;
+    }
+
+    .modal-header{
+        background-color: #0d2d5a;
+    }
+    .modal-header h5{
+        color: white;
+    }
+    .title{
+        font-weight: bold;
+        font-size: 1.1em;
+        color: #0d2d5a;
+        letter-spacing: 1px;
+    }
+    .title-card{
+        font-weight: bold;
+        font-size: 1.1em;
+        color: #ffffff;
+        letter-spacing: 1px;
+    }
+</style>
+</head>
+<body>
+    
+
+<!-- Modal pour le message de succès -->
+<!-- Modal pour le message de succès -->
+    <div class="modal fade" id="successModal" tabindex="-1" aria-labelledby="successModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content shadow border-0 rounded-4">
+                <div class="modal-body text-center py-5">
+                    <div class="icon-container mb-4">
+                        <div class="icon-circle bg-light d-flex align-items-center justify-content-center mx-auto" style="width: 80px; height: 80px; border-radius: 50%;">
+                            <i class="bi bi-check-circle-fill" style="font-size: 40px; color: #28a745;"></i>
+                        </div>
+                    </div>
+                    <h4 class="text-success fw-bold">Succès</h4>
+                    <p class="text-muted fs-6 mt-3">@TempData["Message"]</p>
+                    <button type="button" class="btn btn-dark px-5 py-2 rounded-pill text-uppercase mt-4" data-bs-dismiss="modal">
+                        OK
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal pour le message d'erreur -->
+    <div class="modal fade" id="errorModal" tabindex="-1" aria-labelledby="errorModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content shadow border-0 rounded-4">
+                <div class="modal-body text-center py-5">
+                    <div class="icon-container mb-4">
+                        <div class="icon-circle bg-light d-flex align-items-center justify-content-center mx-auto" style="width: 80px; height: 80px; border-radius: 50%;">
+                            <i class="bi bi-x-circle-fill" style="font-size: 40px; color: #dc3545;"></i>
+                        </div>
+                    </div>
+                    <h4 class="text-danger fw-bold">Erreur</h4>
+                    <p class="text-muted fs-6 mt-3">@TempData["Error"]</p>
+                    <button type="button" class="btn btn-dark px-5 py-2 rounded-pill text-uppercase mt-4" data-bs-dismiss="modal">
+                        OK
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="container-fluid fade-in visible">
+        <div class="row align-items-center">
+            <div class="col">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb bg-transparent mb-0">
+                        <li class="breadcrumb-item"><a href="#">Pages</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">Historique des abonnements</li>
+                    </ol>
+                    <h3 class="title">Historique des abonnements Actif/Expirer/En attente</h3>
+                </nav>
+            </div>
+        </div>
+        <div class="row align-items-center mt-4">
+            <div class="d-flex justify-content-end">
+                <a href="@Url.Action("Index", "AdminPage")" class="btn  btn-animate" >
+                    <i class="bi bi-clock-history"></i>
+                    Liste abonnements actif
+                </a>
+            </div>
+        </div>
+
+    <div class="card ">
+            <div class="card-header text-white">
+                <h5 class="title-card">Liste abonnements Actifs</h5>
+            </div>
+            <div class="table-responsive">
+                <table class="table">
+                    <br>
+                    <thead>
+                        <tr>
+                            <th class="text-uppercase">Nom</th>
+                            <th class="text-uppercase">Prix (Ariary)</th>
+                            <th class="text-uppercase">Fournisseur</th>
+                            <th class="text-uppercase">Date début</th>
+                            <th class="text-uppercase">Date expiration</th>
+                            <th class="text-uppercase">Statut</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var abonnement in Model.Actifs)
+                        {
+                            <tr>
+                                <td>@abonnement.Nom</td>
+                                    <td>@abonnement.Prix.ToString("N2")</td>
+                                    <td>@abonnement.Fournisseur</td>
+                                    <td>@abonnement.DateDebut.ToString("d MMM yyyy")</td>
+                                    <td>@abonnement.DateFin.ToString("d MMM yyyy")</td>
+                                    <td>@abonnement.Status</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="d-flex justify-content-center mt-3">
+            <nav class="text-center mb-3">
+                <!-- Affichage du nombre total de pages -->
+                <p style="color: #0d2d5a;">Pages @Model.CurrentPageActifs sur @Model.TotalPagesActifs</p>
+                <ul class="pagination justify-content-center">
+                    <!-- Bouton Précédent -->
+                    <li class="page-item @(Model.CurrentPageActifs == 1 ? "disabled" : "")">
+                        <a class="page-link" 
+                        href="@Url.Action("HistoriqueDetail", new { pageNumberActifs = Math.Max(1, Model.CurrentPageActifs - 1), pageNumberEnAttente = Model.CurrentPageEnAttente, pageNumberExpires = Model.CurrentPageExpirés })" 
+                        aria-label="Précédent">
+                        &laquo;
+                        </a>
+                    </li>
+
+                    <!-- Pages dynamiques -->
+                    @for (int i = 1; i <= Model.TotalPagesActifs; i++)
+                    {
+                        <li class="page-item @(i == Model.CurrentPageActifs ? "active" : "")">
+                            <a class="page-link" 
+                            href="@Url.Action("HistoriqueDetail", new { pageNumberActifs = i, pageNumberEnAttente = Model.CurrentPageEnAttente, pageNumberExpires = Model.CurrentPageExpirés })"
+                            style="border-radius: 0; padding: 10px 15px; border: 1px solid #0d2d5a; color: @(i == Model.CurrentPageActifs ? "white" : "#0d2d5a"); background-color: @(i == Model.CurrentPageActifs ? "#0d2d5a" : "transparent");">
+                            @i
+                            </a>
+                        </li>
+                    }
+
+                    <!-- Bouton Suivant -->
+                    <li class="page-item @(Model.CurrentPageActifs == Model.TotalPagesActifs ? "disabled" : "")">
+                        <a class="page-link" 
+                        href="@Url.Action("HistoriqueDetail", new { pageNumberActifs = Math.Min(Model.TotalPagesActifs, Model.CurrentPageActifs + 1), pageNumberEnAttente = Model.CurrentPageEnAttente, pageNumberExpires = Model.CurrentPageExpirés })"
+                        aria-label="Suivant">
+                        &raquo;
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+
+
+
+        <div class="card ">
+            <div class="card-header text-white">
+                <h5 class="title-card">Liste abonnements Expirer</h5>
+            </div>
+            <div class="table-responsive">
+                <table class="table">
+                    <br>
+                    <thead>
+                        <tr>
+                            <th class="text-uppercase">Nom</th>
+                            <th class="text-uppercase">Prix (Ariary)</th>
+                            <th class="text-uppercase">Fournisseur</th>
+                            <th class="text-uppercase">Date début</th>
+                            <th class="text-uppercase">Date expiration</th>
+                            <th class="text-uppercase">Statut</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var abonnement in Model.Expirés)
+                        {
+                            <tr>
+                                <td>@abonnement.Nom</td>
+                                    <td>@abonnement.Prix.ToString("N2")</td>
+                                    <td>@abonnement.Fournisseur</td>
+                                    <td>@abonnement.DateDebut.ToString("d MMM yyyy")</td>
+                                    <td>@abonnement.DateFin.ToString("d MMM yyyy")</td>
+                                    <td>@abonnement.Status</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="d-flex justify-content-center mt-3">
+            <nav class="text-center mb-3">
+                <!-- Affichage du nombre total de pages -->
+                <p style="color: #0d2d5a;">Pages @Model.CurrentPageExpirés sur @Model.TotalPagesExpirés</p>
+                <ul class="pagination justify-content-center">
+                    <!-- Bouton Précédent -->
+                    <li class="page-item @(Model.CurrentPageExpirés == 1 ? "disabled" : "")">
+                        <a class="page-link" 
+                        href="@Url.Action("HistoriqueDetail", new { pageNumberActifs = Model.CurrentPageActifs, pageNumberEnAttente = Model.CurrentPageEnAttente, pageNumberExpires = Math.Max(1, Model.CurrentPageExpirés - 1) })" 
+                        aria-label="Précédent">
+                        &laquo;
+                        </a>
+                    </li>
+
+                    <!-- Pages dynamiques -->
+                    @for (int i = 1; i <= Model.TotalPagesExpirés; i++)
+                    {
+                        <li class="page-item @(i == Model.CurrentPageExpirés ? "active" : "")">
+                            <a class="page-link" 
+                            href="@Url.Action("HistoriqueDetail", new { pageNumberActifs = Model.CurrentPageActifs, pageNumberEnAttente = Model.CurrentPageEnAttente, pageNumberExpires = i })"
+                            style="border-radius: 0; padding: 10px 15px; border: 1px solid #0d2d5a; color: @(i == Model.CurrentPageExpirés ? "white" : "#0d2d5a"); background-color: @(i == Model.CurrentPageExpirés ? "#0d2d5a" : "transparent");">
+                            @i
+                            </a>
+                        </li>
+                    }
+
+                    <!-- Bouton Suivant -->
+                    <li class="page-item @(Model.CurrentPageExpirés == Model.TotalPagesExpirés ? "disabled" : "")">
+                        <a class="page-link" 
+                        href="@Url.Action("HistoriqueDetail", new { pageNumberActifs = Model.CurrentPageActifs, pageNumberEnAttente = Model.CurrentPageEnAttente, pageNumberExpires = Math.Min(Model.TotalPagesExpirés, Model.CurrentPageExpirés + 1) })"
+                        aria-label="Suivant">
+                        &raquo;
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+        <div class="card ">
+            <div class="card-header text-white">
+                <h5 class="title-card">Liste abonnements En attente</h5>
+            </div>
+            <div class="table-responsive">
+                <table class="table">
+                    <br>
+                    <thead>
+                        <tr>
+                            <th class="text-uppercase">Nom</th>
+                            <th class="text-uppercase">Prix (Ariary)</th>
+                            <th class="text-uppercase">Fournisseur</th>
+                            <th class="text-uppercase">Date début</th>
+                            <th class="text-uppercase">Date expiration</th>
+                            <th class="text-uppercase">Statut</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var abonnement in Model.EnAttente)
+                        {
+                            <tr>
+                                <td>@abonnement.Nom</td>
+                                    <td>@abonnement.Prix.ToString("N2")</td>
+                                    <td>@abonnement.Fournisseur</td>
+                                    <td>@abonnement.DateDebut.ToString("d MMM yyyy")</td>
+                                    <td>@abonnement.DateFin.ToString("d MMM yyyy")</td>
+                                    <td>@abonnement.Status</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>   
+            </div>
+        </div>
+        <div class="d-flex justify-content-center mt-3">
+            <nav>
+                <!-- Affichage du nombre total de pages -->
+                <p class="text-center mb-3" style="color: #0d2d5a;">
+                    Pages @Model.CurrentPageEnAttente sur @Model.TotalPagesEnAttente
+                </p>
+                <ul class="pagination justify-content-center" style="margin: 0; padding: 0; list-style: none;">
+                    <!-- Bouton Précédent -->
+                    <li class="page-item @(Model.CurrentPageEnAttente == 1 ? "disabled" : "")">
+                        <a class="page-link" 
+                        style="border-radius: 0; padding: 10px 15px;" 
+                        href="@Url.Action("HistoriqueDetail", new { pageNumberActifs = Model.CurrentPageActifs, pageNumberEnAttente = Math.Max(1, Model.CurrentPageEnAttente - 1), pageNumberExpires = Model.CurrentPageExpirés })"
+                        aria-label="Précédent">
+                        &laquo;
+                        </a>
+                    </li>
+
+                    <!-- Pages dynamiques -->
+                    @for (int i = 1; i <= Model.TotalPagesEnAttente; i++)
+                    {
+                        <li class="page-item @(i == Model.CurrentPageEnAttente ? "active" : "")">
+                            <a class="page-link" 
+                            href="@Url.Action("HistoriqueDetail", new { pageNumberActifs = Model.CurrentPageActifs, pageNumberEnAttente = i, pageNumberExpires = Model.CurrentPageExpirés })"
+                            style="border-radius: 0; padding: 10px 15px; border: 1px solid #0d2d5a; color: @(i == Model.CurrentPageEnAttente ? "white" : "#0d2d5a"); background-color: @(i == Model.CurrentPageEnAttente ? "#0d2d5a" : "transparent");">
+                            @i
+                            </a>
+                        </li>
+                    }
+
+                    <!-- Bouton Suivant -->
+                    <li class="page-item @(Model.CurrentPageEnAttente == Model.TotalPagesEnAttente ? "disabled" : "")">
+                        <a class="page-link" 
+                        style="border-radius: 0; padding: 10px 15px;" 
+                        href="@Url.Action("HistoriqueDetail", new { pageNumberActifs = Model.CurrentPageActifs, pageNumberEnAttente = Math.Min(Model.TotalPagesEnAttente, Model.CurrentPageEnAttente + 1), pageNumberExpires = Model.CurrentPageExpirés })"
+                        aria-label="Suivant">
+                        &raquo;
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+            <button id="scrollTopBtn" >↑</button>
+
+    </div>
+    
+</body>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Check if there's a success message
+            if (@(TempData["Message"] != null ? "true" : "false")) {
+                new bootstrap.Modal(document.getElementById('successModal')).show();
+            }
+
+            // Check if there's an error message
+            if (@(TempData["Error"] != null ? "true" : "false")) {
+                new bootstrap.Modal(document.getElementById('errorModal')).show();
+            }
+        });
+
+        window.onload = function() {
+            var scrollTopBtn = document.getElementById("scrollTopBtn");
+
+            // Vérifier si la page a été défilée de plus de 100px
+            window.onscroll = function() {
+                if (document.documentElement.scrollTop > 100) {
+                    scrollTopBtn.style.display = "block"; // Afficher le bouton
+                } else {
+                    scrollTopBtn.style.display = "none"; // Cacher le bouton
+                }
+            };
+
+            // Faire défiler la page vers le haut au clic sur le bouton
+            scrollTopBtn.onclick = function() {
+                window.scrollTo({
+                    top: 0,
+                    behavior: 'smooth' // Défilement fluide
+                });
+            };
+        };
+            
+
+
+    </script>
+
+
+</html>
+
+

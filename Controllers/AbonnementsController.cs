@@ -33,6 +33,8 @@ namespace suivi_abonnement.Controllers
             int abonnementsExpirés = _abonnementService.CountTotalAbonnementsInactif(); // Implémentez cette méthode
             int abonnementsSuspendus = _abonnementService.CountTotalAbonnementsEnAttente(); // Implémentez cette méthode
 
+
+
             // Appel des méthodes pour obtenir les revenus fictifs
             List<Dictionary<string, object>> revenusAnnuels = _abonnementService.RevenusFictifsParAnnee();
             List<Dictionary<string, object>> revenusMensuels = _abonnementService.RevenusFictifsParMois();
@@ -44,7 +46,7 @@ namespace suivi_abonnement.Controllers
                 Expirés = abonnementsExpirés,
                 Suspendus = abonnementsSuspendus,
                 RevenusAnnuels = revenusAnnuels,
-                RevenusMensuels = revenusMensuels
+                RevenusMensuels = revenusMensuels,
             };
 
             return View("~/Views/AdminPage/IndexPage.cshtml", model);
@@ -262,13 +264,9 @@ namespace suivi_abonnement.Controllers
 
                 // Récupération des abonnements
                 List<VAbonnementClient> abonnement = _abonnementService.getListVAbonnement(pageNumber, pageSize) ?? new List<VAbonnementClient>();
-                var (actifs, expires, enAttente) = _abonnementService.getListAbonnementStatus(pageNumber , pageSize);
                 int nbrlcient = _abonnementService.NbrClientAbonne();
                 int totalAbonnements = _abonnementService.CountTotalVAbonnement();
 
-                ViewBag.AbonnementsActifs = actifs;
-                ViewBag.AbonnementsExpirés = expires;
-                ViewBag.AbonnementsEnAttente = enAttente;
                 ViewBag.CurrentPage = pageNumber;
                 ViewBag.TotalPages = (int)Math.Ceiling((double)totalAbonnements / pageSize);
                 ViewBag.TotalAbonnements = totalAbonnements;
@@ -277,6 +275,54 @@ namespace suivi_abonnement.Controllers
                 Console.WriteLine("Current page : " + pageNumber);
                 Console.WriteLine("Total pages : " + ViewBag.TotalPages);
                 return View("~/Views/AdminPage/HistoriquePage.cshtml", abonnement);
+            }
+            catch (Exception ex)
+            {
+                TempData["Error"] = "Une erreur s'est produite : " + ex.Message;
+                return RedirectToAction("Index");
+            }
+        }
+
+        public IActionResult HistoriqueDetail(int pageNumberActifs = 1 , int pageNumberEnAttente = 1 , int pageNumberExpires = 1)
+        {
+            try
+            {
+                int pageSize = 1;
+
+                if (_abonnementService == null)
+                {
+                    throw new Exception("Le service d'abonnement n'est pas disponible.");
+                }
+
+                var (actifs , enAttente , expires) = _abonnementService.getListAbonnementByStatus(pageNumberActifs , pageNumberEnAttente , pageNumberExpires , pageSize);
+
+                int totalActifs = _abonnementService.CountTotalAbonnementsActif();
+                int totalEnAttente = _abonnementService.CountTotalAbonnementsEnAttente();
+                int totalExpires = _abonnementService.CountTotalAbonnementsInactif();
+
+                var viewModel = new HistoriqueViewModel
+                {
+                    Actifs = actifs,
+                    EnAttente = enAttente,
+                    Expirés = expires,
+                    CurrentPageActifs = pageNumberActifs,
+                    CurrentPageEnAttente = pageNumberEnAttente,
+                    CurrentPageExpirés = pageNumberExpires,
+                    TotalActifs = totalActifs,
+                    TotalEnAttente = totalEnAttente,
+                    TotalExpires = totalExpires,
+                    TotalPagesActifs = (int)Math.Ceiling((double)totalActifs / pageSize),
+                    TotalPagesEnAttente = (int)Math.Ceiling((double)totalEnAttente / pageSize),
+                    TotalPagesExpirés = (int)Math.Ceiling((double)totalExpires / pageSize)
+
+                };
+
+                Console.WriteLine("Total actifs : " + totalActifs);
+                Console.WriteLine("Current page actifs : " + pageNumberActifs);
+                Console.WriteLine("Total pages actifs : " + viewModel.TotalPagesActifs);
+                
+
+                return View("~/Views/AdminPage/HistoriqueDetail.cshtml", viewModel);
             }
             catch (Exception ex)
             {
