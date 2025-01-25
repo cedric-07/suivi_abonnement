@@ -55,7 +55,7 @@ namespace suivi_abonnement_omnis.Controllers.Authentification
                             // Redirection vers l'action AbonnementPage
                             return RedirectToAction("Index", "Abonnements");
                         default:
-                            TempData["Error"] = "Rôle utilisateur inconnu.";
+                            TempData["Error"] = "Impossible de vous connecter.";
                             return View(new User());
                     }
                 }
