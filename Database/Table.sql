@@ -58,7 +58,8 @@ CREATE  TABLE suivi_abonnement_omnis_db.notifications (
 	message              VARCHAR(250)    NOT NULL   ,
 	`type`               VARCHAR(20)    NOT NULL   ,
 	`status`             VARCHAR(20)    NOT NULL   ,
-	idabonnement         INT    NOT NULL   
+	idabonnement         INT    NOT NULL ,
+	iduser 			 INT    NOT NULL,
  ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 CREATE INDEX fk_notifications_abonnements ON suivi_abonnement_omnis_db.notifications ( idabonnement );

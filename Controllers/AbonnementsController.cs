@@ -271,9 +271,7 @@ namespace suivi_abonnement.Controllers
                 ViewBag.TotalPages = (int)Math.Ceiling((double)totalAbonnements / pageSize);
                 ViewBag.TotalAbonnements = totalAbonnements;
                 ViewBag.NbrClientAbonne = nbrlcient;
-                Console.WriteLine("Total abonnements : " + totalAbonnements);
-                Console.WriteLine("Current page : " + pageNumber);
-                Console.WriteLine("Total pages : " + ViewBag.TotalPages);
+            
                 return View("~/Views/AdminPage/HistoriquePage.cshtml", abonnement);
             }
             catch (Exception ex)

@@ -37,6 +37,9 @@ builder.Services.AddScoped<ICategorieRepository, CategorieRepository>();
 
 var app = builder.Build();
 
+// Configurer les services nécessaires
+builder.Services.AddHostedService<NotificationBackgroundService>();
+builder.Services.AddSingleton<NotificationService>();
 // Configurer le pipeline de requêtes HTTP
 if (!app.Environment.IsDevelopment())
 {
