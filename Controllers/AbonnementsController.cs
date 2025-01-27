@@ -13,33 +13,56 @@ namespace suivi_abonnement.Controllers
         private readonly IAbonnementService _abonnementService;
         private readonly IFournisseurService _fournisseurService;
         private readonly ICategorieService _categorieService;
+        private readonly INotificationService _notificationService;
         private readonly AbonnementViewModel abonnementViewModel = new AbonnementViewModel();
         private readonly AbonnementStatViewModel abonnementStatViewModel = new AbonnementStatViewModel();
 
         private readonly IDepartementService _departementService;
         private readonly User user = new User();
-        public AbonnementsController(IAbonnementService abonnementService, IFournisseurService fournisseurService, ICategorieService categorieService, IDepartementService departementService)
+        public AbonnementsController(IAbonnementService abonnementService, IFournisseurService fournisseurService, ICategorieService categorieService, IDepartementService departementService , INotificationService notificationService)
         {
             _abonnementService = abonnementService;
             _fournisseurService = fournisseurService;
             _categorieService = categorieService;
             _departementService = departementService;
+            _notificationService = notificationService;
         }
         
         public IActionResult Index()
         {
+            // Vérifier les informations de session utilisateur
+            var userRole = HttpContext.Session.GetString("UserRole");
+            Console.WriteLine("userRole");
+            int userId = HttpContext.Session.GetInt32("UserId") ?? 0;
+
+            if (string.IsNullOrEmpty(userRole) || userId == 0)
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
+            // Appel pour envoyer les notifications si nécessaire
+            _notificationService.SendNotification();
+
             // Appel des méthodes pour obtenir les nombres d'abonnements
             int abonnementsActifs = _abonnementService.CountTotalAbonnementsActif();
-            int abonnementsExpirés = _abonnementService.CountTotalAbonnementsInactif(); // Implémentez cette méthode
-            int abonnementsSuspendus = _abonnementService.CountTotalAbonnementsEnAttente(); // Implémentez cette méthode
-
-
+            int abonnementsExpirés = _abonnementService.CountTotalAbonnementsInactif();
+            int abonnementsSuspendus = _abonnementService.CountTotalAbonnementsEnAttente();
 
             // Appel des méthodes pour obtenir les revenus fictifs
             List<Dictionary<string, object>> revenusAnnuels = _abonnementService.RevenusFictifsParAnnee();
             List<Dictionary<string, object>> revenusMensuels = _abonnementService.RevenusFictifsParMois();
 
-            // Créer un objet pour les passer à la vue
+            // Récupérer les notifications en fonction du rôle
+            List<Notification> notifications = new List<Notification>();
+            if (userRole == "admin")
+            {
+                notifications = _notificationService.GetNotificationsForAdmin();
+            }
+
+            // Calculer le nombre de notifications non lues
+            int notificationCount = notifications?.Count(n => n.Status == "non lu") ?? 0;
+
+            // Créer un objet pour le passer à la vue
             var model = new AbonnementStatViewModel
             {
                 Actifs = abonnementsActifs,
@@ -47,10 +70,17 @@ namespace suivi_abonnement.Controllers
                 Suspendus = abonnementsSuspendus,
                 RevenusAnnuels = revenusAnnuels,
                 RevenusMensuels = revenusMensuels,
+                Notifications = notifications, // Ajouter les notifications au modèle
             };
+
+            // Passer le compteur de notifications dans ViewBag pour une utilisation rapide
+            ViewBag.NotificationCount = notificationCount;
 
             return View("~/Views/AdminPage/IndexPage.cshtml", model);
         }
+
+
+
 
 
         // GET: AbonnementsController

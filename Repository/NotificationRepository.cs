@@ -22,56 +22,7 @@ namespace suivi_abonnement.Service
                 using (var connection = new MySqlConnection(connectionString))
                 {
                     connection.Open();
-                    
-                    SendAdminNotification();
-                    SendClientNotification();
-                    
-
-                    connection.Close();
-
-                }
-            }
-            catch (Exception e)
-            {
-                throw new Exception(e.Message);     
-            }
-        }
-
-        public void SendAdminNotification()
-        {
-            try
-            {
-                using (var connection = new MySqlConnection(connectionString))
-                {
-                    connection.Open();
-                    string query = @"SELECT 
-                                            a.*,
-                                            u.id AS iduser,
-                                            u.username,
-                                            u.email
-                                    FROM
-                                            abonnements a
-                                    JOIN 
-                                            users u ON u.role = 'admin'
-                                    WHERE 
-                                            a.expiration_date BETWEEN NOW() AND DATE_ADD(NOW(), INTERVAL 1 MONTH)";
-                    
-                    using (var command = new MySqlCommand(query , connection))
-                    {
-                        using (var reader = command.ExecuteReader())
-                        {
-                            while (reader.Read())
-                            {
-                                int userId = reader.GetInt32("iduser");
-                                int abonnementId = reader.GetInt32("id");
-                                string message = "Cher Mr/Mme/Mlle " + reader.GetString("username") + " l'abonnement " + reader.GetString("nom") + " va expirer dans un mois";
-
-                                CreateNotification(userId , abonnementId , message);
-                            }
-                            
-                        }
-                    }
-                    connection.Close();
+                    SendNotificationByRole( "admin");
                 }
             }
             catch (Exception e)
@@ -80,55 +31,57 @@ namespace suivi_abonnement.Service
             }
         }
 
-        public void SendClientNotification()
+        public void SendNotificationByRole(string role)
         {
             try
             {
                 using (var connection = new MySqlConnection(connectionString))
                 {
                     connection.Open();
-                    string query = @"SELECT 
-                                            a.*, 
-                                            u.id AS iduser, 
-                                            u.username, 
-                                            u.email
-                                        FROM
-                                            abonnements a
-                                        JOIN 
-                                            departements d ON a.departement_id = d.departement_id
-                                        JOIN
-                                            departement_user du ON du.iddepartement = d.departement_id
-                                        JOIN
-                                            users u ON u.id = du.user_id
-                                        WHERE 
-                                            du.user_id = u.id
-                                        AND
-                                            a.expiration_date BETWEEN NOW() AND DATE_ADD(NOW(), INTERVAL 1 MONTH)";
 
-                    
-                    using (var command = new MySqlCommand(query , connection))
+                    string query = @"SELECT 
+                                        a.abonnement_id,  -- Changer 'a.id' par 'a.abonnement_id'
+                                        a.nom,
+                                        u.id AS iduser,
+                                        u.username,
+                                        u.email
+                                    FROM abonnements a
+                                    JOIN users u ON u.role = @role
+                                    WHERE a.expiration_date BETWEEN NOW() AND DATE_ADD(NOW(), INTERVAL 1 MONTH)";
+
+                    using (var command = new MySqlCommand(query, connection))
                     {
+                        command.Parameters.AddWithValue("@role", role);
+
                         using (var reader = command.ExecuteReader())
                         {
                             while (reader.Read())
                             {
                                 int userId = reader.GetInt32("iduser");
-                                int abonnementId = reader.GetInt32("id");
-                                string message = "Cher Mr/Mme/Mlle " + reader.GetString("username") + " l'abonnement " + reader.GetString("nom") + " va expirer dans un mois";
+                                int abonnementId = reader.GetInt32("abonnement_id");  // Assurez-vous d'utiliser le bon nom de colonne
+                                string message = $"Cher {reader.GetString("username")}, l'abonnement {reader.GetString("nom")} va expirer dans un mois";
 
-                                CreateNotification(userId , abonnementId , message);
+                                try
+                                {
+
+                                    CreateNotification(userId, abonnementId, message);
+                                }
+                                catch (Exception ex)
+                                {
+                                    Console.WriteLine($"Erreur pour {userId}: {ex.Message}");
+                                }
                             }
-                            
                         }
                     }
-                    connection.Close();
                 }
             }
-            catch (Exception e)
+            catch (System.Exception)
             {
-                throw new Exception(e.Message);
+                throw;
             }
         }
+
+
 
         public void CreateNotification(int userId , int abonnementId , string message)
         {
@@ -138,7 +91,7 @@ namespace suivi_abonnement.Service
                 using (var connection = new MySqlConnection(connectionString))
                 {
                     connection.Open();
-                    string query = "INSERT INTO notifications (message , type , status , idabonnement , iduser) VALUES (@message , 'abonnement expirer' , 'non lu' , @idabonnement , @iduser)";
+                    string query = "INSERT INTO notifications (message , type , status , idabonnement , iduser , created_at) VALUES (@message , 'abonnement expirer' , 'non lu' , @idabonnement , @iduser , NOW())";
 
                     using (var command = new MySqlCommand(query, connection))
                     {
@@ -162,11 +115,24 @@ namespace suivi_abonnement.Service
             List<Notification> notifications = new List<Notification>();
             try
             {
-
                 using (var connection = new MySqlConnection(connectionString))
                 {
                     connection.Open();
-                    string query = "SELECT n* , a.nom AS abonnement , u.username AS user FROM notifications n JOIN abonnement a ON n.idabonnement = a.id JOIN user u ON n.iduser = u.id WHERE u.id = @iduser AND n.statut = 'non lu' AND u.role = 'user'";
+                    string query = @"
+                        SELECT 
+                            n.notification_id,  -- Utilisez le nom correct de la colonne 'notification_id'
+                            n.message, 
+                            n.type, 
+                            n.status, 
+                            n.iduser, 
+                            n.created_at, 
+                            n.idabonnement,
+                            a.nom AS abonnements, 
+                            u.username AS user
+                        FROM notifications n
+                        JOIN abonnements a ON n.idabonnement = a.abonnement_id
+                        JOIN users u ON n.iduser = u.id
+                        WHERE u.id = @iduser AND n.status = 'non lu' AND u.role = 'user'";
 
                     using (var command = new MySqlCommand(query, connection))
                     {
@@ -176,11 +142,12 @@ namespace suivi_abonnement.Service
                             while (reader.Read())
                             {
                                 Notification notification = new Notification();
-                                notification.Id = reader.GetInt32("id");
+                                notification.Id = reader.GetInt32("notification_id");  // Assurez-vous de correspondre au bon nom de colonne
                                 notification.Message = reader.GetString("message");
                                 notification.Type = reader.GetString("type");
                                 notification.Status = reader.GetString("status");
                                 notification.UserId = reader.GetInt32("iduser");
+                                notification.CreatedAt = reader.GetDateTime("created_at");
                                 notification.AbonnementId = reader.GetInt32("idabonnement");
 
                                 notifications.Add(notification);
@@ -192,11 +159,11 @@ namespace suivi_abonnement.Service
             }
             catch (Exception e)
             {
-                
                 throw new Exception(e.Message);
             }
             return notifications;
         }
+
 
 
         public List<Notification> GetNotificationsForAdmin()
@@ -204,11 +171,24 @@ namespace suivi_abonnement.Service
             List<Notification> notifications = new List<Notification>();
             try
             {
-
                 using (var connection = new MySqlConnection(connectionString))
                 {
                     connection.Open();
-                    string query = "SELECT n* , a.nom AS abonnement , u.username AS user FROM notifications n JOIN abonnement a ON n.idabonnement = a.id JOIN user u ON n.iduser = u.id WHERE u.role = 'admin' AND n.status = 'non lu'";
+                    string query = @"
+                        SELECT 
+                            n.notification_id,  -- Si l'identifiant est 'notification_id' au lieu de 'id'
+                            n.message, 
+                            n.type, 
+                            n.status, 
+                            n.iduser, 
+                            n.created_at, 
+                            n.idabonnement,
+                            a.nom AS abonnements, 
+                            u.username AS user
+                        FROM notifications n
+                        JOIN abonnements a ON n.idabonnement = a.abonnement_id
+                        JOIN users u ON n.iduser = u.id
+                        WHERE u.role = 'admin' AND n.status = 'non lu'";
 
                     using (var command = new MySqlCommand(query, connection))
                     {
@@ -217,11 +197,12 @@ namespace suivi_abonnement.Service
                             while (reader.Read())
                             {
                                 Notification notification = new Notification();
-                                notification.Id = reader.GetInt32("id");
+                                notification.Id = reader.GetInt32("notification_id");  // Assurez-vous de correspondre au nom de la colonne
                                 notification.Message = reader.GetString("message");
                                 notification.Type = reader.GetString("type");
                                 notification.Status = reader.GetString("status");
                                 notification.UserId = reader.GetInt32("iduser");
+                                notification.CreatedAt = reader.GetDateTime("created_at");
                                 notification.AbonnementId = reader.GetInt32("idabonnement");
 
                                 notifications.Add(notification);
@@ -233,11 +214,11 @@ namespace suivi_abonnement.Service
             }
             catch (Exception e)
             {
-                
                 throw new Exception(e.Message);
             }
             return notifications;
         }
+
 
     }
 }

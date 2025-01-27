@@ -33,13 +33,16 @@ builder.Services.AddScoped<IFournisseurService, FournisseurService>();
 builder.Services.AddScoped<IFournisseurRepository, FournisseurRepository>();
 builder.Services.AddScoped<ICategorieService, CategorieService>();
 builder.Services.AddScoped<ICategorieRepository, CategorieRepository>();
+builder.Services.AddScoped<INotificationRepository, NotificationRepository>();
+builder.Services.AddScoped<INotificationService, NotificationService>();
 
+
+
+// Configurer les services nécessaires
 
 var app = builder.Build();
 
-// Configurer les services nécessaires
-builder.Services.AddHostedService<NotificationBackgroundService>();
-builder.Services.AddSingleton<NotificationService>();
+
 // Configurer le pipeline de requêtes HTTP
 if (!app.Environment.IsDevelopment())
 {

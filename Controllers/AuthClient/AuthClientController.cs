@@ -80,7 +80,7 @@ namespace suivi_abonnement_omnis.Controllers.Authentification
         public IActionResult Register()
         {
             List<Departement> departements = _departementService.getDepartements();
-            ViewBag.Departements = departements;
+            ViewData["Departements"] = departements;
             return View();
         }
 

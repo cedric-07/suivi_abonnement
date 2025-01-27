@@ -52,7 +52,7 @@
                                 <label for="departementSelect">Département</label>
                                 <select class="form-control" id="departementSelect" name="idDepartement">
                                     <option value="" disabled selected hidden>--Choisir un département--</option>
-                                    @foreach (var departement in (List<Departement>)ViewBag.Departements)
+                                    @foreach (var departement in ViewData["Departements"] as List<Departement>)
                                     {
                                         <option value="@departement.Id">@departement.Nom</option>
                                     }

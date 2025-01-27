@@ -13,8 +13,8 @@ namespace suivi_abonnement.Service
         {
             while (!stoppingToken.IsCancellationRequested)
             {
-                _notificationService.SendNotification();
-                await Task.Delay(1000 * 60 * 60 * 24, stoppingToken);
+                _notificationService.SendNotification(); // Logique pour envoyer la notification
+                await Task.Delay(1000 * 60 * 60 * 24, stoppingToken); // Attendre 24 heures avant de renvoyer une notification
             }
         }
     }

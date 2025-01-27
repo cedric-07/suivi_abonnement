@@ -1,16 +1,20 @@
-INSERT INTO suivi_abonnement_omnis_db.categories (nom)
-VALUES 
-('Software Development'),
-('HR Services'),
-('Marketing Campaigns');
+INSERT INTO suivi_abonnement_omnis_db.categories (nom) VALUES
+('Internet Haut Débit'), 
+('Télévision HD'), 
+('Téléphonie Mobile'), 
+('Énergie Solaire');
 
 
 
-INSERT INTO suivi_abonnement_omnis_db.departements (departement_id, nom)
-VALUES 
-(1, 'DRH'),
-(2, 'DSI'),
-(3, 'Marketing');
+
+
+INSERT INTO suivi_abonnement_omnis_db.departements (departement_id, nom) VALUES
+(1, 'Direction Générale'),
+(2, 'Support Technique'),
+(3, 'Marketing'),
+(4, 'Service Client'),
+(5, 'Ressources Humaines');
+
 
 
 
@@ -28,22 +32,23 @@ VALUES
 (3, 3);  -- Cedric Nomena associé au département Marketing
 
 
-INSERT INTO suivi_abonnement_omnis_db.fournisseurs (nom, email, telephone)
-VALUES
-('Fournisseur A', 'fournisseurA@example.com', '0123456789'),
-('Fournisseur B', 'fournisseurB@example.com', '0987654321');
-
-
-INSERT INTO suivi_abonnement_omnis_db.abonnements (type, prix, idfournisseur, idcategorie, expiration_date, description, nom, departement_id)
-VALUES
-('Software License', 1000, 1, 1, '2025-12-31 23:59:59', 'Abonnement logiciel de développement', 'Dev Soft', 1),
-('HR Service', 500, 2, 2, '2025-11-30 23:59:59', 'Service RH pour l\'entreprise', 'HR Service A', 2),
-('Marketing Subscription', 200, 1, 3, '2025-10-15 23:59:59', 'Abonnement pour les campagnes marketing', 'Campaign Marketing', 3);
+INSERT INTO suivi_abonnement_omnis_db.fournisseurs (nom, email, telephone) VALUES
+('Orange', 'contact@orange.com', '+33 1 70 00 00 00'),
+('SFR', 'support@sfr.com', '+33 1 70 50 00 00'),
+('Bouygues Telecom', 'contact@bouygues.com', '+33 1 72 72 12 34');
 
 
 
-INSERT INTO suivi_abonnement_omnis_db.notifications (message, type, status, idabonnement)
-VALUES
-('Abonnement logiciel expiré', 'Alert', 'Inactive', 1),
-('Service RH renouvelé', 'Reminder', 'Active', 2),
-('Nouvelle campagne marketing lancée', 'Info', 'Active', 3);
+INSERT INTO suivi_abonnement_omnis_db.abonnements (type, prix, date_debut, idfournisseur, idcategorie, expiration_date, description, nom, departement_id) VALUES
+('Annuel', 39.99, '2025-01-01 10:00:00', 1, 1, '2026-01-01 10:00:00', 'Abonnement fibre optique 1 Gb/s', 'Fibre Optique Plus', 1),
+('Annuel', 25.99, '2025-01-05 10:00:00', 2, 2, '2026-01-05 10:00:00', 'Abonnement TV HD avec 100 chaînes', 'TV Premium', 2),
+('Annuel', 19.99, '2025-01-10 10:00:00', 3, 3, '2026-01-10 10:00:00', 'Abonnement mobile 5 Go data + appels illimités', 'Mobile Plus', 3);
+
+
+
+
+INSERT INTO suivi_abonnement_omnis_db.notifications (message, type, status, idabonnement, iduser, created_at) VALUES
+('Votre abonnement Fibre Optique Plus est activé et prêt à l\'emploi.', 'Confirmation', 'Lu', 1, 2, '2025-01-01 10:30:00'),
+('Votre abonnement TV Premium a été activé avec succès.', 'Confirmation', 'Non Lu', 2, 1, '2025-01-05 11:00:00'),
+('Abonnement Mobile Plus activé. Profitez de vos 5 Go de données.', 'Confirmation', 'Non Lu', 3, 3, '2025-01-10 12:00:00');
+

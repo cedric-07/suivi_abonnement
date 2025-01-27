@@ -30,5 +30,9 @@ namespace suivi_abonnement.Service
         {
             return _userRepository.GetUserByEmail(email);
         }
+        public User GetRoleByUser(string role)
+        {
+            return _userRepository.GetRoleByUser(role);
+        }
     }
 }

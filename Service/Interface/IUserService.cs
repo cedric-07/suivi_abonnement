@@ -8,5 +8,7 @@ namespace suivi_abonnement.Service.Interface
         string GeneratePasswordResetToken(string email);
         bool ResetPassword(string token , string newPassword , string email);
         User GetUserByEmail(string email);
+        User GetRoleByUser(string role);
+
     }
 }

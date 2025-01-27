@@ -4,8 +4,7 @@ namespace suivi_abonnement.Repository.Interface
     public interface INotificationRepository
     {
         void SendNotification();
-        void SendAdminNotification();
-        void SendClientNotification();
+        void SendNotificationByRole(string role);
         void CreateNotification(int userId , int abonnementId , string message);
         List<Notification> GetNotificationsForAdmin();
         List<Notification> GetNotificationsForClient(int userId);

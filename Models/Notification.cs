@@ -7,6 +7,9 @@ namespace suivi_abonnement.Models
         public string Type { get; set; }
         public string Status { get; set; }
         public int UserId { get; set; }
+
         public int AbonnementId { get; set; }
+
+        public DateTime CreatedAt { get; set; }
     }
 }

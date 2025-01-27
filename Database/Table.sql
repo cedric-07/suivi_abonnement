@@ -8,7 +8,7 @@ CREATE  TABLE suivi_abonnement_omnis_db.categories (
 CREATE  TABLE suivi_abonnement_omnis_db.departements ( 
 	departement_id       INT    NOT NULL   PRIMARY KEY,
 	nom                  VARCHAR(250)       
- ) engine=InnoDB;
+ ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 CREATE  TABLE suivi_abonnement_omnis_db.fournisseurs ( 
 	fournisseur_id       INT    NOT NULL AUTO_INCREMENT  PRIMARY KEY,
@@ -25,14 +25,6 @@ CREATE  TABLE suivi_abonnement_omnis_db.users (
 	password_reset_token VARCHAR(250)       ,
 	role                 VARCHAR(20)       
  ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
-CREATE  TABLE suivi_abonnement_omnis_db.departement_user ( 
-	id                   INT    NOT NULL AUTO_INCREMENT  PRIMARY KEY,
-	user_id              INT    NOT NULL   ,
-	iddepartement        INT       
- ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
-CREATE INDEX fk_users_departements ON suivi_abonnement_omnis_db.departement_user ( user_id );
 
 CREATE  TABLE suivi_abonnement_omnis_db.abonnements ( 
 	abonnement_id        INT    NOT NULL AUTO_INCREMENT  PRIMARY KEY,
@@ -53,13 +45,24 @@ CREATE INDEX fk_abonnements_fournisseurs ON suivi_abonnement_omnis_db.abonnement
 
 CREATE INDEX fk_abonnements_departements ON suivi_abonnement_omnis_db.abonnements ( departement_id );
 
+CREATE  TABLE suivi_abonnement_omnis_db.departement_user ( 
+	id                   INT    NOT NULL AUTO_INCREMENT  PRIMARY KEY,
+	user_id              INT    NOT NULL   ,
+	iddepartement        INT       
+ ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+CREATE INDEX fk_users_departements ON suivi_abonnement_omnis_db.departement_user ( user_id );
+
+CREATE INDEX fk_departement_user ON suivi_abonnement_omnis_db.departement_user ( iddepartement );
+
 CREATE  TABLE suivi_abonnement_omnis_db.notifications ( 
 	notification_id      BIGINT    NOT NULL AUTO_INCREMENT  PRIMARY KEY,
 	message              VARCHAR(250)    NOT NULL   ,
 	`type`               VARCHAR(20)    NOT NULL   ,
 	`status`             VARCHAR(20)    NOT NULL   ,
-	idabonnement         INT    NOT NULL ,
-	iduser 			 INT    NOT NULL,
+	idabonnement         INT    NOT NULL   ,
+	iduser               INT       ,
+	created_at           TIMESTAMP(0)    NOT NULL   
  ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 CREATE INDEX fk_notifications_abonnements ON suivi_abonnement_omnis_db.notifications ( idabonnement );
@@ -70,8 +73,10 @@ ALTER TABLE suivi_abonnement_omnis_db.abonnements ADD CONSTRAINT fk_abonnements_
 
 ALTER TABLE suivi_abonnement_omnis_db.abonnements ADD CONSTRAINT fk_abonnements_fournisseurs FOREIGN KEY ( idfournisseur ) REFERENCES suivi_abonnement_omnis_db.fournisseurs( fournisseur_id ) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
-ALTER TABLE suivi_abonnement_omnis_db.departement_user ADD CONSTRAINT fk_users_departements FOREIGN KEY ( user_id ) REFERENCES suivi_abonnement_omnis_db.users( id ) ON DELETE NO ACTION ON UPDATE NO ACTION;
-
 ALTER TABLE suivi_abonnement_omnis_db.departement_user ADD CONSTRAINT fk_departement_user FOREIGN KEY ( iddepartement ) REFERENCES suivi_abonnement_omnis_db.departements( departement_id ) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
+ALTER TABLE suivi_abonnement_omnis_db.departement_user ADD CONSTRAINT fk_users_departements FOREIGN KEY ( user_id ) REFERENCES suivi_abonnement_omnis_db.users( id ) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
 ALTER TABLE suivi_abonnement_omnis_db.notifications ADD CONSTRAINT fk_notifications_abonnements FOREIGN KEY ( idabonnement ) REFERENCES suivi_abonnement_omnis_db.abonnements( abonnement_id ) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+ALTER TABLE suivi_abonnement_omnis_db.notifications ADD CONSTRAINT fk_notifications_users FOREIGN KEY ( iduser ) REFERENCES suivi_abonnement_omnis_db.users( id ) ON DELETE NO ACTION ON UPDATE NO ACTION;

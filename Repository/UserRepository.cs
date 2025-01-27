@@ -2,6 +2,7 @@ using System;
 using suivi_abonnement.Models;
 using suivi_abonnement.Repository.Interface;
 using MySql.Data.MySqlClient;
+using MySqlX.XDevAPI;
 namespace suivi_abonnement.Repository
 {
     public class UserRepository : IUserRepository
@@ -27,6 +28,7 @@ namespace suivi_abonnement.Repository
                         command.Connection = connection;
                         command.CommandText = "SELECT * FROM users WHERE email = @Email";
                         command.Parameters.AddWithValue("@Email", email);
+
                         using (var reader = command.ExecuteReader())
                         {
                             if (reader.Read())
@@ -213,5 +215,49 @@ namespace suivi_abonnement.Repository
             }
             return user;
         }
+
+        public User GetRoleByUser(string role)
+        {
+            User user = null;
+            try
+            {
+                using (var connection = new MySqlConnection(connectionString))
+                {
+                    connection.Open();
+                    using (var command = new MySqlCommand("SELECT * FROM users WHERE role = @Role", connection))
+                    {
+                        command.Parameters.Add("@Role", MySqlDbType.VarChar).Value = role;
+                        using (var reader = command.ExecuteReader())
+                        {
+                            if (reader.Read())
+                            {
+                                user = new User
+                                {
+                                    Id = Convert.ToInt32(reader["id"]),
+                                    Username = reader["username"].ToString(),
+                                    Email = reader["email"].ToString(),
+                                    Role = reader["role"].ToString()
+                                };
+                            }
+                        }
+                    }
+                }
+            }
+            catch (MySqlException sqlEx)
+            {
+                // Remplacer Console.WriteLine par un log approprié si nécessaire
+                Console.WriteLine($"Database error: {sqlEx.Message}");
+                // Loggez l'erreur dans un fichier ou un service de log en production
+            }
+            catch (Exception ex)
+            {
+                // Catch des exceptions générales pour éviter que l'application plante
+                Console.WriteLine($"Unexpected error: {ex.Message}");
+            }
+
+            // Si aucun utilisateur n'est trouvé, la valeur de user restera null
+            return user;
+        }
+
     }
 }

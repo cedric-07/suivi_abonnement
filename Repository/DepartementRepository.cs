@@ -14,28 +14,37 @@ namespace suivi_abonnement.Repository
         public List<Departement> getDepartements()
         {
             List<Departement> departements = new List<Departement>();
-            using (MySqlConnection connection = new MySqlConnection(connectionString))
+            try
             {
-                connection.Open();
-                string query = "SELECT * FROM departements";
-                using (MySqlCommand command = new MySqlCommand(query, connection))
+                using (MySqlConnection connection = new MySqlConnection(connectionString))
                 {
-                    using (MySqlDataReader reader = command.ExecuteReader())
+                    connection.Open();
+                    string query = "SELECT * FROM departements";
+                    using (MySqlCommand command = new MySqlCommand(query, connection))
                     {
-                        while (reader.Read())
+                        using (MySqlDataReader reader = command.ExecuteReader())
                         {
-                            Departement departement = new Departement();
-                            departement.Id = reader.GetInt32("departement_id");
-                            departement.Nom = reader.GetString("nom");
-                            departements.Add(departement);
-
-                            
+                            while (reader.Read())
+                            {
+                                Departement departement = new Departement
+                                {
+                                    Id = reader.GetInt32("departement_id"),
+                                    Nom = reader.GetString("nom")
+                                };
+                                departements.Add(departement);
+                            }
                         }
                     }
+                    connection.Close();
                 }
-                connection.Close();
+            }
+            catch (Exception ex)
+            {
+                // Loggez l'erreur ou affichez un message de débogage
+                Console.WriteLine($"Erreur lors de la récupération des départements: {ex.Message}");
             }
             return departements;
         }
+
     }
 }
