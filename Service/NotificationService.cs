@@ -30,5 +30,9 @@ namespace suivi_abonnement.Service
         {
             return _notificationRepository.GetNotificationsForClient(userId);
         }   
+        public void MarkNotificationAsRead(int notificationId)
+        {
+            _notificationRepository.MarkNotificationAsRead(notificationId);
+        }
     }
 }

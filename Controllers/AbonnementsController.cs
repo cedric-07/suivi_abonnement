@@ -16,42 +16,65 @@ namespace suivi_abonnement.Controllers
         private readonly INotificationService _notificationService;
         private readonly AbonnementViewModel abonnementViewModel = new AbonnementViewModel();
         private readonly AbonnementStatViewModel abonnementStatViewModel = new AbonnementStatViewModel();
-
+        private readonly IHttpContextAccessor _httpContextAccessor;        
         private readonly IDepartementService _departementService;
         private readonly User user = new User();
-        public AbonnementsController(IAbonnementService abonnementService, IFournisseurService fournisseurService, ICategorieService categorieService, IDepartementService departementService , INotificationService notificationService)
+        public AbonnementsController(IAbonnementService abonnementService, IFournisseurService fournisseurService, ICategorieService categorieService, IDepartementService departementService , INotificationService notificationService , IHttpContextAccessor httpContextAccessor)
         {
             _abonnementService = abonnementService;
             _fournisseurService = fournisseurService;
             _categorieService = categorieService;
             _departementService = departementService;
             _notificationService = notificationService;
+            _httpContextAccessor = httpContextAccessor;
         }
+
+        // GET: AbonnementsController
         
         public IActionResult Index()
         {
-            var userRole = HttpContext.Session.GetString("userRole");
-            var userName = HttpContext.Session.GetString("userName");
-            Console.WriteLine("Nom d'utilisateur connecter : " + userName);
-            Console.WriteLine("Role d'utilisateur connecter : " + userRole);
-            int userId = HttpContext.Session.GetInt32("userId") ?? 0;
+            // Récupération des informations de session
+            int userId = HttpContext.Session.GetInt32("UserId") ?? 0;
+            var userRole = HttpContext.Session.GetString("UserRole");
+            Console.WriteLine("ID d'utilisateur connecté : " + userId);
+            Console.WriteLine("Rôle d'utilisateur connecté : " + userRole);
+            
+
+            // Vérification si l'utilisateur est connecté
             if (string.IsNullOrEmpty(userRole) || userId == 0)
             {
                 Console.WriteLine("Utilisateur non connecté");
-                return RedirectToAction("Login", "Authentification");
             }
 
+            // Envoi de notifications (si nécessaire)
             _notificationService.SendNotification();
+
+            // Initialisation de la liste de notifications
             List<Notification> notifications = new List<Notification>();
+
+            // Récupération des notifications selon le rôle
             if (userRole == "admin")
             {
                 notifications = _notificationService.GetNotificationsForAdmin();
             }
-            int notificationCount = notifications?.Count(n => n.Status == "non lu") ?? 0;
 
+            if (notifications == null || !notifications.Any())
+            {
+                Console.WriteLine("Aucune notification trouvée.");
+            }
+            else
+            {
+                Console.WriteLine("Nombre de notifications trouvées : " + notifications.Count);
+            }
+
+            // Calcul du nombre de notifications non lues
+            int notificationCount = notifications?.Count(n => n.Status == "non lu") ?? 0;
+            
+
+            // Passage du nombre de notifications à la vue
             ViewBag.NotificationCount = notificationCount;
 
-            // Appel des méthodes pour obtenir les nombres d'abonnements
+            // Appel des méthodes pour obtenir les statistiques d'abonnements
             int abonnementsActifs = _abonnementService.CountTotalAbonnementsActif();
             int abonnementsExpirés = _abonnementService.CountTotalAbonnementsInactif();
             int abonnementsSuspendus = _abonnementService.CountTotalAbonnementsEnAttente();
@@ -60,8 +83,11 @@ namespace suivi_abonnement.Controllers
             List<Dictionary<string, object>> revenusAnnuels = _abonnementService.RevenusFictifsParAnnee();
             List<Dictionary<string, object>> revenusMensuels = _abonnementService.RevenusFictifsParMois();
 
-            // Créer un objet pour le passer à la vue
-           var model = new GlobalViewModel
+            //ViewBag pour le notification
+            ViewBag.Notifications = notifications;
+            ViewBag.NbrNotifications = notificationCount;
+            // Création du modèle à passer à la vue
+            var model = new GlobalViewModel
             {
                 AbonnementStatViewModel = new AbonnementStatViewModel
                 {
@@ -75,14 +101,36 @@ namespace suivi_abonnement.Controllers
             };
 
 
-
+            // Retour de la vue avec le modèle
             return View("~/Views/AdminPage/IndexPage.cshtml", model);
+        }
+
+        [HttpPost]
+        public IActionResult MarkNotificationAsRead(int notificationId)
+        {
+            try
+            {
+                // Log pour vérifier que l'ID de notification est correct
+                Console.WriteLine($"NotificationId reçu: {notificationId}");
+                
+                _notificationService.MarkNotificationAsRead(notificationId);
+                Console.WriteLine("Notification marquée comme lue");
+
+                // Pour tester sans redirection
+                return Json(new { success = true });
+            }
+            catch (Exception ex)
+            {
+                // Log de l'erreur
+                Console.WriteLine($"Erreur : {ex.Message}");
+                return Json(new { success = false, message = ex.Message });
+            }
         }
 
         // GET: AbonnementsController
         public ActionResult AbonnementPage(string? keyword = null, DateTime? DateDebut = null, DateTime? ExpirationDate = null, string? type = null, int? idcategorie = null, int pageNumber = 1)
         {
-            int pageSize = 6; // Nombre d'abonnements par page
+            int pageSize = 2; // Nombre d'abonnements par page
             List<Abonnement> abonnements;
 
             // Vérification si les dates sont valides
@@ -136,7 +184,7 @@ namespace suivi_abonnement.Controllers
                     CurrentPage = pageNumber,
                     TotalPages = totalPages,
                     Departements = departements,
-                    TotalAbonnements = totalAbonnements
+                    TotalAbonnements = totalAbonnements,
                 }
             };
 

@@ -249,6 +249,31 @@ namespace suivi_abonnement.Service
             return notifications;
         }
 
+        public void MarkNotificationAsRead(int notificationId)
+        {
+            try
+            {
+                using (var connection = new MySqlConnection(connectionString))
+                {
+                    connection.Open();
+                    string query = "UPDATE notifications SET status = 'lu' WHERE notification_id = @notification_id";
+
+                    using (var command = new MySqlCommand(query, connection))
+                    {
+                        command.Parameters.AddWithValue("@notification_id", notificationId);
+                        int rowsAffected = command.ExecuteNonQuery();
+                        Console.WriteLine($"{rowsAffected} rows updated");
+                    }
+                    connection.Close();
+                }
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
+        }
+
+
 
     }
 }

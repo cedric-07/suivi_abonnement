@@ -1,54 +1,50 @@
 @model suivi_abonnement.Models.GlobalViewModel
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
 </head>
 <body>
-        <nav class="navbar navbar-main navbar-expand-lg px-0 mx-4 shadow-none border-radius-xl" id="navbarBlur" navbar-scroll="true">
-            <div class="container-fluid py-1 px-3">
-               
-                <div class="container-fluid " id="navbar">
-                    <div class="ms-md-auto pe-md-3 d-flex align-items-center">
-                      
-                    </div>
                     <ul class="navbar-nav  justify-content-end">
                         <li class="nav-item dropdown pe-2 d-flex align-items-center">
                             <a href="javascript:;" class="nav-link text-body p-0" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
                                 <i class="fa fa-bell cursor-pointer"></i>
-                                @if (Model?.Notifications != null && Model.Notifications.Any())
+                                @if (Model?.AbonnementStatViewModel.Notifications != null && Model.AbonnementStatViewModel.Notifications.Any())
                                 {
                                     <span class="badge badge-danger position-absolute top-0 start-100 translate-middle p-2 border border-light rounded-circle">
-                                        @ViewBag.NotificationCount
+                                        @Model.AbonnementStatViewModel.Notifications.Count
                                     </span>
                                 }
                             </a>
                             <ul class="dropdown-menu dropdown-menu-end px-2 py-3 me-sm-n4" aria-labelledby="dropdownMenuButton">
-                                @if (Model?.Notifications != null && Model.Notifications.Any())
+                                @if (Model?.AbonnementStatViewModel.Notifications != null && Model.AbonnementStatViewModel.Notifications.Any())
                                 {
-                                    @foreach (var notification in Model.Notifications) 
-                                    {
-                                        <li class="mb-2">
-                                            <a class="dropdown-item border-radius-md" href="javascript:;">
-                                                <div class="d-flex py-1">
-                                                    <div class="d-flex align-items-center me-2">
-                                                        <i class="fa fa-envelope text-primary"></i> <!-- Icône de message -->
+                                    <div class="scrollable-notifications" style="max-height: 300px; overflow-y: auto;">
+                                        @foreach (var notification in Model.AbonnementStatViewModel.Notifications)
+                                        {
+                                            <li class="mb-2">
+                                                <a class="dropdown-item border-radius-md p-3 bg-light shadow-sm">
+                                                    <div class="d-flex py-1">
+                                                        <div class="d-flex align-items-center me-2">
+                                                            <i class="fa fa-envelope text-primary" style="font-size: 24px;"></i> <!-- Icône de message -->
+                                                        </div>
+                                                        <div class="d-flex flex-column justify-content-center">
+                                                            <h6 class="text-sm font-weight-normal mb-1">
+                                                                <span class="font-weight-bold d-block">@notification.Message</span>
+                                                            </h6>
+                                                            <p class="text-xs text-muted mb-0" style=" font-size: 0.875rem;">
+                                                                <i class="fa fa-clock me-1"></i>
+                                                                <span >@notification.CreatedAt.ToString("dd MMM yyyy")</span>
+                                                            </p>
+
+                                                        </div>
                                                     </div>
-                                                    <div class="d-flex flex-column justify-content-center">
-                                                        <h6 class="text-sm font-weight-normal mb-1">
-                                                            <span class="font-weight-bold">@notification.Message</span>
-                                                        </h6>
-                                                        <p class="text-xs text-secondary mb-0">
-                                                            <i class="fa fa-clock me-1"></i>
-                                                            @notification.CreatedAt.ToString()
-                                                        </p>
-                                                    </div>
-                                                </div>
-                                            </a>
-                                        </li>
-                                    }
+                                                </a>
+                                            </li>
+                                        }
+                                    </div>
                                 }
                                 else
                                 {
@@ -58,6 +54,7 @@
                                 }
                             </ul>
                         </li>
+
 
 
                         <li class="nav-item d-flex align-items-center">
@@ -82,8 +79,5 @@
                             </a>
                         </li>
                     </ul>
-                </div>
-            </div>
-        </nav>
 </body>
 </html>

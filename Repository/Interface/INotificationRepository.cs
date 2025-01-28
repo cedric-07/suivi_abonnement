@@ -8,6 +8,7 @@ namespace suivi_abonnement.Repository.Interface
         void CreateNotification(int userId , int abonnementId , string message);
         List<Notification> GetNotificationsForAdmin();
         List<Notification> GetNotificationsForClient(int userId);
+        void MarkNotificationAsRead(int notificationId);
         
     }
 }
