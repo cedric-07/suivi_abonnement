@@ -2,6 +2,12 @@ namespace suivi_abonnement.Models
 {
     public class HistoriqueViewModel
     {
+        public List<VAbonnementClient> Abonnements { get; set; }
+        public int TotalAbonnements { get; set; }
+        public int NbrClientAbonne { get; set; }
+        /// <summary>
+    
+        /// </summary>
         public List<VStatusAbonnement> Actifs { get; set; }
         public List<VStatusAbonnement> Expirés { get; set; }
         public List<VStatusAbonnement> EnAttente { get; set; }

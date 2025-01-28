@@ -1,5 +1,4 @@
-﻿@model suivi_abonnement.Models.AbonnementStatViewModel
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="fr">
 
 <head>
@@ -180,80 +179,10 @@
         <!-- Navbar -->
         <nav class="navbar navbar-main navbar-expand-lg px-0 mx-4 shadow-none border-radius-xl" id="navbarBlur" navbar-scroll="true">
             <div class="container-fluid py-1 px-3">
-               
-                <div class="container-fluid " id="navbar">
-                    <div class="ms-md-auto pe-md-3 d-flex align-items-center">
+                <div class="ms-md-auto pe-md-3 pe-5 d-flex align-items-center">
                       
-                    </div>
-                    <ul class="navbar-nav  justify-content-end">
-                        <li class="nav-item dropdown pe-2 d-flex align-items-center">
-                            <a href="javascript:;" class="nav-link text-body p-0" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
-                                <i class="fa fa-bell cursor-pointer"></i>
-                                @if (Model.Notifications != null && Model.Notifications.Any())
-                                {
-                                    <span class="badge badge-danger position-absolute top-0 start-100 translate-middle p-2 border border-light rounded-circle">
-                                        @Model.Notifications.Count
-                                    </span>
-                                }
-                            </a>
-                            <ul class="dropdown-menu dropdown-menu-end px-2 py-3 me-sm-n4" aria-labelledby="dropdownMenuButton">
-                                @if (Model.Notifications != null && Model.Notifications.Any())
-                                {
-                                    @foreach (var notification in Model.Notifications) 
-                                    {
-                                        <li class="mb-2">
-                                            <a class="dropdown-item border-radius-md" href="javascript:;">
-                                                <div class="d-flex py-1">
-                                                    <div class="d-flex align-items-center me-2">
-                                                        <i class="fa fa-envelope text-primary"></i> <!-- Icône de message -->
-                                                    </div>
-                                                    <div class="d-flex flex-column justify-content-center">
-                                                        <h6 class="text-sm font-weight-normal mb-1">
-                                                            <span class="font-weight-bold">@notification.Message</span>
-                                                        </h6>
-                                                        <p class="text-xs text-secondary mb-0">
-                                                            <i class="fa fa-clock me-1"></i>
-                                                            @notification.CreatedAt.ToString()
-                                                        </p>
-                                                    </div>
-                                                </div>
-                                            </a>
-                                        </li>
-                                    }
-                                }
-                                else
-                                {
-                                    <li class="mb-2">
-                                        <p class="text-sm text-secondary">Aucune notification.</p>
-                                    </li>
-                                }
-                            </ul>
-                        </li>
-
-
-                        <li class="nav-item d-flex align-items-center">
-                            <a href="#logoutModal" data-bs-toggle="modal" class="nav-link text-body font-weight-bold px-0">
-                                <i class="fa fa-sign-out-alt me-sm-1"></i>
-                                <span class="d-sm-inline d-none">Déconnexion</span>
-                            </a>
-                        </li>
-
-                        <li class="nav-item d-xl-none ps-3 d-flex align-items-center">
-                            <a href="javascript:;" class="nav-link text-body p-0" id="iconNavbarSidenav">
-                                <div class="sidenav-toggler-inner">
-                                    <i class="sidenav-toggler-line"></i>
-                                    <i class="sidenav-toggler-line"></i>
-                                    <i class="sidenav-toggler-line"></i>
-                                </div>
-                            </a>
-                        </li>
-                        <li class="nav-item px-3 d-flex align-items-center">
-                            <a href="javascript:;" class="nav-link text-body p-0">
-                                <i class="fixed-plugin-button-nav cursor-pointer"></i>
-                            </a>
-                        </li>
-                    </ul>
                 </div>
+                @Html.Partial("~/Views/Shared/NavbarAdmin/_NavbarLayout.cshtml")
             </div>
         </nav>
         <!-- End Navbar -->

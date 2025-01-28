@@ -10,19 +10,32 @@ namespace suivi_abonnement.Service
     {
         private readonly string connectionString;
 
-        public NotificationRepository()
+        private readonly IHttpContextAccessor _httpContextAccessor;
+
+        public NotificationRepository(IHttpContextAccessor httpContextAccessor)
         {
+            _httpContextAccessor = httpContextAccessor;
             connectionString = "server=localhost;port=3306;database=suivi_abonnement_omnis_db;user=root;password=;SslMode=None";
         }
 
         public void SendNotification()
         {
+            var userRole = _httpContextAccessor.HttpContext.Session.GetString("UserRole");
+
             try
             {
                 using (var connection = new MySqlConnection(connectionString))
                 {
                     connection.Open();
-                    SendNotificationByRole( "admin");
+
+                    if (userRole == "admin")
+                    {
+                        SendNotificationByRole("admin");
+                    }
+                    else
+                    {
+                        SendNotificationByRole( "user");
+                    }
                 }
             }
             catch (Exception e)
@@ -91,9 +104,26 @@ namespace suivi_abonnement.Service
                 using (var connection = new MySqlConnection(connectionString))
                 {
                     connection.Open();
-                    string query = "INSERT INTO notifications (message , type , status , idabonnement , iduser , created_at) VALUES (@message , 'abonnement expirer' , 'non lu' , @idabonnement , @iduser , NOW())";
 
-                    using (var command = new MySqlCommand(query, connection))
+                    string checkAbonnementIsExist = "SELECT COUNT(*) FROM notifications WHERE idabonnement = @idabonnement AND iduser = @iduser";
+
+                    using (var checkcommand = new MySqlCommand(checkAbonnementIsExist, connection))
+                    {
+                        checkcommand.Parameters.AddWithValue("@idabonnement", abonnementId);
+                        checkcommand.Parameters.AddWithValue("@iduser", userId);
+
+                        int AbonnementexistingToNotify = Convert.ToInt32(checkcommand.ExecuteScalar());
+
+                        if (AbonnementexistingToNotify > 0)
+                        {
+                            Console.WriteLine("Notification already exist for this abonnement and user");
+                            return;
+                        }
+                    }
+
+                    string insertquery = "INSERT INTO notifications (message , type , status , idabonnement , iduser , created_at) VALUES (@message , 'abonnement expirer' , 'non lu' , @idabonnement , @iduser , NOW())";
+
+                    using (var command = new MySqlCommand(insertquery, connection))
                     {
                         command.Parameters.AddWithValue("@message", message);
                         command.Parameters.AddWithValue("@idabonnement", abonnementId);

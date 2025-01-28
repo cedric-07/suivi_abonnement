@@ -1,4 +1,4 @@
-@model IEnumerable<suivi_abonnement.Models.Fournisseur>
+@model suivi_abonnement.Models.GlobalViewModel
 @{
     ViewData["Title"] = "Liste des Fournisseurs";
     Layout = "~/Views/Shared/Index.cshtml";
@@ -84,7 +84,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach (var fournisseur in Model)
+                    @foreach (var fournisseur in Model.FournisseurViewModel.Fournisseurs)
                     {
                         <tr>
                             <td>@fournisseur.Nom</td>

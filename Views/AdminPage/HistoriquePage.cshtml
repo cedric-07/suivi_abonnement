@@ -1,4 +1,4 @@
-﻿@model IEnumerable<suivi_abonnement.Models.VAbonnementClient>
+﻿@model suivi_abonnement.Models.GlobalViewModel
 @{
     ViewData["Title"] = "Liste des Abonnements";
     Layout = "~/Views/Shared/Index.cshtml";
@@ -86,7 +86,7 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach (var abonnement in Model)
+                @foreach (var abonnement in Model.HistoriqueViewModel.Abonnements)
                 {
                     <tr>
                         <td>@abonnement.Client</td>

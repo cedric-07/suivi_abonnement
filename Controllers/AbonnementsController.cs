@@ -30,18 +30,26 @@ namespace suivi_abonnement.Controllers
         
         public IActionResult Index()
         {
-            // Vérifier les informations de session utilisateur
-            var userRole = HttpContext.Session.GetString("UserRole");
-            Console.WriteLine("userRole");
-            int userId = HttpContext.Session.GetInt32("UserId") ?? 0;
-
+            var userRole = HttpContext.Session.GetString("userRole");
+            var userName = HttpContext.Session.GetString("userName");
+            Console.WriteLine("Nom d'utilisateur connecter : " + userName);
+            Console.WriteLine("Role d'utilisateur connecter : " + userRole);
+            int userId = HttpContext.Session.GetInt32("userId") ?? 0;
             if (string.IsNullOrEmpty(userRole) || userId == 0)
             {
-                return RedirectToAction("Login", "Account");
+                Console.WriteLine("Utilisateur non connecté");
+                return RedirectToAction("Login", "Authentification");
             }
 
-            // Appel pour envoyer les notifications si nécessaire
             _notificationService.SendNotification();
+            List<Notification> notifications = new List<Notification>();
+            if (userRole == "admin")
+            {
+                notifications = _notificationService.GetNotificationsForAdmin();
+            }
+            int notificationCount = notifications?.Count(n => n.Status == "non lu") ?? 0;
+
+            ViewBag.NotificationCount = notificationCount;
 
             // Appel des méthodes pour obtenir les nombres d'abonnements
             int abonnementsActifs = _abonnementService.CountTotalAbonnementsActif();
@@ -52,36 +60,24 @@ namespace suivi_abonnement.Controllers
             List<Dictionary<string, object>> revenusAnnuels = _abonnementService.RevenusFictifsParAnnee();
             List<Dictionary<string, object>> revenusMensuels = _abonnementService.RevenusFictifsParMois();
 
-            // Récupérer les notifications en fonction du rôle
-            List<Notification> notifications = new List<Notification>();
-            if (userRole == "admin")
-            {
-                notifications = _notificationService.GetNotificationsForAdmin();
-            }
-
-            // Calculer le nombre de notifications non lues
-            int notificationCount = notifications?.Count(n => n.Status == "non lu") ?? 0;
-
             // Créer un objet pour le passer à la vue
-            var model = new AbonnementStatViewModel
+           var model = new GlobalViewModel
             {
-                Actifs = abonnementsActifs,
-                Expirés = abonnementsExpirés,
-                Suspendus = abonnementsSuspendus,
-                RevenusAnnuels = revenusAnnuels,
-                RevenusMensuels = revenusMensuels,
-                Notifications = notifications, // Ajouter les notifications au modèle
+                AbonnementStatViewModel = new AbonnementStatViewModel
+                {
+                    Actifs = abonnementsActifs,
+                    Expirés = abonnementsExpirés,
+                    Suspendus = abonnementsSuspendus,
+                    RevenusAnnuels = revenusAnnuels,
+                    RevenusMensuels = revenusMensuels,
+                    Notifications = notifications
+                }
             };
 
-            // Passer le compteur de notifications dans ViewBag pour une utilisation rapide
-            ViewBag.NotificationCount = notificationCount;
+
 
             return View("~/Views/AdminPage/IndexPage.cshtml", model);
         }
-
-
-
-
 
         // GET: AbonnementsController
         public ActionResult AbonnementPage(string? keyword = null, DateTime? DateDebut = null, DateTime? ExpirationDate = null, string? type = null, int? idcategorie = null, int pageNumber = 1)
@@ -130,15 +126,18 @@ namespace suivi_abonnement.Controllers
             int totalAbonnements = _abonnementService.CountTotalAbonnements();
             int totalPages = (int)Math.Ceiling((double)totalAbonnements / pageSize);
 
-            var viewModel = new AbonnementViewModel
+            var viewModel = new GlobalViewModel
             {
-                Abonnements = abonnements,
-                Fournisseurs = fournisseurs,
-                Categories = categories,
-                CurrentPage = pageNumber,
-                TotalPages = totalPages,
-                Departements = departements,
-                TotalAbonnements = totalAbonnements
+                AbonnementViewModel = new AbonnementViewModel
+                {
+                    Abonnements = abonnements,
+                    Fournisseurs = fournisseurs,
+                    Categories = categories,
+                    CurrentPage = pageNumber,
+                    TotalPages = totalPages,
+                    Departements = departements,
+                    TotalAbonnements = totalAbonnements
+                }
             };
 
             ViewBag.CurrentPage = pageNumber;
@@ -173,12 +172,14 @@ namespace suivi_abonnement.Controllers
             var categoriesList = categories;
             var departementsList = departements;
 
-            var viewModel = new AbonnementViewModel
+            var viewModel = new GlobalViewModel
             {
-                Fournisseurs = fournisseursList,
-                Categories = categoriesList,
-                Departements = departementsList
-
+                AbonnementViewModel = new AbonnementViewModel
+                {
+                    Fournisseurs = fournisseursList,
+                    Categories = categoriesList,
+                    Departements = departementsList
+                }
             };
             
             return View("~/Views/AdminPage/CreateAbonnementPage.cshtml" , viewModel);
@@ -301,8 +302,18 @@ namespace suivi_abonnement.Controllers
                 ViewBag.TotalPages = (int)Math.Ceiling((double)totalAbonnements / pageSize);
                 ViewBag.TotalAbonnements = totalAbonnements;
                 ViewBag.NbrClientAbonne = nbrlcient;
+
+                var viewModel = new GlobalViewModel
+                {
+                    HistoriqueViewModel = new HistoriqueViewModel
+                    {
+                        Abonnements = abonnement,
+                        TotalAbonnements = totalAbonnements,
+                        NbrClientAbonne = nbrlcient,
+                    }
+                };
             
-                return View("~/Views/AdminPage/HistoriquePage.cshtml", abonnement);
+                return View("~/Views/AdminPage/HistoriquePage.cshtml", viewModel);
             }
             catch (Exception ex)
             {
@@ -328,26 +339,28 @@ namespace suivi_abonnement.Controllers
                 int totalEnAttente = _abonnementService.CountTotalAbonnementsEnAttente();
                 int totalExpires = _abonnementService.CountTotalAbonnementsInactif();
 
-                var viewModel = new HistoriqueViewModel
+                var viewModel = new GlobalViewModel
                 {
-                    Actifs = actifs,
-                    EnAttente = enAttente,
-                    Expirés = expires,
-                    CurrentPageActifs = pageNumberActifs,
-                    CurrentPageEnAttente = pageNumberEnAttente,
-                    CurrentPageExpirés = pageNumberExpires,
-                    TotalActifs = totalActifs,
-                    TotalEnAttente = totalEnAttente,
-                    TotalExpires = totalExpires,
-                    TotalPagesActifs = (int)Math.Ceiling((double)totalActifs / pageSize),
-                    TotalPagesEnAttente = (int)Math.Ceiling((double)totalEnAttente / pageSize),
-                    TotalPagesExpirés = (int)Math.Ceiling((double)totalExpires / pageSize)
-
+                    HistoriqueViewModel = new HistoriqueViewModel
+                    {
+                        Actifs = actifs,
+                        EnAttente = enAttente,
+                        Expirés = expires,
+                        CurrentPageActifs = pageNumberActifs,
+                        CurrentPageEnAttente = pageNumberEnAttente,
+                        CurrentPageExpirés = pageNumberExpires,
+                        TotalActifs = totalActifs,
+                        TotalEnAttente = totalEnAttente,
+                        TotalExpires = totalExpires,
+                        TotalPagesActifs = (int)Math.Ceiling((double)totalActifs / pageSize),
+                        TotalPagesEnAttente = (int)Math.Ceiling((double)totalEnAttente / pageSize),
+                        TotalPagesExpirés = (int)Math.Ceiling((double)totalExpires / pageSize)
+                    }
                 };
 
                 Console.WriteLine("Total actifs : " + totalActifs);
                 Console.WriteLine("Current page actifs : " + pageNumberActifs);
-                Console.WriteLine("Total pages actifs : " + viewModel.TotalPagesActifs);
+                Console.WriteLine("Total pages actifs : " + viewModel.HistoriqueViewModel.TotalPagesActifs);
                 
 
                 return View("~/Views/AdminPage/HistoriqueDetail.cshtml", viewModel);

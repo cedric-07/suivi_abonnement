@@ -78,14 +78,17 @@ namespace suivi_abonnement.Controllers
             int totalAbonnements = _abonnementService.CountTotalAbonnements();
             int totalPages = (int)Math.Ceiling((double)totalAbonnements / pageSize);
 
-            var viewModel = new AbonnementViewModel
+            var viewModel = new GlobalViewModel
             {
-                Abonnements = abonnements,
-                Fournisseurs = fournisseurs,
-                Categories = categories,
-                CurrentPage = pageNumber,
-                TotalPages = totalPages,
-                TotalAbonnements = totalAbonnements
+                AbonnementViewModel = new AbonnementViewModel
+                {
+                    Abonnements = abonnements,
+                    Fournisseurs = fournisseurs,
+                    Categories = categories,
+                    CurrentPage = pageNumber,
+                    TotalPages = totalPages,
+                    TotalAbonnements = totalAbonnements
+                }
             };
 
             ViewBag.CurrentPage = pageNumber;

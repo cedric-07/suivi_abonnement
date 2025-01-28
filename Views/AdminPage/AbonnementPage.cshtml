@@ -1,4 +1,4 @@
-﻿@model suivi_abonnement.Models.AbonnementViewModel
+﻿@model suivi_abonnement.Models.GlobalViewModel
 @{
     ViewData["Title"] = "Liste des Abonnements";
     Layout = "~/Views/Shared/Index.cshtml";
@@ -94,7 +94,7 @@
                             <label for="categoryFilter" class="form-label text-dark fw-bold" style="font-size: 13px;">Catégorie</label>
                             <select class="form-select form-select-sm rounded-pill shadow-sm" id="categoryFilter" name="idcategorie" style="font-size: 12px;">
                                 <option disabled selected>--Choisir une catégorie--</option>
-                                @foreach (var categorie in Model.Categories)
+                                @foreach (var categorie in Model.AbonnementViewModel.Categories)
                                 {
                                     <option value="@categorie.Id">@categorie.Nom</option>
                                 }
@@ -104,7 +104,7 @@
                             <label for="TypeFilter" class="form-label text-dark fw-bold" style="font-size: 13px;">Type</label>
                             <select class="form-select form-select-sm rounded-pill shadow-sm" id="TypeFilter" name="type" style="font-size: 12px;">
                                 <option disabled selected>--Choisir une type--</option>
-                                @foreach (var abonnement in Model.Abonnements)
+                                @foreach (var abonnement in Model.AbonnementViewModel.Abonnements)
                                 {
                                     <option value="@abonnement.Type">@abonnement.Type</option>
                                 }
@@ -146,7 +146,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach (var abonnement in Model.Abonnements)
+                    @foreach (var abonnement in Model.AbonnementViewModel.Abonnements)
                     {
                         <tr
                             data_id="@abonnement.Id"
@@ -245,7 +245,7 @@
                                                     <label for="categorie-@abonnement.Id" class="form-label">Catégorie</label>
                                                     <select class="form-select" id="idcategorie-@abonnement.Id" name="idcategorie"  value="@abonnement.NomCategorie" required>
                                                         <option disabled selected hidden>--Choisir une catégorie--</option>
-                                                        @foreach (var categorie in Model.Categories)
+                                                        @foreach (var categorie in Model.AbonnementViewModel.Categories)
                                                         {
                                                             <option value="@categorie.Id">@categorie.Nom</option>
                                                         }
@@ -255,7 +255,7 @@
                                                     <label for="fournisseur-@abonnement.Id" class="form-label">Fournisseur</label>
                                                     <select class="form-select" id="fournisseur-@abonnement.Id" name="idfournisseur" value="@abonnement.NomFournisseur" required>
                                                         <option disabled selected hidden>--Choisir un fournisseur--</option>
-                                                        @foreach (var fournisseur in Model.Fournisseurs)
+                                                        @foreach (var fournisseur in Model.AbonnementViewModel.Fournisseurs)
                                                         {
                                                             <option value="@fournisseur.Id">@fournisseur.Nom</option>
                                                         }
@@ -268,7 +268,7 @@
                                                     <label for="departement-@abonnement.Id" class="form-label">Département</label>
                                                     <select class="form-select" id="departement-@abonnement.Id" name="idDepartement" value="@abonnement.NomDepartement" required>
                                                         <option disabled selected hidden>--Choisir un département--</option>
-                                                        @foreach (var departement in Model.Departements)
+                                                        @foreach (var departement in Model.AbonnementViewModel.Departements)
                                                         {
                                                             <option value="@departement.Id">@departement.Nom</option>
                                                         }
@@ -380,7 +380,7 @@
 
 
                     }
-                    @if (Model.Abonnements.Count == 0)
+                    @if (Model.AbonnementViewModel.Abonnements.Count == 0)
                     {
                         <tr>
                             <td colspan="7" class="text-center">Aucun abonnement trouvé</td>

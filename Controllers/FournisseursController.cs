@@ -33,7 +33,17 @@ namespace suivi_abonnement.Controllers
             ViewBag.CurrentPage = pageNumber;
             ViewBag.totalFournisseurs = totalFournisseurs;
 
-            return View("~/Views/AdminPage/IndexFournisseurPage.cshtml", fournisseurs);
+            var viewModel = new GlobalViewModel
+            {
+                FournisseurViewModel = new FournisseurViewModel
+                {
+                    Fournisseurs = fournisseurs,
+                    CurrentPage = pageNumber,
+                    TotalPages = ViewBag.TotalPages
+                }
+            };
+
+            return View("~/Views/AdminPage/IndexFournisseurPage.cshtml", viewModel);
         }
 
 

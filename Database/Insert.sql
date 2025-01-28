@@ -42,8 +42,9 @@ INSERT INTO suivi_abonnement_omnis_db.fournisseurs (nom, email, telephone) VALUE
 INSERT INTO suivi_abonnement_omnis_db.abonnements (type, prix, date_debut, idfournisseur, idcategorie, expiration_date, description, nom, departement_id) VALUES
 ('Annuel', 39.99, '2025-01-01 10:00:00', 1, 1, '2026-01-01 10:00:00', 'Abonnement fibre optique 1 Gb/s', 'Fibre Optique Plus', 1),
 ('Annuel', 25.99, '2025-01-05 10:00:00', 2, 2, '2026-01-05 10:00:00', 'Abonnement TV HD avec 100 chaînes', 'TV Premium', 2),
-('Annuel', 19.99, '2025-01-10 10:00:00', 3, 3, '2026-01-10 10:00:00', 'Abonnement mobile 5 Go data + appels illimités', 'Mobile Plus', 3);
-
+('Annuel', 19.99, '2025-01-10 10:00:00', 3, 3, '2026-01-10 10:00:00', 'Abonnement mobile 5 Go data + appels illimités', 'Mobile Plus', 3),
+('Mensuel', 49.99, '2024-12-01 10:00:00', 1, 1, '2025-01-01 10:00:00', 'Abonnement internet 50 Mb/s', 'Internet Plus', 1),
+('Annuel', 29.99, '2024-11-15 10:00:00', 2, 2, '2025-01-01 10:00:00', 'Abonnement TV 4K avec 150 chaînes', 'TV Ultra', 2);
 
 
 
