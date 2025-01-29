@@ -22,6 +22,7 @@ D:\STAGE_L3\suivi_abonnement\obj\Debug\net7.0\suivi_abonnement.csproj.CoreCompil
 D:\STAGE_L3\suivi_abonnement\obj\Debug\net7.0\suivi_abonnement.MvcApplicationPartsAssemblyInfo.cache
 D:\STAGE_L3\suivi_abonnement\obj\Debug\net7.0\suivi_abonnement.RazorAssemblyInfo.cache
 D:\STAGE_L3\suivi_abonnement\obj\Debug\net7.0\suivi_abonnement.RazorAssemblyInfo.cs
+D:\STAGE_L3\suivi_abonnement\obj\Debug\net7.0\suivi_abonnement.sourcelink.json
 D:\STAGE_L3\suivi_abonnement\obj\Debug\net7.0\scopedcss\Views\Shared\_Layout.cshtml.rz.scp.css
 D:\STAGE_L3\suivi_abonnement\obj\Debug\net7.0\scopedcss\bundle\suivi_abonnement.styles.css
 D:\STAGE_L3\suivi_abonnement\obj\Debug\net7.0\scopedcss\projectbundle\suivi_abonnement.bundle.scp.css
@@ -40,4 +41,3 @@ D:\STAGE_L3\suivi_abonnement\obj\Debug\net7.0\refint\suivi_abonnement.dll
 D:\STAGE_L3\suivi_abonnement\obj\Debug\net7.0\suivi_abonnement.pdb
 D:\STAGE_L3\suivi_abonnement\obj\Debug\net7.0\suivi_abonnement.genruntimeconfig.cache
 D:\STAGE_L3\suivi_abonnement\obj\Debug\net7.0\ref\suivi_abonnement.dll
-D:\STAGE_L3\suivi_abonnement\obj\Debug\net7.0\suivi_abonnement.sourcelink.json

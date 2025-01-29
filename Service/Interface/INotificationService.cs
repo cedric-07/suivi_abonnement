@@ -7,7 +7,7 @@ namespace suivi_abonnement.Service.Interface
         void SendNotificationByRole(string role);
         void CreateNotification(int userId , int abonnementId , string message);
         List<Notification> GetNotificationsForAdmin();
-        List<Notification> GetNotificationsForClient(int userId);
+        List<Notification> GetNotificationsForClient();
         void MarkNotificationAsRead(int notificationId);
         
     }

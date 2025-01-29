@@ -98,7 +98,6 @@ namespace suivi_abonnement.Service
 
         public void CreateNotification(int userId , int abonnementId , string message)
         {
-            Notification notificationobj = new Notification();
             try
             {
                 using (var connection = new MySqlConnection(connectionString))
@@ -116,7 +115,6 @@ namespace suivi_abonnement.Service
 
                         if (AbonnementexistingToNotify > 0)
                         {
-                            Console.WriteLine("Notification already exist for this abonnement and user");
                             return;
                         }
                     }
@@ -140,9 +138,10 @@ namespace suivi_abonnement.Service
             }
         }
 
-        public List<Notification> GetNotificationsForClient(int userId)
+        public List<Notification> GetNotificationsForClient()
         {
             List<Notification> notifications = new List<Notification>();
+            int userId = _httpContextAccessor.HttpContext.Session.GetInt32("UserId") ?? 0;
             try
             {
                 using (var connection = new MySqlConnection(connectionString))
@@ -150,7 +149,7 @@ namespace suivi_abonnement.Service
                     connection.Open();
                     string query = @"
                         SELECT 
-                            n.notification_id,  -- Utilisez le nom correct de la colonne 'notification_id'
+                            n.notification_id,  -- Si l'identifiant est 'notification_id' au lieu de 'id'
                             n.message, 
                             n.type, 
                             n.status, 
@@ -162,11 +161,11 @@ namespace suivi_abonnement.Service
                         FROM notifications n
                         JOIN abonnements a ON n.idabonnement = a.abonnement_id
                         JOIN users u ON n.iduser = u.id
-                        WHERE u.id = @iduser AND n.status = 'non lu' AND u.role = 'user'";
+                        WHERE u.id = @userId AND u.role = 'user' AND n.status = 'non lu'";
 
                     using (var command = new MySqlCommand(query, connection))
                     {
-                        command.Parameters.AddWithValue("@iduser", userId);
+                        command.Parameters.AddWithValue("@userId", userId);
                         using (var reader = command.ExecuteReader())
                         {
                             while (reader.Read())
@@ -264,6 +263,7 @@ namespace suivi_abonnement.Service
                         int rowsAffected = command.ExecuteNonQuery();
                         Console.WriteLine($"{rowsAffected} rows updated");
                     }
+
                     connection.Close();
                 }
             }

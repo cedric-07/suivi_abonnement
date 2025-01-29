@@ -211,9 +211,13 @@ namespace suivi_abonnement.Repository
                         var result = command.ExecuteNonQuery();
 
                         if (result > 0)
+                        {
                             return "Abonnement mis à jour avec succès";
+                        }
                         else
-                            return "L'abonnement n'a pas été trouvé.";
+                        {
+                            return "Abonnement non mis à jour";
+                        }
                     }
                 }
             }
@@ -1165,6 +1169,66 @@ namespace suivi_abonnement.Repository
             }
             // Retourner les listes d'abonnements filtrées par statut
             return (actifs, enAttente, expires);
+        }
+
+        public List<Abonnement> getAbonnementsExpiredOnMonth()
+        {
+            List<Abonnement> abonnements = new List<Abonnement>();
+            try
+            {
+                using (var connection = new MySqlConnection(_connectionString))
+                {
+                    connection.Open();
+                    string query = @"SELECT 
+                                        a.*, 
+                                        c.nom AS nom_categorie, 
+                                        f.nom AS nom_fournisseur, 
+                                        d.nom AS nom_departement 
+                                    FROM 
+                                        abonnements a 
+                                    JOIN
+                                        departements d ON a.departement_id = d.departement_id
+                                    JOIN
+                                        categories c ON a.idcategorie = c.categorie_id
+                                    JOIN
+                                        fournisseurs f ON a.idfournisseur = f.fournisseur_id
+                                    WHERE 
+                                        DATEDIFF(expiration_date , CURDATE()) <= 30 
+                                    AND 
+                                        DATEDIFF(expiration_date , CURDATE()) >= 0";
+                    using (var command = new MySqlCommand(query, connection))
+                    {
+                        using (var reader = command.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                abonnements.Add(new Abonnement
+                                {
+                                    Id = reader.GetInt32("abonnement_id"),
+                                    Nom = reader.GetString("nom"),
+                                    Description = reader.GetString("description"),
+                                    Prix = reader.GetInt32("prix"),
+                                    DateDebut = reader.GetDateTime("date_debut"),
+                                    ExpirationDate = reader.GetDateTime("expiration_date"),
+                                    Type = reader.GetString("type"),
+                                    idfournisseur = reader.GetInt32("idfournisseur"),
+                                    idcategorie = reader.GetInt32("idcategorie"),
+                                    idDepartement = reader.GetInt32("departement_id"),
+                                    NomCategorie = reader.GetString("nom_categorie"),
+                                    NomDepartement = reader.GetString("nom_departement"),
+                                    NomFournisseur = reader.GetString("nom_fournisseur")
+                                });
+                            }
+                        }
+                    }
+                    connection.Close();
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+            return abonnements;
         }
     }
 }

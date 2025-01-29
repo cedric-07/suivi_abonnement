@@ -114,6 +114,10 @@ namespace suivi_abonnement.Service
         {
             return _abonnementRepository.getListAbonnementByStatus(pageNumberActifs, pageNumberEnAttente, pageNumberExpires, pageSize);
         }
-    
+
+        public List<Abonnement> getAbonnementsExpiredOnMonth()
+        {
+            return _abonnementRepository.getAbonnementsExpiredOnMonth();
+        }
     }
 }

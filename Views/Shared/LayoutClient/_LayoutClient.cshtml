@@ -17,6 +17,7 @@
   <link href="https://fonts.googleapis.com" rel="preconnect">
   <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&family=Montserrat:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
 
   <!-- Vendor CSS Files -->
   <link href="../assetsUser/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
@@ -107,21 +108,79 @@
           </h1>
         </a>
 
-        <nav id="navmenu" class="navmenu">
-          <ul>
-            <li><a href="@Url.Action("Index", "Home")">Accueil</a></li>
-            <li class="dropdown"><a href="@Url.Action("IndexPage", "Home")"><span>Liste Abonnement</span></a></li>
-            <li><a href="@Url.Action("ContactPage" , "Home")">Contact</a></li>
-            <li class="dropdown">
-              <a href="#" class="notification">
-                <span>Notifications</span>
-                <span class="badge">3</span> <!-- Badge de notification -->
-              </a>
-            </li>
-            <li><a href="#logoutModal" data-bs-toggle="modal" class="logout">Déconnexion</a></li>
-          </ul>
-          <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
+          <nav id="navmenu" class="navmenu">
+            <ul>
+                <li><a href="@Url.Action("Index", "Home")">Accueil</a></li>
+                <li class="dropdown"><a href="@Url.Action("IndexPage", "Home")"><span>Liste Abonnement</span></a></li>
+                <li><a href="@Url.Action("ContactPage", "Home")">Contact</a></li>
+
+                <!-- Menu déroulant des notifications -->
+                <li class="dropdown">
+                    <a href="#" class="notification" data-bs-toggle="dropdown" aria-expanded="false">
+                        <span>Notifications</span>
+                        <span class="badge">@ViewBag.NotificationCount</span>
+                    </a>
+
+                    <!-- Menu déroulant avec style amélioré pour les notifications -->
+                    <ul class="dropdown-menu dropdown-menu-end px-3 py-3 me-sm-n4" style="border-radius: 10px; background: #fff; box-shadow: 0 6px 8px rgba(11, 33, 226, 0.1); font-size: 0.875rem; width: 300px;">
+                        <!-- Liste des notifications -->
+                        @if (ViewBag.Notifications != null && ViewBag.Notifications.Count > 0)
+                        {
+                            <div class="scrollable-notifications" style="max-height: 250px; overflow-y: auto;">
+                                @foreach (var notification in ViewBag.Notifications as List<Notification>)
+                                {
+                                    var cssClass = notification.Status == "non lu" ? "font-weight-bold bg-light" : "text-muted";
+
+                                    <li class="mb-3" style="list-style: none; padding: 0;">
+                                        <form asp-action="MarkNotificationAsRead" asp-controller="Notification" method="post">
+                                            <input type="hidden" name="notificationId" value="@notification.Id" />
+                                            <a class="dropdown-item p-2 bg-transparent shadow-none rounded-2 @cssClass" onclick="this.closest('form').submit()" style="border-left: none; transition: all 0.3s ease; padding-left: 10px; padding-right: 10px; cursor: pointer;">
+                                                <div class="d-flex py-1">
+                                                    <div class="d-flex align-items-center me-2">
+                                                        <!-- Icône de notification -->
+                                                        <i class="fa fa-bell text-light" style="font-size: 18px; border-radius: 50%; background-color: #007bff; padding: 12px; display: inline-block; width: 40px; height: 40px; text-align: center; line-height: 18px;"></i>
+                                                    </div>
+                                                    <div class="d-flex flex-column justify-content-center" style="width: 100%; word-wrap: break-word;">
+                                                      <!-- Titre de la notification -->
+                                                      <h6 class="text-sm font-weight-bold mb-1 text-dark" style="margin-bottom: 8px; font-size: 1rem; line-height: 1.4; color: #333; white-space: normal; overflow: visible; text-overflow: clip;">
+                                                          Nouveau Message
+                                                      </h6>
+                                                      
+                                                      <!-- Description de la notification -->
+                                                      <p class="text-xs mb-2" style="font-size: 0.875rem; color: #555; line-height: 1.5; white-space: normal; overflow: visible; text-overflow: clip;">
+                                                          @notification.Message
+                                                      </p>
+                                                      
+                                                      <!-- Date de la notification -->
+                                                      <p class="text-xs text-muted mb-0" style="font-size: 0.75rem; color: #888; line-height: 1.4;">
+                                                          <i class="fa fa-clock me-1"></i>
+                                                          <span>@notification.CreatedAt.ToString("dd MMM yyyy")</span>
+                                                      </p>
+                                                    </div>
+
+                                                </div>
+                                            </a>
+                                        </form>
+                                    </li>
+                                }
+                            </div>
+                        }
+                        else
+                        {
+                            <li class="mb-2">
+                                <p class="text-xs text-center text-secondary">Aucune notification.</p>
+                            </li>
+                        }
+                    </ul>
+                </li>
+
+                <li><a href="#logoutModal" data-bs-toggle="modal" class="logout">Déconnexion</a></li>
+            </ul>
+            <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
         </nav><!-- .nav-menu -->
+
+
+
 
 
       </div>

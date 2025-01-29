@@ -102,7 +102,7 @@
             width: 80px !important; /* Maintenir les proportions */
             margin-left: 50px !important; /* Espace à droite du logo */
         }
-
+    
         </style>
 </head>
 
@@ -178,7 +178,7 @@
     </aside>
     <main class="main-content position-relative max-height-vh-100 h-100 border-radius-lg ">
         <!-- Navbar -->
-        <nav class="navbar navbar-main navbar-expand-lg px-0 mx-4 shadow-none border-radius-xl" id="navbarBlur" navbar-scroll="true">
+        <nav class="navbar navbar-main navbar-expand-lg px-0 mx-4 shadow-none border-radius-xl mt-4" id="navbarBlur" navbar-scroll="true">
             <div class="container-fluid py-1 px-3">  
                 <div class="container-fluid" id="navbar">
                     <div class="ms-md-auto pe-md-3 d-flex align-items-center">
@@ -195,7 +195,6 @@
                                 }       
                             </a>
                             <ul class="dropdown-menu dropdown-menu-end px-2 py-3 me-sm-n4" aria-labelledby="dropdownMenuButton" style="border-radius: 10px; background: #fff; box-shadow: 0 6px 8px rgba(11, 33, 226, 0.1); font-size: 0.875rem; width: 250px;">
-                                <!-- Title of the dropdown -->
                                 <div class="text-center pb-2" style="background-color: #1E2A3A; border-radius: 10px 10px 0 0; padding: 10px;">
                                     <h5 class="font-weight-bold text-white mb-1" style="font-size: 1rem;">Notifications</h5>
                                 </div>
@@ -204,34 +203,29 @@
                                 {
                                     <div class="scrollable-notifications" style="max-height: 250px; overflow-y: auto;">
                                         @foreach (var notification in @ViewBag.Notifications)
-                                        {
-                                                <li class="mb-3" style="list-style: none; padding: 0;">
-                                                <form asp-action="MarkNotificationAsRead" method="post">
-                                                    <input type="hidden" name="notificationId" value="@notification.Id" />
-                                                    <a class="dropdown-item p-2 bg-transparent shadow-none rounded-2" style="border-left: none; transition: all 0.3s ease; padding-left: 10px; padding-right: 10px;">
-                                                        <div class="d-flex py-1">
-                                                            <div class="d-flex align-items-center me-2">
-                                                                <i class="fa fa-bell text-light" style="font-size: 18px; border-radius: 50%; background-color: #007bff; padding: 6px;"></i>
-                                                            </div>
-                                                            <div class="d-flex flex-column justify-content-center" style="width: 100%; word-wrap: break-word;">
-                                                                <h6 class="text-sm font-weight-bold mb-1 text-dark" style="margin-bottom: 5px;white-space: normal; overflow: visible; text-overflow: clip;">@notification.Message</h6>
-                                                                <p class="text-xs mb-2" style="font-size: 0.75rem; color: #555; white-space: normal; overflow: visible; text-overflow: clip;">
-                                                                    @notification.Message
-                                                                </p>
-                                                                <p class="text-xs text-muted mb-0" style="font-size: 0.65rem; color: #888;">
-                                                                    <i class="fa fa-clock me-1"></i>
-                                                                    <span>@notification.CreatedAt.ToString("dd MMM yyyy")</span>
-                                                                </p>
-                                                            </div>
+                                        {                                            
+                                            <li class="mb-3 notification-item" data-notification-id="@notification.Id" style="list-style: none; padding: 0;">
+                                                <a href="#" class="dropdown-item p-2 bg-transparent shadow-none rounded-2 text-decoration-none" style="border-left: none; transition: all 0.3s ease; padding-left: 10px; padding-right: 10px; cursor: pointer;" onclick="markAsRead(@notification.Id)">
+                                                    <div class="d-flex py-1">
+                                                        <div class="d-flex align-items-center me-2">
+                                                            <i class="fa fa-bell text-light" style="font-size: 18px; border-radius: 50%; background-color: #007bff; padding: 6px;"></i>
                                                         </div>
-                                                    </a>
-                                                </form>
+                                                        <div class="d-flex flex-column justify-content-center" style="width: 100%; word-wrap: break-word;">
+                                                            <h6 class="text-sm font-weight-bold mb-1 text-dark" style="margin-bottom: 5px;white-space: normal; overflow: visible; text-overflow: clip;">
+                                                                @notification.Message
+                                                            </h6>
+                                                            <p class="text-xs mb-2" style="font-size: 0.75rem; color: #555; white-space: normal; overflow: visible; text-overflow: clip;">
+                                                                @notification.Message
+                                                            </p>
+                                                            <p class="text-xs text-muted mb-0" style="font-size: 0.65rem; color: #888;">
+                                                                <i class="fa fa-clock me-1"></i>
+                                                                <span>@notification.CreatedAt.ToString("dd MMM yyyy")</span>
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                </a>
                                             </li>
                                         }
-
-
-
-
                                     </div>
                                 }
                                 else
@@ -313,25 +307,41 @@
     <script>
         var win = navigator.platform.indexOf('Win') > -1;
         if (win && document.querySelector('#sidenav-scrollbar')) {
-          var options = {
-            damping: '0.5'
-          }
-          Scrollbar.init(document.querySelector('#sidenav-scrollbar'), options);
+            var options = {
+                damping: '0.5'
+            }
+            Scrollbar.init(document.querySelector('#sidenav-scrollbar'), options);
+        }
+
+        function markAsRead(notificationId) {
+            $.ajax({
+                url: '@Url.Action("MarkNotificationAsRead", "Notification")',
+                type: 'POST',
+                data: { notificationId: notificationId },
+                success: function (response) {
+                    if (response.success) {
+                        // Si la notification est marquée comme lue, on peut retirer l'élément ou changer son apparence
+                        $('li[data-notification-id="' + notificationId + '"]').fadeOut();
+                        // Recharger la page après la mise à jour
+                        location.reload();
+                    } else {
+                        alert("Erreur lors de la mise à jour de la notification.");
+                    }
+                },
+                error: function () {
+                    alert("Erreur de communication avec le serveur.");
+                }
+            });
         }
     </script>
+
     <!-- Github buttons -->
     <script async defer src="https://buttons.github.io/buttons.js"></script>
     <!-- Control Center for Soft Dashboard: parallax effects, scripts for the example pages etc -->
     <script src="../assets/js/soft-ui-dashboard.min.js?v=1.1.0"></script>
-    <script>
-        var win = navigator.platform.indexOf('Win') > -1;
-        if (win && document.querySelector('#sidenav-scrollbar')) {
-          var options = {
-            damping: '0.5'
-          }
-          Scrollbar.init(document.querySelector('#sidenav-scrollbar'), options);
-        }
-    </script>
+    <!-- Inclure jQuery avant ton script -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
 </body>
 
 </html>

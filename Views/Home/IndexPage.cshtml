@@ -1,4 +1,4 @@
-@model suivi_abonnement.Models.GlobalViewModel
+@model suivi_abonnement.Models.AbonnementViewModel
 
 @{
     ViewData["Title"] = "Liste des Abonnements";
@@ -99,7 +99,7 @@
                                             <label for="categoryFilter" class="form-label text-dark fw-bold" style="font-size: 13px;">Catégorie</label>
                                             <select class="form-select form-select-sm rounded-pill shadow-sm" id="categoryFilter" name="idcategorie" style="font-size: 12px;">
                                                 <option disabled selected>--Choisir une catégorie--</option>
-                                                @foreach (var categorie in Model.AbonnementViewModel.Categories)
+                                                @foreach (var categorie in Model.Categories)
                                                 {
                                                     <option value="@categorie.Id">@categorie.Nom</option>
                                                 }
@@ -109,7 +109,7 @@
                                             <label for="TypeFilter" class="form-label text-dark fw-bold" style="font-size: 13px;">Type</label>
                                             <select class="form-select form-select-sm rounded-pill shadow-sm" id="TypeFilter" name="type" style="font-size: 12px;">
                                                 <option disabled selected>--Choisir une type--</option>
-                                                @foreach (var abonnement in Model.AbonnementViewModel.Abonnements)
+                                                @foreach (var abonnement in Model.Abonnements)
                                                 {
                                                     <option value="@abonnement.Type">@abonnement.Type</option>
                                                 }
@@ -124,7 +124,7 @@
                         </div>
                     </div>
                 <div class="container py-4">
-                    @foreach (var abonnement in Model.AbonnementViewModel.Abonnements)
+                    @foreach (var abonnement in Model.Abonnements)
                     {
                         <div class="card mb-4 shadow-lg rounded" style="border: none;">
                             <div class="row g-0">
@@ -195,7 +195,7 @@
                             </div>
                         </div>
                     }
-                    @if (Model.AbonnementViewModel.Abonnements.Count == 0)
+                    @if (Model.Abonnements.Count == 0)
                     {
                         <div class="alert text-center" style="color: red;" role="alert">
                             Aucun abonnement trouvé.

@@ -26,9 +26,9 @@ namespace suivi_abonnement.Service
         {
             return _notificationRepository.GetNotificationsForAdmin();
         }
-        public List<Notification> GetNotificationsForClient(int userId)
+        public List<Notification> GetNotificationsForClient()
         {
-            return _notificationRepository.GetNotificationsForClient(userId);
+            return _notificationRepository.GetNotificationsForClient();
         }   
         public void MarkNotificationAsRead(int notificationId)
         {

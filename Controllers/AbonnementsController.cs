@@ -36,9 +36,6 @@ namespace suivi_abonnement.Controllers
             // Récupération des informations de session
             int userId = HttpContext.Session.GetInt32("UserId") ?? 0;
             var userRole = HttpContext.Session.GetString("UserRole");
-            Console.WriteLine("ID d'utilisateur connecté : " + userId);
-            Console.WriteLine("Rôle d'utilisateur connecté : " + userRole);
-            
 
             // Vérification si l'utilisateur est connecté
             if (string.IsNullOrEmpty(userRole) || userId == 0)
@@ -62,14 +59,10 @@ namespace suivi_abonnement.Controllers
             {
                 Console.WriteLine("Aucune notification trouvée.");
             }
-            else
-            {
-                Console.WriteLine("Nombre de notifications trouvées : " + notifications.Count);
-            }
+            
 
             // Calcul du nombre de notifications non lues
             int notificationCount = notifications?.Count(n => n.Status == "non lu") ?? 0;
-            
 
             // Passage du nombre de notifications à la vue
             ViewBag.NotificationCount = notificationCount;
@@ -105,32 +98,11 @@ namespace suivi_abonnement.Controllers
             return View("~/Views/AdminPage/IndexPage.cshtml", model);
         }
 
-        [HttpPost]
-        public IActionResult MarkNotificationAsRead(int notificationId)
-        {
-            try
-            {
-                // Log pour vérifier que l'ID de notification est correct
-                Console.WriteLine($"NotificationId reçu: {notificationId}");
-                
-                _notificationService.MarkNotificationAsRead(notificationId);
-                Console.WriteLine("Notification marquée comme lue");
-
-                // Pour tester sans redirection
-                return Json(new { success = true });
-            }
-            catch (Exception ex)
-            {
-                // Log de l'erreur
-                Console.WriteLine($"Erreur : {ex.Message}");
-                return Json(new { success = false, message = ex.Message });
-            }
-        }
 
         // GET: AbonnementsController
         public ActionResult AbonnementPage(string? keyword = null, DateTime? DateDebut = null, DateTime? ExpirationDate = null, string? type = null, int? idcategorie = null, int pageNumber = 1)
         {
-            int pageSize = 2; // Nombre d'abonnements par page
+            int pageSize = 8; // Nombre d'abonnements par page
             List<Abonnement> abonnements;
 
             // Vérification si les dates sont valides
@@ -174,6 +146,8 @@ namespace suivi_abonnement.Controllers
             int totalAbonnements = _abonnementService.CountTotalAbonnements();
             int totalPages = (int)Math.Ceiling((double)totalAbonnements / pageSize);
 
+            var abonnementExpirant = _abonnementService.getAbonnementsExpiredOnMonth();
+
             var viewModel = new GlobalViewModel
             {
                 AbonnementViewModel = new AbonnementViewModel
@@ -191,6 +165,7 @@ namespace suivi_abonnement.Controllers
             ViewBag.CurrentPage = pageNumber;
             ViewBag.TotalPages = totalPages;
             ViewBag.TotalAbonnements = totalAbonnements;
+            ViewBag.AbonnementExpirant = abonnementExpirant;
 
             return View("~/Views/AdminPage/abonnementPage.cshtml", viewModel);
         }
@@ -374,7 +349,7 @@ namespace suivi_abonnement.Controllers
         {
             try
             {
-                int pageSize = 1;
+                int pageSize = 6;
 
                 if (_abonnementService == null)
                 {
@@ -420,8 +395,20 @@ namespace suivi_abonnement.Controllers
             }
         }
 
+        public IActionResult AlertePage()
+        {
+            var userRole = HttpContext.Session.GetString("UserRole");
+            var abonnementExpiredOnMonth = _abonnementService.getAbonnementsExpiredOnMonth();
 
-
-
+            if (userRole == "admin")
+            {
+                return View("~/Views/AdminPage/AlertePage.cshtml", abonnementExpiredOnMonth);
+            }
+            else
+            {
+                return View("~/Views/Home/AlertePage.cshtml" , abonnementExpiredOnMonth);
+            }
+            
+        }
     }
 }

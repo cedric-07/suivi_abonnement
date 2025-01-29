@@ -11,25 +11,51 @@ namespace suivi_abonnement.Controllers
         private readonly ICategorieService _categorieService;
         private readonly AbonnementViewModel abonnementViewModel = new AbonnementViewModel();
         private readonly AbonnementStatViewModel abonnementStatViewModel = new AbonnementStatViewModel();
+        private readonly INotificationService _notificationService;
 
         private readonly IDepartementService _departementService;
         private readonly User user = new User();
         private readonly ILogger<HomeController> _logger;
 
-        public HomeController(IAbonnementService abonnementService, IFournisseurService fournisseurService, ICategorieService categorieService, ILogger<HomeController> logger, IDepartementService departementService)
+        public HomeController(IAbonnementService abonnementService, IFournisseurService fournisseurService, ICategorieService categorieService, INotificationService notificationService, IDepartementService departementService, ILogger<HomeController> logger)
         {
             _abonnementService = abonnementService;
             _fournisseurService = fournisseurService;
             _categorieService = categorieService;
-            _logger = logger;
+            _notificationService = notificationService;
             _departementService = departementService;
+            _logger = logger;
         }
 
 
         public IActionResult Index()
         {
+            int userId = HttpContext.Session.GetInt32("UserId") ?? 0;
+            var userRole = HttpContext.Session.GetString("UserRole");
+            if (string.IsNullOrEmpty(userRole) || userId == 0)
+            {
+                Console.WriteLine("Utilisateur non connecté");
+            }
+
+            _notificationService.SendNotification();
+            List<Notification> notifications = new List<Notification>();
+            
+            if (userRole == "user")
+            {
+                notifications = _notificationService.GetNotificationsForClient();
+            }
+
+            if (notifications == null || !notifications.Any())
+            {
+                Console.WriteLine("Aucune notification trouvée.");
+            }
+            
+            int notificationCount = notifications?.Count(n => n.Status == "non lu") ?? 0;
+            ViewBag.NotificationCount = notificationCount;
+            ViewBag.Notifications = notifications;
             return View();
         }
+
         public ActionResult IndexPage(string? keyword = null, DateTime? DateDebut = null, DateTime? ExpirationDate = null, string? type = null, int? idcategorie = null, int pageNumber = 1)
         {
             int pageSize = 6; // Nombre d'abonnements par page
@@ -78,18 +104,17 @@ namespace suivi_abonnement.Controllers
             int totalAbonnements = _abonnementService.CountTotalAbonnements();
             int totalPages = (int)Math.Ceiling((double)totalAbonnements / pageSize);
 
-            var viewModel = new GlobalViewModel
+            var viewModel = new AbonnementViewModel
             {
-                AbonnementViewModel = new AbonnementViewModel
-                {
-                    Abonnements = abonnements,
-                    Fournisseurs = fournisseurs,
-                    Categories = categories,
-                    CurrentPage = pageNumber,
-                    TotalPages = totalPages,
-                    TotalAbonnements = totalAbonnements
-                }
+                Abonnements = abonnements,
+                Fournisseurs = fournisseurs,
+                Categories = categories,
+                CurrentPage = pageNumber,
+                TotalPages = totalPages,
+                TotalAbonnements = totalAbonnements,
+                User = user
             };
+           
 
             ViewBag.CurrentPage = pageNumber;
             ViewBag.TotalPages = totalPages;
