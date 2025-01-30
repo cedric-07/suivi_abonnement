@@ -32,6 +32,8 @@
         public IEnumerable<Categorie> Categories { get; set; }
         public List<Departement> Departements { get; set; }
 
+        public List<VAbonnementClient> AbonnementClients { get; set; }
+
         public User User { get; set; }
     }
 }

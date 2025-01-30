@@ -99,6 +99,8 @@ namespace suivi_abonnement.Controllers
             
             List<Fournisseur> fournisseurs = _fournisseurService.GetFournisseurs();
             List<Categorie> categories = _categorieService.GetCategories();
+            List<VAbonnementClient> abonnementExpiredOnMonth = _abonnementService.getAbonnementsExpiredOnMonthClient();
+
 
             
             int totalAbonnements = _abonnementService.CountTotalAbonnements();
@@ -112,6 +114,7 @@ namespace suivi_abonnement.Controllers
                 CurrentPage = pageNumber,
                 TotalPages = totalPages,
                 TotalAbonnements = totalAbonnements,
+                AbonnementClients = abonnementExpiredOnMonth,
                 User = user
             };
            

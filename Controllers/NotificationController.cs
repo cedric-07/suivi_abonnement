@@ -27,8 +27,20 @@
                     // Marquer la notification comme lue
                     _notificationService.MarkNotificationAsRead(notificationId);
 
-                    // Retourner une réponse JSON pour indiquer que l'opération a réussi
-                    return Json(new { success = true });
+                    // Préparer la réponse
+                    dynamic response = new { success = true };
+
+                    if (userRole == "Admin")
+                    {
+                        response = new { success = true, redirectUrl = Url.Action("IndexPage", "Abonnement") };
+                    }
+                    else
+                    {
+                        response = new { success = true, redirectUrl = Url.Action("Index", "Home") };
+                    }
+
+                    // Retourner la réponse JSON
+                    return Json(response);
                 }
                 catch (Exception ex)
                 {
@@ -38,6 +50,8 @@
                     return Json(new { success = false, message = ex.Message });
                 }
             }
+
+
 
 
         }

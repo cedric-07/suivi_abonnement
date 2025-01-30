@@ -14,7 +14,7 @@
         public string Type { get; set; }
         public string Fournisseur { get; set; }
         public string Departement { get; set; }
-
+        public string Categorie { get; set; }
 
     }
 }

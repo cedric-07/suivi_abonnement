@@ -30,11 +30,15 @@ namespace suivi_abonnement.Service
 
                     if (userRole == "admin")
                     {
-                        SendNotificationByRole("admin");
+                        SendNotificationByRoleAdmin("admin");
+                    }
+                    else if (userRole == "user")
+                    {
+                        SendNotificationByRoleUser( "user");
                     }
                     else
                     {
-                        SendNotificationByRole( "user");
+                        throw new Exception("Role non reconnu");
                     }
                 }
             }
@@ -44,7 +48,7 @@ namespace suivi_abonnement.Service
             }
         }
 
-        public void SendNotificationByRole(string role)
+        public void SendNotificationByRoleAdmin(string role)
         {
             try
             {
@@ -60,7 +64,7 @@ namespace suivi_abonnement.Service
                                         u.email
                                     FROM abonnements a
                                     JOIN users u ON u.role = @role
-                                    WHERE a.expiration_date BETWEEN NOW() AND DATE_ADD(NOW(), INTERVAL 1 MONTH)";
+                                    WHERE DATEDIFF(a.expiration_date , CURDATE()) <= 30 AND DATEDIFF(a.expiration_date , CURDATE()) >= 0";
 
                     using (var command = new MySqlCommand(query, connection))
                     {
@@ -72,7 +76,50 @@ namespace suivi_abonnement.Service
                             {
                                 int userId = reader.GetInt32("iduser");
                                 int abonnementId = reader.GetInt32("abonnement_id");  // Assurez-vous d'utiliser le bon nom de colonne
-                                string message = $"Cher {reader.GetString("username")}, l'abonnement {reader.GetString("nom")} va expirer dans un mois";
+                                string message = $"l'abonnement {reader.GetString("nom")} va expirer dans 30 jours";
+
+                                try
+                                {
+
+                                    CreateNotification(userId, abonnementId, message);
+                                }
+                                catch (Exception ex)
+                                {
+                                    Console.WriteLine($"Erreur pour {userId}: {ex.Message}");
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            catch (System.Exception)
+            {
+                throw;
+            }
+        }
+
+        public void SendNotificationByRoleUser(string role)
+        {
+            try
+            {
+                using (var connection = new MySqlConnection(connectionString))
+                {
+                    connection.Open();
+
+                    string query = @"SELECT * FROM v_abonnements_par_client WHERE roleclient = @role AND DATEDIFF(expiration_date , CURDATE()) <= 30 AND DATEDIFF(expiration_date , CURDATE()) >= 0;
+";
+
+                    using (var command = new MySqlCommand(query, connection))
+                    {
+                        command.Parameters.AddWithValue("@role", role);
+
+                        using (var reader = command.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                int userId = reader.GetInt32("idclient");
+                                int abonnementId = reader.GetInt32("abonnement_id");  // Assurez-vous d'utiliser le bon nom de colonne
+                                string message = $"Votre abonnement {reader.GetString("nomabonnement")} va expirer dans 30 jours";
 
                                 try
                                 {
@@ -161,7 +208,7 @@ namespace suivi_abonnement.Service
                         FROM notifications n
                         JOIN abonnements a ON n.idabonnement = a.abonnement_id
                         JOIN users u ON n.iduser = u.id
-                        WHERE u.id = @userId AND u.role = 'user' AND n.status = 'non lu'";
+                        WHERE u.id = @userId AND u.role = 'user'";
 
                     using (var command = new MySqlCommand(query, connection))
                     {
@@ -217,7 +264,8 @@ namespace suivi_abonnement.Service
                         FROM notifications n
                         JOIN abonnements a ON n.idabonnement = a.abonnement_id
                         JOIN users u ON n.iduser = u.id
-                        WHERE u.role = 'admin' AND n.status = 'non lu'";
+                        WHERE u.role = 'admin' 
+                        ORDER BY N.status DESC";
 
                     using (var command = new MySqlCommand(query, connection))
                     {
@@ -248,6 +296,7 @@ namespace suivi_abonnement.Service
             return notifications;
         }
 
+        
         public void MarkNotificationAsRead(int notificationId)
         {
             try

@@ -14,9 +14,13 @@ namespace suivi_abonnement.Service
         {
             _notificationRepository.SendNotification();
         }
-        public void SendNotificationByRole(string role)
+        public void SendNotificationByRoleAdmin(string role)
         {
-            _notificationRepository.SendNotificationByRole(role);
+            _notificationRepository.SendNotificationByRoleAdmin(role);
+        }
+        public void SendNotificationByRoleUser(string role)
+        {
+            _notificationRepository.SendNotificationByRoleUser(role);
         }
         public void CreateNotification(int userId, int abonnementId, string message)
         {

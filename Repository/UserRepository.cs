@@ -69,6 +69,7 @@ namespace suivi_abonnement.Repository
                 Console.WriteLine($"Username: {user.Username}");
                 Console.WriteLine($"Email: {user.Email}");
                 Console.WriteLine($"Password: {user.Password}");
+                Console.WriteLine($"departement: {idDepartement}");
 
                 string hashedPassword = BCrypt.Net.BCrypt.HashPassword(user.Password);
                 using (var connection = new MySqlConnection(connectionString))

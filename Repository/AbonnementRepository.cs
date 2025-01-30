@@ -12,8 +12,12 @@ namespace suivi_abonnement.Repository
     public class AbonnementRepository : IAbonnementRepository
     {
         private readonly string _connectionString;
-        public AbonnementRepository()
+        private readonly IHttpContextAccessor _httpContextAccessor;
+
+        public AbonnementRepository(IHttpContextAccessor httpContextAccessor)
         {
+            _httpContextAccessor = httpContextAccessor;
+        
             _connectionString = "server=localhost;port=3306;database=suivi_abonnement_omnis_db;user=root;password=;SslMode=None";
         }
 
@@ -1171,7 +1175,8 @@ namespace suivi_abonnement.Repository
             return (actifs, enAttente, expires);
         }
 
-        public List<Abonnement> getAbonnementsExpiredOnMonth()
+        //Admin
+        public List<Abonnement> getAbonnementsExpiredOnMonthAdmin()
         {
             List<Abonnement> abonnements = new List<Abonnement>();
             try
@@ -1217,6 +1222,51 @@ namespace suivi_abonnement.Repository
                                     NomCategorie = reader.GetString("nom_categorie"),
                                     NomDepartement = reader.GetString("nom_departement"),
                                     NomFournisseur = reader.GetString("nom_fournisseur")
+                                });
+                            }
+                        }
+                    }
+                    connection.Close();
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+            return abonnements;
+        }
+
+        //Client
+        public List<VAbonnementClient> getAbonnementsExpiredOnMonthClient()
+        {
+            int userId = _httpContextAccessor.HttpContext.Session.GetInt32("UserId") ?? 0;
+            List<VAbonnementClient> abonnements = new List<VAbonnementClient>();
+            try
+            {
+                using (var connection = new MySqlConnection(_connectionString))
+                {
+                    connection.Open();
+                    string query = @"SELECT * FROM v_abonnements_par_client WHERE idclient = @userId AND DATEDIFF(expiration_date , CURDATE()) <= 30 AND DATEDIFF(expiration_date , CURDATE()) >= 0";
+                    using (var command = new MySqlCommand(query, connection))
+                    {
+                        command.Parameters.AddWithValue("@userId", userId);
+                        using (var reader = command.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                abonnements.Add(new VAbonnementClient
+                                {
+                                    Id = reader.GetInt32("abonnement_id"),
+                                    Abonnement = reader.GetString("nomabonnement"),
+                                    Description = reader.GetString("description"),  
+                                    Prix = reader.GetInt32("prix"),
+                                    Type = reader.GetString("type"),
+                                    DateDebut = reader.GetDateTime("date_debut"),
+                                    DateFin = reader.GetDateTime("expiration_date"),
+                                    Departement = reader.GetString("nomdepartement"),
+                                    Fournisseur = reader.GetString("nomfournisseur"),
+                                    Client = reader.GetString("nom"),
+                                    Email = reader.GetString("email")
                                 });
                             }
                         }

@@ -79,8 +79,8 @@ namespace suivi_abonnement_omnis.Controllers.Authentification
         [HttpGet]
         public IActionResult Register()
         {
-            List<Departement> departements = _departementService.getDepartements();
-            ViewData["Departements"] = departements;
+            var departements = _departementService.getDepartements();
+            ViewBag.Departements = departements;
             return View();
         }
 

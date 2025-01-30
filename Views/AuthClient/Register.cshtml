@@ -52,10 +52,18 @@
                                 <label for="departementSelect">Département</label>
                                 <select class="form-control" id="departementSelect" name="idDepartement">
                                     <option value="" disabled selected hidden>--Choisir un département--</option>
-                                    @foreach (var departement in ViewData["Departements"] as List<Departement>)
+                                    @if (ViewBag.Departements is List<Departement> departements)
                                     {
-                                        <option value="@departement.Id">@departement.Nom</option>
+                                        @foreach (var departement in departements)
+                                        {
+                                            <option value="@departement.Id">@departement.Nom</option>
+                                        }
                                     }
+                                    else
+                                    {
+                                        <p>Aucun département disponible.</p>
+                                    }
+
                                 </select>
                             </div>
                             <div class="mb-3">

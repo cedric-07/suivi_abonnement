@@ -104,7 +104,7 @@ namespace suivi_abonnement.Controllers
         {
             int pageSize = 8; // Nombre d'abonnements par page
             List<Abonnement> abonnements;
-
+            
             // Vérification si les dates sont valides
             if (DateDebut.HasValue && ExpirationDate.HasValue)
             {
@@ -146,7 +146,7 @@ namespace suivi_abonnement.Controllers
             int totalAbonnements = _abonnementService.CountTotalAbonnements();
             int totalPages = (int)Math.Ceiling((double)totalAbonnements / pageSize);
 
-            var abonnementExpirant = _abonnementService.getAbonnementsExpiredOnMonth();
+            var abonnementExpirant = _abonnementService.getAbonnementsExpiredOnMonthAdmin();
 
             var viewModel = new GlobalViewModel
             {
@@ -395,20 +395,5 @@ namespace suivi_abonnement.Controllers
             }
         }
 
-        public IActionResult AlertePage()
-        {
-            var userRole = HttpContext.Session.GetString("UserRole");
-            var abonnementExpiredOnMonth = _abonnementService.getAbonnementsExpiredOnMonth();
-
-            if (userRole == "admin")
-            {
-                return View("~/Views/AdminPage/AlertePage.cshtml", abonnementExpiredOnMonth);
-            }
-            else
-            {
-                return View("~/Views/Home/AlertePage.cshtml" , abonnementExpiredOnMonth);
-            }
-            
-        }
     }
 }

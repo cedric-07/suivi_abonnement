@@ -29,6 +29,8 @@
   <!-- Main CSS File -->
   <link href="../assetsUser/css/main.css" rel="stylesheet">
 
+
+
   <!-- =======================================================
   * Template Name: Impact
   * Template URL: https://bootstrapmade.com/impact-bootstrap-business-website-template/
@@ -41,12 +43,9 @@
       font-family: Montserrat ,sans-serif !important;
       background-color: #0d2d5a !important;
     }
-    .navbar-brand-img{
-      width:  150px;
-      height: 800px;
-    }
+
     .header{
-      background: linear-gradient(to left, #0d2d5a, #424abd) !important;
+      background: linear-gradient(to left, #0d2d5a, #d4d5dd) !important;
     }
     #navmenu {
         background-color: #0d2d5a; /* Couleur de fond */
@@ -91,6 +90,12 @@
     #navmenu ul li a:hover {
         color: #00bcd4; /* Couleur d'effet de survol */
     }
+    .logo-custom {
+        max-width: 100px !important;
+        max-height: 100px !important;
+        margin-left: 30px !important;
+    }
+
 
   </style>
 </head>
@@ -100,14 +105,9 @@
   <header id="header" class="header fixed-top">
     <div class="branding d-flex align-items-cente">
       <div class="container position-relative d-flex align-items-center justify-content-between">
-        <a href="index.html" class="logo d-flex align-items-center">
-          <!-- Uncomment the line below if you also wish to use an image logo -->
-          <!-- <img src="../assetsUser/img/logo.png" alt=""> -->
-          <h1 class="sitename">
-                <img src="../assets/img/logo_omnis.png" class="navbar-brand-img " alt="main_logo">
-          </h1>
-        </a>
-
+          <a class="navbar-brand" href="https://demos.creative-tim.com/soft-ui-dashboard/pages/dashboard.html" target="_blank">
+              <img src="../assets/img/logo_omnis.png" class="img-fluid logo-custom" alt="main_logo">
+          </a>
           <nav id="navmenu" class="navmenu">
             <ul>
                 <li><a href="@Url.Action("Index", "Home")">Accueil</a></li>
@@ -123,66 +123,75 @@
 
                     <!-- Menu déroulant avec style amélioré pour les notifications -->
                     <ul class="dropdown-menu dropdown-menu-end px-3 py-3 me-sm-n4" style="border-radius: 10px; background: #fff; box-shadow: 0 6px 8px rgba(11, 33, 226, 0.1); font-size: 0.875rem; width: 300px;">
-                        <!-- Liste des notifications -->
-                        @if (ViewBag.Notifications != null && ViewBag.Notifications.Count > 0)
-                        {
-                            <div class="scrollable-notifications" style="max-height: 250px; overflow-y: auto;">
-                                @foreach (var notification in ViewBag.Notifications as List<Notification>)
-                                {
-                                    var cssClass = notification.Status == "non lu" ? "font-weight-bold bg-light" : "text-muted";
+                      <!-- Liste des notifications -->
+                      @if (ViewBag.Notifications != null && ViewBag.Notifications.Count > 0)
+                      {
+                          <div class="scrollable-notifications" style="max-height: 250px; overflow-y: auto;">
+                              @foreach (var notification in ViewBag.Notifications as List<Notification>)
+                              {
+                                  var cssClass = notification.Status == "non lu" ? "font-weight-bold bg-light" : "text-muted";
+                                  var notificationStatus = notification.Status == "non lu" ? "Mark as Read" : "Read";
 
-                                    <li class="mb-3" style="list-style: none; padding: 0;">
-                                        <form asp-action="MarkNotificationAsRead" asp-controller="Notification" method="post">
-                                            <input type="hidden" name="notificationId" value="@notification.Id" />
-                                            <a class="dropdown-item p-2 bg-transparent shadow-none rounded-2 @cssClass" onclick="this.closest('form').submit()" style="border-left: none; transition: all 0.3s ease; padding-left: 10px; padding-right: 10px; cursor: pointer;">
-                                                <div class="d-flex py-1">
-                                                    <div class="d-flex align-items-center me-2">
-                                                        <!-- Icône de notification -->
-                                                        <i class="fa fa-bell text-light" style="font-size: 18px; border-radius: 50%; background-color: #007bff; padding: 12px; display: inline-block; width: 40px; height: 40px; text-align: center; line-height: 18px;"></i>
-                                                    </div>
-                                                    <div class="d-flex flex-column justify-content-center" style="width: 100%; word-wrap: break-word;">
+                                  <li class="mb-3" style="list-style: none; padding: 0;">
+                                      <form asp-action="MarkNotificationAsRead" asp-controller="Notification" method="post">
+                                          <input type="hidden" name="notificationId" value="@notification.Id" />
+                                          <a class="dropdown-item p-2 bg-transparent shadow-none rounded-2 @cssClass" 
+                                            onclick="this.closest('form').submit()" style="border-left: none; transition: all 0.3s ease; padding-left: 10px; padding-right: 10px; cursor: pointer;">
+                                              <div class="d-flex py-1">
+                                                  <div class="d-flex align-items-center me-2">
+                                                      <!-- Icône de notification -->
+                                                      <i class="fa fa-bell text-light" style="font-size: 18px; border-radius: 50%; background-color: #c70909; padding: 12px; display: inline-block; width: 40px; height: 40px; text-align: center; line-height: 18px;"></i>
+                                                      
+                                                      <!-- Icône de coche ou alerte en fonction du statut -->
+                                                      @if (notification.Status == "non lu")
+                                                      {
+                                                          <i class="fa fa-exclamation-circle text-warning ms-2" style="font-size: 20px;"></i>
+                                                      }
+                                                      else
+                                                      {
+                                                          <i class="fa fa-check-circle text-success ms-2" style="font-size: 20px;"></i>
+                                                      }
+                                                  </div>
+                                                  
+                                                  <div class="d-flex flex-column justify-content-center" style="width: 100%; word-wrap: break-word;">
                                                       <!-- Titre de la notification -->
-                                                      <h6 class="text-sm font-weight-bold mb-1 text-dark" style="margin-bottom: 8px; font-size: 1rem; line-height: 1.4; color: #333; white-space: normal; overflow: visible; text-overflow: clip;">
-                                                          Nouveau Message
+                                                      <h6 class="text-sm font-weight-bold mb-1" style="margin-bottom: 8px; font-size: 1rem; line-height: 1.4; color: @((notification.Status == "non lu") ? "#fd0404" : "#b3b0b0");">
+                                                          @((notification.Status == "non lu") ? "Nouveau message" : "Ancien message")
                                                       </h6>
                                                       
                                                       <!-- Description de la notification -->
-                                                      <p class="text-xs mb-2" style="font-size: 0.875rem; color: #555; line-height: 1.5; white-space: normal; overflow: visible; text-overflow: clip;">
+                                                      <p class="text-xs mb-2" style="font-size: 0.875rem; color: @((notification.Status == "non lu") ? "#020208" : "#b3b0b0"); line-height: 1.5; white-space: normal; overflow: visible; text-overflow: clip;">
                                                           @notification.Message
                                                       </p>
                                                       
                                                       <!-- Date de la notification -->
-                                                      <p class="text-xs text-muted mb-0" style="font-size: 0.75rem; color: #888; line-height: 1.4;">
+                                                      <p class="text-xs text-muted mb-0" style="font-size: 0.75rem; color: #1f1a1a; line-height: 1.4;">
                                                           <i class="fa fa-clock me-1"></i>
                                                           <span>@notification.CreatedAt.ToString("dd MMM yyyy")</span>
                                                       </p>
-                                                    </div>
+                                                  </div>
+                                              </div>
+                                          </a>
+                                      </form>
+                                  </li>
+                              }
+                          </div>
+                      }
+                      else
+                      {
+                          <li class="mb-2">
+                              <p class="text-xs text-center text-secondary">Aucune notification.</p>
+                          </li>
+                      }
+                  </ul>
 
-                                                </div>
-                                            </a>
-                                        </form>
-                                    </li>
-                                }
-                            </div>
-                        }
-                        else
-                        {
-                            <li class="mb-2">
-                                <p class="text-xs text-center text-secondary">Aucune notification.</p>
-                            </li>
-                        }
-                    </ul>
+
                 </li>
 
                 <li><a href="#logoutModal" data-bs-toggle="modal" class="logout">Déconnexion</a></li>
             </ul>
             <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
         </nav><!-- .nav-menu -->
-
-
-
-
-
       </div>
 
     </div>
@@ -290,9 +299,44 @@
   <script src="../assetsUser/vendor/purecounter/purecounter_vanilla.js"></script>
   <script src="../assetsUser/vendor/imagesloaded/imagesloaded.pkgd.min.js"></script>
   <script src="../assetsUser/vendor/isotope-layout/isotope.pkgd.min.js"></script>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.5/jquery.validate.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate-unobtrusive/3.2.12/jquery.validate.unobtrusive.min.js"></script>
 
   <!-- Main JS File -->
   <script src="../assetsUser/js/main.js"></script>
+    <script>
+  $(document).ready(function () {
+    // Envoie la requête Ajax lorsque l'utilisateur clique sur une notification
+    $(".dropdown-item").click(function (e) {
+      e.preventDefault();  // Empêche la soumission du formulaire classique
+      var notificationId = $(this).closest('form').find('input[name="notificationId"]').val();
+
+      // Envoie la requête Ajax
+      $.ajax({
+        type: "POST",
+        url: '@Url.Action("MarkNotificationAsRead", "Notification")', // URL de l'action du contrôleur
+        data: { notificationId: notificationId },
+        success: function (response) {
+          if (response.success) {
+            // Redirige l'utilisateur en fonction de la réponse
+            if (response.redirectUrl) {
+              window.location.href = response.redirectUrl;
+            }
+          } else {
+            alert("Une erreur s'est produite lors de la mise à jour de la notification.");
+          }
+        },
+        error: function () {
+          alert("Une erreur est survenue.");
+        }
+      });
+    });
+  });
+</script>
+
+
+
 
 </body>
 
