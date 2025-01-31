@@ -10,5 +10,9 @@ namespace suivi_abonnement.Repository.Interface
         User GetUserByEmail(string email);
 
         User GetRoleByUser(string role);
+
+        List<User> GetAllUsers();
+
+        User GetUserById(int id);
     }
 }

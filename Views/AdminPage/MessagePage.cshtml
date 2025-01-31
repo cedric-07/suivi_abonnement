@@ -1,0 +1,193 @@
+@model suivi_abonnement.Models.MessageViewModel
+
+@{
+    ViewData["Title"] = "Liste des Abonnements";
+    Layout = "~/Views/Shared/Index.cshtml";
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WhatsApp-like Interface</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        body {
+            background-color: #f0f2f5;
+        }
+        .chat-container {
+            height: 90vh;
+            display: grid;
+            grid-template-columns: 30% 70%;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        .chat-list {
+            background-color: #ffffff;
+            border-right: 1px solid #ddd;
+            overflow-y: auto;
+        }
+        .chat-header, .message-input {
+            padding: 10px;
+            background-color: #ededed;
+            border-bottom: 1px solid #ddd;
+        }
+        .message-list {
+            height: calc(90vh - 120px);
+            overflow-y: auto;
+            padding: 15px;
+            background-color: #e5ddd5;
+        }
+        .message {
+            padding: 8px 12px;
+            margin-bottom: 10px;
+            border-radius: 20px;
+            max-width: 70%;
+        }
+        .sent {
+            background-color: #dcf8c6;
+            align-self: flex-end;
+            text-align: right;
+            margin-left: auto;
+        }
+        .received {
+            background-color: #ffffff;
+        }
+        .message-row {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        .message-input {
+        align-items: center;
+        justify-content: center;  /* Centrer le contenu */
+    }
+
+    .message-input textarea {
+        border-radius: 10px;  /* Bord arrondi */
+        margin-right: 10px;  /* Espacement avec le bouton d'envoi */
+    }
+
+    
+
+    .icon-btn {
+        background: none;
+        border: none;
+        font-size: 1.5rem;
+        color: #007bff;
+        margin-left: 8px;
+    }
+
+        .avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: #ccc;
+            margin-right: 10px;
+        }
+        .chat-list a {
+            text-decoration: none;
+            color: inherit;
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-4">
+        <div class="chat-container">
+            <!-- Liste des conversations -->
+            <div class="chat-list">
+                <div class="chat-header">
+                    <h5>Conversations</h5>
+                </div>
+                <ul class="list-group list-group-flush">
+                    @foreach (var user in Model.Users)
+                    {
+                        <li class="list-group-item">
+                            <div class="d-flex align-items-center">
+                                <div class="avatar">
+                                    <i class="fas fa-user-circle text-white d-flex justify-content-center align-items-center" style="font-size: 1.5rem;"></i>
+                                </div>
+                                <span>@user.Username</span>
+                            </div>
+                            <a href="@Url.Action("Index", "Message", new { receiverId = user.Id })" class="stretched-link"></a>
+                        </li>
+                    }
+                </ul>
+            </div>
+
+            <!-- Boîte de chat -->
+            <div class="chat-box d-flex flex-column">
+                <div class="chat-header">
+                    @if (Model.ReceiverId.HasValue)
+                    {
+                        var receiver = Model.Users.FirstOrDefault(u => u.Id == Model.ReceiverId);
+                        <h5>Chat avec @receiver?.Username</h5>
+                    }
+                    else
+                    {
+                        <h5>Sélectionnez un utilisateur pour discuter</h5>
+                    }
+                </div>
+                <div class="message-list flex-grow-1">
+                    @foreach (var message in Model.Messages)
+                    {
+                        <div class="message-row">
+                            @if (message.SenderId != 2)  // 2 is the current user id
+                            {
+                                <div class="avatar"></div>
+                                <div class="message received">
+                                    @message.MessageText
+                                </div>
+                            }
+                            else 
+                            {
+                                <div class="message sent">
+                                    @message.MessageText
+                                </div>
+                            }
+                        </div>
+                    }
+                </div>
+                <div class="message-input">
+                    @if (Model.ReceiverId.HasValue)
+                    {
+                        <form method="post" action="@Url.Action("SendMessage", "Message")" enctype="multipart/form-data">
+                            <input type="hidden" name="receiverId" value="@Model.ReceiverId" />
+                            <div class="d-flex align-items-center w-100">
+                                <button type="button" class="icon-btn" data-bs-toggle="tooltip" data-bs-placement="top" title="Attacher un fichier">
+                                    <i class="fas fa-paperclip"></i>
+                                </button>
+                                <button type="button" class="icon-btn" data-bs-toggle="tooltip" data-bs-placement="top" title="Ajouter une image">
+                                    <i class="fas fa-image"></i>
+                                </button>
+                                <input type="file" name="attachment" class="d-none" id="attachmentInput" />
+                                <input type="file" name="image" class="d-none" id="imageInput" accept="image/*" />
+                                <textarea name="messageText" placeholder="Tapez un message..." class="form-control"></textarea>
+                                <button type="submit" class="btn btn-success ms-2">Envoyer</button>
+                            </div>
+                        </form>
+                    }
+                    else
+                    {
+                        <p>Sélectionnez un utilisateur pour commencer à discuter.</p>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+    // Afficher un input de fichier quand on clique sur les icônes
+    document.querySelector('.fa-paperclip').addEventListener('click', function() {
+        document.getElementById('attachmentInput').click();
+    });
+    document.querySelector('.fa-image').addEventListener('click', function() {
+        document.getElementById('imageInput').click();
+    });
+</script>
+</body>
+</html>

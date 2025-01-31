@@ -260,5 +260,81 @@ namespace suivi_abonnement.Repository
             return user;
         }
 
+
+        public List<User> GetAllUsers()
+        {
+            List<User> users = new List<User>();
+            try
+            {
+                using (var connection = new MySqlConnection(connectionString))
+                {
+                    connection.Open();
+                    using (var command = new MySqlCommand("SELECT * FROM users WHERE role != 'admin'", connection))
+                    {
+                        using (var reader = command.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                users.Add(new User
+                                {
+                                    Id = Convert.ToInt32(reader["id"]),
+                                    Username = reader["username"].ToString(),
+                                    Email = reader["email"].ToString(),
+                                    Role = reader["role"].ToString()
+                                });
+                            }
+                        }
+                    }
+                }
+            }
+            catch (MySqlException sqlEx)
+            {
+                Console.WriteLine($"Database error: {sqlEx.Message}");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Unexpected error: {ex.Message}");
+            }
+            return users;
+        }
+
+        public User GetUserById(int id)
+        {
+            User user = null;
+            try
+            {
+                using (var connection = new MySqlConnection(connectionString))
+                {
+                    connection.Open();
+                    using (var command = new MySqlCommand("SELECT * FROM users WHERE id = @Id AND role != 'admin'", connection))
+                    {
+                        command.Parameters.Add("@Id", MySqlDbType.Int32).Value = id;
+                        using (var reader = command.ExecuteReader())
+                        {
+                            if (reader.Read())
+                            {
+                                user = new User
+                                {
+                                    Id = Convert.ToInt32(reader["id"]),
+                                    Username = reader["username"].ToString(),
+                                    Email = reader["email"].ToString(),
+                                    Role = reader["role"].ToString()
+                                };
+                            }
+                        }
+                    }
+                }
+            }
+            catch (MySqlException sqlEx)
+            {
+                Console.WriteLine($"Database error: {sqlEx.Message}");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Unexpected error: {ex.Message}");
+            }
+            return user;
+        }
+
     }
 }

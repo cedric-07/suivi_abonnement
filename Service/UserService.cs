@@ -34,5 +34,13 @@ namespace suivi_abonnement.Service
         {
             return _userRepository.GetRoleByUser(role);
         }
+        public List<User> GetAllUsers()
+        {
+            return _userRepository.GetAllUsers();
+        }
+        public User GetUserById(int id)
+        {
+            return _userRepository.GetUserById(id);
+        }
     }
 }

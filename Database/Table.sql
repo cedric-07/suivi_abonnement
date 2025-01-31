@@ -80,3 +80,31 @@ ALTER TABLE suivi_abonnement_omnis_db.departement_user ADD CONSTRAINT fk_users_d
 ALTER TABLE suivi_abonnement_omnis_db.notifications ADD CONSTRAINT fk_notifications_abonnements FOREIGN KEY ( idabonnement ) REFERENCES suivi_abonnement_omnis_db.abonnements( abonnement_id ) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 ALTER TABLE suivi_abonnement_omnis_db.notifications ADD CONSTRAINT fk_notifications_users FOREIGN KEY ( iduser ) REFERENCES suivi_abonnement_omnis_db.users( id ) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+
+
+
+----Conversation----------
+
+CREATE TABLE suivi_abonnement_omnis_db.conversations (
+  conversation_id INT AUTO_INCREMENT PRIMARY KEY,
+  user1_id INT NOT NULL,
+  user2_id INT NOT NULL,
+  LastMessageat TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (user1_id) REFERENCES users(id),
+  FOREIGN KEY (user2_id) REFERENCES users(id)
+);
+
+-- Messages---
+CREATE TABLE suivi_abonnement_omnis_db.messages (
+  message_id INT AUTO_INCREMENT PRIMARY KEY,
+  messagetext TEXT NOT NULL,
+  sentat TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  isread BOOLEAN DEFAULT FALSE,
+  senderid INT NOT NULL,
+  receiverid INT NOT NULL,
+  idconversation INT NOT NULL,
+  FOREIGN KEY (senderid) REFERENCES users(id),
+  FOREIGN KEY (receiverid) REFERENCES users(id),
+  FOREIGN KEY (idconversation) REFERENCES conversations(conversation_id)
+);

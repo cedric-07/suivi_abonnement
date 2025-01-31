@@ -9,6 +9,7 @@ namespace suivi_abonnement.Service.Interface
         bool ResetPassword(string token , string newPassword , string email);
         User GetUserByEmail(string email);
         User GetRoleByUser(string role);
-
+        List<User> GetAllUsers();
+        User GetUserById(int id);
     }
 }
