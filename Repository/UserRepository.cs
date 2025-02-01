@@ -335,6 +335,39 @@ namespace suivi_abonnement.Repository
             }
             return user;
         }
-
+        public User GetAdmin()
+        {
+            User adminUser = new User();
+            try
+            {
+                using (var connection = new MySqlConnection(connectionString))
+                {
+                    connection.Open();
+                    string query = "SELECT * FROM users WHERE role = 'admin' LIMIT 1";
+                    using (var command = new MySqlCommand(query, connection))
+                    {
+                        using (var reader = command.ExecuteReader())
+                        {
+                            if (reader.Read())
+                            {
+                                return new User
+                                {
+                                    Id = reader.GetInt32("id"),
+                                    Username = reader.GetString("username"),
+                                    Email = reader.GetString("email"),
+                                    Role = reader.GetString("role")
+                                };
+                            }
+                        }
+                    }
+                }
+            }
+            catch (System.Exception)
+            {
+                
+                throw new System.Exception("Admin introuvable");
+            }
+            return adminUser;
+        }
     }
 }

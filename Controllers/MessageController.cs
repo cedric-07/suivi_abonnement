@@ -24,6 +24,7 @@ namespace suivi_abonnement.Controllers
             try
             {
                 int userId = _httpContextAccessor.HttpContext.Session.GetInt32("UserId") ?? 0;
+                var userRole = _httpContextAccessor.HttpContext.Session.GetString("UserRole");
 
                 // Si l'utilisateur n'est pas connecté, redirigez-le vers la page de connexion
                 if (userId == 0)
@@ -39,14 +40,33 @@ namespace suivi_abonnement.Controllers
                     ? _messageService.GetMessagesForConversation(userId, receiverId.Value)
                     : new List<Message>();
 
-                var model = new MessageViewModel
+                 var viewmodel = new AbonnementViewModel
+                 {
+                    MessageViewModel = new MessageViewModel
+                    {
+                        Users = users,
+                        Messages = messages,
+                        ReceiverId = receiverId,
+                        CurrentUserId = userId 
+                    }
+                 };
+
+                 var model = new MessageViewModel
                 {
                     Users = users,
                     Messages = messages,
-                    ReceiverId = receiverId
+                    ReceiverId = receiverId,
+                    CurrentUserId = userId 
                 };
 
-                return View("~/Views/AdminPage/MessagePage.cshtml", model);
+                if(userRole == "admin")
+                {
+                    return View("~/Views/AdminPage/MessagePage.cshtml", model);
+                }
+                else
+                {
+                    return View("~/Views/Home/InboxPage.cshtml" , viewmodel);
+                }
             }
             catch (Exception ex)
             {
@@ -56,24 +76,32 @@ namespace suivi_abonnement.Controllers
             }
         }
 
-        [HttpPost]
-        public IActionResult SendMessage(int receiverId, string messageText)
+        [HttpPost("Message/SendMessage")]
+  
+        public IActionResult SendMessage(int receiverId, string messageText, IFormFile attachment, IFormFile image)
         {
             try
             {
                 int senderId = _httpContextAccessor.HttpContext.Session.GetInt32("UserId") ?? 0;
 
-                // Vérifiez si l'utilisateur est connecté
                 if (senderId == 0)
+                    return RedirectToAction("Login", "Account");
+
+                if (string.IsNullOrEmpty(messageText) && attachment == null && image == null)
                 {
-                    return RedirectToAction("Login", "Account"); // Remplacez "Account" et "Login" par vos valeurs réelles
+                    TempData["Error"] = "Veuillez fournir un message ou une pièce jointe.";
+                    return RedirectToAction("Index", new { receiverId });
                 }
 
-                // Validation du message
-                if (string.IsNullOrEmpty(messageText))
+                // Gestion des pièces jointes (sauvegarde des fichiers)
+                if (attachment != null)
                 {
-                    TempData["Error"] = "Le message ne peut pas être vide.";
-                    return RedirectToAction("Index", new { receiverId });
+                    var filePath = Path.Combine("wwwroot/uploads", attachment.FileName);
+                    using (var stream = new FileStream(filePath, FileMode.Create))
+                    {
+                        attachment.CopyTo(stream);
+                    }
+                    messageText += $" [Fichier joint : {attachment.FileName}]";
                 }
 
                 _messageService.SendMessage(senderId, receiverId, messageText);
@@ -81,10 +109,10 @@ namespace suivi_abonnement.Controllers
             }
             catch (Exception ex)
             {
-                // Log the exception (ajoutez votre logique de journalisation ici)
-                Console.WriteLine("Une erreur s'est produite lors de l'envoi du message : " + ex.Message); 
+                Console.WriteLine("Erreur lors de l'envoi du message : " + ex.Message);
                 return RedirectToAction("Index", new { receiverId });
             }
         }
+
     }
 }

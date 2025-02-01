@@ -35,5 +35,6 @@
         public List<VAbonnementClient> AbonnementClients { get; set; }
 
         public User User { get; set; }
+        public MessageViewModel MessageViewModel {get; set; }
     }
 }

@@ -11,5 +11,6 @@ namespace suivi_abonnement.Service.Interface
         User GetRoleByUser(string role);
         List<User> GetAllUsers();
         User GetUserById(int id);
+        User GetAdmin();
     }
 }

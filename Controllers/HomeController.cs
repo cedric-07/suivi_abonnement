@@ -1,6 +1,7 @@
 ﻿using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using suivi_abonnement.Models;
+using suivi_abonnement.Service;
 using suivi_abonnement.Service.Interface;
 namespace suivi_abonnement.Controllers
 {
@@ -9,6 +10,9 @@ namespace suivi_abonnement.Controllers
          private readonly IAbonnementService _abonnementService;
         private readonly IFournisseurService _fournisseurService;
         private readonly ICategorieService _categorieService;
+        private readonly HttpContextAccessor _httpContextAccessor;
+        private readonly IMessageService _messageService;
+        private readonly UserService _userService;
         private readonly AbonnementViewModel abonnementViewModel = new AbonnementViewModel();
         private readonly AbonnementStatViewModel abonnementStatViewModel = new AbonnementStatViewModel();
         private readonly INotificationService _notificationService;
@@ -31,6 +35,7 @@ namespace suivi_abonnement.Controllers
         public IActionResult Index()
         {
             int userId = HttpContext.Session.GetInt32("UserId") ?? 0;
+            Console.WriteLine(userId);
             var userRole = HttpContext.Session.GetString("UserRole");
             if (string.IsNullOrEmpty(userRole) || userId == 0)
             {
@@ -141,5 +146,53 @@ namespace suivi_abonnement.Controllers
         {
             return View();
         }
+
+        [HttpGet]
+        public IActionResult InboxPage(int? receiverId)
+        {
+            try
+            {
+                int userId = _httpContextAccessor.HttpContext.Session.GetInt32("UserId") ?? 0;
+                var userRole = _httpContextAccessor.HttpContext.Session.GetString("UserRole");
+
+                // Si l'utilisateur n'est pas connecté, redirigez-le vers la page de connexion
+                if (userId == 0)
+                {
+                    return RedirectToAction("Login", "Account"); // Remplacez "Account" et "Login" par vos valeurs réelles
+                }
+
+                // Get users
+                var users = _userService.GetAllUsers();
+
+                // Get messages for the selected receiver (if any)
+                var messages = receiverId.HasValue
+                    ? _messageService.GetMessagesForConversation(userId, receiverId.Value)
+                    : new List<Message>();
+
+                var model = new MessageViewModel
+                {
+                    Users = users,
+                    Messages = messages,
+                    ReceiverId = receiverId,
+                    CurrentUserId = userId 
+                };
+
+                if(userRole == "admin")
+                {
+                    return View("~/Views/AdminPage/MessagePage.cshtml", model);
+                }
+                else
+                {
+                    return View("~/Views/Home/InboxPage.cshtml" , model);
+                }
+            }
+            catch (Exception ex)
+            {
+                // Log the exception (ajoutez votre logique de journalisation ici)
+                TempData["Error"] = "Une erreur s'est produite lors du chargement des messages. Veuillez réessayer plus tard.";
+                return RedirectToAction("Index");
+            }
+        }
+
     }
 }

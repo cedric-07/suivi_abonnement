@@ -135,18 +135,18 @@
                     @foreach (var message in Model.Messages)
                     {
                         <div class="message-row">
-                            @if (message.SenderId != 2)  // 2 is the current user id
+                            @if (message.SenderId == Model.CurrentUserId)  // 2 is the current user id
                             {
-                                <div class="avatar"></div>
-                                <div class="message received">
+                                 <div class="message sent">
                                     @message.MessageText
                                 </div>
                             }
                             else 
                             {
-                                <div class="message sent">
+                                <div class="avatar"></div>
+                                <div class="message received">
                                     @message.MessageText
-                                </div>
+                                </div>   
                             }
                         </div>
                     }
@@ -188,6 +188,12 @@
     document.querySelector('.fa-image').addEventListener('click', function() {
         document.getElementById('imageInput').click();
     });
+
+    window.onload = function () {
+    var messageList = document.querySelector('.message-list');
+    messageList.scrollTop = messageList.scrollHeight;
+};
+
 </script>
 </body>
 </html>
