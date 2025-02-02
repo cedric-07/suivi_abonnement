@@ -4,7 +4,7 @@ namespace suivi_abonnement.Models
     {
         public int? ReceiverId { get; set; } // Id du destinataire
         public List<User> Users { get; set; } // Liste des utilisateurs
-        public User adminUser {get; set; }
+        public List<User> adminUser {get; set; }
         public int CurrentUserId { get; set; } // Id de l'utilisateur actuel
         public List<Message> Messages { get; set; } // Liste des messages
     }

@@ -35,6 +35,8 @@ namespace suivi_abonnement.Controllers
                 // Get users
                 var users = _userService.GetAllUsers();
 
+                var adminuser = _userService.GetAdmin();
+
                 // Get messages for the selected receiver (if any)
                 var messages = receiverId.HasValue
                     ? _messageService.GetMessagesForConversation(userId, receiverId.Value)
@@ -44,14 +46,14 @@ namespace suivi_abonnement.Controllers
                  {
                     MessageViewModel = new MessageViewModel
                     {
-                        Users = users,
+                        adminUser = adminuser,
                         Messages = messages,
                         ReceiverId = receiverId,
                         CurrentUserId = userId 
                     }
                  };
 
-                 var model = new MessageViewModel
+                var model = new MessageViewModel
                 {
                     Users = users,
                     Messages = messages,

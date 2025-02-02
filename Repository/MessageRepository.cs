@@ -103,25 +103,41 @@ namespace suivi_abonnement.Repository
                 using (var connection = new MySqlConnection(_connectionString))
                 {
                     connection.Open();
-                    string query = @"
-                        INSERT INTO messages (senderid, receiverid, messagetext, sentat, isread, idconversation) 
-                        VALUES (@senderId, @receiverId, @messageText, NOW(), false, @conversationId)";
-
-                    using (var command = new MySqlCommand(query, connection))
+                    using (var transaction = connection.BeginTransaction())
                     {
-                        command.Parameters.AddWithValue("@senderId", senderId);
-                        command.Parameters.AddWithValue("@receiverId", receiverId);
-                        command.Parameters.AddWithValue("@messageText", messageText);
-                        command.Parameters.AddWithValue("@conversationId", conversationId); // Utilisez ici la conversation existante
-                        command.ExecuteNonQuery();
-                    }
+                        try
+                        {
+                            // Insertion du message
+                            string query = @"
+                                INSERT INTO messages (senderid, receiverid, messagetext, sentat, isread, idconversation) 
+                                VALUES (@senderId, @receiverId, @messageText, NOW(), false, @conversationId)";
 
-                    // Mise à jour de l'heure du dernier message dans la conversation
-                    string updatequery = "UPDATE conversations SET LastMessageat = NOW() WHERE conversation_id = @conversationId";
-                    using (var updatecommand = new MySqlCommand(updatequery, connection))
-                    {
-                        updatecommand.Parameters.AddWithValue("@conversationId", conversationId);
-                        updatecommand.ExecuteNonQuery();
+                            using (var command = new MySqlCommand(query, connection, transaction))
+                            {
+                                command.Parameters.AddWithValue("@senderId", senderId);
+                                command.Parameters.AddWithValue("@receiverId", receiverId);
+                                command.Parameters.AddWithValue("@messageText", messageText);
+                                command.Parameters.AddWithValue("@conversationId", conversationId);
+                                command.ExecuteNonQuery();
+                            }
+
+                            // Mise à jour de l'heure du dernier message dans la conversation
+                            string updatequery = "UPDATE conversations SET LastMessageat = NOW() WHERE conversation_id = @conversationId";
+                            using (var updatecommand = new MySqlCommand(updatequery, connection, transaction))
+                            {
+                                updatecommand.Parameters.AddWithValue("@conversationId", conversationId);
+                                updatecommand.ExecuteNonQuery();
+                            }
+
+                            // Validation de la transaction
+                            transaction.Commit();
+                        }
+                        catch (Exception ex)
+                        {
+                            // En cas d'erreur, on annule la transaction
+                            transaction.Rollback();
+                            throw new System.Exception($"Erreur lors de l'envoi du message : {ex.Message}");
+                        }
                     }
                 }
             }
@@ -130,6 +146,7 @@ namespace suivi_abonnement.Repository
                 throw new System.Exception($"Erreur lors de l'envoi du message : {ex.Message}");
             }
         }
+
 
         public int GetOrCreateConversation(int senderId, int receiverId)
         {

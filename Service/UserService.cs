@@ -42,7 +42,7 @@ namespace suivi_abonnement.Service
         {
             return _userRepository.GetUserById(id);
         }
-         public User GetAdmin()
+         public List<User> GetAdmin()
         {
             return _userRepository.GetAdmin();
         }

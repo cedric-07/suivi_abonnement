@@ -15,6 +15,6 @@ namespace suivi_abonnement.Repository.Interface
 
         User GetUserById(int id);
 
-        User GetAdmin();
+        List<User> GetAdmin();
     }
 }

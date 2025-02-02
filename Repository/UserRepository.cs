@@ -335,9 +335,9 @@ namespace suivi_abonnement.Repository
             }
             return user;
         }
-        public User GetAdmin()
+        public List<User> GetAdmin()
         {
-            User adminUser = new User();
+            List<User> adminUser = new List<User>();
             try
             {
                 using (var connection = new MySqlConnection(connectionString))
@@ -348,15 +348,15 @@ namespace suivi_abonnement.Repository
                     {
                         using (var reader = command.ExecuteReader())
                         {
-                            if (reader.Read())
+                            while (reader.Read())
                             {
-                                return new User
+                                adminUser.Add(new User
                                 {
-                                    Id = reader.GetInt32("id"),
-                                    Username = reader.GetString("username"),
-                                    Email = reader.GetString("email"),
-                                    Role = reader.GetString("role")
-                                };
+                                    Id = Convert.ToInt32(reader["id"]),
+                                    Username = reader["username"].ToString(),
+                                    Email = reader["email"].ToString(),
+                                    Role = reader["role"].ToString()
+                                });
                             }
                         }
                     }
