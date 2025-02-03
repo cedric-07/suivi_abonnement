@@ -43,6 +43,7 @@ namespace suivi_abonnement_omnis.Controllers.Authentification
             try
             {
                 var user = _userService.Login(email, password);
+                
                 if (user != null)
                 {
                     // Stockage de l'utilisateur dans la session ou tout autre système de gestion d'état si nécessaire
@@ -211,9 +212,22 @@ namespace suivi_abonnement_omnis.Controllers.Authentification
         }
         public IActionResult Logout()
         {
+            // Récupérer l'ID de l'utilisateur depuis la session
+            var userId = HttpContext.Session.GetInt32("UserId");
+
+            if (userId.HasValue)
+            {
+                // Appeler le service pour mettre à jour IsConnected sur false
+                _userService.Logout(userId.Value);
+            }
+
+            // Effacer la session
             HttpContext.Session.Clear();
+
+            // Rediriger vers la page de connexion
             return RedirectToAction("Login", "AuthClient");
         }
+
 
         [HttpPost]
         public JsonResult CheckEmailExistence(string email)

@@ -18,5 +18,6 @@ namespace suivi_abonnement.Models
 
         public string Email { get; set; }   
         public string Role { get; set; } = "user";
+        public bool IsConnected { get; set; } = false;
     }
 }

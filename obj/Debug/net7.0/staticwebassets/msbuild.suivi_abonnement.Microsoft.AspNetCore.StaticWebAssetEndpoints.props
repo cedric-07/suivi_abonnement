@@ -11512,13 +11512,13 @@
       <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\suivi_abonnement.ep5ti928nx.bundle.scp.css'))</AssetFile>
       <Selectors><![CDATA[[]]]></Selectors>
       <EndpointProperties><![CDATA[[{"Name":"integrity","Value":"sha256-3gezbv4NyqiYEVoHyHMVt8JIHthUqX6/dYEwuENdKpk="}]]]></EndpointProperties>
-      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"no-cache"},{"Name":"Content-Length","Value":"1133"},{"Name":"Content-Type","Value":"text/css"},{"Name":"ETag","Value":"\u00223gezbv4NyqiYEVoHyHMVt8JIHthUqX6/dYEwuENdKpk=\u0022"},{"Name":"Last-Modified","Value":"Wed, 29 Jan 2025 08:04:30 GMT"}]]]></ResponseHeaders>
+      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"no-cache"},{"Name":"Content-Length","Value":"1133"},{"Name":"Content-Type","Value":"text/css"},{"Name":"ETag","Value":"\u00223gezbv4NyqiYEVoHyHMVt8JIHthUqX6/dYEwuENdKpk=\u0022"},{"Name":"Last-Modified","Value":"Mon, 03 Feb 2025 12:36:05 GMT"}]]]></ResponseHeaders>
     </StaticWebAssetEndpoint>
     <StaticWebAssetEndpoint Include="_content/suivi_abonnement/suivi_abonnement.ep5ti928nx.bundle.scp.css">
       <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\suivi_abonnement.ep5ti928nx.bundle.scp.css'))</AssetFile>
       <Selectors><![CDATA[[]]]></Selectors>
       <EndpointProperties><![CDATA[[{"Name":"fingerprint","Value":"ep5ti928nx"},{"Name":"integrity","Value":"sha256-3gezbv4NyqiYEVoHyHMVt8JIHthUqX6/dYEwuENdKpk="},{"Name":"label","Value":"_content/suivi_abonnement/suivi_abonnement.bundle.scp.css"}]]]></EndpointProperties>
-      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"max-age=31536000, immutable"},{"Name":"Content-Length","Value":"1133"},{"Name":"Content-Type","Value":"text/css"},{"Name":"ETag","Value":"\u00223gezbv4NyqiYEVoHyHMVt8JIHthUqX6/dYEwuENdKpk=\u0022"},{"Name":"Last-Modified","Value":"Wed, 29 Jan 2025 08:04:30 GMT"}]]]></ResponseHeaders>
+      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"max-age=31536000, immutable"},{"Name":"Content-Length","Value":"1133"},{"Name":"Content-Type","Value":"text/css"},{"Name":"ETag","Value":"\u00223gezbv4NyqiYEVoHyHMVt8JIHthUqX6/dYEwuENdKpk=\u0022"},{"Name":"Last-Modified","Value":"Mon, 03 Feb 2025 12:36:05 GMT"}]]]></ResponseHeaders>
     </StaticWebAssetEndpoint>
     <StaticWebAssetEndpoint Include="_content/suivi_abonnement/vendors/fonts/bootstrap-icons.27ytiamo65.woff2">
       <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\vendors\fonts\bootstrap-icons.woff2'))</AssetFile>

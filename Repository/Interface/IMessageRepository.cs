@@ -7,6 +7,9 @@ namespace suivi_abonnement.Repository.Interface
         int CreateConversation(int user1Id, int user2Id);
         void SendMessage(int senderId, int receiverId, string messageText);
         int GetOrCreateConversation(int senderId, int receiverId);
+        User searchUser(string name);
+        int CountMessagesisRead(int userId);
+        void MarkMessagesAsRead(int userId);
 
     }
 }

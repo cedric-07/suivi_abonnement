@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using suivi_abonnement.Service.Interface;
 using suivi_abonnement.Models;
 using System;
+using System.Text.RegularExpressions;
 
 namespace suivi_abonnement.Controllers
 {
@@ -31,7 +32,7 @@ namespace suivi_abonnement.Controllers
                 {
                     return RedirectToAction("Login", "Account"); // Remplacez "Account" et "Login" par vos valeurs réelles
                 }
-
+            
                 // Get users
                 var users = _userService.GetAllUsers();
 
@@ -42,12 +43,17 @@ namespace suivi_abonnement.Controllers
                     ? _messageService.GetMessagesForConversation(userId, receiverId.Value)
                     : new List<Message>();
 
+                if(receiverId.HasValue)
+                {
+                    _messageService.MarkMessagesAsRead(userId);
+                }
+
                  var viewmodel = new AbonnementViewModel
                  {
                     MessageViewModel = new MessageViewModel
                     {
-                        adminUser = adminuser,
-                        Messages = messages,
+                        adminUser = adminuser?? new List<User>(),
+                        Messages = messages?? new List<Message>(),
                         ReceiverId = receiverId,
                         CurrentUserId = userId 
                     }
@@ -79,7 +85,6 @@ namespace suivi_abonnement.Controllers
         }
 
         [HttpPost("Message/SendMessage")]
-  
         public IActionResult SendMessage(int receiverId, string messageText, IFormFile attachment, IFormFile image)
         {
             try
@@ -94,6 +99,9 @@ namespace suivi_abonnement.Controllers
                     TempData["Error"] = "Veuillez fournir un message ou une pièce jointe.";
                     return RedirectToAction("Index", new { receiverId });
                 }
+
+                // Transformation du texte du message pour rendre les liens cliquables
+                messageText = ConvertLinksToHtmlLinks(messageText);
 
                 // Gestion des pièces jointes (sauvegarde des fichiers)
                 if (attachment != null)
@@ -115,6 +123,118 @@ namespace suivi_abonnement.Controllers
                 return RedirectToAction("Index", new { receiverId });
             }
         }
+
+        // Méthode pour convertir les liens en HTML cliquable
+        private string ConvertLinksToHtmlLinks(string messageText)
+        {
+            // Expression régulière pour détecter les liens
+            string pattern = @"(https?://[^\s]+)";
+            string replacement = @"<a href=""$1"" target=""_blank"">$1</a>";
+            return Regex.Replace(messageText, pattern, replacement);
+        }
+
+
+
+        [HttpGet("Message/searchUser")]
+        public IActionResult searchUser(string name)
+        {
+            var userRole = _httpContextAccessor.HttpContext.Session.GetString("UserRole");
+            try
+            {
+                var user = _messageService.searchUser(name);
+                if (user != null && user.Id > 0)
+                {
+                    var model = new MessageViewModel
+                    {
+                        ReceiverId = user.Id,
+                        Users = new List<User> { user }
+                    };
+
+                    var viewmodel = new AbonnementViewModel
+                    {
+                        MessageViewModel = new MessageViewModel
+                        {
+                            ReceiverId = user.Id,
+                            Users = new List<User> { user }
+                        }
+                    };
+
+                    if (userRole == "admin")
+                    {
+                        return View("~/Views/AdminPage/MessagePage.cshtml", model);
+                    }
+                    else
+                    {
+                        return View("~/Views/Home/InboxPage.cshtml", viewmodel);
+                    }
+                }
+                else
+                {
+                    TempData["Error"] = "Aucun utilisateur trouvé avec ce nom.";
+                    if (userRole == "admin")
+                    {
+                        return View("~/Views/AdminPage/MessagePage.cshtml");
+                    }
+                    else
+                    {
+                        return View("~/Views/Home/InboxPage.cshtml");
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Erreur lors de la recherche de l'utilisateur : " + ex.Message);
+                if (userRole == "admin")
+                {
+                    return View("~/Views/AdminPage/MessagePage.cshtml");
+                }
+                else
+                {
+                    return View("~/Views/Home/InboxPage.cshtml");
+                }
+            }
+        }
+
+        [HttpGet("Message/GetUnreadMessagesCount")]
+        public JsonResult GetUnreadMessagesCount()
+        {
+            try
+            {
+                int userId = _httpContextAccessor.HttpContext.Session.GetInt32("UserId") ?? 0;
+                if (userId == 0)
+                    return Json(new { count = 0 });
+
+                int count = _messageService.CountMessagesisRead(userId);
+                return Json(new { count });
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Erreur lors du comptage des messages non lus : " + ex.Message);
+                return Json(new { count = 0, error = ex.Message });
+            }
+        }
+
+
+        [HttpPost("Message/MarkMessagesAsRead")]
+        public JsonResult MarkMessagesAsRead()
+        {
+            try
+            {
+                int userId = _httpContextAccessor.HttpContext.Session.GetInt32("UserId") ?? 0;
+                if (userId == 0)
+                    return Json(new { success = false });
+
+                _messageService.MarkMessagesAsRead(userId);
+                return Json(new { success = true });
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Erreur lors du marquage des messages comme lus : " + ex.Message);
+                return Json(new { success = false });
+            }
+        }
+
+
 
     }
 }

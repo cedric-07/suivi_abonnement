@@ -27,6 +27,18 @@ namespace suivi_abonnement.Service
         {
             return _messageRepository.GetOrCreateConversation(senderId, receiverId);
         }
+        public User searchUser(string name)
+        {
+            return _messageRepository.searchUser(name);
+        }
+        public int CountMessagesisRead(int userId)
+        {
+            return _messageRepository.CountMessagesisRead(userId);
+        }
+        public void MarkMessagesAsRead(int userId)
+        {
+            _messageRepository.MarkMessagesAsRead(userId);
+        }
        
     }
 }

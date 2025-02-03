@@ -16,5 +16,6 @@ namespace suivi_abonnement.Repository.Interface
         User GetUserById(int id);
 
         List<User> GetAdmin();
+        void Logout(int userId);
     }
 }

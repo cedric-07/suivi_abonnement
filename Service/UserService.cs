@@ -46,5 +46,9 @@ namespace suivi_abonnement.Service
         {
             return _userRepository.GetAdmin();
         }
+        public void Logout(int userId)
+        {
+            _userRepository.Logout(userId);
+        }
     }
 }

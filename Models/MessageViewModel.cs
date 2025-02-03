@@ -7,5 +7,10 @@ namespace suivi_abonnement.Models
         public List<User> adminUser {get; set; }
         public int CurrentUserId { get; set; } // Id de l'utilisateur actuel
         public List<Message> Messages { get; set; } // Liste des messages
+
+        public MessageViewModel()
+        {
+            Messages = new List<Message>();
+        }
     }
 }

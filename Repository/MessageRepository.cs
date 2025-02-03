@@ -195,6 +195,95 @@ namespace suivi_abonnement.Repository
             return conversationId;
         }
 
+        public User searchUser(string name)
+        {
+            User user = new User();
+            try
+            {
+                using (var connection = new MySqlConnection(_connectionString))
+                {
+                    connection.Open();
+                    string query = @"
+                        SELECT * 
+                        FROM users 
+                        WHERE username = @name";
+
+                    using (var command = new MySqlCommand(query, connection))
+                    {
+                        command.Parameters.AddWithValue("@name", name);
+
+                        using (var reader = command.ExecuteReader())
+                        {
+                            if (reader.Read())
+                            {
+                                user.Id = reader.GetInt32("id");
+                                user.Username = reader.GetString("username");
+                            }
+                        }
+                    }
+                }
+            }
+            catch (System.Exception ex)
+            {
+                throw new System.Exception($"Erreur lors de la recherche de l'utilisateur : {ex.Message}");
+            }
+
+            return user;
+        }
+
+        public int CountMessagesisRead(int userId)
+        {
+            int count = 0;
+            try
+            {
+                using (var connection = new MySqlConnection(_connectionString))
+                {
+                    connection.Open();
+                    string query = @"
+                        SELECT COUNT(*) 
+                        FROM messages 
+                        WHERE receiverid = @userId 
+                          AND isread = 0";
+
+                    using (var command = new MySqlCommand(query, connection))
+                    {
+                        command.Parameters.AddWithValue("@userId", userId);
+                        count = Convert.ToInt32(command.ExecuteScalar());
+                    }
+                }
+            }
+            catch (System.Exception ex)
+            {
+                throw new System.Exception($"Erreur lors du comptage des messages non lus : {ex.Message}");
+            }
+
+            return count;
+        }
+
+        public void MarkMessagesAsRead(int userId)
+        {
+            try
+            {
+                using (var connection = new MySqlConnection(_connectionString))
+                {
+                    connection.Open();
+                    string query = @"
+                        UPDATE messages 
+                        SET isread = true 
+                        WHERE receiverid = @userId";
+
+                    using (var command = new MySqlCommand(query, connection))
+                    {
+                        command.Parameters.AddWithValue("@userId", userId);
+                        command.ExecuteNonQuery();
+                    }
+                }
+            }
+            catch (System.Exception ex)
+            {
+                throw new System.Exception($"Erreur lors de la mise à jour des messages en tant que lus : {ex.Message}");
+            }
+        }
         
     }
 }

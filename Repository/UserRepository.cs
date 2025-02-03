@@ -41,8 +41,12 @@ namespace suivi_abonnement.Repository
                                         Id = Convert.ToInt32(reader["id"]),
                                         Username = reader["username"].ToString(),
                                         Email = reader["email"].ToString(),
-                                        Role = reader["role"].ToString()
+                                        Role = reader["role"].ToString(),
+                                        IsConnected = reader.GetBoolean("isconnected")
                                     };
+
+                                    UpdateUserConnectionStatus(user.Id, true);
+
                                 }
                             }
                         }
@@ -59,6 +63,33 @@ namespace suivi_abonnement.Repository
             }
 
             return user;
+        }
+
+        private void UpdateUserConnectionStatus(int userId, bool isConnected)
+        {
+            try
+            {
+                using (var connection = new MySqlConnection(connectionString))
+                {
+                    connection.Open();
+                    using (var command = new MySqlCommand())
+                    {
+                        command.Connection = connection;
+                        command.CommandText = "UPDATE users SET isconnected = @IsConnected WHERE id = @UserId";
+                        command.Parameters.AddWithValue("@IsConnected", isConnected);
+                        command.Parameters.AddWithValue("@UserId", userId);
+                        command.ExecuteNonQuery();
+                    }
+                }
+            }
+            catch (MySqlException sqlEx)
+            {
+                Console.WriteLine($"Database error: {sqlEx.Message}");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Unexpected error: {ex.Message}");
+            }
         }
 
         public string Register(User user, int idDepartement)
@@ -85,7 +116,7 @@ namespace suivi_abonnement.Repository
                                 command.Transaction = transaction;
                                 
                                 // Insertion dans la table users
-                                command.CommandText = "INSERT INTO users (username, email, password, role) VALUES (@Username, @Email, @Password, @Role)";
+                                command.CommandText = "INSERT INTO users (username, email, password, role ) VALUES (@Username, @Email, @Password, @Role )";
                                 command.Parameters.AddWithValue("@Username", user.Username);
                                 command.Parameters.AddWithValue("@Password", hashedPassword);
                                 command.Parameters.AddWithValue("@Email", user.Email);
@@ -178,6 +209,24 @@ namespace suivi_abonnement.Repository
                 }
             }
         }
+
+        public void Logout(int userId)
+        {
+            using (var connection = new MySqlConnection(connectionString))
+            {
+                connection.Open();
+
+                var query = "UPDATE Users SET IsConnected = @IsConnected WHERE Id = @UserId";
+                using (var command = new MySqlCommand(query, connection))
+                {
+                    command.Parameters.AddWithValue("@IsConnected", false);
+                    command.Parameters.AddWithValue("@UserId", userId);
+
+                    command.ExecuteNonQuery();
+                }
+            }
+        }
+
 
         //Get User by email
         public User GetUserByEmail(string email)

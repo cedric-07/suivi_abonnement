@@ -13,32 +13,37 @@
     <title>WhatsApp-like Interface</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
     <style>
         <style>
         body {
             background-color: #f0f2f5;
-            margin-top: 400px;
         }
 
         .chat-container {
             height: 90vh;
             display: grid;
             grid-template-columns: 30% 70%;
-            border: 1px solid #ddd;
             border-radius: 10px;
             overflow: hidden;
         }
 
         .chat-list {
-            background-color: #ffffff;
+            background-color: #0d2d5a;
             border-right: 1px solid #ddd;
             overflow-y: auto;
         }
 
-        .chat-header, .message-input {
+        .chat-header {
             padding: 10px;
-            background-color: #ededed;
-            border-bottom: 1px solid #ddd;
+            background-color: #0d2d5a;
+            color: #fff;
+        }
+
+        .message-input {
+            padding: 10px;
+            background-color: #0d2d5a;
+            color: #fff;
         }
 
         .message-list {
@@ -75,6 +80,7 @@
             background-color: #ffffff;
             align-self: flex-start;
             text-align: left;
+            margin-left: 10px;
         }
 
         .message-date {
@@ -82,9 +88,7 @@
             color: #999;
             position: inherit;
             bottom: -5px;
-            right: 5px; /* Aligner la date à droite */
         }
-
 
         .message-input {
             align-items: center;
@@ -104,16 +108,84 @@
             margin-left: 8px;
         }
 
-        .avatar {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background-color: #ccc;
+        .avatar-sender, .avatar-receiver {
+            margin-top: 5px;
+            margin-left: 10px;
+        }
+
+        .avatar-sender {
             margin-right: 10px;
+        }
+
+        .avatar-receiver {
+            margin-left: 10px;
         }
         .chat-list a {
             text-decoration: none;
             color: inherit;
+        }
+        .discussion-header {
+            display: flex;
+            align-items: center;
+            background-color: #0d2d5a;
+        }
+        .discussion-header h5 {
+            color: #fff;
+            margin: 0;
+            padding: 10px;
+        }
+        .list-group-item {
+            cursor: pointer;
+            background-color: #0d2d5a;
+            color: #fff;
+        }
+        
+        .list-group-item {
+            border: none; /* Retirer les bordures par défaut */
+            padding: 12px 20px;
+            color: #fff;
+        }
+
+        .list-group-item:hover {
+            cursor: pointer;
+        }
+
+        .avatar {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            background-color: #e0d8d8; /* Couleur de fond pour les avatars */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .user-name {
+            font-weight: bold;
+            color: #fafafa;
+            font-size: 1rem;
+        }
+
+        .list-group-item .flex-grow-1 {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+    /* Ajout d'un petit badge pour l'avatar si l'utilisateur est en ligne (par exemple) */
+        .avatar::after {
+            content: "";
+            position: absolute;
+            bottom: 5px;
+            right: 5px;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+
+    /* Personnalisation de l'icône */
+        .fas.fa-user-circle {
+            font-size: 2.5rem; /* Augmenter la taille de l'icône de l'avatar */
         }
     </style>
 </head>
@@ -125,20 +197,46 @@
                 <div class="chat-header">
                     <h5>Conversations</h5>
                 </div>
-                <ul class="list-group list-group-flush">
-                    @foreach (var user in Model.Users)
+                <!-- Barre de recherche -->
+                <!-- Barre de recherche sans bouton -->
+                <div class="p-3">
+                    <form asp-action="searchUser" method="get">
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="fa fa-search"></i></span>
+                            <input type="text" class="form-control" placeholder="Recherche utilisateur..." name="name" />
+                        </div>
+                    </form>
+                </div>
+                <!-- Liste des utilisateurs -->
+                <ul id="userList" class="list-group list-group-flush">
+                    @foreach (var user in Model?.Users)
                     {
-                        <li class="list-group-item">
-                            <div class="d-flex align-items-center">
-                                <div class="avatar">
-                                    <i class="fas fa-user-circle text-white d-flex justify-content-center align-items-center" style="font-size: 1.5rem;"></i>
-                                </div>
-                                <span>@user.Username</span>
+                        <li class="list-group-item d-flex align-items-center">
+                            <!-- Avatar -->
+                            <div class="avatar me-3">
+                                <i class="fas fa-user-circle text-white d-flex justify-content-center align-items-center" style="font-size: 2.5rem;"></i>
                             </div>
+                            <!-- Nom de l'utilisateur -->
+                            <div class="flex-grow-1">
+                                <span class="user-name">@user.Username</span>
+                            </div>
+                            <span class="badge bg-danger ms-2 unread-messages-count" style="display: none;">0</span>
+                            <!-- Badge de connexion si l'utilisateur est connecté -->
+                            @if (user.IsConnected)
+                            {
+                                <div class="badge bg-success ms-2" title="Utilisateur connecté" style="width: 10px; height: 10px; border-radius: 50%; background-color: #28a745;"></div>
+                            }
+                            else
+                            {
+                                <div class="badge bg-secondary ms-2" title="Utilisateur hors ligne" style="width: 10px; height: 10px; border-radius: 50%; background-color: #ff1414;"></div>
+                            }
+
+                            <!-- Lien vers la conversation -->
                             <a href="@Url.Action("Index", "Message", new { receiverId = user.Id })" class="stretched-link"></a>
                         </li>
                     }
                 </ul>
+
             </div>
 
             <!-- Boîte de chat -->
@@ -146,8 +244,11 @@
                 <div class="chat-header">
                     @if (Model.ReceiverId.HasValue)
                     {
-                        var receiver = Model.Users.FirstOrDefault(u => u.Id == Model.ReceiverId);
-                        <h5>Chat avec @receiver?.Username</h5>
+                        var receiver = Model.Users?.FirstOrDefault(u => u.Id == Model.ReceiverId);
+
+                        <div class="discussion-header d-flex align-items-center" >
+                            <h5>Discussion avec @(receiver?.Username ?? "Utilisateur inconnu")</h5>
+                        </div>
                     }
                     else
                     {
@@ -175,20 +276,21 @@
                             {
                                 
                                 <div class="message sent">
-                                    @message.MessageText
+                                    @Html.Raw(message.MessageText)
                                     <div class="message-date">@dateDisplay</div>
                                 </div>
-                                <div class="avatar">
-                                    <i class="fas fa-user-circle text-white d-flex justify-content-center align-items-center" style="font-size: 1.5rem;"></i>
+                                <div class="avatar-sender">
+                                    <i class="fas fa-user-circle text-white d-flex justify-content-center align-items-center" style="font-size: 1.5rem; "></i>
                                 </div>
+                                
                             }
                             else  // Si le message est reçu
                             {
-                                <div class="avatar">
+                                <div class="avatar-receiver">
                                     <i class="fas fa-user-circle text-white d-flex justify-content-center align-items-center" style="font-size: 1.5rem;"></i>
                                 </div>
                                 <div class="message received">
-                                    @message.MessageText
+                                    @Html.Raw(message.MessageText)
                                     <div class="message-date">@dateDisplay</div>
                                 </div>
                             }
@@ -196,22 +298,33 @@
                     }
                 </div>
 
-                <div class="message-input">
+               <div class="message-input">
                     @if (Model.ReceiverId.HasValue)
                     {
                         <form method="post" action="@Url.Action("SendMessage", "Message")" enctype="multipart/form-data">
                             <input type="hidden" name="receiverId" value="@Model.ReceiverId" />
                             <div class="d-flex align-items-center w-100">
-                                <button type="button" class="icon-btn" data-bs-toggle="tooltip" data-bs-placement="top" title="Attacher un fichier">
+                                <!-- Icône Attacher un fichier -->
+                                <button type="button" class="icon-btn me-2" data-bs-toggle="tooltip" data-bs-placement="top" title="Attacher un fichier">
                                     <i class="fas fa-paperclip"></i>
                                 </button>
-                                <button type="button" class="icon-btn" data-bs-toggle="tooltip" data-bs-placement="top" title="Ajouter une image">
+
+                                <!-- Icône Ajouter une image -->
+                                <button type="button" class="icon-btn me-2" data-bs-toggle="tooltip" data-bs-placement="top" title="Ajouter une image">
                                     <i class="fas fa-image"></i>
                                 </button>
+
+                                <!-- Inputs de fichier cachés -->
                                 <input type="file" name="attachment" class="d-none" id="attachmentInput" />
                                 <input type="file" name="image" class="d-none" id="imageInput" accept="image/*" />
-                                <textarea name="messageText" placeholder="Tapez un message..." class="form-control"></textarea>
-                                <button type="submit" class="btn btn-success ms-2">Envoyer</button>
+
+                                <!-- Textarea de message -->
+                                <textarea name="messageText" placeholder="Tapez un message..." class="form-control w-100 me-2" rows="1"></textarea>
+
+                                <!-- Icône d'envoi -->
+                                <button type="submit" class="btn p-0 ms-2" style="background: none; border: none; cursor: pointer; display: flex; justify-content: center;" data-bs-toggle="tooltip" data-bs-placement="top" title="Envoyer">
+                                    <i class="fas fa-paper-plane" style="color: #dcf8c6; display: flex; align-items: center;"></i>
+                                </button>
                             </div>
                         </form>
                     }
@@ -220,25 +333,102 @@
                         <p>Sélectionnez un utilisateur pour commencer à discuter.</p>
                     }
                 </div>
+
+
+
+
             </div>
         </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script>
-    // Afficher un input de fichier quand on clique sur les icônes
-    document.querySelector('.fa-paperclip').addEventListener('click', function() {
-        document.getElementById('attachmentInput').click();
-    });
-    document.querySelector('.fa-image').addEventListener('click', function() {
-        document.getElementById('imageInput').click();
-    });
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    // Fonction pour charger les utilisateurs
+    function loadUsers() {
+        $.ajax({
+            url: '/Message/searchUser', // Assure-toi d'avoir une action dans ton contrôleur
+            method: 'GET',
+            success: function (data) {
+                $('#userList').html(data);
+            },
+            error: function () {
+                console.error('Erreur lors du chargement des utilisateurs');
+            }
+        });
+    }
 
+    // Fonction pour charger les messages
+    function loadMessages() {
+        var receiverId = '@Model.ReceiverId';
+
+        if (receiverId) {
+            $.ajax({
+                url: '/Message/LoadMessages', // Assure-toi d'avoir une action dans ton contrôleur
+                method: 'GET',
+                data: { receiverId: receiverId },
+                success: function (data) {
+                    $('.message-list').html(data);
+                },
+                error: function () {
+                    console.error('Erreur lors du chargement des messages');
+                }
+            });
+        }
+    }
+
+    // Rechargement automatique toutes les 5 secondes si le champ de recherche est vide
+    setInterval(function () {
+        if (!$('input[name="name"]').val()) { // Si le champ de recherche est vide
+            loadUsers();  // Recharger la liste des utilisateurs
+        }
+    }, 5000);
+
+    // Scroll automatique en bas des messages
     window.onload = function () {
-    var messageList = document.querySelector('.message-list');
-    messageList.scrollTop = messageList.scrollHeight;
-};
+        var messageList = document.querySelector('.message-list');
+        messageList.scrollTop = messageList.scrollHeight;
+    };
 
+    function loadUnreadMessages() {
+        $.ajax({
+            url: '/Message/GetUnreadMessagesCount',
+            method: 'GET',
+            success: function (data) {
+                const $messageBadge = $('.unread-messages-count');
+                
+                if (data && typeof data.count !== 'undefined') {
+                    if (data.count > 0) {
+                        $messageBadge.text(data.count).show(); // Affiche le badge si messages non lus
+                    } else {
+                        $messageBadge.hide(); // Cache si pas de messages
+                    }
+                } else {
+                    console.warn('Réponse invalide lors du comptage des messages.');
+                }
+            },
+            error: function (xhr, status, error) {
+                console.error('Erreur serveur lors du chargement des messages :', error);
+            }
+        });
+    }
+
+
+
+    // Charger les notifications toutes les 5 secondes
+    setInterval(loadUnreadMessages, 5000);
+
+
+        function markMessagesAsRead(userId) {
+            $.post('/Message/MarkMessagesAsRead', { userId: userId })
+                .done(function () {
+                    console.log('Messages marqués comme lus.');
+                })
+                .fail(function () {
+                    console.error('Erreur lors de la mise à jour des messages.');
+                });
+        }
 </script>
+
+
 </body>
 </html>
