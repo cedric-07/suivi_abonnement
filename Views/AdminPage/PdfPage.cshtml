@@ -1,0 +1,102 @@
+@model suivi_abonnement.Models.GlobalViewModel
+<div class="table-responsive">
+    <table class="table">
+        <thead>
+            <tr>
+                <th class="text-uppercase">Nom</th>
+                <th class="text-uppercase">Prix (Ariary)</th>
+                <th class="text-uppercase">Fournisseur</th>
+                <th class="text-uppercase">Date début</th>
+                <th class="text-uppercase">Date expiration</th>
+                <th class="text-uppercase">Statut</th>
+                <th class="text-uppercase">Détails</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var abonnement in Model.AbonnementViewModel.Abonnements)
+            {
+                <tr>
+                    <td>@abonnement.Nom</td>
+                    <td>@abonnement.Prix.ToString("N2")</td>
+                    <td>@abonnement.NomFournisseur</td>
+                    <td>@abonnement.DateDebut.ToString("d MMM yyyy")</td>
+                    <td>@abonnement.ExpirationDate.ToString("d MMM yyyy")</td>
+                    <td>
+                        @if (abonnement.DateDebut > DateTime.Now)
+                        {
+                            <span class="badge bg-warning">En attente</span>
+                        }
+                        else if (abonnement.ExpirationDate < DateTime.Now)
+                        {
+                            <span class="badge bg-danger">Expiré</span>
+                        }
+                        else
+                        {
+                            <span class="badge bg-success">Actif</span>
+                        }
+                    </td>
+                    <td>
+                        <button class="btn btn-info" data-bs-toggle="collapse" data-bs-target="#details-@abonnement.Id" aria-expanded="false" aria-controls="details-@abonnement.Id">
+                            Voir les détails
+                        </button>
+                    </td>
+                </tr>
+                <tr id="details-@abonnement.Id" class="collapse">
+                    <td colspan="7">
+                        <div class="card border-0 shadow-sm rounded-4">
+                            <div class="card-body">
+                                <!-- Informations générales -->
+                                <h6 class="fw-bold text-uppercase mb-3" style="color: #0d2d5a;">Informations générales</h6>
+                                <div class="row mb-3">
+                                    <div class="col-md-6">
+                                        <p><strong><i class="fas fa-user me-2"></i>Nom :</strong> @abonnement.Nom</p>
+                                        <p><strong><i class="fas fa-id-card me-2"></i>Type :</strong> @abonnement.Type</p>
+                                        <p><strong><i class="fas fa-dollar-sign me-2"></i>Prix :</strong> @abonnement.Prix.ToString("N2") Ariary</p>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <p><strong><i class="fas fa-calendar-alt me-2"></i>Date de début :</strong> @abonnement.DateDebut.ToString("d MMM yyyy")</p>
+                                        <p><strong><i class="fas fa-hourglass-end me-2"></i>Date d'expiration :</strong> @abonnement.ExpirationDate.ToString("d MMM yyyy")</p>
+                                        <p><strong><i class="fas fa-circle-notch me-2"></i>Statut :</strong>
+                                            @if (abonnement.DateDebut > DateTime.Now)
+                                            {
+                                                <span class="badge bg-warning text-dark">En attente</span>
+                                            }
+                                            else if (abonnement.ExpirationDate < DateTime.Now)
+                                            {
+                                                <span class="badge bg-danger">Expiré</span>
+                                            }
+                                            else
+                                            {
+                                                <span class="badge bg-success">Actif</span>
+                                            }
+                                        </p>
+                                    </div>
+                                </div>
+                                <hr />
+                                
+                                <!-- Informations supplémentaires -->
+                                <h6 class="fw-bold text-uppercase mb-3" style="color: #0d2d5a;">Informations supplémentaires</h6>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <p><strong><i class="fas fa-tags me-2"></i>Catégorie :</strong> @abonnement.NomCategorie</p>
+                                        <p><strong><i class="fas fa-truck me-2"></i>Fournisseur :</strong> @abonnement.NomFournisseur</p>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <p><strong><i class="fas fa-building me-2"></i>Département :</strong> @abonnement.NomDepartement</p>
+                                        <p><strong><i class="fas fa-info-circle me-2"></i>Description :</strong> @abonnement.Description</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            }
+            @if (Model.AbonnementViewModel.Abonnements.Count == 0)
+            {
+                <tr>
+                    <td colspan="7" class="text-center">Aucun abonnement trouvé</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

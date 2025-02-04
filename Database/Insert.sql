@@ -68,6 +68,17 @@ VALUES
 ('Mensuel', 49.99, CURRENT_TIMESTAMP, 2, 2, DATE_ADD(CURRENT_TIMESTAMP, INTERVAL 1 MONTH), 'Abonnement TV 4K avec 150 chaînes', 'TV Premium', 2);
 
 
+--Abonnement expirer 7 jours--
+INSERT INTO suivi_abonnement_omnis_db.abonnements (type, prix, date_debut, idfournisseur, idcategorie, expiration_date, description, nom, departement_id) 
+VALUES
+('Mensuel', 49.99, CURRENT_TIMESTAMP, 1, 1, DATE_ADD(CURRENT_TIMESTAMP, INTERVAL 7 DAY), 'Abonnement Internet avec débit élevé', 'Internet Pro', 1),
+('Mensuel', 69.99, CURRENT_TIMESTAMP, 2, 2, DATE_ADD(CURRENT_TIMESTAMP, INTERVAL 7 DAY), 'Abonnement TV HD avec 100 chaînes', 'TV Plus', 2),
+('Mensuel', 79.99, CURRENT_TIMESTAMP, 3, 3, DATE_ADD(CURRENT_TIMESTAMP, INTERVAL 7 DAY), 'Abonnement Mobile 5 Go de données', 'Mobile Standard', 3),
+('Mensuel', 59.99, CURRENT_TIMESTAMP, 1, 1, DATE_ADD(CURRENT_TIMESTAMP, INTERVAL 7 DAY), 'Abonnement fibre optique 1 Gb/s', 'Fibre Optique', 1),
+('Mensuel', 79.99, CURRENT_TIMESTAMP, 3, 3, DATE_ADD(CURRENT_TIMESTAMP, INTERVAL 7 DAY), 'Abonnement mobile 10 Go de données', 'Mobile Plus', 5);
+
+
+
 INSERT INTO suivi_abonnement_omnis_db.notifications (message, type, status, idabonnement, iduser, created_at) VALUES
 ('Votre abonnement Fibre Optique Plus est activé et prêt à l\'emploi.', 'Confirmation', 'Lu', 1, 2, '2025-01-01 10:30:00'),
 ('Votre abonnement TV Premium a été activé avec succès.', 'Confirmation', 'Non Lu', 2, 1, '2025-01-05 11:00:00'),

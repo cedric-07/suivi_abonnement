@@ -56,15 +56,17 @@ namespace suivi_abonnement.Service
                 {
                     connection.Open();
 
+                    // Notification pour abonnements expirant dans 30 et 7 jours
                     string query = @"SELECT 
-                                        a.abonnement_id,  -- Changer 'a.id' par 'a.abonnement_id'
+                                        a.abonnement_id,
                                         a.nom,
                                         u.id AS iduser,
                                         u.username,
-                                        u.email
+                                        u.email,
+                                        DATEDIFF(a.expiration_date, CURDATE()) AS jours_restants
                                     FROM abonnements a
                                     JOIN users u ON u.role = @role
-                                    WHERE DATEDIFF(a.expiration_date , CURDATE()) <= 30 AND DATEDIFF(a.expiration_date , CURDATE()) >= 0";
+                                    WHERE DATEDIFF(a.expiration_date, CURDATE()) BETWEEN 0 AND 30";
 
                     using (var command = new MySqlCommand(query, connection))
                     {
@@ -72,31 +74,58 @@ namespace suivi_abonnement.Service
 
                         using (var reader = command.ExecuteReader())
                         {
-                            while (reader.Read())
+                            if (reader.HasRows)
                             {
-                                int userId = reader.GetInt32("iduser");
-                                int abonnementId = reader.GetInt32("abonnement_id");  // Assurez-vous d'utiliser le bon nom de colonne
-                                string message = $"l'abonnement {reader.GetString("nom")} va expirer dans 30 jours";
-
-                                try
+                                while (reader.Read())
                                 {
+                                    int userId = reader.GetInt32("iduser");
+                                    int abonnementId = reader.GetInt32("abonnement_id");
+                                    int joursRestants = reader.GetInt32("jours_restants");
+                                    string nomAbonnement = reader.GetString("nom");
+                                    string nomClient = reader.GetString("username");
+                                    string emailClient = reader.GetString("email");
 
-                                    CreateNotification(userId, abonnementId, message);
+                                    string message;
+                                    string type;
+
+                                    if (joursRestants <= 7)
+                                    {
+                                        message = $"L'abonnement {nomAbonnement} va expirer dans {joursRestants} jour(s)";
+                                        type = "Rappel";
+                                    }
+                                    else
+                                    {
+                                        message = $"L'abonnement {nomAbonnement} va expirer dans {joursRestants} jours";
+                                        type = "Alerte";
+                                    }
+
+                                    try
+                                    {
+                                        CreateNotification(userId, abonnementId, message, type); // Utilisation du type dynamique
+                                    }
+                                    catch (Exception ex)
+                                    {
+                                        Console.WriteLine($"Erreur lors de la création de la notification pour {userId}: {ex.Message}");
+                                        Console.WriteLine(ex.StackTrace);
+                                    }
                                 }
-                                catch (Exception ex)
-                                {
-                                    Console.WriteLine($"Erreur pour {userId}: {ex.Message}");
-                                }
+                            }
+                            else
+                            {
+                                Console.WriteLine("Aucune donnée trouvée pour la requête.");
                             }
                         }
                     }
                 }
             }
-            catch (System.Exception)
+            catch (Exception e)
             {
-                throw;
+                throw new Exception("Une erreur s'est produite lors de l'envoi des notifications : " + e.Message);
             }
         }
+
+
+
 
         public void SendNotificationByRoleUser(string role)
         {
@@ -106,8 +135,9 @@ namespace suivi_abonnement.Service
                 {
                     connection.Open();
 
-                    string query = @"SELECT * FROM v_abonnements_par_client WHERE roleclient = @role AND DATEDIFF(expiration_date , CURDATE()) <= 30 AND DATEDIFF(expiration_date , CURDATE()) >= 0;
-";
+                    // Notification pour abonnements expirant dans 30 et 7 jours
+                    string query = @"SELECT idclient , abonnement_id , nomabonnement , nomclient , emailclient , idclient , DATEDIFF(expiration_date, CURDATE()) AS jours_restants 
+                                    FROM v_abonnements_par_client WHERE roleclient = @role AND DATEDIFF(expiration_date, CURDATE()) BETWEEN 0 AND 30";
 
                     using (var command = new MySqlCommand(query, connection))
                     {
@@ -118,13 +148,29 @@ namespace suivi_abonnement.Service
                             while (reader.Read())
                             {
                                 int userId = reader.GetInt32("idclient");
-                                int abonnementId = reader.GetInt32("abonnement_id");  // Assurez-vous d'utiliser le bon nom de colonne
-                                string message = $"Votre abonnement {reader.GetString("nomabonnement")} va expirer dans 30 jours";
+                                int abonnementId = reader.GetInt32("abonnement_id");
+                                int joursRestants = reader.GetInt32("jours_restants");
+                                string nomAbonnement = reader.GetString("nomabonnement");
+                                string nomClient = reader.GetString("nomclient");
+                                string emailClient = reader.GetString("emailclient");
+
+                                string message;
+                                string type;
+
+                                if (joursRestants <= 7)
+                                {
+                                    message = $"L'abonnement {nomAbonnement} de {nomClient} va expirer dans {joursRestants} jour(s)";
+                                    type = "Rappel";
+                                }
+                                else
+                                {
+                                    message = $"L'abonnement {nomAbonnement} de {nomClient} va expirer dans {joursRestants} jours";
+                                    type = "Alerte";
+                                }
 
                                 try
                                 {
-
-                                    CreateNotification(userId, abonnementId, message);
+                                    CreateNotification(userId, abonnementId, message, type); // Utilisation du type dynamique
                                 }
                                 catch (Exception ex)
                                 {
@@ -135,55 +181,66 @@ namespace suivi_abonnement.Service
                     }
                 }
             }
-            catch (System.Exception)
-            {
-                throw;
-            }
-        }
-
-
-
-        public void CreateNotification(int userId , int abonnementId , string message)
-        {
-            try
-            {
-                using (var connection = new MySqlConnection(connectionString))
-                {
-                    connection.Open();
-
-                    string checkAbonnementIsExist = "SELECT COUNT(*) FROM notifications WHERE idabonnement = @idabonnement AND iduser = @iduser";
-
-                    using (var checkcommand = new MySqlCommand(checkAbonnementIsExist, connection))
-                    {
-                        checkcommand.Parameters.AddWithValue("@idabonnement", abonnementId);
-                        checkcommand.Parameters.AddWithValue("@iduser", userId);
-
-                        int AbonnementexistingToNotify = Convert.ToInt32(checkcommand.ExecuteScalar());
-
-                        if (AbonnementexistingToNotify > 0)
-                        {
-                            return;
-                        }
-                    }
-
-                    string insertquery = "INSERT INTO notifications (message , type , status , idabonnement , iduser , created_at) VALUES (@message , 'abonnement expirer' , 'non lu' , @idabonnement , @iduser , NOW())";
-
-                    using (var command = new MySqlCommand(insertquery, connection))
-                    {
-                        command.Parameters.AddWithValue("@message", message);
-                        command.Parameters.AddWithValue("@idabonnement", abonnementId);
-                        command.Parameters.AddWithValue("@iduser", userId);
-                        command.ExecuteNonQuery();
-                    }
-                    connection.Close();
-                }
-            }
             catch (Exception e)
             {
-                
-                throw new Exception(e.Message);
+                throw new Exception("Une erreur s'est produite lors de l'envoi des notifications : " + e.Message);
             }
         }
+
+
+
+
+            public void CreateNotification(int userId, int abonnementId, string message , string type)
+            {
+                try
+                {
+                    using (var connection = new MySqlConnection(connectionString))
+                    {
+                        connection.Open();
+
+                        // Vérification si la notification existe déjà
+                        string checkAbonnementIsExist = "SELECT COUNT(*) FROM notifications WHERE idabonnement = @idabonnement AND iduser = @iduser";
+                        using (var checkcommand = new MySqlCommand(checkAbonnementIsExist, connection))
+                        {
+                            checkcommand.Parameters.AddWithValue("@idabonnement", abonnementId);
+                            checkcommand.Parameters.AddWithValue("@iduser", userId);
+
+                            int AbonnementexistingToNotify = Convert.ToInt32(checkcommand.ExecuteScalar());
+
+                            if (AbonnementexistingToNotify > 0)
+                            {
+                                return; // Sortie de la méthode si la notification existe déjà
+                            }
+                        }
+
+                        // Insertion de la nouvelle notification
+                        string insertquery = "INSERT INTO notifications (message, type, status, idabonnement, iduser, created_at) " +
+                                            "VALUES (@message, @type, 'non lu', @idabonnement, @iduser, NOW())";
+
+                        using (var command = new MySqlCommand(insertquery, connection))
+                        {
+                            command.Parameters.AddWithValue("@message", message);
+                            command.Parameters.AddWithValue("@type", type); // ou autre type selon votre logique
+                            command.Parameters.AddWithValue("@idabonnement", abonnementId);
+                            command.Parameters.AddWithValue("@iduser", userId);
+                            command.ExecuteNonQuery();
+                        }
+                    }
+                }
+                catch (MySqlException ex)
+                {
+                    // Gestion spécifique des erreurs MySQL
+                    Console.WriteLine($"Erreur MySQL : {ex.Message}");
+                    throw new Exception("Erreur lors de l'insertion de la notification dans la base de données.", ex);
+                }
+                catch (Exception ex)
+                {
+                    // Gestion des autres erreurs
+                    Console.WriteLine($"Erreur générale : {ex.Message}");
+                    throw new Exception("Une erreur s'est produite lors de la création de la notification.", ex);
+                }
+            }
+
 
         public List<Notification> GetNotificationsForClient()
         {

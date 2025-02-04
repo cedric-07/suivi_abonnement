@@ -34,6 +34,8 @@ namespace suivi_abonnement.Service.Interface
         (List<VStatusAbonnement> actifs, List<VStatusAbonnement> enAttente, List<VStatusAbonnement> expires) getListAbonnementByStatus(int pageNumberActifs , int pageNumberEnAttente, int pageNumberExpires, int pageSize);
         List<Abonnement> getAbonnementsExpiredOnMonthAdmin();
         List<VAbonnementClient> getAbonnementsExpiredOnMonthClient();
+        List<Abonnement> getAbonnementsExpiredOnWeek();
+        List<VAbonnementClient> getAbonnementsExpiredOnWeekClient();
 
     }
 }

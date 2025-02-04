@@ -34,5 +34,7 @@ namespace suivi_abonnement.Repository.Interface
 
         List<Abonnement> getAbonnementsExpiredOnMonthAdmin();
         List<VAbonnementClient> getAbonnementsExpiredOnMonthClient();
+        List<Abonnement> getAbonnementsExpiredOnWeek();
+        List<VAbonnementClient> getAbonnementsExpiredOnWeekClient();
     }
 }

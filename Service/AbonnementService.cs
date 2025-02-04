@@ -123,5 +123,13 @@ namespace suivi_abonnement.Service
         {
             return _abonnementRepository.getAbonnementsExpiredOnMonthClient();
         }
+        public List<Abonnement> getAbonnementsExpiredOnWeek()
+        {
+            return _abonnementRepository.getAbonnementsExpiredOnWeek();
+        }
+        public List<VAbonnementClient> getAbonnementsExpiredOnWeekClient()
+        {
+            return _abonnementRepository.getAbonnementsExpiredOnWeekClient();
+        }
     }
 }

@@ -6,7 +6,7 @@ namespace suivi_abonnement.Repository.Interface
         void SendNotification();
         void SendNotificationByRoleAdmin(string role);
         void SendNotificationByRoleUser(string role);
-        void CreateNotification(int userId , int abonnementId , string message);
+        void CreateNotification(int userId , int abonnementId , string message , string type);
         List<Notification> GetNotificationsForAdmin();
         List<Notification> GetNotificationsForClient();
         void MarkNotificationAsRead(int notificationId);

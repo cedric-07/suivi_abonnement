@@ -214,43 +214,92 @@
                                             <li class="mb-3 notification-item" data-notification-id="@notification.Id" data-createdat="@notification.CreatedAt" style="list-style: none; padding: 0;">
                                                 <a href="#" class="dropdown-item p-2 bg-transparent shadow-none rounded-2 text-decoration-none" style="border-left: none; transition: all 0.3s ease; padding-left: 10px; padding-right: 10px; cursor: pointer;" onclick="markAsRead(@notification.Id)">
                                                     <div class="d-flex py-1">
-                                                        <div class="d-flex align-items-center me-2">
-                                                            <i class="fa fa-bell text-light" style="font-size: 18px; border-radius: 50%; background-color: #d81616; padding: 6px;"></i>
-                                                        </div>
+                                                        @if(notification.Status == "non lu")
+                                                        {
+                                                            <div class="d-flex align-items-center me-2">
+                                                                <i class="fa fa-bell text-light" style="font-size: 18px; border-radius: 50%; background-color: #d81616; padding: 6px;"></i>
+                                                            </div>
+                                                        }
+                                                        else
+                                                        {
+                                                            <div class="d-flex align-items-center me-2">
+                                                                <i class="fa fa-bell text-light" style="font-size: 18px; border-radius: 50%; background-color: #000000; padding: 6px;"></i>
+                                                            </div>
+                                                        }
                                                         <div class="d-flex flex-column justify-content-center" style="width: 100%; word-wrap: break-word;">
                                                             @if(notification.Status == "lu")
                                                             {
-                                                                <!-- Titre avec coche verte pour notification lue -->
-                                                                <div class="d-flex justify-content-between align-items-center">
-                                                                    <h6 class="text-sm font-weight-bold mb-1 text-muted" style="margin-bottom: 5px; white-space: normal; overflow: visible; text-overflow: clip;">
-                                                                        Ancienne Message
-                                                                    </h6>
-                                                                    <i class="fa fa-check-circle text-success" style="font-size: 18px; cursor: pointer;" onclick="markAsRead(@notification.Id)"></i>
-                                                                </div>
-                                                                <p class="text-xs mb-2" style="font-size: 0.75rem; white-space: normal; overflow: visible; text-overflow: clip;">
-                                                                    @notification.Message
-                                                                </p>
-                                                                <p class="text-xs text-muted mb-0" style="font-size: 0.65rem;">
-                                                                    <i class="fa fa-clock me-1"></i>
-                                                                    <span>@notification.CreatedAt.ToString("dd MMM yyyy")</span>
-                                                                </p>
+                                                                @if(notification.Type == "alert")
+                                                                {
+                                                                    <!-- Titre avec coche pleine pour notification lue -->
+                                                                    <div class="d-flex justify-content-between align-items-center">
+                                                                        <h6 class="text-sm font-weight-bold mb-1" style="margin-bottom: 5px; white-space: normal; overflow: visible; text-overflow: clip;">
+                                                                            @notification.Type
+                                                                        </h6>
+                                                                        <i class="fa fa-circle text-muted" style="font-size: 18px; cursor: pointer;" onclick="markAsRead(@notification.Id)"></i>
+                                                                    </div>
+                                                                    <p class="text-xs mb-2" style="font-size: 0.75rem; color: #000000; white-space: normal; overflow: visible; text-overflow: clip;">
+                                                                        @notification.Message
+                                                                    </p>
+                                                                    <p class="text-xs text-muted mb-0" style="font-size: 0.65rem; color: #000000;">
+                                                                        <i class="fa fa-clock me-1"></i>
+                                                                        <span>@notification.CreatedAt.ToString("dd MMM yyyy")</span>
+                                                                    </p>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <!-- Titre avec coche pleine pour notification lue -->
+                                                                    <div class="d-flex justify-content-between align-items-center">
+                                                                        <h6 class="text-sm font-weight-bold mb-1" style="margin-bottom: 5px; white-space: normal; overflow: visible; text-overflow: clip; color: #000000;">
+                                                                            @notification.Type
+                                                                        </h6>
+                                                                        <i class="fa fa-circle text-muted" style="font-size: 18px; cursor: pointer;" onclick="markAsRead(@notification.Id)"></i>
+                                                                    </div>
+                                                                    <p class="text-xs mb-2 text-muted" style="font-size: 0.75rem;  white-space: normal; overflow: visible; text-overflow: clip;">
+                                                                        @notification.Message
+                                                                    </p>
+                                                                    <p class="text-xs text-muted mb-0" style="font-size: 0.65rem;">
+                                                                        <i class="fa fa-clock me-1"></i>
+                                                                        <span>@notification.CreatedAt.ToString("dd MMM yyyy")</span>
+                                                                    </p>
+                                                                }
                                                             }
                                                             else
                                                             {
-                                                                <!-- Titre avec coche vide pour notification non lue -->
-                                                                <div class="d-flex justify-content-between align-items-center">
-                                                                    <h6 class="text-sm font-weight-bold mb-1" style="margin-bottom: 5px; white-space: normal; overflow: visible; text-overflow: clip; color: #d81616;">
-                                                                        Nouveau message
-                                                                    </h6>
-                                                                    <i class="fa fa-circle-thin text-muted" style="font-size: 18px; cursor: pointer;" onclick="markAsRead(@notification.Id)"></i>
-                                                                </div>
-                                                                <p class="text-xs mb-2" style="font-size: 0.75rem; color: #000000; white-space: normal; overflow: visible; text-overflow: clip;">
-                                                                    @notification.Message
-                                                                </p>
-                                                                <p class="text-xs text-muted mb-0" style="font-size: 0.65rem; color: #000000;">
-                                                                    <i class="fa fa-clock me-1"></i>
-                                                                    <span>@notification.CreatedAt.ToString("dd MMM yyyy")</span>
-                                                                </p>
+                                                                @if(notification.Type == "alert")
+                                                                {
+                                                                    <!-- Titre avec coche vide pour notification non lue -->
+                                                                    <div class="d-flex justify-content-between align-items-center">
+                                                                        <h6 class="text-sm font-weight-bold mb-1" style="margin-bottom: 5px; white-space: normal; overflow: visible; text-overflow: clip; color: #d81616;">
+                                                                            @notification.Type
+                                                                        </h6>
+                                                                        <i class="fa fa-circle-thin text-muted" style="font-size: 18px; cursor: pointer;" onclick="markAsRead(@notification.Id)"></i>
+                                                                    </div>
+                                                                    <p class="text-xs mb-2" style="font-size: 0.75rem; color: #000000; white-space: normal; overflow: visible; text-overflow: clip;">
+                                                                        @notification.Message
+                                                                    </p>
+                                                                    <p class="text-xs text-muted mb-0" style="font-size: 0.65rem; color: #000000;">
+                                                                        <i class="fa fa-clock me-1"></i>
+                                                                        <span>@notification.CreatedAt.ToString("dd MMM yyyy")</span>
+                                                                    </p>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <!-- Titre avec coche vide pour notification non lue -->
+                                                                    <div class="d-flex justify-content-between align-items-center">
+                                                                        <h6 class="text-sm font-weight-bold mb-1" style="margin-bottom: 5px; white-space: normal; overflow: visible; text-overflow: clip; color: #d81616;">
+                                                                            @notification.Type
+                                                                        </h6>
+                                                                        <i class="fa fa-circle-thin text-muted" style="font-size: 18px; cursor: pointer;" onclick="markAsRead(@notification.Id)"></i>
+                                                                    </div>
+                                                                    <p class="text-xs mb-2" style="font-size: 0.75rem; color: #000000; white-space: normal; overflow: visible; text-overflow: clip;">
+                                                                        @notification.Message
+                                                                    </p>
+                                                                    <p class="text-xs text-muted mb-0" style="font-size: 0.65rem; color: #000000;">
+                                                                        <i class="fa fa-clock me-1"></i>
+                                                                        <span>@notification.CreatedAt.ToString("dd MMM yyyy")</span>
+                                                                    </p>
+                                                                }                                                                  
                                                             }
                                                         </div>
                                                     </div>

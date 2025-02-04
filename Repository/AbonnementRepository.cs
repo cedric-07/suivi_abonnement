@@ -1198,7 +1198,7 @@ namespace suivi_abonnement.Repository
                                     JOIN
                                         fournisseurs f ON a.idfournisseur = f.fournisseur_id
                                     WHERE 
-                                        DATEDIFF(expiration_date , CURDATE()) <= 30 
+                                        DATEDIFF(expiration_date , CURDATE()) <= 30
                                     AND 
                                         DATEDIFF(expiration_date , CURDATE()) >= 0";
                     using (var command = new MySqlCommand(query, connection))
@@ -1259,6 +1259,110 @@ namespace suivi_abonnement.Repository
                                     Id = reader.GetInt32("abonnement_id"),
                                     Abonnement = reader.GetString("nomabonnement"),
                                     Description = reader.GetString("description"),  
+                                    Prix = reader.GetInt32("prix"),
+                                    Type = reader.GetString("type"),
+                                    DateDebut = reader.GetDateTime("date_debut"),
+                                    DateFin = reader.GetDateTime("expiration_date"),
+                                    Departement = reader.GetString("nomdepartement"),
+                                    Fournisseur = reader.GetString("nomfournisseur"),
+                                    Client = reader.GetString("nom"),
+                                    Email = reader.GetString("email")
+                                });
+                            }
+                        }
+                    }
+                    connection.Close();
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+            return abonnements;
+        }
+
+        public List<Abonnement> getAbonnementsExpiredOnWeek()
+        {	
+            List<Abonnement> abonnements = new List<Abonnement>();
+            try
+            {
+                using (var connection = new MySqlConnection(_connectionString))
+                {
+                    connection.Open();
+                    string query = @"SELECT 
+                                        a.*, 
+                                        c.nom AS nom_categorie, 
+                                        f.nom AS nom_fournisseur, 
+                                        d.nom AS nom_departement 
+                                    FROM 
+                                        abonnements a 
+                                    JOIN
+                                        departements d ON a.departement_id = d.departement_id
+                                    JOIN
+                                        categories c ON a.idcategorie = c.categorie_id
+                                    JOIN
+                                        fournisseurs f ON a.idfournisseur = f.fournisseur_id
+                                    WHERE 
+                                        DATEDIFF(expiration_date , CURDATE()) <= 7 
+                                    AND 
+                                        DATEDIFF(expiration_date , CURDATE()) >= 0";
+                    using (var command = new MySqlCommand(query, connection))
+                    {
+                        using (var reader = command.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                abonnements.Add(new Abonnement
+                                {
+                                    Id = reader.GetInt32("abonnement_id"),
+                                    Nom = reader.GetString("nom"),
+                                    Description = reader.GetString("description"),
+                                    Prix = reader.GetInt32("prix"),
+                                    DateDebut = reader.GetDateTime("date_debut"),
+                                    ExpirationDate = reader.GetDateTime("expiration_date"),
+                                    Type = reader.GetString("type"),    
+                                    idfournisseur = reader.GetInt32("idfournisseur"),
+                                    idcategorie = reader.GetInt32("idcategorie"),
+                                    idDepartement = reader.GetInt32("departement_id"),
+                                    NomCategorie = reader.GetString("nom_categorie"),
+                                    NomDepartement = reader.GetString("nom_departement"),
+                                    NomFournisseur = reader.GetString("nom_fournisseur")
+                                });
+                            }
+                        }
+                    }
+                    connection.Close();
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+            return abonnements;
+        }
+
+        public List<VAbonnementClient> getAbonnementsExpiredOnWeekClient()
+        {
+            int userId = _httpContextAccessor.HttpContext.Session.GetInt32("UserId") ?? 0;
+            List<VAbonnementClient> abonnements = new List<VAbonnementClient>();
+            try
+            {
+                using (var connection = new MySqlConnection(_connectionString))
+                {
+                    connection.Open();
+                    string query = @"SELECT * FROM v_abonnements_par_client WHERE idclient = @userId AND DATEDIFF(expiration_date , CURDATE()) <= 7 AND DATEDIFF(expiration_date , CURDATE()) >= 0";
+                    using (var command = new MySqlCommand(query, connection))
+                    {
+                        command.Parameters.AddWithValue("@userId", userId);
+                        using (var reader = command.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                abonnements.Add(new VAbonnementClient
+                                {
+                                    Id = reader.GetInt32("abonnement_id"),
+                                    Abonnement = reader.GetString("nomabonnement"), 
+                                    Description = reader.GetString("description"),
                                     Prix = reader.GetInt32("prix"),
                                     Type = reader.GetString("type"),
                                     DateDebut = reader.GetDateTime("date_debut"),

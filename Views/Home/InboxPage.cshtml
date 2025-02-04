@@ -276,27 +276,27 @@
                             dateDisplay = messageDate.ToString("dddd HH:mm");
                         }
                         <div class="message-row">
-                        @if (message.SenderId == Model.MessageViewModel.CurrentUserId)  // Si le message est envoyé par l'utilisateur actuel
-                        {
-                            <div class="message sent">
-                                @Html.Raw(message.MessageText) <!-- Affiche le message avec des liens cliquables -->
-                                <div class="message-date">@dateDisplay</div>
-                            </div>
-                            <div class="avatar-sender">
-                                <i class="fas fa-user-circle text-white d-flex justify-content-center align-items-center" style="font-size: 1.5rem; "></i>
-                            </div>
-                        }
-                        else  // Si le message est reçu
-                        {
-                            <div class="avatar-receiver">
-                                <i class="fas fa-user-circle text-white d-flex justify-content-center align-items-center" style="font-size: 1.5rem;"></i>
-                            </div>
-                            <div class="message received">
-                                @Html.Raw(message.MessageText) <!-- Affiche le message avec des liens cliquables -->
-                                <div class="message-date">@dateDisplay</div>
-                            </div>
-                        }
-                    </div>
+                            @if (message.SenderId == Model.MessageViewModel.CurrentUserId)  // Si le message est envoyé par l'utilisateur actuel
+                            {
+                                <div class="message sent">
+                                    @Html.Raw(message.MessageText) <!-- Affiche le message avec des liens cliquables -->
+                                    <div class="message-date">@dateDisplay</div>
+                                </div>
+                                <div class="avatar-sender">
+                                    <i class="fas fa-user-circle text-white d-flex justify-content-center align-items-center" style="font-size: 1.5rem; "></i>
+                                </div>
+                            }
+                            else 
+                            {
+                                <div class="avatar-receiver">
+                                    <i class="fas fa-user-circle text-white d-flex justify-content-center align-items-center" style="font-size: 1.5rem;"></i>
+                                </div>
+                                <div class="message received">
+                                    @Html.Raw(message.MessageText) <!-- Affiche le message avec des liens cliquables -->
+                                    <div class="message-date">@dateDisplay</div>
+                                </div>
+                            }
+                        </div>
 
                     }
                 </div>
