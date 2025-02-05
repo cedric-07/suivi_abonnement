@@ -28,7 +28,7 @@ namespace suivi_abonnement.Service
         {
             return _abonnementRepository.SaveAbonnement(abonnement) ;
         }
-        public List<Abonnement> GetAbonnementById(int id)
+        public Abonnement GetAbonnementById(int id)
         {
             return _abonnementRepository.GetAbonnementById(id);
         }

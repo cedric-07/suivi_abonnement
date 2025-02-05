@@ -10,7 +10,7 @@ namespace suivi_abonnement.Repository.Interface
         List<Abonnement> getAbonnements(int pageNumber, int pageSize);
         int CountTotalAbonnements();
         Abonnement SaveAbonnement(Abonnement abonnement);
-        List<Abonnement> GetAbonnementById(int id);
+        Abonnement GetAbonnementById(int id);
         string updateAbonnement(Abonnement abonnement);
         string deleteAbonnement(int id);
         List<Abonnement> searchMultiplyAbonnement(string keyword);

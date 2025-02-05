@@ -136,52 +136,62 @@ namespace suivi_abonnement.Repository
             }
             return newAbonnement;
         }
-        public List<Abonnement> GetAbonnementById(int id)
+        public Abonnement GetAbonnementById(int id)
         {
-            List<Abonnement> abonnements = new List<Abonnement>();
+            Abonnement abonnement = null; // Initialisation à null pour le cas où aucun abonnement n'est trouvé.
             try
             {
                 using (var connection = new MySqlConnection(_connectionString))
                 {
                     connection.Open();
                     string query = @"
-                                SELECT a.*, c.nom AS nom_categorie, f.nom AS nom_fournisseur
-                                FROM abonnements a
-                                JOIN categories c ON a.idcategorie = c.categorie_id
-                                JOIN fournisseurs f ON a.idfournisseur = f.fournisseur_id
-                                WHERE abonnement_id = @id";
+                        SELECT a.abonnement_id, a.nom, a.description, a.prix, 
+                            a.date_debut, a.expiration_date, a.type, 
+                            a.idfournisseur, a.idcategorie, 
+                            c.nom AS NomCategorie, f.nom AS NomFournisseur, d.nom AS NomDepartement
+                        FROM abonnements a
+                        JOIN categories c ON a.idcategorie = c.categorie_id
+                        JOIN fournisseurs f ON a.idfournisseur = f.fournisseur_id
+                        JOIN departements d ON a.departement_id = d.departement_id
+                        WHERE a.abonnement_id = @id";
+
                     using (var command = new MySqlCommand(query, connection))
                     {
                         command.Parameters.AddWithValue("@id", id);
                         using (var reader = command.ExecuteReader())
                         {
-                            while (reader.Read())
+                            if (reader.Read()) // Si des données sont retournées
                             {
-                                Abonnement abonnement = new Abonnement();
-                                abonnement.Id = reader.GetInt32("abonnement_id");
-                                abonnement.Nom = reader.GetString("nom");
-                                abonnement.Description = reader.GetString("description");
-                                abonnement.Prix = reader.GetInt32("prix");
-                                abonnement.DateDebut = reader.GetDateTime("date_debut");
-                                abonnement.ExpirationDate = reader.GetDateTime("expiration_date");
-                                abonnement.Type = reader.GetString("type");
-                                abonnement.idfournisseur = reader.GetInt32("idfournisseur");
-                                abonnement.idcategorie = reader.GetInt32("idcategorie");
-                                abonnement.NomCategorie = reader.GetString("nom_categorie");
-                                abonnement.NomFournisseur = reader.GetString("nom_fournisseur");
-                                abonnements.Add(abonnement); // Ajout de l'abonnement à la liste
+                                abonnement = new Abonnement
+                                {
+                                    Id = reader.GetInt32("abonnement_id"),
+                                    Nom = reader.GetString("nom"),
+                                    Description = reader.GetString("description"),
+                                    Prix = reader.GetInt32("prix"),
+                                    DateDebut = reader.GetDateTime("date_debut"),
+                                    ExpirationDate = reader.GetDateTime("expiration_date"),
+                                    Type = reader.GetString("type"),
+                                    idfournisseur = reader.GetInt32("idfournisseur"),
+                                    idcategorie = reader.GetInt32("idcategorie"),
+                                    NomCategorie = reader.GetString("NomCategorie"),
+                                    NomFournisseur = reader.GetString("NomFournisseur"),
+                                    NomDepartement = reader.GetString("NomDepartement")
+                                };
                             }
                         }
                     }
-                    connection.Close();
                 }
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+                Console.WriteLine($"Erreur : {ex.Message}");
+                Console.WriteLine($"Trace : {ex.StackTrace}");
+                // Vous pouvez ici aussi envisager de logger l'exception dans un fichier ou une base de données
             }
-            return abonnements;
+            return abonnement; // Retourne null si aucun abonnement n'est trouvé
         }
+
+
 
         //ADMINISTRATEUR
         public string updateAbonnement(Abonnement abonnement)

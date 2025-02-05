@@ -11,7 +11,7 @@ namespace suivi_abonnement.Repository
         private readonly HttpContextAccessor _httpContextAccessor;
         public UserRepository(IConfiguration configuration , IHttpContextAccessor httpContextAccessor)
         {
-            connectionString = configuration.GetConnectionString("MySqlConnection");
+            connectionString = "server=localhost;port=3306;database=suivi_abonnement_omnis_db;user=root;password=;SslMode=None";
             httpContextAccessor = _httpContextAccessor;
         }
 

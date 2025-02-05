@@ -28,6 +28,7 @@
 
         public  int TotalAbonnements {get; set; }
         public List<Abonnement> Abonnements { get; set; }
+        public Abonnement Abonnement { get; set; }
         public IEnumerable<Fournisseur> Fournisseurs { get; set; }
         public IEnumerable<Categorie> Categories { get; set; }
         public List<Departement> Departements { get; set; }

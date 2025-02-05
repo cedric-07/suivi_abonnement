@@ -174,15 +174,17 @@ namespace suivi_abonnement.Controllers
 
    
         // GET: AbonnementsController/Details/5
-        // public ActionResult Details(int id)
-        // {
-        //     Abonnement abonnementDetails = abonnement.GetAllAbonnements().Find(a => a.Id == id);
-        //     if (abonnementDetails == null)
-        //     {
-        //         return NotFound();
-        //     }
-        //     return View(abonnementDetails);
-        // }
+        public ActionResult Details(int id)
+        {
+            var abonnementDetails = _abonnementService.GetAbonnementById(id);
+            Console.WriteLine("Abonnement trouvé : " + abonnementDetails.Nom);
+            if (abonnementDetails == null)
+            {
+                return NotFound();
+            }
+            ViewBag.Abonnement = abonnementDetails;
+            return View("~/Views/AdminPage/DetailAbonnementPage.cshtml");
+        }
 
         // GET: AbonnementsController/Create
         public ActionResult Create()
@@ -396,37 +398,5 @@ namespace suivi_abonnement.Controllers
                 return RedirectToAction("Index");
             }
         }
-
-        public IActionResult GeneratePdf()
-        {
-            var html = RenderViewToString("~/View/AdminPage/PdfPage.cshtml");
-
-            using (var ms = new MemoryStream())
-            {
-                var writer = new PdfWriter(ms);
-                var pdf = new PdfDocument(writer);
-                var document = new Document(pdf);
-
-                var converteProperties = new ConverterProperties();
-                HtmlConverter.ConvertToPdf(html, document, converteProperties);   
-
-                return File(ms.ToArray(), "application/pdf", "Abonnements.pdf");
-            }
-            
-        }
-
-        private string RenderViewToString(string viewName)
-        {
-            var viewResult = _viewEngine.GetView("" , viewName , false);
-            if(viewResult.Success == false)
-            {
-                throw new InvalidOperationException($"La vue {viewName} n'a pas été trouvée.");
-            }
-
-            var sb = new StringBuilder();
-            using (var sw = new ViewContext)
-        }
-
-
     }
 }
