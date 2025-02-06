@@ -187,11 +187,30 @@
         .fas.fa-user-circle {
             font-size: 2.5rem; /* Augmenter la taille de l'icône de l'avatar */
         }
+
+        .title {
+            font-weight: bold;
+            font-size: 1.1em;
+            color: #0d2d5a;
+            letter-spacing: 1px;
+        }
     </style>
 </head>
 <body>
-    <div class="container mt-4">
+    <div class="container-fluid fade-in visible">
+        <div class="row align-items-center">
+            <div class="col mb-4">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb bg-transparent mb-0">
+                        <li class="breadcrumb-item"><a href="#"><i class="bi bi-house-door-fill me-1"></i>Pages</a></li>
+                        <li class="breadcrumb-item active" aria-current="page"><i class="bi bi-chat-fill me-1"></i>Boite de messages</li>
+                    </ol>
+                    <h3 class="title">Boite de messages</h3>
+                </nav>
+            </div>
+        </div>
         <div class="chat-container">
+            
             <!-- Liste des conversations -->
             <div class="chat-list">
                 <div class="chat-header">

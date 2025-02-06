@@ -3,22 +3,6 @@
   "WorkspaceRootPath": "D:\\STAGE_L3\\suivi_abonnement\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{CD639EE7-C34B-4FDD-94EA-4B83E4F0C0A6}|suivi_abonnement.csproj|d:\\stage_l3\\suivi_abonnement\\repository\\userrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{CD639EE7-C34B-4FDD-94EA-4B83E4F0C0A6}|suivi_abonnement.csproj|solutionrelative:repository\\userrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{CD639EE7-C34B-4FDD-94EA-4B83E4F0C0A6}|suivi_abonnement.csproj|d:\\stage_l3\\suivi_abonnement\\controllers\\authclient\\authclientcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{CD639EE7-C34B-4FDD-94EA-4B83E4F0C0A6}|suivi_abonnement.csproj|solutionrelative:controllers\\authclient\\authclientcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{CD639EE7-C34B-4FDD-94EA-4B83E4F0C0A6}|suivi_abonnement.csproj|d:\\stage_l3\\suivi_abonnement\\views\\authclient\\register.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{CD639EE7-C34B-4FDD-94EA-4B83E4F0C0A6}|suivi_abonnement.csproj|solutionrelative:views\\authclient\\register.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{CD639EE7-C34B-4FDD-94EA-4B83E4F0C0A6}|suivi_abonnement.csproj|d:\\stage_l3\\suivi_abonnement\\views\\adminpage\\historiquepage.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{CD639EE7-C34B-4FDD-94EA-4B83E4F0C0A6}|suivi_abonnement.csproj|solutionrelative:views\\adminpage\\historiquepage.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{CD639EE7-C34B-4FDD-94EA-4B83E4F0C0A6}|suivi_abonnement.csproj|d:\\stage_l3\\suivi_abonnement\\repository\\abonnementrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{CD639EE7-C34B-4FDD-94EA-4B83E4F0C0A6}|suivi_abonnement.csproj|solutionrelative:repository\\abonnementrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
@@ -27,16 +11,16 @@
       "RelativeMoniker": "D:0:0:{CD639EE7-C34B-4FDD-94EA-4B83E4F0C0A6}|suivi_abonnement.csproj|solutionrelative:controllers\\abonnementscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{CD639EE7-C34B-4FDD-94EA-4B83E4F0C0A6}|suivi_abonnement.csproj|d:\\stage_l3\\suivi_abonnement\\database\\vue.sql||{CC5D8DF0-88F4-4BB2-9DBB-B48CEE65C30A}",
-      "RelativeMoniker": "D:0:0:{CD639EE7-C34B-4FDD-94EA-4B83E4F0C0A6}|suivi_abonnement.csproj|solutionrelative:database\\vue.sql||{CC5D8DF0-88F4-4BB2-9DBB-B48CEE65C30A}"
+      "AbsoluteMoniker": "D:0:0:{CD639EE7-C34B-4FDD-94EA-4B83E4F0C0A6}|suivi_abonnement.csproj|d:\\stage_l3\\suivi_abonnement\\views\\adminpage\\abonnementpage.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{CD639EE7-C34B-4FDD-94EA-4B83E4F0C0A6}|suivi_abonnement.csproj|solutionrelative:views\\adminpage\\abonnementpage.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{CD639EE7-C34B-4FDD-94EA-4B83E4F0C0A6}|suivi_abonnement.csproj|d:\\stage_l3\\suivi_abonnement\\views\\shared\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{CD639EE7-C34B-4FDD-94EA-4B83E4F0C0A6}|suivi_abonnement.csproj|solutionrelative:views\\shared\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+      "AbsoluteMoniker": "D:0:0:{CD639EE7-C34B-4FDD-94EA-4B83E4F0C0A6}|suivi_abonnement.csproj|d:\\stage_l3\\suivi_abonnement\\views\\adminpage\\detailspage.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{CD639EE7-C34B-4FDD-94EA-4B83E4F0C0A6}|suivi_abonnement.csproj|solutionrelative:views\\adminpage\\detailspage.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{CD639EE7-C34B-4FDD-94EA-4B83E4F0C0A6}|suivi_abonnement.csproj|d:\\stage_l3\\suivi_abonnement\\database\\vue.sql||{CC5D8DF0-88F4-4BB2-9DBB-B48CEE65C30A}|CodeFrame",
-      "RelativeMoniker": "D:0:0:{CD639EE7-C34B-4FDD-94EA-4B83E4F0C0A6}|suivi_abonnement.csproj|solutionrelative:database\\vue.sql||{CC5D8DF0-88F4-4BB2-9DBB-B48CEE65C30A}|CodeFrame"
+      "AbsoluteMoniker": "D:0:0:{CD639EE7-C34B-4FDD-94EA-4B83E4F0C0A6}|suivi_abonnement.csproj|d:\\stage_l3\\suivi_abonnement\\views\\adminpage\\test.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{CD639EE7-C34B-4FDD-94EA-4B83E4F0C0A6}|suivi_abonnement.csproj|solutionrelative:views\\adminpage\\test.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     }
   ],
   "DocumentGroupContainers": [
@@ -59,104 +43,65 @@
             {
               "$type": "Document",
               "DocumentIndex": 0,
-              "Title": "UserRepository.cs",
-              "DocumentMoniker": "D:\\STAGE_L3\\suivi_abonnement\\Repository\\UserRepository.cs",
-              "RelativeDocumentMoniker": "Repository\\UserRepository.cs",
-              "ToolTip": "D:\\STAGE_L3\\suivi_abonnement\\Repository\\UserRepository.cs",
-              "RelativeToolTip": "Repository\\UserRepository.cs",
-              "ViewState": "AgIAAHIAAAAAAAAAAAAUwAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-01-22T11:59:29.287Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "AuthClientController.cs",
-              "DocumentMoniker": "D:\\STAGE_L3\\suivi_abonnement\\Controllers\\AuthClient\\AuthClientController.cs",
-              "RelativeDocumentMoniker": "Controllers\\AuthClient\\AuthClientController.cs",
-              "ToolTip": "D:\\STAGE_L3\\suivi_abonnement\\Controllers\\AuthClient\\AuthClientController.cs",
-              "RelativeToolTip": "Controllers\\AuthClient\\AuthClientController.cs",
-              "ViewState": "AgIAAFUAAAAAAAAAAAAAwAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-01-22T11:54:11.627Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "Register.cshtml",
-              "DocumentMoniker": "D:\\STAGE_L3\\suivi_abonnement\\Views\\AuthClient\\Register.cshtml",
-              "RelativeDocumentMoniker": "Views\\AuthClient\\Register.cshtml",
-              "ToolTip": "D:\\STAGE_L3\\suivi_abonnement\\Views\\AuthClient\\Register.cshtml",
-              "RelativeToolTip": "Views\\AuthClient\\Register.cshtml",
-              "ViewState": "AgIAACUAAAAAAAAAAADwvwAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-01-22T11:53:48.478Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 6,
-              "Title": "Vue.sql ",
-              "DocumentMoniker": "D:\\STAGE_L3\\suivi_abonnement\\Database\\Vue.sql",
-              "RelativeDocumentMoniker": "Database\\Vue.sql",
-              "ToolTip": "D:\\STAGE_L3\\suivi_abonnement\\Database\\Vue.sql",
-              "RelativeToolTip": "Database\\Vue.sql",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000826|",
-              "WhenOpened": "2025-01-22T11:35:03.954Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 3,
-              "Title": "HistoriquePage.cshtml",
-              "DocumentMoniker": "D:\\STAGE_L3\\suivi_abonnement\\Views\\AdminPage\\HistoriquePage.cshtml",
-              "RelativeDocumentMoniker": "Views\\AdminPage\\HistoriquePage.cshtml",
-              "ToolTip": "D:\\STAGE_L3\\suivi_abonnement\\Views\\AdminPage\\HistoriquePage.cshtml",
-              "RelativeToolTip": "Views\\AdminPage\\HistoriquePage.cshtml",
-              "ViewState": "AgIAAHYAAAAAAAAAAADwv44AAAAaAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-01-22T11:26:21.288Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 4,
               "Title": "AbonnementRepository.cs",
               "DocumentMoniker": "D:\\STAGE_L3\\suivi_abonnement\\Repository\\AbonnementRepository.cs",
               "RelativeDocumentMoniker": "Repository\\AbonnementRepository.cs",
               "ToolTip": "D:\\STAGE_L3\\suivi_abonnement\\Repository\\AbonnementRepository.cs",
               "RelativeToolTip": "Repository\\AbonnementRepository.cs",
-              "ViewState": "AgIAAEkEAAAAAAAAAADwv4AEAABUAAAAAAAAAA==",
+              "ViewState": "AgIAAKkAAAAAAAAAAAAywL8AAAAJAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-01-22T11:14:48.88Z",
+              "WhenOpened": "2025-02-05T12:30:12.502Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 7,
-              "Title": "Index.cshtml",
-              "DocumentMoniker": "D:\\STAGE_L3\\suivi_abonnement\\Views\\Shared\\Index.cshtml",
-              "RelativeDocumentMoniker": "Views\\Shared\\Index.cshtml",
-              "ToolTip": "D:\\STAGE_L3\\suivi_abonnement\\Views\\Shared\\Index.cshtml",
-              "RelativeToolTip": "Views\\Shared\\Index.cshtml",
-              "ViewState": "AgIAAIMAAAAAAAAAAAAywLAAAABaAAAAAAAAAA==",
+              "DocumentIndex": 2,
+              "Title": "AbonnementPage.cshtml",
+              "DocumentMoniker": "D:\\STAGE_L3\\suivi_abonnement\\Views\\AdminPage\\AbonnementPage.cshtml",
+              "RelativeDocumentMoniker": "Views\\AdminPage\\AbonnementPage.cshtml",
+              "ToolTip": "D:\\STAGE_L3\\suivi_abonnement\\Views\\AdminPage\\AbonnementPage.cshtml",
+              "RelativeToolTip": "Views\\AdminPage\\AbonnementPage.cshtml",
+              "ViewState": "AgIAAK0AAAAAAAAAAAAxwLcAAABBAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-01-22T11:07:47.906Z",
+              "WhenOpened": "2025-02-05T11:57:06.15Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
+              "DocumentIndex": 1,
               "Title": "AbonnementsController.cs",
               "DocumentMoniker": "D:\\STAGE_L3\\suivi_abonnement\\Controllers\\AbonnementsController.cs",
               "RelativeDocumentMoniker": "Controllers\\AbonnementsController.cs",
               "ToolTip": "D:\\STAGE_L3\\suivi_abonnement\\Controllers\\AbonnementsController.cs",
               "RelativeToolTip": "Controllers\\AbonnementsController.cs",
-              "ViewState": "AgIAAFgAAAAAAAAAAAAowBcBAABJAAAAAAAAAA==",
+              "ViewState": "AgIAAK8AAAAAAAAAAAAvwLEAAAAkAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-01-22T10:16:49.748Z",
+              "WhenOpened": "2025-02-05T11:55:47.245Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "Test.cshtml",
+              "DocumentMoniker": "D:\\STAGE_L3\\suivi_abonnement\\Views\\AdminPage\\Test.cshtml",
+              "RelativeDocumentMoniker": "Views\\AdminPage\\Test.cshtml",
+              "ToolTip": "D:\\STAGE_L3\\suivi_abonnement\\Views\\AdminPage\\Test.cshtml",
+              "RelativeToolTip": "Views\\AdminPage\\Test.cshtml",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAMAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-02-05T11:54:59.401Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "DetailsPage.cshtml",
+              "DocumentMoniker": "D:\\STAGE_L3\\suivi_abonnement\\Views\\AdminPage\\DetailsPage.cshtml",
+              "RelativeDocumentMoniker": "Views\\AdminPage\\DetailsPage.cshtml",
+              "ToolTip": "D:\\STAGE_L3\\suivi_abonnement\\Views\\AdminPage\\DetailsPage.cshtml",
+              "RelativeToolTip": "Views\\AdminPage\\DetailsPage.cshtml",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAG4AAAAVAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-02-05T11:46:36.363Z",
               "EditorCaption": ""
             }
           ]

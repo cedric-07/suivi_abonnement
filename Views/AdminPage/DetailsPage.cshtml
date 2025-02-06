@@ -1,0 +1,211 @@
+@model suivi_abonnement.Models.Abonnement;
+
+@{
+    ViewData["Title"] = "Liste des Abonnements";
+    Layout = "~/Views/Shared/Index.cshtml";
+}
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+
+<!-- Modal pour le message de succès -->
+<div class="modal fade" id="successModal" tabindex="-1" aria-labelledby="successModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content shadow border-0 rounded-4">
+            <div class="modal-body text-center py-5">
+                <div class="icon-container mb-4">
+                    <div class="icon-circle bg-light d-flex align-items-center justify-content-center mx-auto" style="width: 80px; height: 80px; border-radius: 50%;">
+                        <i class="bi bi-check-circle-fill" style="font-size: 40px; color: #28a745;"></i>
+                    </div>
+                </div>
+                <h4 class="text-success fw-bold">Succès</h4>
+                <p class="text-muted fs-6 mt-3">@TempData["Message"]</p>
+                <button type="button" class="btn btn-dark px-5 py-2 rounded-pill text-uppercase mt-4" data-bs-dismiss="modal">
+                    OK
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal pour le message d'erreur -->
+<div class="modal fade" id="errorModal" tabindex="-1" aria-labelledby="errorModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content shadow border-0 rounded-4">
+            <div class="modal-body text-center py-5">
+                <div class="icon-container mb-4">
+                    <div class="icon-circle bg-light d-flex align-items-center justify-content-center mx-auto" style="width: 80px; height: 80px; border-radius: 50%;">
+                        <i class="bi bi-x-circle-fill" style="font-size: 40px; color: #dc3545;"></i>
+                    </div>
+                </div>
+                <h4 class="text-danger fw-bold">Erreur</h4>
+                <p class="text-muted fs-6 mt-3">@TempData["Error"]</p>
+                <button type="button" class="btn btn-dark px-5 py-2 rounded-pill text-uppercase mt-4" data-bs-dismiss="modal">
+                    OK
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container-fluid mb-4">
+    <div class="row align-items-center">
+        <div class="col-6">
+            <nav class="navbar navbar-main navbar-expand-lg px-0 shadow-none border-radius-xl " id="navbarBlur" navbar-scroll="true">
+                <div class="-am-pm-container-fluid  d-flex">
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb bg-transparent mb-0 pb-0 pt-1 px-0 me-sm-6">
+                            <li class="breadcrumb-item text-sm"><a class=" text-dark" href="javascript:;"><i class="bi bi-house-door-fill me-1"></i>Pages</a></li>
+                            <li class="breadcrumb-item text-sm text-dark active" aria-current="page"><i class="bi bi-journal-album me-1"></i>Liste des fournisseurs</li>
+                        </ol>
+                        <h6 class="font-weight-bolder">Liste des fournisseurs</h6>
+                    </nav>
+                </div>
+            </nav>
+        </div>
+    </div>
+    <div class="d-flex justify-content-start mb-4">
+        <a href="@Url.Action("AbonnementPage", "Abonnements")" class="btn-retour btn-animate" style="font-size: 15px;">
+            <i class="bi bi-arrow-left-circle me-2 " style="font-size: 15px;"></i>Retourner vers la liste
+        </a>
+    </div>
+    <div class="row justify-content-center">
+        @if (Model != null)
+        {
+            <div class="col-12">
+                <div class="card shadow border-0 rounded-4">
+                    <div class="card-body">
+                        <div class="card-header">
+                            <h5 class="title-card text-white">Détails de l'abonnement @Model.Nom</h5>
+                        </div>
+
+                        <div class="row mt-4">
+                            <!-- Informations générales -->
+                            <div class="col-md-6">
+                                <section>
+                                    <h5 class="text-secondary"><i class="bi bi-info-circle me-2"></i> Informations générales</h5>
+                                    <p class="card-text" style="word-wrap: break-word; overflow-wrap: break-word;">
+                                        <i class="bi bi-cash-coin me-2"></i>Déscription : @Model.Description
+                                    </p>
+                                    <p class="card-text">
+                                        <i class="bi bi-cash-stack me-2"></i>Prix : @Model.Prix.ToString("N2") Ariary
+                                    </p>
+                                </section>
+                            </div>
+
+                            <!-- Catégories & Types -->
+                            <div class="col-md-6">
+                                <section>
+                                    <h5 class="text-secondary"><i class="bi bi-grid-3x3-gap me-2"></i> Catégories & Types</h5>
+                                    <p class="card-text">
+                                        <i class="bi bi-list me-2"></i>Type : @Model.Type
+                                    </p>
+                                    <p class="card-text">
+                                        <i class="bi bi-folder me-2"></i>Catégorie : @Model.NomCategorie
+                                    </p>
+                                </section>
+                            </div>
+                        </div>
+
+                        <div class="row mb-4">
+                            <!-- Fournisseur & Département -->
+                            <div class="col-md-6">
+                                <section>
+                                    <h5 class="text-secondary"><i class="bi bi-shop me-2"></i> Fournisseur & Département</h5>
+                                    <p class="card-text">
+                                        <i class="bi bi-building me-2"></i>Fournisseur : @Model.NomFournisseur
+                                    </p>
+                                    <p class="card-text">
+                                        <i class="bi bi-geo me-2"></i>Département : @Model.NomDepartement
+                                    </p>
+                                </section>
+                            </div>
+
+                            <!-- Dates -->
+                            <div class="col-md-6">
+                                <section>
+                                    <h5 class="text-secondary"><i class="bi bi-calendar-event me-2"></i> Dates</h5>
+                                    <p class="card-text">
+                                        <i class="bi bi-calendar-check me-2"></i>Date début : @Model.DateDebut.ToString("d MMM yyyy")
+                                    </p>
+                                    <p class="card-text">
+                                        <i class="bi bi-calendar-x me-2"></i>Date expiration : @Model.ExpirationDate.ToString("d MMM yyyy")
+                                    </p>
+                                </section>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+        else
+        {
+            <div class="col-12 text-center">
+                <p class="text-muted">Aucun abonnement trouvé</p>
+            </div>
+        }
+    </div>
+
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        if (@(TempData["Message"] != null ? "true" : "false")) {
+            new bootstrap.Modal(document.getElementById('successModal')).show();
+        }
+
+        if (@(TempData["Error"] != null ? "true" : "false")) {
+            new bootstrap.Modal(document.getElementById('errorModal')).show();
+        }
+    });
+</script>
+<style>
+    .title {
+        font-weight: bold;
+        font-size: 1.1em;
+        color: #0d2d5a;
+        letter-spacing: 1px;
+    }
+
+    .card {
+        width: 100%;
+        height: 100%;
+    }
+
+    .card-title {
+        font-size: 1.5rem;
+        color: #0d2d5a;
+    }
+
+    .card-text {
+        font-size: 1rem;
+        color: #6c757d;
+    }
+
+    section {
+        border-bottom: 1px solid #ddd;
+        padding-bottom: 10px;
+        margin-bottom: 15px;
+    }
+
+    .card-header {
+        background-color: #0d2d5a;
+    }
+
+    .btn-retour{
+        background-color: lightsteelblue;
+        color: darkblue;
+        border: none;
+        padding: 10px 20px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 16px;
+        margin: 4px 2px;
+        cursor: pointer;
+        border-radius: 5px;
+    }
+
+     .btn-retour:hover {
+        background-color: #0d2d5a;
+        color: white;
+     }
+</style>

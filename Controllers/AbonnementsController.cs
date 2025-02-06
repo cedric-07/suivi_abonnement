@@ -77,10 +77,11 @@ namespace suivi_abonnement.Controllers
             // Appel des méthodes pour obtenir les revenus fictifs
             List<Dictionary<string, object>> revenusAnnuels = _abonnementService.RevenusFictifsParAnnee();
             List<Dictionary<string, object>> revenusMensuels = _abonnementService.RevenusFictifsParMois();
-
+            int nbrlcient = _abonnementService.NbrClientAbonne();
             //ViewBag pour le notification
             ViewBag.Notifications = notifications;
             ViewBag.NbrNotifications = notificationCount;
+            //ViewBag pour les statistiques
             // Création du modèle à passer à la vue
             var model = new GlobalViewModel
             {
@@ -91,7 +92,8 @@ namespace suivi_abonnement.Controllers
                     Suspendus = abonnementsSuspendus,
                     RevenusAnnuels = revenusAnnuels,
                     RevenusMensuels = revenusMensuels,
-                    Notifications = notifications
+                    Notifications = notifications,
+                    NbrClient = nbrlcient
                 }
             };
 
@@ -172,18 +174,30 @@ namespace suivi_abonnement.Controllers
             return View("~/Views/AdminPage/abonnementPage.cshtml", viewModel);
         }
 
-   
+
         // GET: AbonnementsController/Details/5
-        public ActionResult Details(int id)
+        [HttpGet]
+        public IActionResult Details(int id)
         {
             var abonnementDetails = _abonnementService.GetAbonnementById(id);
-            Console.WriteLine("Abonnement trouvé : " + abonnementDetails.Nom);
+
             if (abonnementDetails == null)
             {
-                return NotFound();
+                Console.WriteLine("Aucun abonnement trouvé pour l'ID : " + id);
+                return RedirectToAction("AbonnementPage");
             }
-            ViewBag.Abonnement = abonnementDetails;
-            return View("~/Views/AdminPage/DetailAbonnementPage.cshtml");
+
+            Console.WriteLine("Abonnement trouvé : " + abonnementDetails.Nom);
+
+            
+            return View("~/Views/AdminPage/DetailsPage.cshtml" , abonnementDetails);
+        }
+
+
+        public IActionResult Test()
+        {
+
+            return View("~/Views/AdminPage/Test.cshtml");
         }
 
         // GET: AbonnementsController/Create
@@ -323,8 +337,9 @@ namespace suivi_abonnement.Controllers
                 // Récupération des abonnements
                 List<VAbonnementClient> abonnement = _abonnementService.getListVAbonnement(pageNumber, pageSize) ?? new List<VAbonnementClient>();
                 int nbrlcient = _abonnementService.NbrClientAbonne();
-                int totalAbonnements = _abonnementService.CountTotalVAbonnement();
+                Console.WriteLine("Nombre de clients abonnées : " + nbrlcient);
 
+                int totalAbonnements = _abonnementService.CountTotalVAbonnement();
                 ViewBag.CurrentPage = pageNumber;
                 ViewBag.TotalPages = (int)Math.Ceiling((double)totalAbonnements / pageSize);
                 ViewBag.TotalAbonnements = totalAbonnements;

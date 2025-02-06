@@ -11,13 +11,20 @@
     <title>Dashboard Premium</title>
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         /* Style général pour les cartes */
         .card {
             border-radius: 8px;
+            height: 100px;
+            width: auto; /* Vous pouvez ajuster la largeur si nécessaire */
+            display: flex;
+            justify-content: center;
+            align-items: center;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
             transition: transform 0.3s ease, box-shadow 0.3s ease;
+            
         }
 
         .card:hover {
@@ -26,7 +33,16 @@
         }
 
         .card-title {
-            font-size: 1rem;
+            font-size: 13px;
+            margin-top: 30px;
+            white-space: normal;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+
+        .statistique {
+            font-size: 1.5rem;
             font-weight: bold;
         }
 
@@ -36,27 +52,41 @@
             font-weight: bold;
         }
 
-        .icon {
-            font-size: 1.5rem;
-            margin-right: 8px;
+        /* Appliquer un fond coloré et arrondi aux icônes */
+        .bgic {
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            width: 4rem; /* Taille de l'icône avec son fond */
+            height: 4rem;
+            border-radius: 10%; /* Arrondir les bords pour une forme circulaire */
+            color: white; /* Couleur de l'icône */
+            font-size: 1.5rem; /* Ajuster la taille de l'icône à l'intérieur */
         }
 
+        /* Couleurs spécifiques pour chaque statut d'icône */
         .icon-actif {
-            color: rgb(0, 0, 0);
+            background-image: linear-gradient(to right, #3498db, #2ecc71); /* Dégradé bleu à vert */
         }
 
         .icon-expire {
-            color: rgb(0, 0, 0);
+            background-image: linear-gradient(to right, #071657, #089cc9); /* Dégradé rouge à orange */
         }
 
         .icon-suspendu {
-            color: rgb(255, 255, 255);
+            background-image: linear-gradient(to right, #5dc490, #033e6e); /* Dégradé orange à violet */
         }
 
+        .icon-client {
+            background-image: linear-gradient(to right, rgb(115, 150, 190), #101a9e); /* Dégradé orange à violet */
+        }
         /* Nouvelle disposition des sections avec box-shadow */
         .section-container {
             margin-bottom: 20px;
             padding: 15px;
+            height: auto;
+            border: 1px solid #ccc;
+            width: 100%;
             border-radius: 8px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             background-color: #fff;
@@ -94,15 +124,16 @@
         }
     </style>
 </head>
-<body class="g-sidenav-show bg-gray-100">
-    <div class="container-fluid mb-10">
-        <div class="col-12">
+<body>
+<div class="container-fluid fade-in visible">
+    <div class="row align-items-center">
+        <div class="col">
             <nav class="navbar navbar-main navbar-expand-lg px-0 shadow-none border-radius-xl " id="navbarBlur" navbar-scroll="true">
                 <div class="container-fluid  d-flex">
                     <nav aria-label="breadcrumb">
                         <ol class="breadcrumb bg-transparent mb-0 pb-0 pt-1 px-0 me-sm-6">
-                            <li class="breadcrumb-item text-sm"><a class="opacity-5 text-dark" href="javascript:;">Pages</a></li>
-                            <li class="breadcrumb-item text-sm text-dark active" aria-current="page">Tableau de bord</li>
+                            <li class="breadcrumb-item text-sm"><a class=" text-dark" href="javascript:;"><i class="bi bi-house-door-fill me-1"></i>Pages</a></li>
+                            <li class="breadcrumb-item text-sm text-dark active" aria-current="page"><i class="bi bi-dashboard me-1"></i>Tableau de bord</li>
                         </ol>
                         <h6 class="font-weight-bolder">Tableau de bord</h6>
                     </nav>
@@ -111,40 +142,52 @@
 
             <!-- Section Top Cards -->
             <div class="row">
-                <div class="col-md-4">
+                <div class="col-md-3">
                     <div class="card mb-3 text-dark">
                         <div class="card-body d-flex justify-content-between align-items-center">
                             <div>
-                                <h5 class="card-title">Abonnements Actifs</h5>
-                                <p>@Model.AbonnementStatViewModel.Actifs</p>
+                                <h5 class="card-title">Nombre Total des clients par abonnements</h5>
+                                <p class="statistique">@Model.AbonnementStatViewModel.NbrClient</p>
                             </div>
-                            <i class="fas fa-users icon icon-actif text-dark" style="font-size: 2rem;"></i>
+                            <i class="fas fa-users bgic icon-client"></i>
                         </div>
                     </div>
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-3">
                     <div class="card mb-3 text-dark">
                         <div class="card-body d-flex justify-content-between align-items-center">
                             <div>
-                                <h5 class="card-title">Abonnements Expirés</h5>
-                                <p>@Model.AbonnementStatViewModel.Expirés</p>
+                                <h5 class="card-title">Nombre Total des abonnements en Actifs</h5>
+                                <p class="statistique">@Model.AbonnementStatViewModel.Actifs</p>
                             </div>
-                            <i class="fas fa-calendar-times icon icon-expire text-dark" style="font-size: 2rem;"></i>
+                            <i class="fas fa-bell bgic icon-actif"></i>
                         </div>
                     </div>
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-3">
                     <div class="card mb-3 text-dark">
                         <div class="card-body d-flex justify-content-between align-items-center">
                             <div>
-                                <h5 class="card-title">Abonnements Suspendus</h5>
-                                <p>@Model.AbonnementStatViewModel.Suspendus</p>
+                                <h5 class="card-title">Nombre Total des abonnements Expirés</h5>
+                                <p class="statistique">@Model.AbonnementStatViewModel.Expirés</p>
                             </div>
-                            <i class="fas fa-pause-circle icon icon-suspendu text-dark" style="font-size: 2rem;"></i>
+                            <i class="fas fa-calendar-times bgic icon-expire"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card mb-3 text-dark">
+                        <div class="card-body d-flex justify-content-between align-items-center">
+                            <div>
+                                <h5 class="card-title">Nombre Total des abonnements En attente</h5>
+                                <p class="statistique">@Model.AbonnementStatViewModel.Suspendus</p>
+                            </div>
+                            <i class="fas fa-pause-circle bgic icon-suspendu"></i>
                         </div>
                     </div>
                 </div>
             </div>
+
 
             <!-- Section avec graphique revenues -->
             <div class="main-section">
@@ -172,80 +215,123 @@
     </div>
 
     <script>
-        // Revenus par Année
-        var revenusAnneeData = @Html.Raw(Json.Serialize(Model.AbonnementStatViewModel.RevenusAnnuels));
-        var labelsAnnee = revenusAnneeData.map(r => r.annee);
-        var dataRevenusAnnee = revenusAnneeData.map(r => r.revenus);
+    // Revenus par Année (Area Chart)
+    var revenusAnneeData = @Html.Raw(Json.Serialize(Model.AbonnementStatViewModel.RevenusAnnuels));
+    var labelsAnnee = revenusAnneeData.map(r => r.annee);
+    var dataRevenusAnnee = revenusAnneeData.map(r => r.revenus);
 
-        var ctx1 = document.getElementById('revenusAnneeChart').getContext('2d');
-        var revenusAnneeChart = new Chart(ctx1, {
-            type: 'doughnut',
-            data: {
-                labels: labelsAnnee,
-                datasets: [{
-                    label: 'Revenus Année',
-                    data: dataRevenusAnnee,
-                   backgroundColor: [
-                        'rgba(255, 99, 132, 1)',  // Couleur plus saturée pour le premier élément
-                        'rgba(54, 162, 235, 1)',  // Couleur plus saturée pour le second élément
-                        'rgba(55, 206, 86, 1)',   // Couleur plus saturée pour le troisième élément
-                        'rgba(75, 192, 192, 1)',  // Couleur plus saturée pour le quatrième élément
-                        'rgba(153, 102, 255, 1)', // Couleur plus saturée pour le cinquième élément
-                        'rgba(255, 159, 64, 1)'   // Couleur plus saturée pour le sixième élément
-                    ],
-                    borderColor: [
-                        'rgba(255, 99, 132, 1)',  // Bordure plus marquée pour le premier élément
-                        'rgba(54, 162, 235, 1)',  // Bordure plus marquée pour le second élément
-                        'rgba(55, 206, 86, 1)',   // Bordure plus marquée pour le troisième élément
-                        'rgba(75, 192, 192, 1)',  // Bordure plus marquée pour le quatrième élément
-                        'rgba(153, 102, 255, 1)', // Bordure plus marquée pour le cinquième élément
-                        'rgba(255, 159, 64, 1)'   // Bordure plus marquée pour le sixième élément
-                    ],
-                    borderWidth: 2 // Augmenter la largeur de la bordure pour un effet plus prononcé
-
-                }]
+    var ctx1 = document.getElementById('revenusAnneeChart').getContext('2d');
+    var revenusAnneeChart = new Chart(ctx1, {
+        type: 'line', // Type 'line' pour l'area chart
+        data: {
+            labels: labelsAnnee,
+            datasets: [{
+                label: 'Revenus par Année',
+                data: dataRevenusAnnee,
+                backgroundColor: 'rgba(80, 162, 235, 0.8)', // Couleur de l'area modifiée (plus saturée)
+                borderColor: 'rgba(54, 162, 235, 1)', // Bordure de la ligne modifiée (plus saturée)
+                borderWidth: 2, // Épaisseur de la bordure
+                fill: true, // Permet de remplir l'area sous la ligne
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    position: 'top',
+                },
+                tooltip: {
+                    mode: 'index',
+                    intersect: false,
+                }
+            },
+            scales: {
+                x: {
+                    beginAtZero: true
+                },
+                y: {
+                    beginAtZero: true
+                }
             }
-        });
-
-        // Revenus par Mois
-        var revenusMoisData = @Html.Raw(Json.Serialize(Model.AbonnementStatViewModel.RevenusMensuels));
-        var labelsMois = revenusMoisData.map(r => {
-            var mois = r.mois;
-            var moisNom = ["Janvier", "Février", "Mars", "Avril", "Mai", "Juin", "Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre"];
-            return moisNom[mois - 1];
-        });
-        var dataRevenusMois = revenusMoisData.map(r => r.revenus);
-
-        var moisColors = [
-            'rgba(255, 99, 132, 1)',  // Rouge vif
-            'rgba(54, 162, 235, 1)',  // Bleu vif
-            'rgba(55, 206, 86, 1)',   // Vert vif
-            'rgba(75, 192, 192, 1)',  // Turquoise vif
-            'rgba(153, 102, 255, 1)', // Violet vif
-            'rgba(255, 159, 64, 1)',  // Orange vif
-            'rgba(255, 99, 132, 1)',  // Rouge vif (répétition pour d'autres segments)
-            'rgba(54, 162, 235, 1)',  // Bleu vif (répétition)
-            'rgba(255, 206, 86, 1)',  // Jaune vif
-            'rgba(75, 192, 192, 1)',  // Turquoise vif (répétition)
-            'rgba(153, 102, 255, 1)', // Violet vif (répétition)
-            'rgba(255, 159, 64, 1)'   // Orange vif (répétition)
-        ];
+        }
+    });
 
 
-        var ctx2 = document.getElementById('revenusMoisChart').getContext('2d');
-        var revenusMoisChart = new Chart(ctx2, {
-            type: 'doughnut',
-            data: {
-                labels: labelsMois,
-                datasets: [{
-                    label: 'Revenus Mensuel',
-                    data: dataRevenusMois,
-                    backgroundColor: moisColors,
-                    borderColor: moisColors,
-                    borderWidth: 1
-                }]
+    // Revenus par Mois (Combo Chart)
+    var revenusMoisData = @Html.Raw(Json.Serialize(Model.AbonnementStatViewModel.RevenusMensuels));
+    var labelsMois = revenusMoisData.map(r => {
+        var mois = r.mois;
+        var moisNom = ["Janvier", "Février", "Mars", "Avril", "Mai", "Juin", "Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre"];
+        return moisNom[mois - 1];
+    });
+    var dataRevenusMois = revenusMoisData.map(r => r.revenus);
+
+    // Tableau de couleurs pour chaque mois
+    var moisCouleurs = [
+        'rgba(255, 99, 132, 0.8)', // Janvier
+        'rgba(54, 162, 235, 0.8)', // Février
+        'rgba(255, 206, 86, 0.8)', // Mars
+        'rgba(75, 192, 192, 0.8)', // Avril
+        'rgba(153, 102, 255, 0.8)', // Mai
+        'rgba(255, 159, 64, 0.8)', // Juin
+        'rgba(0, 123, 255, 0.8)', // Juillet
+        'rgba(0, 255, 0, 0.8)', // Août
+        'rgba(255, 165, 0, 0.8)', // Septembre
+        'rgba(128, 0, 128, 0.8)', // Octobre
+        'rgba(0, 255, 255, 0.8)', // Novembre
+        'rgba(255, 0, 255, 0.8)'  // Décembre
+    ];
+
+    var ctx2 = document.getElementById('revenusMoisChart').getContext('2d');
+    var revenusMoisChart = new Chart(ctx2, {
+        type: 'bar', // Type bar pour les revenus mensuels
+        data: {
+            labels: labelsMois,
+            datasets: [{
+                label: 'Revenus Mensuels',
+                data: dataRevenusMois,
+                backgroundColor: function(context) {
+                    var index = context.dataIndex; // Obtient l'index du mois
+                    return moisCouleurs[index]; // Applique la couleur correspondante
+                },
+                borderColor: function(context) {
+                    var index = context.dataIndex;
+                    return moisCouleurs[index]; // Bordure avec la même couleur que les barres
+                },
+                borderWidth: 2
+            }, {
+                label: 'Moyenne Mensuelle', // Ligne pour la moyenne mensuelle
+                data: dataRevenusMois.map(r => r * 0.8), // Exemple de données pour la ligne
+                type: 'line', // Graphique en ligne
+                borderColor: 'rgba(255, 69, 0, 1)', // Couleur de la ligne (rouge vif)
+                borderWidth: 3, // Bordure plus épaisse
+                fill: false, // Pas de remplissage sous la ligne
+                tension: 0.4 // Courbe de la ligne
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    position: 'top',
+                },
+                tooltip: {
+                    mode: 'index',
+                    intersect: false,
+                }
+            },
+            scales: {
+                x: {
+                    beginAtZero: true
+                },
+                y: {
+                    beginAtZero: true
+                }
             }
-        });
-    </script>
+        }
+    });
+
+
+</script>
 </body>
 </html>

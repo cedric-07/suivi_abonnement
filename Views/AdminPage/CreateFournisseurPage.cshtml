@@ -3,25 +3,31 @@
     ViewData["Title"] = "Ajout d'un fournisseur";
     Layout = "~/Views/Shared/Index.cshtml";
 }
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
 
 <div class="container-fluid  fade-in visible">
-    <!-- Navigation (fil d'ariane) -->
-    <div class="row align-items-start mb-4">
+    <div class="row align-items-center">
         <div class="col">
-            <nav aria-label="breadcrumb">
-                <ol class="breadcrumb bg-transparent mb-0">
-                    <li class="breadcrumb-item"><a href="javascript:;">Pages</a></li>
-                    <li class="breadcrumb-item active" aria-current="page">Formulaire de fournisseur</li>
-                </ol>
+            <nav class="navbar navbar-main navbar-expand-lg px-0 shadow-none border-radius-xl " id="navbarBlur" navbar-scroll="true">
+                <div class="-am-pm-container-fluid  d-flex">
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb bg-transparent mb-0 pb-0 pt-1 px-0 me-sm-6">
+                            <li class="breadcrumb-item text-sm"><a class=" text-dark" href="javascript:;"><i class="bi bi-house-door-fill me-1"></i>Pages</a></li>
+                            <li class="breadcrumb-item text-sm text-dark active" aria-current="page"><i class="bi bi-folder-fill me-1"></i>Formulaire de fournisseur</li>
+                        </ol>
+                        <h6 class="font-weight-bolder">Formulaire de fournisseur</h6>
+                    </nav>
+                </div>
+                
             </nav>
-            <!-- Titre -->
-            <h3 class="title-header mb-2">Formulaire de fournisseur</h3>
-            <!-- Bouton de retour placé sous le titre -->
-            <a href="@Url.Action("Index", "Fournisseurs")" class="btn  text-uppercase mt-2" style="font-size: 14px; margin-left: 91%; ; gap: 8px; background-color: #0d2d5a; color: white;">
-                <i class="fas fa-arrow-left" style="font-size: 1rem; color: white;"></i> Retour
-            </a>
         </div>
     </div>
+    <div class="d-flex justify-content-start mb-4">
+        <a href="@Url.Action("Index", "Fournisseurs")" class="btn-retour btn-animate" style="font-size: 15px;">
+            <i class="bi bi-arrow-left-circle me-2 " style="font-size: 15px;"></i>Retourner vers la liste
+        </a>
+    </div>
+    
 
 
     <!-- Card pour le formulaire -->
@@ -109,25 +115,24 @@
         font-weight: 600;
     }
 
-    .btn-animate {
-        position: relative;
-        overflow: hidden;
-        transition: transform 0.3s ease, color 0.3s ease;
+    .btn-retour {
+        background-color: lightsteelblue;
+        color: darkblue;
+        border: none;
+        padding: 10px 20px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 16px;
+        margin: 4px 2px;
+        cursor: pointer;
+        border-radius: 5px;
     }
 
-    .btn-animate:hover {
-        color: #0d2d5a;
-        transform: scale(1.05);
-    }
-
-    .btn-animate i {
-        transition: transform 0.3s ease, color 0.3s ease;
-    }
-
-    .btn-animate:hover i {
-        transform: translateX(5px);
-        color: #007bff;
-    }
+        .btn-retour:hover {
+            background-color: #0d2d5a;
+            color: white;
+        }
 
     .fade-in {
         opacity: 0;

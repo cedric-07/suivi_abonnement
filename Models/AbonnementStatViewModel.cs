@@ -5,6 +5,7 @@
         public int Actifs { get; set; }
         public int Expirés { get; set; }
         public int Suspendus { get; set; }
+        public int NbrClient { get; set; }
         public List<Notification> Notifications { get; set; }
         public List<Abonnement> listeAbonnementActif  { get; set; }
         public List<Abonnement> listeAbonnementExpiré { get; set; }

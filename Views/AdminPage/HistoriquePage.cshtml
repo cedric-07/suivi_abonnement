@@ -49,23 +49,24 @@
 
 <div class="container-fluid fade-in visible">
     <div class="row align-items-center">
-        <div class="col">
-            <nav aria-label="breadcrumb">
-                <ol class="breadcrumb bg-transparent mb-0">
-                    <li class="breadcrumb-item"><a href="#">Pages</a></li>
-                    <li class="breadcrumb-item active" aria-current="page">Historique des abonnements</li>
-                </ol>
-                <h3 class="title">Historique des abonnements</h3>
+        <div class="col-6">
+            <nav class="navbar navbar-main navbar-expand-lg px-0 shadow-none border-radius-xl " id="navbarBlur" navbar-scroll="true">
+                <div class="-am-pm-container-fluid  d-flex">
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb bg-transparent mb-0 pb-0 pt-1 px-0 me-sm-6">
+                            <li class="breadcrumb-item text-sm"><a class=" text-dark" href="javascript:;"><i class="bi bi-house-door-fill me-1"></i>Pages</a></li>
+                            <li class="breadcrumb-item text-sm text-dark active" aria-current="page"><i class="bi bi-table me-1"></i>Liste des fournisseurs</li>
+                        </ol>
+                        <h6 class="font-weight-bolder">Liste des fournisseurs</h6>
+                    </nav>
+                </div>
             </nav>
         </div>
     </div>
-    <div class="row align-items-center mt-4">
-        <div class="d-flex justify-content-end">
-            <a href="@Url.Action("HistoriqueDetail", "Abonnements")" class="btn  btn-animate" >
-                <i class="bi bi-clock-history"></i>
-                Liste abonnements avec Statut
-            </a>
-        </div>
+    <div class="d-flex justify-content-start mb-4">
+        <a href="@Url.Action("HistoriqueDetail", "Abonnements")" class="btn-retour btn-animate" style="font-size: 15px;">
+            <i class="fas fa-list me-2 " style="font-size: 15px;"></i>Voir Historique Detail des Abonnements
+        </a>
     </div>
    <div class="card ">
     <div class="card-header text-white">
@@ -182,34 +183,6 @@
         color: white;
     }
 
-
-        .btn-animate {
-        position: relative;
-        overflow: hidden;
-        transition: transform 0.3s ease, color 0.3s ease;
-    }
-
-    .btn-animate:hover {
-        color: #0d2d5a;
-        transform: scale(1.05); /* Agrandit légèrement le bouton */
-    }
-
-    .btn-animate i {
-        transition: transform 0.3s ease, color 0.3s ease;
-    }
-
-    .btn-animate:hover i {
-        transform: translateX(5px); /* Fait glisser l'icône vers la droite */
-        color: #007bff; /* Change la couleur de l'icône */
-    }
-    .btn {
-        font-weight: bold;
-        font-size: 14px;
-        letter-spacing: 1px;
-        background-color: #0d2d5a;
-        color: white;
-    }
-
     .modal-content {
         padding: 0;
         border: none;
@@ -255,5 +228,24 @@
         color: #ffffff;
         letter-spacing: 1px;
     }
+
+    .btn-retour {
+        background-color: lightsteelblue;
+        color: darkblue;
+        border: none;
+        padding: 10px 20px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 16px;
+        margin: 4px 2px;
+        cursor: pointer;
+        border-radius: 5px;
+    }
+
+        .btn-retour:hover {
+            background-color: #0d2d5a;
+            color: white;
+        }
 </style>
 
