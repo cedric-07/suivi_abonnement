@@ -131,5 +131,10 @@ namespace suivi_abonnement.Service
         {
             return _abonnementRepository.getAbonnementsExpiredOnWeekClient();
         }
+
+        public List<Abonnement> GetNbrAbonnementPerFournisseur()
+        {
+            return _abonnementRepository.GetNbrAbonnementPerFournisseur();
+        }
     }
 }

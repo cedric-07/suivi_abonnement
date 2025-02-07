@@ -37,5 +37,9 @@ namespace suivi_abonnement.Service.Interface
         List<Abonnement> getAbonnementsExpiredOnWeek();
         List<VAbonnementClient> getAbonnementsExpiredOnWeekClient();
 
+        List<Abonnement> GetNbrAbonnementPerFournisseur();
+
+
+
     }
 }

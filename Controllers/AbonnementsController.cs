@@ -77,7 +77,14 @@ namespace suivi_abonnement.Controllers
             // Appel des méthodes pour obtenir les revenus fictifs
             List<Dictionary<string, object>> revenusAnnuels = _abonnementService.RevenusFictifsParAnnee();
             List<Dictionary<string, object>> revenusMensuels = _abonnementService.RevenusFictifsParMois();
+            List<Abonnement> abonnementfournisseur = _abonnementService.GetNbrAbonnementPerFournisseur();
+            foreach (var item in abonnementfournisseur)
+            {
+                Console.WriteLine("${item.NomFournisseur} : {item.NbrAbonnement}");
+            }
             int nbrlcient = _abonnementService.NbrClientAbonne();
+            
+            
             //ViewBag pour le notification
             ViewBag.Notifications = notifications;
             ViewBag.NbrNotifications = notificationCount;
@@ -93,7 +100,8 @@ namespace suivi_abonnement.Controllers
                     RevenusAnnuels = revenusAnnuels,
                     RevenusMensuels = revenusMensuels,
                     Notifications = notifications,
-                    NbrClient = nbrlcient
+                    NbrClient = nbrlcient,
+                    Abonnements = abonnementfournisseur
                 }
             };
 

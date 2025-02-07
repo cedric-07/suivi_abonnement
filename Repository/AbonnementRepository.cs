@@ -17,7 +17,7 @@ namespace suivi_abonnement.Repository
         public AbonnementRepository(IHttpContextAccessor httpContextAccessor)
         {
             _httpContextAccessor = httpContextAccessor;
-        
+
             _connectionString = "server=localhost;port=3306;database=suivi_abonnement_omnis_db;user=root;password=;SslMode=None";
         }
 
@@ -665,7 +665,7 @@ namespace suivi_abonnement.Repository
             }
             return revenus;
         }
-        
+
 
         //CLIENT
         public List<Abonnement> getAbonnementByUser(int pageNumber, int pageSize, int userId)
@@ -1059,7 +1059,7 @@ namespace suivi_abonnement.Repository
             return count;
         }
 
-        public (List<VStatusAbonnement> actifs, List<VStatusAbonnement> enAttente, List<VStatusAbonnement> expires) getListAbonnementByStatus(int pageNumberActifs , int pageNumberEnAttente, int pageNumberExpires, int pageSize)
+        public (List<VStatusAbonnement> actifs, List<VStatusAbonnement> enAttente, List<VStatusAbonnement> expires) getListAbonnementByStatus(int pageNumberActifs, int pageNumberEnAttente, int pageNumberExpires, int pageSize)
         {
             // Initialisation des listes pour chaque statut
             List<VStatusAbonnement> actifs = new List<VStatusAbonnement>();
@@ -1071,7 +1071,7 @@ namespace suivi_abonnement.Repository
                 using (var connection = new MySqlConnection(_connectionString))
                 {
                     connection.Open();
-                    
+
                     // Requête SQL avec un filtre de statut
                     string query = @"
                         SELECT * 
@@ -1171,9 +1171,9 @@ namespace suivi_abonnement.Repository
                             }
                         }
                     }
-                  
+
                     connection.Close();
-                    
+
 
                 }
             }
@@ -1268,7 +1268,7 @@ namespace suivi_abonnement.Repository
                                 {
                                     Id = reader.GetInt32("abonnement_id"),
                                     Abonnement = reader.GetString("nomabonnement"),
-                                    Description = reader.GetString("description"),  
+                                    Description = reader.GetString("description"),
                                     Prix = reader.GetInt32("prix"),
                                     Type = reader.GetString("type"),
                                     DateDebut = reader.GetDateTime("date_debut"),
@@ -1292,7 +1292,7 @@ namespace suivi_abonnement.Repository
         }
 
         public List<Abonnement> getAbonnementsExpiredOnWeek()
-        {	
+        {
             List<Abonnement> abonnements = new List<Abonnement>();
             try
             {
@@ -1330,7 +1330,7 @@ namespace suivi_abonnement.Repository
                                     Prix = reader.GetInt32("prix"),
                                     DateDebut = reader.GetDateTime("date_debut"),
                                     ExpirationDate = reader.GetDateTime("expiration_date"),
-                                    Type = reader.GetString("type"),    
+                                    Type = reader.GetString("type"),
                                     idfournisseur = reader.GetInt32("idfournisseur"),
                                     idcategorie = reader.GetInt32("idcategorie"),
                                     idDepartement = reader.GetInt32("departement_id"),
@@ -1371,7 +1371,7 @@ namespace suivi_abonnement.Repository
                                 abonnements.Add(new VAbonnementClient
                                 {
                                     Id = reader.GetInt32("abonnement_id"),
-                                    Abonnement = reader.GetString("nomabonnement"), 
+                                    Abonnement = reader.GetString("nomabonnement"),
                                     Description = reader.GetString("description"),
                                     Prix = reader.GetInt32("prix"),
                                     Type = reader.GetString("type"),
@@ -1381,6 +1381,54 @@ namespace suivi_abonnement.Repository
                                     Fournisseur = reader.GetString("nomfournisseur"),
                                     Client = reader.GetString("nom"),
                                     Email = reader.GetString("email")
+                                });
+                            }
+                        }
+                    }
+                    connection.Close();
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+            return abonnements;
+        }
+
+        public List<Abonnement> GetNbrAbonnementPerFournisseur()
+        {
+            List<Abonnement> abonnements = new List<Abonnement>();
+            try
+            {
+                using (var connection = new MySqlConnection(_connectionString))
+                {
+                    connection.Open();
+                    string query = @"
+                        SELECT 
+                            a.idfournisseur, 
+                            f.nom AS nom_fournisseur,
+                            COUNT(a.abonnement_id) AS nbr_abonnements
+                        FROM 
+                            abonnements a
+                        JOIN 
+                            fournisseurs f ON a.idfournisseur = f.fournisseur_id
+                        WHERE 
+                            a.expiration_date >= CURDATE() 
+                        GROUP BY 
+                            a.idfournisseur, f.nom
+                        ORDER BY 
+                            nbr_abonnements DESC
+                        LIMIT 5; ";
+                    using (var command = new MySqlCommand(query, connection))
+                    {
+                        using (var reader = command.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                abonnements.Add(new Abonnement
+                                {
+                                    NomFournisseur = reader.GetString("nom_fournisseur"),
+                                    NbrAbonnements = reader.GetInt32("nbr_abonnements")
                                 });
                             }
                         }

@@ -18,5 +18,6 @@ namespace suivi_abonnement.Models
         public string NomFournisseur { get; set; }
         public int idDepartement { get; set; }
         public string NomDepartement { get; set; }
+        public int NbrAbonnements { get; set; }
     }
 }

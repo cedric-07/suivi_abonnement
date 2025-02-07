@@ -7,20 +7,16 @@
       "RelativeMoniker": "D:0:0:{CD639EE7-C34B-4FDD-94EA-4B83E4F0C0A6}|suivi_abonnement.csproj|solutionrelative:views\\adminpage\\indexpage.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     },
     {
+      "AbsoluteMoniker": "D:0:0:{CD639EE7-C34B-4FDD-94EA-4B83E4F0C0A6}|suivi_abonnement.csproj|d:\\stage_l3\\suivi_abonnement\\views\\adminpage\\historiquepage.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{CD639EE7-C34B-4FDD-94EA-4B83E4F0C0A6}|suivi_abonnement.csproj|solutionrelative:views\\adminpage\\historiquepage.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{CD639EE7-C34B-4FDD-94EA-4B83E4F0C0A6}|suivi_abonnement.csproj|d:\\stage_l3\\suivi_abonnement\\controllers\\abonnementscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{CD639EE7-C34B-4FDD-94EA-4B83E4F0C0A6}|suivi_abonnement.csproj|solutionrelative:controllers\\abonnementscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{CD639EE7-C34B-4FDD-94EA-4B83E4F0C0A6}|suivi_abonnement.csproj|d:\\stage_l3\\suivi_abonnement\\repository\\abonnementrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{CD639EE7-C34B-4FDD-94EA-4B83E4F0C0A6}|suivi_abonnement.csproj|solutionrelative:repository\\abonnementrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{CD639EE7-C34B-4FDD-94EA-4B83E4F0C0A6}|suivi_abonnement.csproj|d:\\stage_l3\\suivi_abonnement\\models\\abonnementstatviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{CD639EE7-C34B-4FDD-94EA-4B83E4F0C0A6}|suivi_abonnement.csproj|solutionrelative:models\\abonnementstatviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{CD639EE7-C34B-4FDD-94EA-4B83E4F0C0A6}|suivi_abonnement.csproj|d:\\stage_l3\\suivi_abonnement\\views\\adminpage\\historiquepage.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{CD639EE7-C34B-4FDD-94EA-4B83E4F0C0A6}|suivi_abonnement.csproj|solutionrelative:views\\adminpage\\historiquepage.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     }
   ],
   "DocumentGroupContainers": [
@@ -30,7 +26,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 237,
-          "SelectedChildIndex": 5,
+          "SelectedChildIndex": 4,
           "Children": [
             {
               "$type": "Bookmark",
@@ -42,41 +38,28 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
-              "Title": "AbonnementStatViewModel.cs",
-              "DocumentMoniker": "D:\\STAGE_L3\\suivi_abonnement\\Models\\AbonnementStatViewModel.cs",
-              "RelativeDocumentMoniker": "Models\\AbonnementStatViewModel.cs",
-              "ToolTip": "D:\\STAGE_L3\\suivi_abonnement\\Models\\AbonnementStatViewModel.cs",
-              "RelativeToolTip": "Models\\AbonnementStatViewModel.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAcAAAAcAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-02-06T10:12:45.644Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "AbonnementRepository.cs",
-              "DocumentMoniker": "D:\\STAGE_L3\\suivi_abonnement\\Repository\\AbonnementRepository.cs",
-              "RelativeDocumentMoniker": "Repository\\AbonnementRepository.cs",
-              "ToolTip": "D:\\STAGE_L3\\suivi_abonnement\\Repository\\AbonnementRepository.cs",
-              "RelativeToolTip": "Repository\\AbonnementRepository.cs",
-              "ViewState": "AgIAABcCAAAAAAAAAAAewCICAAAvAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-02-06T09:46:36.929Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 1,
               "Title": "HistoriquePage.cshtml",
               "DocumentMoniker": "D:\\STAGE_L3\\suivi_abonnement\\Views\\AdminPage\\HistoriquePage.cshtml",
               "RelativeDocumentMoniker": "Views\\AdminPage\\HistoriquePage.cshtml",
               "ToolTip": "D:\\STAGE_L3\\suivi_abonnement\\Views\\AdminPage\\HistoriquePage.cshtml",
               "RelativeToolTip": "Views\\AdminPage\\HistoriquePage.cshtml",
-              "ViewState": "AgIAADYAAAAAAAAAAAAIwE0AAABsAAAAAAAAAA==",
+              "ViewState": "AgIAAJEAAAAAAAAAAAAAAJgAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-02-06T09:44:14.703Z",
+              "WhenOpened": "2025-02-06T13:00:03.591Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "AbonnementRepository.cs",
+              "DocumentMoniker": "D:\\STAGE_L3\\suivi_abonnement\\Repository\\AbonnementRepository.cs",
+              "RelativeDocumentMoniker": "Repository\\AbonnementRepository.cs",
+              "ToolTip": "D:\\STAGE_L3\\suivi_abonnement\\Repository\\AbonnementRepository.cs",
+              "RelativeToolTip": "Repository\\AbonnementRepository.cs",
+              "ViewState": "AgIAAH0FAAAAAAAAAAAIwIcFAAA7AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-02-06T12:37:45.414Z",
               "EditorCaption": ""
             },
             {
@@ -87,22 +70,22 @@
               "RelativeDocumentMoniker": "Views\\AdminPage\\IndexPage.cshtml",
               "ToolTip": "D:\\STAGE_L3\\suivi_abonnement\\Views\\AdminPage\\IndexPage.cshtml",
               "RelativeToolTip": "Views\\AdminPage\\IndexPage.cshtml",
-              "ViewState": "AgIAADEAAAAAAAAAAAAuwEkAAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAAMEAAAAAAAAAAAAwwM4AAAAMAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-02-06T09:41:08.773Z",
+              "WhenOpened": "2025-02-06T12:28:26.786Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 2,
               "Title": "AbonnementsController.cs",
               "DocumentMoniker": "D:\\STAGE_L3\\suivi_abonnement\\Controllers\\AbonnementsController.cs",
               "RelativeDocumentMoniker": "Controllers\\AbonnementsController.cs",
               "ToolTip": "D:\\STAGE_L3\\suivi_abonnement\\Controllers\\AbonnementsController.cs",
               "RelativeToolTip": "Controllers\\AbonnementsController.cs",
-              "ViewState": "AgIAAEIAAAAAAAAAAAAiwEkAAABUAAAAAAAAAA==",
+              "ViewState": "AgIAAEIAAAAAAAAAAAAlwFIAAABPAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-02-06T09:38:40.056Z",
+              "WhenOpened": "2025-02-06T12:10:58.132Z",
               "EditorCaption": ""
             }
           ]
