@@ -30,7 +30,7 @@ namespace suivi_abonnement.Repository
                             WHERE (user1_id = @user1Id AND user2_id = @user2Id) 
                                OR (user1_id = @user2Id AND user2_id = @user1Id)
                         ) 
-                        ORDER BY sentat DESC";
+                        ORDER BY sentat ASC";
 
                     using (var command = new MySqlCommand(query, connection))
                     {
@@ -107,6 +107,7 @@ namespace suivi_abonnement.Repository
                     {
                         try
                         {
+
                             // Insertion du message
                             string query = @"
                                 INSERT INTO messages (senderid, receiverid, messagetext, sentat, isread, idconversation) 
@@ -120,6 +121,7 @@ namespace suivi_abonnement.Repository
                                 command.Parameters.AddWithValue("@conversationId", conversationId);
                                 command.ExecuteNonQuery();
                             }
+
 
                             // Mise à jour de l'heure du dernier message dans la conversation
                             string updatequery = "UPDATE conversations SET LastMessageat = NOW() WHERE conversation_id = @conversationId";
@@ -242,7 +244,7 @@ namespace suivi_abonnement.Repository
                     string query = @"
                         SELECT COUNT(*) 
                         FROM messages 
-                        WHERE receiverid = @userId 
+                        WHERE receiverid = @userId
                           AND isread = 0";
 
                     using (var command = new MySqlCommand(query, connection))

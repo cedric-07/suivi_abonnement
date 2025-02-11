@@ -49,7 +49,7 @@ namespace suivi_abonnement_omnis.Controllers.Authentification
                     // Stockage de l'utilisateur dans la session ou tout autre système de gestion d'état si nécessaire
                     HttpContext.Session.SetString("UserRole", user.Role);
                     HttpContext.Session.SetInt32("UserId", user.Id);
-
+               
                     switch (user.Role)
                     {
                         case "admin":

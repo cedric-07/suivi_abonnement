@@ -3,20 +3,28 @@
   "WorkspaceRootPath": "D:\\STAGE_L3\\suivi_abonnement\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{CD639EE7-C34B-4FDD-94EA-4B83E4F0C0A6}|suivi_abonnement.csproj|d:\\stage_l3\\suivi_abonnement\\views\\adminpage\\indexpage.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{CD639EE7-C34B-4FDD-94EA-4B83E4F0C0A6}|suivi_abonnement.csproj|solutionrelative:views\\adminpage\\indexpage.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+      "AbsoluteMoniker": "D:0:0:{CD639EE7-C34B-4FDD-94EA-4B83E4F0C0A6}|suivi_abonnement.csproj|d:\\stage_l3\\suivi_abonnement\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{CD639EE7-C34B-4FDD-94EA-4B83E4F0C0A6}|suivi_abonnement.csproj|solutionrelative:program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{CD639EE7-C34B-4FDD-94EA-4B83E4F0C0A6}|suivi_abonnement.csproj|d:\\stage_l3\\suivi_abonnement\\views\\adminpage\\historiquepage.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{CD639EE7-C34B-4FDD-94EA-4B83E4F0C0A6}|suivi_abonnement.csproj|solutionrelative:views\\adminpage\\historiquepage.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+      "AbsoluteMoniker": "D:0:0:{CD639EE7-C34B-4FDD-94EA-4B83E4F0C0A6}|suivi_abonnement.csproj|d:\\stage_l3\\suivi_abonnement\\hubs\\messagehub.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{CD639EE7-C34B-4FDD-94EA-4B83E4F0C0A6}|suivi_abonnement.csproj|solutionrelative:hubs\\messagehub.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{CD639EE7-C34B-4FDD-94EA-4B83E4F0C0A6}|suivi_abonnement.csproj|d:\\stage_l3\\suivi_abonnement\\controllers\\abonnementscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{CD639EE7-C34B-4FDD-94EA-4B83E4F0C0A6}|suivi_abonnement.csproj|solutionrelative:controllers\\abonnementscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{CD639EE7-C34B-4FDD-94EA-4B83E4F0C0A6}|suivi_abonnement.csproj|d:\\stage_l3\\suivi_abonnement\\controllers\\messagecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{CD639EE7-C34B-4FDD-94EA-4B83E4F0C0A6}|suivi_abonnement.csproj|solutionrelative:controllers\\messagecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{CD639EE7-C34B-4FDD-94EA-4B83E4F0C0A6}|suivi_abonnement.csproj|d:\\stage_l3\\suivi_abonnement\\repository\\abonnementrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{CD639EE7-C34B-4FDD-94EA-4B83E4F0C0A6}|suivi_abonnement.csproj|solutionrelative:repository\\abonnementrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{CD639EE7-C34B-4FDD-94EA-4B83E4F0C0A6}|suivi_abonnement.csproj|d:\\stage_l3\\suivi_abonnement\\repository\\messagerepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{CD639EE7-C34B-4FDD-94EA-4B83E4F0C0A6}|suivi_abonnement.csproj|solutionrelative:repository\\messagerepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{CD639EE7-C34B-4FDD-94EA-4B83E4F0C0A6}|suivi_abonnement.csproj|d:\\stage_l3\\suivi_abonnement\\views\\adminpage\\messagepage.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{CD639EE7-C34B-4FDD-94EA-4B83E4F0C0A6}|suivi_abonnement.csproj|solutionrelative:views\\adminpage\\messagepage.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{CD639EE7-C34B-4FDD-94EA-4B83E4F0C0A6}|suivi_abonnement.csproj|d:\\stage_l3\\suivi_abonnement\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{CD639EE7-C34B-4FDD-94EA-4B83E4F0C0A6}|suivi_abonnement.csproj|solutionrelative:appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
     }
   ],
   "DocumentGroupContainers": [
@@ -26,7 +34,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 237,
-          "SelectedChildIndex": 4,
+          "SelectedChildIndex": 3,
           "Children": [
             {
               "$type": "Bookmark",
@@ -38,54 +46,79 @@
             },
             {
               "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "appsettings.json",
+              "DocumentMoniker": "D:\\STAGE_L3\\suivi_abonnement\\appsettings.json",
+              "RelativeDocumentMoniker": "appsettings.json",
+              "ToolTip": "D:\\STAGE_L3\\suivi_abonnement\\appsettings.json",
+              "RelativeToolTip": "appsettings.json",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAYAAAA2AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2025-02-10T17:38:49.53Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "Program.cs",
+              "DocumentMoniker": "D:\\STAGE_L3\\suivi_abonnement\\Program.cs",
+              "RelativeDocumentMoniker": "Program.cs",
+              "ToolTip": "D:\\STAGE_L3\\suivi_abonnement\\Program.cs",
+              "RelativeToolTip": "Program.cs",
+              "ViewState": "AgIAACoAAAAAAAAAAADwv0UAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-02-10T17:30:13.357Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
               "DocumentIndex": 1,
-              "Title": "HistoriquePage.cshtml",
-              "DocumentMoniker": "D:\\STAGE_L3\\suivi_abonnement\\Views\\AdminPage\\HistoriquePage.cshtml",
-              "RelativeDocumentMoniker": "Views\\AdminPage\\HistoriquePage.cshtml",
-              "ToolTip": "D:\\STAGE_L3\\suivi_abonnement\\Views\\AdminPage\\HistoriquePage.cshtml",
-              "RelativeToolTip": "Views\\AdminPage\\HistoriquePage.cshtml",
-              "ViewState": "AgIAAJEAAAAAAAAAAAAAAJgAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-02-06T13:00:03.591Z",
+              "Title": "MessageHub.cs",
+              "DocumentMoniker": "D:\\STAGE_L3\\suivi_abonnement\\Hubs\\MessageHub.cs",
+              "RelativeDocumentMoniker": "Hubs\\MessageHub.cs",
+              "ToolTip": "D:\\STAGE_L3\\suivi_abonnement\\Hubs\\MessageHub.cs",
+              "RelativeToolTip": "Hubs\\MessageHub.cs",
+              "ViewState": "AgIAADwAAAAAAAAAAAAzwE4AAAAJAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-02-10T17:22:16.854Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 3,
-              "Title": "AbonnementRepository.cs",
-              "DocumentMoniker": "D:\\STAGE_L3\\suivi_abonnement\\Repository\\AbonnementRepository.cs",
-              "RelativeDocumentMoniker": "Repository\\AbonnementRepository.cs",
-              "ToolTip": "D:\\STAGE_L3\\suivi_abonnement\\Repository\\AbonnementRepository.cs",
-              "RelativeToolTip": "Repository\\AbonnementRepository.cs",
-              "ViewState": "AgIAAH0FAAAAAAAAAAAIwIcFAAA7AAAAAAAAAA==",
+              "Title": "MessageRepository.cs",
+              "DocumentMoniker": "D:\\STAGE_L3\\suivi_abonnement\\Repository\\MessageRepository.cs",
+              "RelativeDocumentMoniker": "Repository\\MessageRepository.cs",
+              "ToolTip": "D:\\STAGE_L3\\suivi_abonnement\\Repository\\MessageRepository.cs",
+              "RelativeToolTip": "Repository\\MessageRepository.cs",
+              "ViewState": "AgIAAGYAAAAAAAAAAAAkwHoAAAAdAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-02-06T12:37:45.414Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "IndexPage.cshtml",
-              "DocumentMoniker": "D:\\STAGE_L3\\suivi_abonnement\\Views\\AdminPage\\IndexPage.cshtml",
-              "RelativeDocumentMoniker": "Views\\AdminPage\\IndexPage.cshtml",
-              "ToolTip": "D:\\STAGE_L3\\suivi_abonnement\\Views\\AdminPage\\IndexPage.cshtml",
-              "RelativeToolTip": "Views\\AdminPage\\IndexPage.cshtml",
-              "ViewState": "AgIAAMEAAAAAAAAAAAAwwM4AAAAMAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-02-06T12:28:26.786Z",
+              "WhenOpened": "2025-02-10T13:01:09.734Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 2,
-              "Title": "AbonnementsController.cs",
-              "DocumentMoniker": "D:\\STAGE_L3\\suivi_abonnement\\Controllers\\AbonnementsController.cs",
-              "RelativeDocumentMoniker": "Controllers\\AbonnementsController.cs",
-              "ToolTip": "D:\\STAGE_L3\\suivi_abonnement\\Controllers\\AbonnementsController.cs",
-              "RelativeToolTip": "Controllers\\AbonnementsController.cs",
-              "ViewState": "AgIAAEIAAAAAAAAAAAAlwFIAAABPAAAAAAAAAA==",
+              "Title": "MessageController.cs",
+              "DocumentMoniker": "D:\\STAGE_L3\\suivi_abonnement\\Controllers\\MessageController.cs",
+              "RelativeDocumentMoniker": "Controllers\\MessageController.cs",
+              "ToolTip": "D:\\STAGE_L3\\suivi_abonnement\\Controllers\\MessageController.cs",
+              "RelativeToolTip": "Controllers\\MessageController.cs",
+              "ViewState": "AgIAALQAAAAAAAAAAAAzwMMAAAA1AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-02-06T12:10:58.132Z",
+              "WhenOpened": "2025-02-10T12:53:13.101Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "MessagePage.cshtml",
+              "DocumentMoniker": "D:\\STAGE_L3\\suivi_abonnement\\Views\\AdminPage\\MessagePage.cshtml",
+              "RelativeDocumentMoniker": "Views\\AdminPage\\MessagePage.cshtml",
+              "ToolTip": "D:\\STAGE_L3\\suivi_abonnement\\Views\\AdminPage\\MessagePage.cshtml",
+              "RelativeToolTip": "Views\\AdminPage\\MessagePage.cshtml",
+              "ViewState": "AgIAAMMAAAAAAAAAAADwv9sAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-02-09T12:22:34.242Z",
               "EditorCaption": ""
             }
           ]

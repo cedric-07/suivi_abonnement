@@ -6,448 +6,304 @@
 }
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>WhatsApp-like Interface</title>
+    <title>Boîte de Messages</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
     <style>
-        <style>
         body {
             background-color: #f0f2f5;
+            font-family: Roboto, Helvetica, Arial, sans-serif;
         }
-
         .chat-container {
-            height: 90vh;
-            display: grid;
-            grid-template-columns: 30% 70%;
+            height: 85vh;
+            display: flex;
             border-radius: 10px;
             overflow: hidden;
+            box-shadow: 0px 4px 10px rgba(0,0,0,0.1);
         }
-
         .chat-list {
-            background-color: #0d2d5a;
-            border-right: 1px solid #ddd;
-            overflow-y: auto;
+            width: 30%;
+            background: white;
         }
-
+        .chat-box {
+            width: 70%;
+            display: flex;
+            flex-direction: column;
+            background: #e5ddd5;
+        }
         .chat-header {
-            padding: 10px;
-            background-color: #0d2d5a;
-            color: #fff;
-        }
-
-        .message-input {
-            padding: 10px;
-            background-color: #0d2d5a;
-            color: #fff;
-        }
-
-        .message-list {
-            display: flex;
-            flex-direction: column-reverse; /* Affiche les derniers messages en bas */
-            height: calc(90vh - 120px);
-            overflow-y: auto;
             padding: 15px;
-            background-color: #e5ddd5;
-        }
-
-        .message-row {
-            display: flex;
-            align-items: flex-start;
-            margin-bottom: 10px;
-        }
-
-        .message {
-            padding: 8px 12px;
-            margin-bottom: 10px;
-            border-radius: 20px;
-            max-width: 70%;
-            position: relative; /* Permet de positionner la date en bas du message */
-        }
-
-        .sent {
-            background-color: #dcf8c6;
-            align-self: flex-end;
-            text-align: right;
-            margin-left: auto;
-        }
-
-        .received {
-            background-color: #ffffff;
-            align-self: flex-start;
-            text-align: left;
-            margin-left: 10px;
-        }
-
-        .message-date {
-            font-size: 0.75rem;
-            color: #999;
-            position: inherit;
-            bottom: -5px;
-        }
-
-        .message-input {
-            align-items: center;
-            justify-content: center;
-        }
-
-        .message-input textarea {
-            border-radius: 10px;
-            margin-right: 10px;
-        }
-
-        .icon-btn {
-            background: none;
-            border: none;
-            font-size: 1.5rem;
-            color: #007bff;
-            margin-left: 8px;
-        }
-
-        .avatar-sender, .avatar-receiver {
-            margin-top: 5px;
-            margin-left: 10px;
-        }
-
-        .avatar-sender {
-            margin-right: 10px;
-        }
-
-        .avatar-receiver {
-            margin-left: 10px;
-        }
-        .chat-list a {
-            text-decoration: none;
-            color: inherit;
-        }
-        .discussion-header {
-            display: flex;
-            align-items: center;
-            background-color: #0d2d5a;
-        }
-        .discussion-header h5 {
-            color: #fff;
-            margin: 0;
-            padding: 10px;
-        }
-        .list-group-item {
-            cursor: pointer;
-            background-color: #0d2d5a;
-            color: #fff;
-        }
-        
-        .list-group-item {
-            border: none; /* Retirer les bordures par défaut */
-            padding: 12px 20px;
-            color: #fff;
-        }
-
-        .list-group-item:hover {
-            cursor: pointer;
-        }
-
-        .avatar {
-            width: 45px;
-            height: 45px;
-            border-radius: 50%;
-            background-color: #e0d8d8; /* Couleur de fond pour les avatars */
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .user-name {
-            font-weight: bold;
-            color: #fafafa;
-            font-size: 1rem;
-        }
-
-        .list-group-item .flex-grow-1 {
             display: flex;
             justify-content: space-between;
             align-items: center;
-        }
+            color: darkblue;
 
-    /* Ajout d'un petit badge pour l'avatar si l'utilisateur est en ligne (par exemple) */
-        .avatar::after {
-            content: "";
-            position: absolute;
-            bottom: 5px;
-            right: 5px;
-            width: 12px;
-            height: 12px;
-            border-radius: 50%;
         }
-
-    /* Personnalisation de l'icône */
-        .fas.fa-user-circle {
-            font-size: 2.5rem; /* Augmenter la taille de l'icône de l'avatar */
+        .message-list {
+            flex: 1;
+            padding: 15px;
+            overflow-y: auto;
+            color: darkblue;
         }
-
-        .title {
-            font-weight: bold;
-            font-size: 1.1em;
-            color: #0d2d5a;
-            letter-spacing: 1px;
+        .message-input {
+            padding: 10px;
+            background: white;
+            border-top: 1px solid #ddd;
         }
+        .message {
+            padding: 10px 15px;
+            border-radius: 18px;
+            word-wrap: break-word;
+        }
+        .sent {
+            background: #24a74f;
+            color: rgb(250, 250, 250);
+            margin-left:auto;
+            margin-right: 0;
+        }
+        .received {
+            background: #e5e5ea;
+            color: black;
+        }
+        .message-date {
+            font-size: 12px;
+            text-align: right;
+            margin-top: 5px;
+            color: #666;
+        }
+        .list-group-item {
+            cursor: pointer;
+            border: none;
+        }
+        .message-row {
+            align-items: center;
+            margin-bottom: 10px;
+            height: auto;
+            width: 30%;
+            border-radius: 15px;
+        }
+        
     </style>
 </head>
 <body>
-    <div class="container-fluid fade-in visible">
-        <div class="row align-items-center">
-            <div class="col mb-4">
-                <nav aria-label="breadcrumb">
-                    <ol class="breadcrumb bg-transparent mb-0">
-                        <li class="breadcrumb-item"><a href="#"><i class="bi bi-house-door-fill me-1"></i>Pages</a></li>
-                        <li class="breadcrumb-item active" aria-current="page"><i class="bi bi-chat-fill me-1"></i>Boite de messages</li>
-                    </ol>
-                    <h3 class="title">Boite de messages</h3>
-                </nav>
-            </div>
-        </div>
+    <div class="container mt-4">
         <div class="chat-container">
-            
-            <!-- Liste des conversations -->
-            <div class="chat-list">
-                <div class="chat-header">
-                    <h5>Conversations</h5>
-                </div>
-                <!-- Barre de recherche -->
-                <!-- Barre de recherche sans bouton -->
-                <div class="p-3">
-                    <form asp-action="searchUser" method="get">
-                        <div class="input-group">
-                            <span class="input-group-text"><i class="fa fa-search"></i></span>
-                            <input type="text" class="form-control" placeholder="Recherche utilisateur..." name="name" />
-                        </div>
-                    </form>
-                </div>
-                <!-- Liste des utilisateurs -->
-                <ul id="userList" class="list-group list-group-flush">
+            <div class="chat-list p-3">
+                <h5 class="mb-3">Conversations</h5>
+                <form class="mb-3">
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="fa fa-search"></i></span>
+                        <input type="text" class="form-control" placeholder="Rechercher...">
+                    </div>
+                </form>
+                <ul class="list-group" id="userList">
                     @foreach (var user in Model?.Users)
                     {
-                        <li class="list-group-item d-flex align-items-center">
-                            <!-- Avatar -->
-                            <div class="avatar me-3">
-                                <i class="fas fa-user-circle text-white d-flex justify-content-center align-items-center" style="font-size: 2.5rem;"></i>
+                        <li class="list-group-item d-flex align-items-center" onclick="selectUser(@user.Id, '@user.Username')">
+                            <div class="me-3">
+                                <i class="fas fa-user-circle fa-2x"></i>
                             </div>
-                            <!-- Nom de l'utilisateur -->
-                            <div class="flex-grow-1">
-                                <span class="user-name">@user.Username</span>
-                            </div>
-                            <span class="badge bg-danger ms-2 unread-messages-count" style="display: none;">0</span>
-                            <!-- Badge de connexion si l'utilisateur est connecté -->
-                            @if (user.IsConnected)
-                            {
-                                <div class="badge bg-success ms-2" title="Utilisateur connecté" style="width: 10px; height: 10px; border-radius: 50%; background-color: #28a745;"></div>
-                            }
-                            else
-                            {
-                                <div class="badge bg-secondary ms-2" title="Utilisateur hors ligne" style="width: 10px; height: 10px; border-radius: 50%; background-color: #ff1414;"></div>
-                            }
-
-                            <!-- Lien vers la conversation -->
-                            <a href="@Url.Action("Index", "Message", new { receiverId = user.Id })" class="stretched-link"></a>
+                            <span>@user.Username</span>
+                            <span class="user-status @(user.IsConnected ? "online" : "offline")"></span>
+                            <span class="badge bg-danger ms-auto d-none">0</span>
                         </li>
                     }
                 </ul>
-
             </div>
-
-            <!-- Boîte de chat -->
-            <div class="chat-box d-flex flex-column">
+            <div class="chat-box">
                 <div class="chat-header">
-                    @if (Model.ReceiverId.HasValue)
-                    {
-                        var receiver = Model.Users?.FirstOrDefault(u => u.Id == Model.ReceiverId);
-
-                        <div class="discussion-header d-flex align-items-center" >
-                            <h5>Discussion avec @(receiver?.Username ?? "Utilisateur inconnu")</h5>
-                        </div>
-                    }
-                    else
-                    {
-                        <h5>Sélectionnez un utilisateur pour discuter</h5>
-                    }
+                    <h5 id="chatTitle">Sélectionnez un utilisateur</h5>
                 </div>
-                <div class="message-list flex-grow-1">
+                <div id="chatWindow" class="message-list">
                     @foreach (var message in Model.Messages)
                     {
-                        var messageDate = message.DateEnvoi;
-                        string dateDisplay;
-
-                        // Vérifier si le message a été envoyé aujourd'hui
-                        if (messageDate.Date == DateTime.Now.Date)
+                        if (message.SenderId == Model.CurrentUserId)
                         {
-                            dateDisplay = "Aujourd'hui à " + messageDate.ToString("HH:mm");
+                            <div class="message-row sent">
+                                <div class="avatar-sender">
+                                    <i class="fas fa-user-circle user-icon"></i>
+                                </div>
+                                <div class="sent">
+                                    <p>@message.MessageText</p>
+                                    <span class="message-date">@message.DateEnvoi</span>
+                                </div>
+                            </div>
                         }
                         else
                         {
-                            // Sinon, afficher le jour de la semaine et l'heure
-                            dateDisplay = messageDate.ToString("dddd HH:mm");
-                        }
-                        <div class="message-row">
-                            @if (message.SenderId == Model.CurrentUserId)  // Si le message est envoyé par l'utilisateur actuel
-                            {
-                                
-                                <div class="message sent">
-                                    @Html.Raw(message.MessageText)
-                                    <div class="message-date">@dateDisplay</div>
-                                </div>
-                                <div class="avatar-sender">
-                                    <i class="fas fa-user-circle text-white d-flex justify-content-center align-items-center" style="font-size: 1.5rem; "></i>
-                                </div>
-                                
-                            }
-                            else  // Si le message est reçu
-                            {
+                            <div class="message-row received">
                                 <div class="avatar-receiver">
-                                    <i class="fas fa-user-circle text-white d-flex justify-content-center align-items-center" style="font-size: 1.5rem;"></i>
+                                    <i class="fas fa-user-circle user-icon"></i>
                                 </div>
                                 <div class="message received">
-                                    @Html.Raw(message.MessageText)
-                                    <div class="message-date">@dateDisplay</div>
+                                    <p>@message.MessageText</p>
+                                    <span class="message-date">@message.DateEnvoi</span>
                                 </div>
-                            }
-                        </div>
-                    }
-                </div>
-
-               <div class="message-input">
-                    @if (Model.ReceiverId.HasValue)
-                    {
-                        <form method="post" action="@Url.Action("SendMessage", "Message")" enctype="multipart/form-data">
-                            <input type="hidden" name="receiverId" value="@Model.ReceiverId" />
-                            <div class="d-flex align-items-center w-100">
-                                <!-- Icône Attacher un fichier -->
-                                <button type="button" class="icon-btn me-2" data-bs-toggle="tooltip" data-bs-placement="top" title="Attacher un fichier">
-                                    <i class="fas fa-paperclip"></i>
-                                </button>
-
-                                <!-- Icône Ajouter une image -->
-                                <button type="button" class="icon-btn me-2" data-bs-toggle="tooltip" data-bs-placement="top" title="Ajouter une image">
-                                    <i class="fas fa-image"></i>
-                                </button>
-
-                                <!-- Inputs de fichier cachés -->
-                                <input type="file" name="attachment" class="d-none" id="attachmentInput" />
-                                <input type="file" name="image" class="d-none" id="imageInput" accept="image/*" />
-
-                                <!-- Textarea de message -->
-                                <textarea name="messageText" placeholder="Tapez un message..." class="form-control w-100 me-2" rows="1"></textarea>
-
-                                <!-- Icône d'envoi -->
-                                <button type="submit" class="btn p-0 ms-2" style="background: none; border: none; cursor: pointer; display: flex; justify-content: center;" data-bs-toggle="tooltip" data-bs-placement="top" title="Envoyer">
-                                    <i class="fas fa-paper-plane" style="color: #dcf8c6; display: flex; align-items: center;"></i>
-                                </button>
                             </div>
-                        </form>
-                    }
-                    else
-                    {
-                        <p>Sélectionnez un utilisateur pour commencer à discuter.</p>
+                        }
                     }
                 </div>
-
-
-
-
+                <div class="message-input d-flex">
+                    <input type="hidden" id="receiverId" value="@Model.ReceiverId">
+                    <textarea  id="messageText" class="form-control me-2" placeholder="Écrivez un message..."></textarea>
+                    <button id="sendButton" class="btn btn-primary"><i class="fas fa-paper-plane"></i></button>
+                </div>
             </div>
         </div>
     </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/3.1.20/signalr.min.js"></script>
+    <script>
+        var userId = '@(Context.Session.GetInt32("UserId"))';
+        var connection = new signalR.HubConnectionBuilder().withUrl("/messageHub").build();
 
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script>
-    // Fonction pour charger les utilisateurs
-    function loadUsers() {
-        $.ajax({
-            url: '/Message/searchUser', // Assure-toi d'avoir une action dans ton contrôleur
-            method: 'GET',
-            success: function (data) {
-                $('#userList').html(data);
-            },
-            error: function () {
-                console.error('Erreur lors du chargement des utilisateurs');
+        connection.start().then(() => {
+            console.log("SignalR connecté !");
+        }).catch(err => {
+            console.error(err.toString());
+        });
+
+        // Fonction pour envoyer un message
+        $("#sendButton").click(function () {
+            var receiverId = $("#receiverId").val();
+            var message = $("#messageText").val();
+
+            if (!receiverId || !message) {
+                console.warn("⚠️ Impossible d'envoyer : receiverId ou message est vide.");
+                return;
+            }
+
+            try {
+                connection.invoke("SendMessageToReceiver", parseInt(receiverId), message)
+                    .then(() => {
+                        console.log("✅ Message envoyé avec succès via SignalR.");
+
+                        var messageDate = new Date();
+                        var now = new Date();
+                        var dateDisplay = formatDate(messageDate, now);
+
+                        $("#messageText").val(""); // Vider l'input après l'envoi
+
+                        // Ajouter le message envoyé en bas du chat
+                        $("#chatWindow").append(`
+                            <div class="message-row sent">
+                                <div class="avatar-sender">
+                                    <i class="fas fa-user-circle user-icon"></i>
+                                </div>
+                                <div class="message sent">
+                                    <p>${message}</p>
+                                    <span class="message-date">${dateDisplay}</span>
+                                </div>
+                            </div>
+                        `);
+
+                        scrollToBottom();
+                    })
+                    .catch(err => {
+                        console.error("❌ Erreur lors de l'envoi du message via SignalR :", err);
+                    });
+            } catch (error) {
+                console.error("🚨 Erreur d'exécution dans `SendMessage` :", error);
             }
         });
-    }
 
-    // Fonction pour charger les messages
-    function loadMessages() {
-        var receiverId = '@Model.ReceiverId';
+        // Fonction pour recevoir un message
+        connection.on("ReceiveMessage", function (senderId, message) {
+            var isSentByCurrentUser = senderId === parseInt(userId);
+            var messageClass = isSentByCurrentUser ? "sent" : "received";
+            var avatarClass = isSentByCurrentUser ? "avatar-sender" : "avatar-receiver";
 
-        if (receiverId) {
+            var messageDate = new Date();
+            var now = new Date();
+            var dateDisplay = formatDate(messageDate, now);
+
+            // Ajouter le message reçu en bas du chat
+            $("#chatWindow").append(`
+                <div class="message-row ${messageClass}">
+                    <div class="${avatarClass}">
+                        <i class="fas fa-user-circle user-icon"></i>
+                    </div>
+                    <div class="message ${messageClass}">
+                        <p>${message}</p>
+                        <span class="message-date">${dateDisplay}</span>
+                    </div>
+                </div>
+            `);
+
+            scrollToBottom();
+        });
+
+        // Fonction pour scroller en bas du chat automatiquement
+        function scrollToBottom() {
+            var chatWindow = $("#chatWindow");
+            chatWindow.scrollTop(chatWindow.prop("scrollHeight"));
+        }
+
+        // Fonction pour formater la date
+        function formatDate(messageDate, now) {
+            if (
+                messageDate.getDate() === now.getDate() &&
+                messageDate.getMonth() === now.getMonth() &&
+                messageDate.getFullYear() === now.getFullYear()
+            ) {
+                return "Aujourd'hui à " + messageDate.toLocaleTimeString("fr-FR", { hour: "2-digit", minute: "2-digit" });
+            } else {
+                return messageDate.toLocaleDateString("fr-FR", { weekday: "long" }) + 
+                    " à " + 
+                    messageDate.toLocaleTimeString("fr-FR", { hour: "2-digit", minute: "2-digit" });
+            }
+        }
+
+        // Charger les messages dans le bon ordre
+        function selectUser(receiverId, receiverName) {
+            $("#receiverId").val(receiverId);
+            $("#chatTitle").text("Chat avec " + receiverName);
+            $("#chatWindow").empty();
+
+            // Réinitialiser le badge de notification
+            $("#notif-" + receiverId).text("0").addClass("d-none");
+
+            // Charger les anciens messages
             $.ajax({
-                url: '/Message/LoadMessages', // Assure-toi d'avoir une action dans ton contrôleur
-                method: 'GET',
+                url: "/Message/GetMessages",
+                type: "GET",
                 data: { receiverId: receiverId },
-                success: function (data) {
-                    $('.message-list').html(data);
+                success: function (messages) {
+                    messages.forEach(msg => {
+                        let messageClass = msg.senderId === parseInt(userId) ? "sent" : "received";
+                        let messagedate = new Date(msg.dateEnvoi);
+                        let now = new Date();
+                        let dateDisplay = formatDate(messagedate, now);
+
+                        // Ajouter les messages dans l'ordre naturel
+                        $("#chatWindow").append(`
+                            <div class="message-row ${messageClass}">
+                                <div class="message ${messageClass}">
+                                    <i class="bi bi-person-circle user-icon"></i>
+                                    <div class="message-content">
+                                        <p>${msg.messageText}</p>
+                                        <span class="message-date">${dateDisplay}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        `);
+                    });
+
+                    scrollToBottom(); // Assurer que la conversation s'affiche en bas au chargement
                 },
-                error: function () {
-                    console.error('Erreur lors du chargement des messages');
+                error: function (err) {
+                    console.error("❌ Erreur lors du chargement des messages :", err);
                 }
             });
         }
-    }
-
-    // Rechargement automatique toutes les 5 secondes si le champ de recherche est vide
-    setInterval(function () {
-        if (!$('input[name="name"]').val()) { // Si le champ de recherche est vide
-            loadUsers();  // Recharger la liste des utilisateurs
-        }
-    }, 5000);
-
-    // Scroll automatique en bas des messages
-    window.onload = function () {
-        var messageList = document.querySelector('.message-list');
-        messageList.scrollTop = messageList.scrollHeight;
-    };
-
-    function loadUnreadMessages() {
-        $.ajax({
-            url: '/Message/GetUnreadMessagesCount',
-            method: 'GET',
-            success: function (data) {
-                const $messageBadge = $('.unread-messages-count');
-                
-                if (data && typeof data.count !== 'undefined') {
-                    if (data.count > 0) {
-                        $messageBadge.text(data.count).show(); // Affiche le badge si messages non lus
-                    } else {
-                        $messageBadge.hide(); // Cache si pas de messages
-                    }
-                } else {
-                    console.warn('Réponse invalide lors du comptage des messages.');
-                }
-            },
-            error: function (xhr, status, error) {
-                console.error('Erreur serveur lors du chargement des messages :', error);
-            }
-        });
-    }
 
 
-
-    // Charger les notifications toutes les 5 secondes
-    setInterval(loadUnreadMessages, 5000);
-
-
-        function markMessagesAsRead(userId) {
-            $.post('/Message/MarkMessagesAsRead', { userId: userId })
-                .done(function () {
-                    console.log('Messages marqués comme lus.');
-                })
-                .fail(function () {
-                    console.error('Erreur lors de la mise à jour des messages.');
-                });
-        }
 </script>
-
-
 </body>
+
 </html>

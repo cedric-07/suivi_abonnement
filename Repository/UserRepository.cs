@@ -329,7 +329,8 @@ namespace suivi_abonnement.Repository
                                     Id = Convert.ToInt32(reader["id"]),
                                     Username = reader["username"].ToString(),
                                     Email = reader["email"].ToString(),
-                                    Role = reader["role"].ToString()
+                                    Role = reader["role"].ToString(),
+                                    IsConnected = reader.GetBoolean("isconnected")
                                 });
                             }
                         }

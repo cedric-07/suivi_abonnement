@@ -56,6 +56,8 @@ D:\STAGE_L3\suivi_abonnement\bin\Debug\net7.0\System.Drawing.Common.dll
 D:\STAGE_L3\suivi_abonnement\bin\Debug\net7.0\System.Reflection.MetadataLoadContext.dll
 D:\STAGE_L3\suivi_abonnement\bin\Debug\net7.0\System.Security.Cryptography.ProtectedData.dll
 D:\STAGE_L3\suivi_abonnement\bin\Debug\net7.0\System.Security.Permissions.dll
+D:\STAGE_L3\suivi_abonnement\bin\Debug\net7.0\System.Text.Encodings.Web.dll
+D:\STAGE_L3\suivi_abonnement\bin\Debug\net7.0\System.Text.Json.dll
 D:\STAGE_L3\suivi_abonnement\bin\Debug\net7.0\System.Windows.Extensions.dll
 D:\STAGE_L3\suivi_abonnement\bin\Debug\net7.0\af\Humanizer.resources.dll
 D:\STAGE_L3\suivi_abonnement\bin\Debug\net7.0\ar\Humanizer.resources.dll
@@ -200,6 +202,7 @@ D:\STAGE_L3\suivi_abonnement\bin\Debug\net7.0\runtimes\win\lib\net6.0\Microsoft.
 D:\STAGE_L3\suivi_abonnement\bin\Debug\net7.0\runtimes\unix\lib\net6.0\System.Drawing.Common.dll
 D:\STAGE_L3\suivi_abonnement\bin\Debug\net7.0\runtimes\win\lib\net6.0\System.Drawing.Common.dll
 D:\STAGE_L3\suivi_abonnement\bin\Debug\net7.0\runtimes\win\lib\net6.0\System.Security.Cryptography.ProtectedData.dll
+D:\STAGE_L3\suivi_abonnement\bin\Debug\net7.0\runtimes\browser\lib\net7.0\System.Text.Encodings.Web.dll
 D:\STAGE_L3\suivi_abonnement\bin\Debug\net7.0\runtimes\win\lib\net6.0\System.Windows.Extensions.dll
 D:\STAGE_L3\suivi_abonnement\obj\Debug\net7.0\suivi_abonnement.csproj.AssemblyReference.cache
 D:\STAGE_L3\suivi_abonnement\obj\Debug\net7.0\suivi_abonnement.GeneratedMSBuildEditorConfig.editorconfig
@@ -228,3 +231,16 @@ D:\STAGE_L3\suivi_abonnement\obj\Debug\net7.0\refint\suivi_abonnement.dll
 D:\STAGE_L3\suivi_abonnement\obj\Debug\net7.0\suivi_abonnement.pdb
 D:\STAGE_L3\suivi_abonnement\obj\Debug\net7.0\suivi_abonnement.genruntimeconfig.cache
 D:\STAGE_L3\suivi_abonnement\obj\Debug\net7.0\ref\suivi_abonnement.dll
+D:\STAGE_L3\suivi_abonnement\bin\Debug\net7.0\Microsoft.Extensions.Configuration.Abstractions.dll
+D:\STAGE_L3\suivi_abonnement\bin\Debug\net7.0\Microsoft.Extensions.DependencyInjection.Abstractions.dll
+D:\STAGE_L3\suivi_abonnement\bin\Debug\net7.0\Microsoft.Extensions.Diagnostics.Abstractions.dll
+D:\STAGE_L3\suivi_abonnement\bin\Debug\net7.0\Microsoft.Extensions.FileProviders.Abstractions.dll
+D:\STAGE_L3\suivi_abonnement\bin\Debug\net7.0\Microsoft.Extensions.Hosting.Abstractions.dll
+D:\STAGE_L3\suivi_abonnement\bin\Debug\net7.0\Microsoft.Extensions.Logging.Abstractions.dll
+D:\STAGE_L3\suivi_abonnement\bin\Debug\net7.0\Microsoft.Extensions.ObjectPool.dll
+D:\STAGE_L3\suivi_abonnement\bin\Debug\net7.0\Microsoft.Extensions.Options.dll
+D:\STAGE_L3\suivi_abonnement\bin\Debug\net7.0\Microsoft.Extensions.Primitives.dll
+D:\STAGE_L3\suivi_abonnement\bin\Debug\net7.0\System.Diagnostics.DiagnosticSource.dll
+D:\STAGE_L3\suivi_abonnement\bin\Debug\net7.0\System.IO.Pipelines.dll
+D:\STAGE_L3\suivi_abonnement\bin\Debug\net7.0\System.Net.WebSockets.WebSocketProtocol.dll
+D:\STAGE_L3\suivi_abonnement\bin\Debug\net7.0\System.Threading.Channels.dll

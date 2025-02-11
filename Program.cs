@@ -5,6 +5,7 @@ using suivi_abonnement.Repository.Interface;
 using suivi_abonnement.Service.Interface;
 using suivi_abonnement.Service;
 using suivi_abonnement.Repository;
+using suivi_abonnement.Hubs;
 var builder = WebApplication.CreateBuilder(args);
 
 // Ajouter les services nécessaires
@@ -22,7 +23,10 @@ builder.Services.AddHttpContextAccessor();
 // Ajouter les services Razor et MVC
 builder.Services.AddRazorPages();  // ou AddServerSideBlazor() si vous utilisez Blazor Server
 builder.Services.AddControllersWithViews();  // Pour les contrôleurs avec vues
+builder.Services.AddSignalR(); // 👈 Enregistre SignalR
+builder.Services.AddHttpContextAccessor();
 
+// Ajouter les services de configuration de la base de données
 builder.Services.AddScoped<IAbonnementService, AbonnementService>();
 builder.Services.AddScoped<IAbonnementRepository, AbonnementRepository>();
 builder.Services.AddScoped<IUserService, UserService>();
@@ -37,7 +41,6 @@ builder.Services.AddScoped<INotificationRepository, NotificationRepository>();
 builder.Services.AddScoped<INotificationService, NotificationService>();
 builder.Services.AddScoped<IMessageRepository, MessageRepository>();
 builder.Services.AddScoped<IMessageService, MessageService>();
-
 
 
 // Configurer les services nécessaires
@@ -66,4 +69,5 @@ app.MapControllerRoute(
     name: "default",
     pattern: "{controller=AuthClient}/{action=Login}/{id?}");
 
+app.MapHub<MessageHub>("/messageHub");  // 👈 Ajoute le hub SignalR
 app.Run();

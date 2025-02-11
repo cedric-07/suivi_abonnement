@@ -1,0 +1,303 @@
+@model suivi_abonnement.Models.MessageViewModel
+
+@{
+    ViewData["Title"] = "Messagerie en Temps Réel";
+    Layout = "~/Views/Shared/Index.cshtml";
+}
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Messagerie en Temps Réel</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f0f2f5;
+            font-family: Arial, sans-serif;
+        }
+
+        .chat-container {
+            height: 90vh;
+            display: grid;
+            grid-template-columns: 30% 70%;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .chat-list {
+            background-color: #0d2d5a;
+            border-right: 1px solid #ddd;
+            overflow-y: auto;
+            padding: 15px;
+        }
+
+        .chat-list h5 {
+            padding-bottom: 10px;
+            border-bottom: 1px solid white;
+            color: white;
+        }
+
+        .chat-box {
+            background: white;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .chat-header {
+            padding: 10px;
+            background-color: #0d2d5a;
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .message-list {
+            display: flex;
+            flex-direction: column-reverse; /* Affiche les derniers messages en bas */
+            height: calc(90vh - 120px);
+            overflow-y: auto;
+            padding: 15px;
+            background-color: #e5ddd5;
+        }
+
+        .message {
+            padding: 10px;
+            border-radius: 8px;
+            margin: 5px;
+            max-width: 60%;
+            font-size: 14px;
+            line-height: 1.4;
+            position: relative;
+        }
+
+        .sent {
+            background-color: #DCF8C6;
+            align-self: flex-end;
+            text-align: right;
+        }
+
+        .received {
+            background-color: white;
+            align-self: flex-start;
+            text-align: left;
+        }
+
+        .message-time {
+            font-size: 10px;
+            color: gray;
+            position: absolute;
+            bottom: 5px;
+            right: 10px;
+        }
+
+        .user-status {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            display: inline-block;
+        }
+
+        .online {
+            background-color: #28a745;
+        }
+
+        .offline {
+            background-color: #ff1414;
+        }
+
+        .message-input {
+            padding: 10px;
+            background-color: #0d2d5a;
+            color: white;
+            border-top: 1px solid #ddd;
+            display: flex;
+        }
+
+
+    </style>
+</head>
+<body>
+
+    <div class="container-fluid">
+        <div class="chat-container">
+            <!-- Liste des conversations -->
+            <div class="chat-list">
+                <h5>Conversations</h5>
+                <div id="userList">
+                    @foreach (var user in Model?.Users)
+                    {
+                        <div class="d-flex align-items-center mb-2">
+                            <button class="btn  text-white" onclick="selectUser(@user.Id, '@user.Username')">
+                                <div class="avatar me-2">
+                                    <i class="fas fa-user-circle text-white" style="font-size: 2rem;"></i>
+                                </div>
+                                <span class="user-name">@user.Username</span>
+                                <span class="user-status @(user.IsConnected ? "online" : "offline")"></span>
+                                <span id="notif-@user.Id" class="badge bg-danger d-none">0</span>
+                            </button>
+                        </div>
+                    }
+                </div>
+            </div>
+
+            <!-- Boîte de chat -->
+            <div class="chat-box">
+                <div class="chat-header">
+                    <h5 id="chatTitle">Sélectionnez un utilisateur</h5>
+                    <span class="user-status online" id="chatUserStatus"></span>
+                </div>
+                <div id="chatWindow" class="message-list">
+                    @foreach (var message in Model.Messages)
+                    {
+                        <div class="message @(message.SenderId == Model.CurrentUserId ? "sent" : "received")">
+                            <p>@Html.Raw(message.MessageText)</p>
+                            <span class="message-time">@message.DateEnvoi.ToString("HH:mm")</span>
+                        </div>
+                    }
+                </div>
+                <div class="message-input">
+                    <input type="hidden" id="receiverId" value="@Model.ReceiverId">
+                    <div class="d-flex">
+                        <textarea id="messageText" class="form-control" placeholder="Écrivez un message..."></textarea>
+                        <button id="sendButton" class="btn btn-primary ms-2"><i class="fas fa-paper-plane"></i></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/3.1.20/signalr.min.js"></script>
+
+<script>
+    var userId = '@(Context.Session.GetInt32("UserId"))';
+    var connection = new signalR.HubConnectionBuilder().withUrl("/messageHub").build();
+
+    function selectUser(receiverId, receiverName) {
+    console.log("👤 Utilisateur sélectionné :", receiverId, receiverName);
+    $("#receiverId").val(receiverId);
+    $("#chatTitle").text("Chat avec " + receiverName);
+    $("#chatWindow").empty();
+}
+
+
+    connection.start().then(() => {
+        console.log("SignalR connecté !");
+    }).catch(err => {
+        console.error(err.toString());
+    });
+
+    // Sélection d'un utilisateur pour chatter
+    function selectUser(receiverId, receiverName) {
+        $("#receiverId").val(receiverId);
+        $("#chatTitle").text("Chat avec " + receiverName);
+        $("#chatWindow").empty();
+    }
+
+    // Envoi d'un message
+    $("#sendButton").click(function () {
+        var receiverId = $("#receiverId").val();
+        var message = $("#messageText").val();
+
+        if (!receiverId || !message) {
+            console.warn("⚠️ Impossible d'envoyer : receiverId ou message est vide.");
+            return;
+        }
+
+        try {
+            connection.invoke("SendMessageToReceiver", parseInt(receiverId), message)
+                .then(() => {
+                    console.log("✅ Message envoyé avec succès via SignalR.");
+                    $("#messageText").val("");
+                    $("#chatWindow").prepend(`
+                        <div class="message sent">
+                            <p>${message}</p>
+                        </div>
+                    `);
+                })
+                .catch(err => {
+                    console.error("❌ Erreur lors de l'envoi du message via SignalR :", err);
+                });
+        } catch (error) {
+            console.error("🚨 Erreur d'exécution dans `SendMessage` :", error);
+        }
+    });
+
+
+
+    // Réception d'un message en temps réel
+    connection.on("ReceiveMessage", function (senderId, message) {
+        $("#chatWindow").prepend(`
+            <div class="message received">
+                <p>${message}</p>
+            </div>
+        `);
+    });
+
+    // Notification en temps réel
+    connection.on("NotifyNewMessage", function (receiverId) {
+        if (receiverId == userId) {
+            let notifBadge = $("#notif-" + receiverId);
+            let currentCount = parseInt(notifBadge.text()) || 0;
+            notifBadge.text(currentCount + 1).removeClass("d-none");
+        }
+    });
+
+    // Mise à jour des statuts en ligne / hors ligne
+    connection.on("UserConnected", function (connectedUserId) {
+        $(".user-status").each(function () {
+            if ($(this).attr("data-user-id") == connectedUserId) {
+                $(this).removeClass("offline").addClass("online");
+            }
+        });
+    });
+
+    connection.on("UserDisconnected", function (disconnectedUserId) {
+        $(".user-status").each(function () {
+            if ($(this).attr("data-user-id") == disconnectedUserId) {
+                $(this).removeClass("online").addClass("offline");
+            }
+        });
+    });
+
+    // Réinitialiser le badge de notification lorsque l'utilisateur ouvre la conversation
+function selectUser(receiverId, receiverName) {
+    $("#receiverId").val(receiverId);
+    $("#chatTitle").text("Chat avec " + receiverName);
+    $("#chatWindow").empty();
+    
+    // Réinitialiser le badge
+    $("#notif-" + receiverId).text("0").addClass("d-none");
+
+    // Charger les messages
+    $.ajax({
+        url: "/Message/GetMessages",
+        type: "GET",
+        data: { receiverId: receiverId },
+        success: function (messages) {
+            messages.forEach(msg => {
+                let messageClass = msg.senderId === parseInt(userId) ? "sent" : "received";
+                $("#chatWindow").prepend(`
+                    <div class="message ${messageClass}">
+                        <p>${msg.messageText}</p>
+                    </div>
+                `);
+            });
+        },
+        error: function (err) {
+            console.error("❌ Erreur lors du chargement des messages :", err);
+        }
+    });
+}
+
+
+</script>
+
+</body>
+</html>

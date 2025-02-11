@@ -1,8 +1,13 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 using suivi_abonnement.Service.Interface;
 using suivi_abonnement.Models;
+using suivi_abonnement.Hubs;
 using System;
+using System.Collections.Generic;
+using System.IO;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 
 namespace suivi_abonnement.Controllers
 {
@@ -11,12 +16,18 @@ namespace suivi_abonnement.Controllers
         private readonly IMessageService _messageService;
         private readonly IUserService _userService;
         private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly IHubContext<MessageHub> _hubContext;
 
-        public MessageController(IMessageService messageService, IUserService userService, IHttpContextAccessor httpContextAccessor)
+        public MessageController(
+            IMessageService messageService, 
+            IUserService userService, 
+            IHttpContextAccessor httpContextAccessor, 
+            IHubContext<MessageHub> hubContext)
         {
             _messageService = messageService;
             _userService = userService;
             _httpContextAccessor = httpContextAccessor;
+            _hubContext = hubContext;
         }
 
         [HttpGet]
@@ -27,113 +38,101 @@ namespace suivi_abonnement.Controllers
                 int userId = _httpContextAccessor.HttpContext.Session.GetInt32("UserId") ?? 0;
                 var userRole = _httpContextAccessor.HttpContext.Session.GetString("UserRole");
 
-                // Si l'utilisateur n'est pas connecté, redirigez-le vers la page de connexion
                 if (userId == 0)
                 {
-                    return RedirectToAction("Login", "Account"); // Remplacez "Account" et "Login" par vos valeurs réelles
+                    return RedirectToAction("Login", "Account");
                 }
-            
-                // Get users
+
                 var users = _userService.GetAllUsers();
+                var adminUser = _userService.GetAdmin();
 
-                var adminuser = _userService.GetAdmin();
-
-                // Get messages for the selected receiver (if any)
-                var messages = receiverId.HasValue
-                    ? _messageService.GetMessagesForConversation(userId, receiverId.Value)
+                var messages = receiverId.HasValue 
+                    ? _messageService.GetMessagesForConversation(userId, receiverId.Value) 
                     : new List<Message>();
 
-                if(receiverId.HasValue)
+                if (receiverId.HasValue)
                 {
                     _messageService.MarkMessagesAsRead(userId);
                 }
-
-                 var viewmodel = new AbonnementViewModel
-                 {
-                    MessageViewModel = new MessageViewModel
-                    {
-                        adminUser = adminuser?? new List<User>(),
-                        Messages = messages?? new List<Message>(),
-                        ReceiverId = receiverId,
-                        CurrentUserId = userId 
-                    }
-                 };
 
                 var model = new MessageViewModel
                 {
                     Users = users,
                     Messages = messages,
                     ReceiverId = receiverId,
-                    CurrentUserId = userId 
+                    CurrentUserId = userId
                 };
 
-                if(userRole == "admin")
+                var viewmodel = new AbonnementViewModel
                 {
-                    return View("~/Views/AdminPage/MessagePage.cshtml", model);
-                }
-                else
-                {
-                    return View("~/Views/Home/InboxPage.cshtml" , viewmodel);
-                }
+                    MessageViewModel = new MessageViewModel
+                    {
+                        Users = adminUser,
+                        Messages = messages,
+                        ReceiverId = receiverId,
+                        CurrentUserId = userId
+                    }
+                };
+
+                return userRole == "admin" 
+                    ? View("~/Views/AdminPage/MessagePage.cshtml", model) 
+                    : View("~/Views/Home/InboxPage.cshtml", viewmodel);
             }
             catch (Exception ex)
             {
-                // Log the exception (ajoutez votre logique de journalisation ici)
-                TempData["Error"] = "Une erreur s'est produite lors du chargement des messages. Veuillez réessayer plus tard.";
+                TempData["Error"] = "Une erreur s'est produite lors du chargement des messages.";
                 return RedirectToAction("Index");
             }
         }
 
         [HttpPost("Message/SendMessage")]
-        public IActionResult SendMessage(int receiverId, string messageText, IFormFile attachment, IFormFile image)
+        public async Task<IActionResult> SendMessageToReceiver(int receiverId, string messageText)
         {
             try
             {
                 int senderId = _httpContextAccessor.HttpContext.Session.GetInt32("UserId") ?? 0;
 
                 if (senderId == 0)
-                    return RedirectToAction("Login", "Account");
-
-                if (string.IsNullOrEmpty(messageText) && attachment == null && image == null)
                 {
-                    TempData["Error"] = "Veuillez fournir un message ou une pièce jointe.";
-                    return RedirectToAction("Index", new { receiverId });
+                    Console.WriteLine("❌ Utilisateur non authentifié.");
+                    return Unauthorized();
                 }
 
-                // Transformation du texte du message pour rendre les liens cliquables
+                if (string.IsNullOrEmpty(messageText))
+                {
+                    Console.WriteLine("⚠️ Message vide.");
+                    return BadRequest("Le message ne peut pas être vide.");
+                }
+
                 messageText = ConvertLinksToHtmlLinks(messageText);
 
-                // Gestion des pièces jointes (sauvegarde des fichiers)
-                if (attachment != null)
-                {
-                    var filePath = Path.Combine("wwwroot/uploads", attachment.FileName);
-                    using (var stream = new FileStream(filePath, FileMode.Create))
-                    {
-                        attachment.CopyTo(stream);
-                    }
-                    messageText += $" [Fichier joint : {attachment.FileName}]";
-                }
+                Console.WriteLine($"📩 Message envoyé de {senderId} à {receiverId}: {messageText}");
 
                 _messageService.SendMessage(senderId, receiverId, messageText);
-                return RedirectToAction("Index", new { receiverId });
+
+                await _hubContext.Clients.User(receiverId.ToString())
+                    .SendAsync("ReceiveMessage", senderId, messageText);
+
+                await _hubContext.Clients.User(receiverId.ToString())
+                    .SendAsync("NotifyNewMessage", senderId);
+
+                return Ok();
             }
             catch (Exception ex)
             {
-                Console.WriteLine("Erreur lors de l'envoi du message : " + ex.Message);
-                return RedirectToAction("Index", new { receiverId });
+                Console.WriteLine($"❌ Erreur dans SendMessage: {ex.Message}");
+                return StatusCode(500, "Erreur serveur");
             }
         }
 
-        // Méthode pour convertir les liens en HTML cliquable
+
+
         private string ConvertLinksToHtmlLinks(string messageText)
         {
-            // Expression régulière pour détecter les liens
             string pattern = @"(https?://[^\s]+)";
             string replacement = @"<a href=""$1"" target=""_blank"">$1</a>";
             return Regex.Replace(messageText, pattern, replacement);
         }
-
-
 
         [HttpGet("Message/searchUser")]
         public IActionResult searchUser(string name)
@@ -150,48 +149,24 @@ namespace suivi_abonnement.Controllers
                         Users = new List<User> { user }
                     };
 
-                    var viewmodel = new AbonnementViewModel
-                    {
-                        MessageViewModel = new MessageViewModel
-                        {
-                            ReceiverId = user.Id,
-                            Users = new List<User> { user }
-                        }
-                    };
-
-                    if (userRole == "admin")
-                    {
-                        return View("~/Views/AdminPage/MessagePage.cshtml", model);
-                    }
-                    else
-                    {
-                        return View("~/Views/Home/InboxPage.cshtml", viewmodel);
-                    }
+                    return userRole == "admin" 
+                        ? View("~/Views/AdminPage/MessagePage.cshtml", model) 
+                        : View("~/Views/Home/InboxPage.cshtml", model);
                 }
                 else
                 {
                     TempData["Error"] = "Aucun utilisateur trouvé avec ce nom.";
-                    if (userRole == "admin")
-                    {
-                        return View("~/Views/AdminPage/MessagePage.cshtml");
-                    }
-                    else
-                    {
-                        return View("~/Views/Home/InboxPage.cshtml");
-                    }
+                    return userRole == "admin" 
+                        ? View("~/Views/AdminPage/MessagePage.cshtml") 
+                        : View("~/Views/Home/InboxPage.cshtml");
                 }
             }
             catch (Exception ex)
             {
                 Console.WriteLine("Erreur lors de la recherche de l'utilisateur : " + ex.Message);
-                if (userRole == "admin")
-                {
-                    return View("~/Views/AdminPage/MessagePage.cshtml");
-                }
-                else
-                {
-                    return View("~/Views/Home/InboxPage.cshtml");
-                }
+                return userRole == "admin" 
+                    ? View("~/Views/AdminPage/MessagePage.cshtml") 
+                    : View("~/Views/Home/InboxPage.cshtml");
             }
         }
 
@@ -214,7 +189,6 @@ namespace suivi_abonnement.Controllers
             }
         }
 
-
         [HttpPost("Message/MarkMessagesAsRead")]
         public JsonResult MarkMessagesAsRead()
         {
@@ -231,6 +205,22 @@ namespace suivi_abonnement.Controllers
             {
                 Console.WriteLine("Erreur lors du marquage des messages comme lus : " + ex.Message);
                 return Json(new { success = false });
+            }
+        }
+
+        [HttpGet]
+        public IActionResult GetMessages(int receiverId)
+        {
+            int userId = _httpContextAccessor.HttpContext.Session.GetInt32("UserId") ?? 0;
+            try
+            {
+                var messages = _messageService.GetMessagesForConversation(userId, receiverId);
+                return Json(messages);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Erreur lors du chargement des messages : " + ex.Message);
+                return Json(new { error = ex.Message });
             }
         }
 

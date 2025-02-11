@@ -56,16 +56,20 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5QYWdlXEluZGV4UGFnZS5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
+[D:/STAGE_L3/suivi_abonnement/Views/AdminPage/MessagePage - Copier.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5QYWdlXE1lc3NhZ2VQYWdlIC0gQ29waWVyLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/STAGE_L3/suivi_abonnement/Views/AdminPage/MessagePage copy.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5QYWdlXE1lc3NhZ2VQYWdlIGNvcHkuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
 [D:/STAGE_L3/suivi_abonnement/Views/AdminPage/MessagePage.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5QYWdlXE1lc3NhZ2VQYWdlLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
 [D:/STAGE_L3/suivi_abonnement/Views/AdminPage/PdfPage.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5QYWdlXFBkZlBhZ2UuY3NodG1s
-build_metadata.AdditionalFiles.CssScope = 
-
-[D:/STAGE_L3/suivi_abonnement/Views/AdminPage/Test.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5QYWdlXFRlc3QuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
 [D:/STAGE_L3/suivi_abonnement/Views/AuthClient/ForgotPassword.cshtml]
