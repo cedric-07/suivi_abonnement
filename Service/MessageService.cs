@@ -35,9 +35,9 @@ namespace suivi_abonnement.Service
         {
             return _messageRepository.CountMessagesisRead(userId);
         }
-        public void MarkMessagesAsRead(int userId)
+        public void MarkMessagesAsRead(int receiverId, int senderId)
         {
-            _messageRepository.MarkMessagesAsRead(userId);
+            _messageRepository.MarkMessagesAsRead(receiverId, senderId);
         }
        
     }

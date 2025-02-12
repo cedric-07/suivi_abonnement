@@ -50,7 +50,8 @@ namespace suivi_abonnement.Hubs
             }
         }
 
-        // 🔥 Assure-toi que la méthode existe et est publique
+        
+
         public async Task SendMessageToReceiver(int receiverId, string message)
         {
             try
@@ -59,17 +60,11 @@ namespace suivi_abonnement.Hubs
 
                 if (!senderId.HasValue || string.IsNullOrEmpty(message))
                 {
-                    Console.WriteLine($"❌ Erreur SignalR: senderId ou message invalide. senderId: {senderId}, message: '{message}'");
+                    Console.WriteLine($"❌ [SendMessageToReceiver] Erreur SignalR: senderId ou message invalide. senderId: {senderId}, message: '{message}'");
                     return;
                 }
 
-                Console.WriteLine($"📩 Message reçu de {senderId.Value} à {receiverId}: {message}");
-
-                if (_messageService == null)
-                {
-                    Console.WriteLine("⚠️ Erreur: _messageService est NULL. Vérifiez l'injection de dépendance.");
-                    return;
-                }
+                Console.WriteLine($"📩 [SendMessageToReceiver] Message reçu de {senderId.Value} à {receiverId}: {message}");
 
                 _messageService.SendMessage(senderId.Value, receiverId, message);
 
@@ -77,22 +72,80 @@ namespace suivi_abonnement.Hubs
                 {
                     foreach (var connectionId in ConnectedUsers[receiverId])
                     {
-                        Console.WriteLine($"🔗 Envoi du message à {connectionId} via SignalR");
+                        Console.WriteLine($"🔗 [SendMessageToReceiver] Envoi du message à {connectionId} via SignalR");
                         await Clients.Client(connectionId).SendAsync("ReceiveMessage", senderId.Value, message);
                     }
                 }
                 else
                 {
-                    Console.WriteLine($"⚠️ Utilisateur {receiverId} n'est pas en ligne.");
+                    Console.WriteLine($"⚠️ [SendMessageToReceiver] Utilisateur {receiverId} n'est pas en ligne.");
                 }
 
-                await Clients.Others.SendAsync("NotifyNewMessage", receiverId);
+                // 🔥 Toujours envoyer `NotifyNewMessage` si la conversation n'est pas ouverte
+                await Clients.User(receiverId.ToString()).SendAsync("NotifyNewMessage", senderId.Value);
+                Console.WriteLine($"📬 [SendMessageToReceiver] SignalR - NotifyNewMessage envoyé à l'utilisateur {receiverId} (de {senderId.Value})");
+
+                // 🔥 Envoyer le nombre de messages non lus
+                await SendUnreadMessagesCount(receiverId);
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"❌ Erreur dans SendMessage (SignalR) : {ex.Message}");
+                Console.WriteLine($"❌ [SendMessageToReceiver] Erreur dans SendMessage (SignalR) : {ex.Message}");
             }
         }
+
+        public async Task MarkMessagesAsRead(int senderId, int receiverId)
+        {
+            try
+            {
+                Console.WriteLine($"✅ [MarkMessagesAsRead] Marquer les messages de {senderId} à {receiverId} comme lus.");
+
+                // 🔥 Mettre à jour les messages en base de données
+                _messageService.MarkMessagesAsRead(senderId, receiverId);
+
+                // 🔥 Informer l'expéditeur que ses messages ont été lus
+                if (ConnectedUsers.ContainsKey(senderId))
+                {
+                    foreach (var connectionId in ConnectedUsers[senderId])
+                    {
+                        await Clients.Client(connectionId).SendAsync("MessagesMarkedAsRead", receiverId);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"❌ [MarkMessagesAsRead] Erreur : {ex.Message}");
+            }
+        }
+
+
+        public async Task SendUnreadMessagesCount(int userId)
+        {
+            try
+            {
+                if (userId == 0)
+                    return;
+
+                // 🔥 Appel du service pour obtenir le nombre de messages non lus
+                int unreadCount = _messageService.CountMessagesisRead(userId);
+
+                Console.WriteLine($"📬 Notification : {unreadCount} messages non lus pour l'utilisateur {userId}");
+
+                // Vérifier si l'utilisateur est connecté
+                if (ConnectedUsers.ContainsKey(userId))
+                {
+                    foreach (var connectionId in ConnectedUsers[userId])
+                    {
+                        await Clients.Client(connectionId).SendAsync("ReceiveUnreadMessagesCount", unreadCount);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"❌ Erreur dans SendUnreadMessagesCount : {ex.Message}");
+            }
+        }
+
 
     }
 }

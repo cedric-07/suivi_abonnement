@@ -44,6 +44,23 @@
             color: darkblue;
 
         }
+        .message-container {
+            display: flex;
+            align-items: flex-end;
+            margin-bottom: 10px;
+        }
+
+        .message-container.sent {
+            justify-content: flex-end;
+        }
+
+        .message-container.received {
+            justify-content: flex-start;
+        }
+        .avatar i {
+            font-size: 30px;
+            color: #6c757d;
+        }
         .message-list {
             flex: 1;
             padding: 15px;
@@ -56,25 +73,33 @@
             border-top: 1px solid #ddd;
         }
         .message {
-            padding: 10px 15px;
-            border-radius: 18px;
-            word-wrap: break-word;
+            max-width: 70%;
+            padding: 10px;
+            border-radius: 15px;
+            position: relative;
+            font-size: 14px;
         }
-        .sent {
-            background: #24a74f;
-            color: rgb(250, 250, 250);
-            margin-left:auto;
-            margin-right: 0;
+        .message.sent {
+            background-color: #dcf8c6;
+            text-align: right;
+            border-bottom-right-radius: 0;
         }
-        .received {
-            background: #e5e5ea;
-            color: black;
+
+        .message.received {
+            background-color: #fff;
+            border-bottom-left-radius: 0;
         }
         .message-date {
+            display: block;
             font-size: 12px;
-            text-align: right;
+            color: #888;
             margin-top: 5px;
-            color: #666;
+        }
+
+        .message-status {
+            font-size: 12px;
+            color: #34b7f1;
+            margin-left: 5px;
         }
         .list-group-item {
             cursor: pointer;
@@ -87,11 +112,36 @@
             width: 30%;
             border-radius: 15px;
         }
+
+        .badge {
+            font-size: 0.8rem;
+            border-radius: 50%;
+            padding: 5px 8px;
+            margin-left: auto;
+            margin-right: 10px;
+        }
+        .title {
+            font-weight: bold;
+            font-size: 0.8em;
+            color: #0d2d5a;
+            letter-spacing: 1px;
+        }
         
     </style>
 </head>
 <body>
-    <div class="container mt-4">
+    <div class="container-fluid fade-in visible">
+         <div class="row align-items-center">
+            <div class="col mb-4">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb bg-transparent mb-0">
+                        <li class="breadcrumb-item"><i class="bi bi-house-door-fill me-1"></i>Pages</li>
+                        <li class="breadcrumb-item active" aria-current="page"><i class="bi bi-chat-fill me-1"></i>Boite de messages</li>
+                    </ol>
+                    <h3 class="title">Boite de messages</h3>
+                </nav>
+            </div>
+        </div>
         <div class="chat-container">
             <div class="chat-list p-3">
                 <h5 class="mb-3">Conversations</h5>
@@ -110,10 +160,12 @@
                             </div>
                             <span>@user.Username</span>
                             <span class="user-status @(user.IsConnected ? "online" : "offline")"></span>
-                            <span class="badge bg-danger ms-auto d-none">0</span>
+                            <span id="notif-@user.Id" class="badge bg-danger ms-auto d-none">0</span>
                         </li>
                     }
                 </ul>
+
+
             </div>
             <div class="chat-box">
                 <div class="chat-header">
@@ -157,153 +209,225 @@
         </div>
     </div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/3.1.20/signalr.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/3.1.20/signalr.min.js"></script>
     <script>
-        var userId = '@(Context.Session.GetInt32("UserId"))';
-        var connection = new signalR.HubConnectionBuilder().withUrl("/messageHub").build();
+    var userId = '@(Context.Session.GetInt32("UserId"))';
+    var connection = new signalR.HubConnectionBuilder()
+        .withUrl("/messageHub")
+        .withAutomaticReconnect()
+        .build();
 
+    // 🚀 Connexion SignalR avec reconnexion automatique
+    function startConnection() {
         connection.start().then(() => {
-            console.log("SignalR connecté !");
+            console.log("✅ SignalR connecté !");
+            restoreUnreadNotifications();
         }).catch(err => {
-            console.error(err.toString());
+            console.error("❌ Erreur de connexion SignalR :", err);
+            setTimeout(startConnection, 5000);
         });
+    }
 
-        // Fonction pour envoyer un message
-        $("#sendButton").click(function () {
-            var receiverId = $("#receiverId").val();
-            var message = $("#messageText").val();
+    startConnection();
 
-            if (!receiverId || !message) {
-                console.warn("⚠️ Impossible d'envoyer : receiverId ou message est vide.");
-                return;
-            }
+    connection.onreconnecting(() => console.warn("⚠️ SignalR tente de se reconnecter..."));
+    connection.onreconnected(() => {
+        console.log("✅ SignalR reconnecté !");
+        restoreUnreadNotifications();
+    });
+    connection.onclose(() => {
+        console.error("❌ SignalR déconnecté, tentative de reconnexion...");
+        setTimeout(startConnection, 5000);
+    });
 
-            try {
-                connection.invoke("SendMessageToReceiver", parseInt(receiverId), message)
-                    .then(() => {
-                        console.log("✅ Message envoyé avec succès via SignalR.");
+    // 📩 Fonction d'envoi de message
+    $("#sendButton").click(function () {
+        var receiverId = $("#receiverId").val();
+        var message = $("#messageText").val();
 
-                        var messageDate = new Date();
-                        var now = new Date();
-                        var dateDisplay = formatDate(messageDate, now);
+        if (!receiverId || !message.trim()) {
+            console.warn("⚠️ Impossible d'envoyer : receiverId ou message est vide.");
+            return;
+        }
 
-                        $("#messageText").val(""); // Vider l'input après l'envoi
+        connection.invoke("SendMessageToReceiver", parseInt(receiverId), message)
+            .then(() => {
+                console.log("✅ Message envoyé via SignalR.");
+                var messageDate = new Date();
+                var dateDisplay = formatDate(messageDate);
+                let messageStatus = "✓ Envoyé"; // Statut initial avant lecture
 
-                        // Ajouter le message envoyé en bas du chat
-                        $("#chatWindow").append(`
-                            <div class="message-row sent">
-                                <div class="avatar-sender">
-                                    <i class="fas fa-user-circle user-icon"></i>
-                                </div>
-                                <div class="message sent">
-                                    <p>${message}</p>
-                                    <span class="message-date">${dateDisplay}</span>
-                                </div>
-                            </div>
-                        `);
+                $("#messageText").val(""); // Effacer le champ texte après l'envoi
 
-                        scrollToBottom();
-                    })
-                    .catch(err => {
-                        console.error("❌ Erreur lors de l'envoi du message via SignalR :", err);
-                    });
-            } catch (error) {
-                console.error("🚨 Erreur d'exécution dans `SendMessage` :", error);
-            }
-        });
-
-        // Fonction pour recevoir un message
-        connection.on("ReceiveMessage", function (senderId, message) {
-            var isSentByCurrentUser = senderId === parseInt(userId);
-            var messageClass = isSentByCurrentUser ? "sent" : "received";
-            var avatarClass = isSentByCurrentUser ? "avatar-sender" : "avatar-receiver";
-
-            var messageDate = new Date();
-            var now = new Date();
-            var dateDisplay = formatDate(messageDate, now);
-
-            // Ajouter le message reçu en bas du chat
-            $("#chatWindow").append(`
-                <div class="message-row ${messageClass}">
-                    <div class="${avatarClass}">
-                        <i class="fas fa-user-circle user-icon"></i>
+                $("#chatWindow").append(`
+                    <div class="message-container sent">
+                        <div class="message sent">
+                            <p>${message}</p>
+                            <span class="message-date">${dateDisplay}</span>
+                            <span class="message-status">${messageStatus}</span>
+                        </div>
+                        <div class="avatar"><i class="bi bi-person-circle user-icon"></i></div>
                     </div>
-                    <div class="message ${messageClass}">
+                `);
+
+                scrollToBottom();
+            })
+            .catch(err => console.error("❌ Erreur d'envoi de message via SignalR :", err));
+    });
+
+
+    // 📬 Notification de nouveau message
+    connection.on("NotifyNewMessage", function (senderId) {
+        console.log("📬 Nouveau message de :", senderId);
+
+        var currentReceiverId = $("#receiverId").val();
+        if (parseInt(currentReceiverId) !== senderId) {
+            console.log("⚠️ Affichage d'une notification");
+
+            var notifBadge = $("#notif-" + senderId);
+            if (notifBadge.length > 0) {
+                var currentCount = parseInt(notifBadge.text()) || 0;
+                notifBadge.text(currentCount + 1).removeClass("d-none");
+                saveUnreadNotification(senderId, currentCount + 1);
+            } else {
+                console.warn("⚠️ Badge non trouvé pour l'utilisateur " + senderId);
+            }
+        }
+    });
+
+    // 📩 Réception d'un message
+    connection.on("ReceiveMessage", function (senderId, message) {
+        console.log("📩 Message reçu de :", senderId);
+
+        var currentReceiverId = $("#receiverId").val();
+        var messageDate = new Date();
+        var dateDisplay = formatDate(messageDate);
+        let messageStatus = "✓✓"; // Statut initial avant lecture
+
+
+        if (parseInt(currentReceiverId) === senderId) {
+            console.log("✅ Affichage du message en temps réel");
+
+            $("#chatWindow").append(`
+                <div class="message-container received">
+                    <div class="avatar"><i class="bi bi-person-circle user-icon"></i></div>
+                    <div class="message received">
                         <p>${message}</p>
                         <span class="message-date">${dateDisplay}</span>
+                        <span class="message-status">${messageStatus}</span>
                     </div>
                 </div>
             `);
-
             scrollToBottom();
-        });
 
-        // Fonction pour scroller en bas du chat automatiquement
-        function scrollToBottom() {
-            var chatWindow = $("#chatWindow");
-            chatWindow.scrollTop(chatWindow.prop("scrollHeight"));
-        }
+            // 🔥 Marquer comme lu dès réception du message
+            connection.invoke("MarkMessagesAsRead", parseInt(senderId), parseInt(userId))
+                .then(() => console.log("✅ Messages marqués comme lus pour", senderId))
+                .catch(err => console.error("❌ Erreur lors du marquage comme lu :", err));
+        } else {
+            console.warn("⚠️ Message reçu mais la conversation n'est pas ouverte !");
 
-        // Fonction pour formater la date
-        function formatDate(messageDate, now) {
-            if (
-                messageDate.getDate() === now.getDate() &&
-                messageDate.getMonth() === now.getMonth() &&
-                messageDate.getFullYear() === now.getFullYear()
-            ) {
-                return "Aujourd'hui à " + messageDate.toLocaleTimeString("fr-FR", { hour: "2-digit", minute: "2-digit" });
+            var notifBadge = $("#notif-" + senderId);
+            if (notifBadge.length > 0) {
+                var currentCount = parseInt(notifBadge.text()) || 0;
+                notifBadge.text(currentCount + 1).removeClass("d-none");
+                saveUnreadNotification(senderId, currentCount + 1);
             } else {
-                return messageDate.toLocaleDateString("fr-FR", { weekday: "long" }) + 
-                    " à " + 
-                    messageDate.toLocaleTimeString("fr-FR", { hour: "2-digit", minute: "2-digit" });
+                console.warn("⚠️ Badge non trouvé pour l'utilisateur " + senderId);
             }
         }
+    });
 
-        // Charger les messages dans le bon ordre
-        function selectUser(receiverId, receiverName) {
-            $("#receiverId").val(receiverId);
-            $("#chatTitle").text("Chat avec " + receiverName);
-            $("#chatWindow").empty();
 
-            // Réinitialiser le badge de notification
-            $("#notif-" + receiverId).text("0").addClass("d-none");
 
-            // Charger les anciens messages
-            $.ajax({
-                url: "/Message/GetMessages",
-                type: "GET",
-                data: { receiverId: receiverId },
-                success: function (messages) {
-                    messages.forEach(msg => {
-                        let messageClass = msg.senderId === parseInt(userId) ? "sent" : "received";
-                        let messagedate = new Date(msg.dateEnvoi);
-                        let now = new Date();
-                        let dateDisplay = formatDate(messagedate, now);
 
-                        // Ajouter les messages dans l'ordre naturel
-                        $("#chatWindow").append(`
-                            <div class="message-row ${messageClass}">
-                                <div class="message ${messageClass}">
-                                    <i class="bi bi-person-circle user-icon"></i>
-                                    <div class="message-content">
-                                        <p>${msg.messageText}</p>
-                                        <span class="message-date">${dateDisplay}</span>
-                                    </div>
-                                </div>
-                            </div>
-                        `);
-                    });
+    // 📩 Mettre à jour les ✓✓ Vu pour l'expéditeur
+    connection.on("MessageRead", function (receiverId) {
+        console.log("✅ Messages marqués comme lus par :", receiverId);
+        $(".message-row.sent .message-status").text("✓✓ Vu");
+    });
 
-                    scrollToBottom(); // Assurer que la conversation s'affiche en bas au chargement
-                },
-                error: function (err) {
-                    console.error("❌ Erreur lors du chargement des messages :", err);
-                }
-            });
+    // 🔥 Sauvegarde des notifications non lues
+    function saveUnreadNotification(userId, count) {
+        var unreadNotifications = JSON.parse(localStorage.getItem("unreadNotifications")) || {};
+        unreadNotifications[userId] = count;
+        localStorage.setItem("unreadNotifications", JSON.stringify(unreadNotifications));
+    }
+
+    // 🔄 Restauration des notifications non lues après rechargement
+    function restoreUnreadNotifications() {
+        var unreadNotifications = JSON.parse(localStorage.getItem("unreadNotifications")) || {};
+        for (var userId in unreadNotifications) {
+            var notifBadge = $("#notif-" + userId);
+            if (notifBadge.length > 0) {
+                notifBadge.text(unreadNotifications[userId]).removeClass("d-none");
+            }
         }
+    }
+
+    // 🎯 Sélection d'un utilisateur
+    function selectUser(receiverId, receiverName) {
+    console.log("🔄 Ouverture de la conversation avec :", receiverId);
+
+    $("#receiverId").val(receiverId);
+    $("#chatTitle").text("Chat avec " + receiverName);
+    $("#chatWindow").empty();
+
+    var notifBadge = $("#notif-" + receiverId);
+    if (notifBadge.length > 0 && !notifBadge.hasClass("d-none")) {
+        notifBadge.text("0").addClass("d-none");
+        saveUnreadNotification(receiverId, 0);
+    }
+
+    connection.invoke("MarkMessagesAsRead", parseInt(receiverId), parseInt(userId))
+        .then(() => console.log("✅ Messages marqués comme lus pour", receiverId))
+        .catch(err => console.error("❌ Erreur lors du marquage comme lu :", err));
+
+    // Charger les anciens messages via AJAX
+    $.ajax({
+        url: "/Message/GetMessages",
+        type: "GET",
+        data: { receiverId: receiverId },
+        success: function (messages) {
+            messages.forEach(msg => {
+                let isSent = msg.senderId === parseInt(userId);
+                let messageClass = isSent ? "sent" : "received";
+                let messageDate = new Date(msg.dateEnvoi);
+                let dateDisplay = formatDate(messageDate);
+                let messageStatus = msg.isSeen ? "✓✓ Vu" : "✓✓";
+
+                $("#chatWindow").append(`
+                    <div class="message-container ${messageClass}">
+                        ${isSent ? "" : `<div class="avatar"><i class="bi bi-person-circle user-icon"></i></div>`}
+                        <div class="message ${messageClass}">
+                            <p>${msg.messageText}</p>
+                            <span class="message-date">${dateDisplay}</span>
+                            <span class="message-status">${messageStatus}</span>
+                        </div>
+                        ${isSent ? `<div class="avatar"><i class="bi bi-person-circle user-icon"></i></div>` : ""}
+                    </div>
+                `);
+            });
+
+            scrollToBottom();
+        },
+        error: function (err) {
+            console.error("❌ Erreur chargement messages :", err);
+        }
+    });
+}
 
 
+    function scrollToBottom() {
+        $("#chatWindow").scrollTop($("#chatWindow").prop("scrollHeight"));
+    }
+
+    function formatDate(date) {
+        return date.toLocaleTimeString("fr-FR", { hour: "2-digit", minute: "2-digit" });
+    }
 </script>
+
+
 </body>
 
 </html>

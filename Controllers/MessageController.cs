@@ -50,10 +50,10 @@ namespace suivi_abonnement.Controllers
                     ? _messageService.GetMessagesForConversation(userId, receiverId.Value) 
                     : new List<Message>();
 
-                if (receiverId.HasValue)
-                {
-                    _messageService.MarkMessagesAsRead(userId);
-                }
+                // if (receiverId.HasValue)
+                // {
+                //     _messageService.MarkMessagesAsRead(userId);
+                // }
 
                 var model = new MessageViewModel
                 {
@@ -84,6 +84,8 @@ namespace suivi_abonnement.Controllers
                 return RedirectToAction("Index");
             }
         }
+
+       
 
         [HttpPost("Message/SendMessage")]
         public async Task<IActionResult> SendMessageToReceiver(int receiverId, string messageText)
@@ -189,24 +191,24 @@ namespace suivi_abonnement.Controllers
             }
         }
 
-        [HttpPost("Message/MarkMessagesAsRead")]
-        public JsonResult MarkMessagesAsRead()
-        {
-            try
-            {
-                int userId = _httpContextAccessor.HttpContext.Session.GetInt32("UserId") ?? 0;
-                if (userId == 0)
-                    return Json(new { success = false });
+        // [HttpPost("Message/MarkMessagesAsRead")]
+        // public JsonResult MarkMessagesAsRead()
+        // {
+        //     try
+        //     {
+        //         int userId = _httpContextAccessor.HttpContext.Session.GetInt32("UserId") ?? 0;
+        //         if (userId == 0)
+        //             return Json(new { success = false });
 
-                _messageService.MarkMessagesAsRead(userId);
-                return Json(new { success = true });
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine("Erreur lors du marquage des messages comme lus : " + ex.Message);
-                return Json(new { success = false });
-            }
-        }
+        //         _messageService.MarkMessagesAsRead(userId);
+        //         return Json(new { success = true });
+        //     }
+        //     catch (Exception ex)
+        //     {
+        //         Console.WriteLine("Erreur lors du marquage des messages comme lus : " + ex.Message);
+        //         return Json(new { success = false });
+        //     }
+        // }
 
         [HttpGet]
         public IActionResult GetMessages(int receiverId)

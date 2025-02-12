@@ -262,7 +262,7 @@ namespace suivi_abonnement.Repository
             return count;
         }
 
-        public void MarkMessagesAsRead(int userId)
+        public void MarkMessagesAsRead(int receiverId, int senderId)
         {
             try
             {
@@ -272,20 +272,22 @@ namespace suivi_abonnement.Repository
                     string query = @"
                         UPDATE messages 
                         SET isread = true 
-                        WHERE receiverid = @userId";
+                        WHERE receiverid = @receiverId AND senderid = @senderId AND isread = false";
 
                     using (var command = new MySqlCommand(query, connection))
                     {
-                        command.Parameters.AddWithValue("@userId", userId);
+                        command.Parameters.AddWithValue("@receiverId", receiverId);
+                        command.Parameters.AddWithValue("@senderId", senderId);
                         command.ExecuteNonQuery();
                     }
                 }
             }
-            catch (System.Exception ex)
+            catch (Exception ex)
             {
-                throw new System.Exception($"Erreur lors de la mise à jour des messages en tant que lus : {ex.Message}");
+                throw new Exception($"❌ Erreur lors de la mise à jour des messages en tant que lus : {ex.Message}");
             }
         }
+
         
     }
 }

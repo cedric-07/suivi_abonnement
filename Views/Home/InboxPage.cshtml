@@ -6,429 +6,418 @@
 }
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>WhatsApp-like Interface</title>
+    <title>Boîte de Messages</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
     <style>
-        <style>
         body {
             background-color: #f0f2f5;
+            padding-top: 10%;
         }
-
         .chat-container {
-            height: 90vh;
-            display: grid;
-            grid-template-columns: 30% 70%;
+            height: 85vh;
+            display: flex;
             border-radius: 10px;
             overflow: hidden;
+            box-shadow: 0px 4px 10px rgba(0,0,0,0.1);
         }
-
         .chat-list {
-            background-color: #0d2d5a;
-            border-right: 1px solid #ddd;
-            overflow-y: auto;
+            width: 30%;
+            background: white;
         }
-
+        .chat-box {
+            width: 70%;
+            display: flex;
+            flex-direction: column;
+            background: #e5ddd5;
+        }
         .chat-header {
-            padding: 10px;
-            background-color: #0d2d5a;
-            color: #fff;
-        }
-
-        .message-input {
-            padding: 10px;
-            background-color: #0d2d5a;
-            color: #fff;
-        }
-
-        .message-list {
-            display: flex;
-            flex-direction: column; /* Correction pour un affichage normal */
-            height: calc(90vh - 120px);
-            overflow-y: auto;
             padding: 15px;
-            background-color: #e5ddd5;
-        }
-
-        .message-row {
-            display: flex;
-            align-items: flex-start;
-            margin-bottom: 10px;
-        }
-
-        .message {
-            padding: 8px 12px;
-            margin-bottom: 10px;
-            border-radius: 20px;
-            max-width: 70%;
-            position: relative; /* Permet de positionner la date en bas du message */
-        }
-
-        .sent {
-            background-color: #dcf8c6;
-            align-self: flex-end;
-            text-align: right;
-            margin-left: auto;
-        }
-
-        .received {
-            background-color: #ffffff;
-            align-self: flex-start;
-            text-align: left;
-            margin-left: 10px;
-        }
-
-        .message-date {
-            font-size: 0.75rem;
-            color: #999;
-            position: inherit;
-            bottom: -5px;
-        }
-
-        .message-input {
-            align-items: center;
-            justify-content: center;
-        }
-
-        .message-input textarea {
-            border-radius: 10px;
-            margin-right: 10px;
-        }
-
-        .icon-btn {
-            background: none;
-            border: none;
-            font-size: 1.5rem;
-            color: #007bff;
-            margin-left: 8px;
-        }
-
-        .avatar-sender, .avatar-receiver {
-            margin-top: 5px;
-            margin-left: 10px;
-        }
-
-        .avatar-sender {
-            margin-right: 10px;
-        }
-
-        .avatar-receiver {
-            margin-left: 10px;
-        }
-        .chat-list a {
-            text-decoration: none;
-            color: inherit;
-        }
-        .discussion-header {
-            display: flex;
-            align-items: center;
-            background-color: #0d2d5a;
-        }
-        .discussion-header h5 {
-            color: #fff;
-            margin: 0;
-            padding: 10px;
-        }
-        .list-group-item {
-            cursor: pointer;
-            background-color: #0d2d5a;
-            color: #fff;
-        }
-        
-        .list-group-item {
-            border: none; /* Retirer les bordures par défaut */
-            padding: 12px 20px;
-            color: #fff;
-        }
-
-        .list-group-item:hover {
-            cursor: pointer;
-        }
-
-        .avatar {
-            width: 45px;
-            height: 45px;
-            border-radius: 50%;
-            background-color: #e0d8d8; /* Couleur de fond pour les avatars */
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .user-name {
-            font-weight: bold;
-            color: #fafafa;
-            font-size: 1rem;
-        }
-
-        .list-group-item .flex-grow-1 {
             display: flex;
             justify-content: space-between;
             align-items: center;
+            color: darkblue;
+
+        }
+        .message-container {
+            display: flex;
+            align-items: flex-end;
+            margin-bottom: 10px;
         }
 
-    /* Ajout d'un petit badge pour l'avatar si l'utilisateur est en ligne (par exemple) */
-        .avatar::after {
-            content: "";
-            position: absolute;
-            bottom: 5px;
-            right: 5px;
-            width: 12px;
-            height: 12px;
+        .message-container.sent {
+            justify-content: flex-end;
+        }
+
+        .message-container.received {
+            justify-content: flex-start;
+        }
+        .avatar i {
+            font-size: 30px;
+            color: #6c757d;
+        }
+        .message-list {
+            flex: 1;
+            padding: 15px;
+            overflow-y: auto;
+            color: darkblue;
+        }
+        .message-input {
+            padding: 10px;
+            background: white;
+            border-top: 1px solid #ddd;
+        }
+        .message {
+            max-width: 70%;
+            padding: 10px;
+            border-radius: 15px;
+            position: relative;
+            font-size: 14px;
+        }
+        .message.sent {
+            background-color: #dcf8c6;
+            text-align: right;
+            border-bottom-right-radius: 0;
+        }
+
+        .message.received {
+            background-color: #fff;
+            border-bottom-left-radius: 0;
+        }
+        .message-date {
+            display: block;
+            font-size: 12px;
+            color: #888;
+            margin-top: 5px;
+        }
+
+        .message-status {
+            font-size: 12px;
+            color: #34b7f1;
+            margin-left: 5px;
+        }
+        .list-group-item {
+            cursor: pointer;
+            border: none;
+        }
+        .message-row {
+            align-items: center;
+            margin-bottom: 10px;
+            height: auto;
+            width: 30%;
+            border-radius: 15px;
+        }
+
+        .badge {
+            font-size: 0.8rem;
             border-radius: 50%;
+            padding: 5px 8px;
+            margin-left: auto;
+            margin-right: 10px;
         }
-
-    /* Personnalisation de l'icône */
-        .fas.fa-user-circle {
-            font-size: 2.5rem; /* Augmenter la taille de l'icône de l'avatar */
-        }
-
         .title {
             font-weight: bold;
-            font-size: 1.1em;
+            font-size: 0.8em;
             color: #0d2d5a;
             letter-spacing: 1px;
         }
+        
     </style>
 </head>
 <body>
-    <div class="container-fluid fade-in visible">
-        <div class="row align-items-center">
-            <div class="col mb-4">
-                <nav aria-label="breadcrumb">
-                    <ol class="breadcrumb bg-transparent mb-0">
-                        <li class="breadcrumb-item"><a href="#"><i class="bi bi-house-door-fill me-1"></i>Pages</a></li>
-                        <li class="breadcrumb-item active" aria-current="page"><i class="bi bi-chat-fill me-1"></i>Boite de messages</li>
-                    </ol>
-                    <h3 class="title">Boite de messages</h3>
-                </nav>
-            </div>
-        </div>
-        <div class="d-flex justify-content-start mb-4">
-            <a href="@Url.Action("Create", "Fournisseurs")" class="btn-retour btn-animate" style="font-size: 15px;">
-                <i class="fa fa-plus-circle me-2 " style="font-size: 15px;"></i>Se reclamer
-            </a>
-        </div>
+    <div class="container">
         <div class="chat-container">
-            <!-- Liste des conversations -->
-            <div class="chat-list">
-                <div class="chat-header">
-                    <h5>Conversations</h5>
-                </div>
-                <!-- Barre de recherche -->
-                <!-- Barre de recherche sans bouton -->
-                <div class="p-3">
-                    <form asp-action="searchUser" method="get">
-                        <div class="input-group">
-                            <span class="input-group-text"><i class="fa fa-search"></i></span>
-                            <input type="text" class="form-control" placeholder="Recherche utilisateur..." name="name" />
-                        </div>
-                    </form>
-                </div>
-                <!-- Liste des utilisateurs -->
-                <ul id="userList" class="list-group list-group-flush">
+            <div class="chat-list p-3">
+                <h5 class="mb-3">Conversations</h5>
+                <form class="mb-3">
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="fa fa-search"></i></span>
+                        <input type="text" class="form-control" placeholder="Rechercher...">
+                    </div>
+                </form>
+                <ul class="list-group" id="userList">
                     @foreach (var user in Model?.MessageViewModel.Users)
                     {
-                        <li class="list-group-item d-flex align-items-center">
-                            <!-- Avatar -->
-                            <div class="avatar me-3">
-                                <i class="fas fa-user-circle text-white d-flex justify-content-center align-items-center" style="font-size: 2.5rem;"></i>
+                        <li class="list-group-item d-flex align-items-center" onclick="selectUser(@user.Id, '@user.Username')">
+                            <div class="me-3">
+                                <i class="fas fa-user-circle fa-2x"></i>
                             </div>
-                            <!-- Nom de l'utilisateur -->
-                            <div class="flex-grow-1">
-                                <span class="user-name">@user.Username</span>
-                            </div>
-                            <span id="notif-@user.Id" class="badge bg-danger d-none">0</span>
+                            <span>@user.Username</span>
                             <span class="user-status @(user.IsConnected ? "online" : "offline")"></span>
-                            <!-- Lien vers la conversation -->
-                            <a onclick="selectUser(@user.Id, '@user.Username')" class="stretched-link"></a>
+                            <span id="notif-@user.Id" class="badge bg-danger ms-auto d-none">0</span>
                         </li>
                     }
                 </ul>
 
-            </div>
 
-            <!-- Boîte de chat -->
+            </div>
             <div class="chat-box">
                 <div class="chat-header">
                     <h5 id="chatTitle">Sélectionnez un utilisateur</h5>
-                    <span class="user-status online" id="chatUserStatus"></span>
                 </div>
                 <div id="chatWindow" class="message-list">
                     @foreach (var message in Model.MessageViewModel.Messages)
                     {
-                        <div class="message @(message.SenderId == Model.MessageViewModel.CurrentUserId ? "sent" : "received")">
-                            <p>@Html.Raw(message.MessageText)
-                                <span class="message-date">@message.DateEnvoi.ToString("HH:mm")</span>
-                            </p>
-                            <span class="message-time">@message.DateEnvoi.ToString("HH:mm")</span>
-                        </div>
-                    }
-                </div>
-                <div class="message-input">
-                    <input type="hidden" id="receiverId" value="@Model.MessageViewModel.ReceiverId">
-                    <div class="d-flex">
-                        <textarea id="messageText" class="form-control" placeholder="Écrivez un message..."></textarea>
-                        <button id="sendButton" class="btn btn-primary ms-2"><i class="fas fa-paper-plane"></i></button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/3.1.20/signalr.min.js"></script>
-
-<script>
-        var userId = '@(Context.Session.GetInt32("UserId"))';
-        var connection = new signalR.HubConnectionBuilder().withUrl("/messageHub").build();
-
-        connection.start().then(() => {
-            console.log("SignalR connecté !");
-        }).catch(err => {
-            console.error(err.toString());
-        });
-
-        // Fonction pour envoyer un message
-        $("#sendButton").click(function () {
-            var receiverId = $("#receiverId").val();
-            var message = $("#messageText").val();
-
-            if (!receiverId || !message) {
-                console.warn("⚠️ Impossible d'envoyer : receiverId ou message est vide.");
-                return;
-            }
-
-            try {
-                connection.invoke("SendMessageToReceiver", parseInt(receiverId), message)
-                    .then(() => {
-                        console.log("✅ Message envoyé avec succès via SignalR.");
-
-                        var messageDate = new Date();
-                        var now = new Date();
-                        var dateDisplay = formatDate(messageDate, now);
-
-                        $("#messageText").val(""); // Vider l'input après l'envoi
-
-                        // Ajouter le message envoyé en bas du chat
-                        $("#chatWindow").append(`
+                        if (message.SenderId == Model.MessageViewModel.CurrentUserId)
+                        {
                             <div class="message-row sent">
                                 <div class="avatar-sender">
                                     <i class="fas fa-user-circle user-icon"></i>
                                 </div>
-                                <div class="message sent">
-                                    <p>${message}</p>
-                                    <span class="message-date">${dateDisplay}</span>
+                                <div class="sent">
+                                    <p>@message.MessageText</p>
+                                    <span class="message-date">@message.DateEnvoi</span>
                                 </div>
                             </div>
-                        `);
+                        }
+                        else
+                        {
+                            <div class="message-row received">
+                                <div class="avatar-receiver">
+                                    <i class="fas fa-user-circle user-icon"></i>
+                                </div>
+                                <div class="message received">
+                                    <p>@message.MessageText</p>
+                                    <span class="message-date">@message.DateEnvoi</span>
+                                </div>
+                            </div>
+                        }
+                    }
+                </div>
+                <div class="message-input d-flex">
+                    <input type="hidden" id="receiverId" value="@Model.MessageViewModel.ReceiverId">
+                    <textarea  id="messageText" class="form-control me-2" placeholder="Écrivez un message..."></textarea>
+                    <button id="sendButton" class="btn btn-primary"><i class="fas fa-paper-plane"></i></button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/3.1.20/signalr.min.js"></script>
+    <script>
+    var userId = '@(Context.Session.GetInt32("UserId"))';
+    var connection = new signalR.HubConnectionBuilder()
+        .withUrl("/messageHub")
+        .withAutomaticReconnect()
+        .build();
 
-                        scrollToBottom();
-                    })
-                    .catch(err => {
-                        console.error("❌ Erreur lors de l'envoi du message via SignalR :", err);
-                    });
-            } catch (error) {
-                console.error("🚨 Erreur d'exécution dans `SendMessage` :", error);
-            }
+    // 🚀 Connexion SignalR avec reconnexion automatique
+    function startConnection() {
+        connection.start().then(() => {
+            console.log("✅ SignalR connecté !");
+            restoreUnreadNotifications();
+        }).catch(err => {
+            console.error("❌ Erreur de connexion SignalR :", err);
+            setTimeout(startConnection, 5000);
         });
+    }
 
-        // Fonction pour recevoir un message
-        connection.on("ReceiveMessage", function (senderId, message) {
-            var isSentByCurrentUser = senderId === parseInt(userId);
-            var messageClass = isSentByCurrentUser ? "sent" : "received";
-            var avatarClass = isSentByCurrentUser ? "avatar-sender" : "avatar-receiver";
+    startConnection();
 
-            var messageDate = new Date();
-            var now = new Date();
-            var dateDisplay = formatDate(messageDate, now);
+    connection.onreconnecting(() => console.warn("⚠️ SignalR tente de se reconnecter..."));
+    connection.onreconnected(() => {
+        console.log("✅ SignalR reconnecté !");
+        restoreUnreadNotifications();
+    });
+    connection.onclose(() => {
+        console.error("❌ SignalR déconnecté, tentative de reconnexion...");
+        setTimeout(startConnection, 5000);
+    });
 
-            // Ajouter le message reçu en bas du chat
-            $("#chatWindow").append(`
-                <div class="message-row ${messageClass}">
-                    <div class="${avatarClass}">
-                        <i class="fas fa-user-circle user-icon"></i>
+    // 📩 Fonction d'envoi de message
+    $("#sendButton").click(function () {
+        var receiverId = $("#receiverId").val();
+        var message = $("#messageText").val();
+
+        if (!receiverId || !message.trim()) {
+            console.warn("⚠️ Impossible d'envoyer : receiverId ou message est vide.");
+            return;
+        }
+
+        connection.invoke("SendMessageToReceiver", parseInt(receiverId), message)
+            .then(() => {
+                console.log("✅ Message envoyé via SignalR.");
+                var messageDate = new Date();
+                var dateDisplay = formatDate(messageDate);
+                let messageStatus = "✓ Envoyé"; // Statut initial avant lecture
+
+                $("#messageText").val(""); // Effacer le champ texte après l'envoi
+
+                $("#chatWindow").append(`
+                    <div class="message-container sent">
+                        <div class="message sent">
+                            <p>${message}</p>
+                            <span class="message-date">${dateDisplay}</span>
+                            <span class="message-status">${messageStatus}</span>
+                        </div>
+                        <div class="avatar"><i class="bi bi-person-circle user-icon"></i></div>
                     </div>
-                    <div class="message ${messageClass}">
+                `);
+
+                scrollToBottom();
+            })
+            .catch(err => console.error("❌ Erreur d'envoi de message via SignalR :", err));
+    });
+
+
+    // 📬 Notification de nouveau message
+    connection.on("NotifyNewMessage", function (senderId) {
+        console.log("📬 Nouveau message de :", senderId);
+
+        var currentReceiverId = $("#receiverId").val();
+        if (parseInt(currentReceiverId) !== senderId) {
+            console.log("⚠️ Affichage d'une notification");
+
+            var notifBadge = $("#notif-" + senderId);
+            if (notifBadge.length > 0) {
+                var currentCount = parseInt(notifBadge.text()) || 0;
+                notifBadge.text(currentCount + 1).removeClass("d-none");
+                saveUnreadNotification(senderId, currentCount + 1);
+            } else {
+                console.warn("⚠️ Badge non trouvé pour l'utilisateur " + senderId);
+            }
+        }
+    });
+
+    // 📩 Réception d'un message
+    connection.on("ReceiveMessage", function (senderId, message) {
+        console.log("📩 Message reçu de :", senderId);
+
+        var currentReceiverId = $("#receiverId").val();
+        var messageDate = new Date();
+        var dateDisplay = formatDate(messageDate);
+        let messageStatus = "✓✓"; // Statut initial avant lecture
+
+
+        if (parseInt(currentReceiverId) === senderId) {
+            console.log("✅ Affichage du message en temps réel");
+
+            $("#chatWindow").append(`
+                <div class="message-container received">
+                    <div class="avatar"><i class="bi bi-person-circle user-icon"></i></div>
+                    <div class="message received">
                         <p>${message}</p>
                         <span class="message-date">${dateDisplay}</span>
+                        <span class="message-status">${messageStatus}</span>
                     </div>
                 </div>
             `);
-
             scrollToBottom();
-        });
 
-        // Fonction pour scroller en bas du chat automatiquement
-        function scrollToBottom() {
-            var chatWindow = $("#chatWindow");
-            chatWindow.scrollTop(chatWindow.prop("scrollHeight"));
-        }
+            // 🔥 Marquer comme lu dès réception du message
+            connection.invoke("MarkMessagesAsRead", parseInt(senderId), parseInt(userId))
+                .then(() => console.log("✅ Messages marqués comme lus pour", senderId))
+                .catch(err => console.error("❌ Erreur lors du marquage comme lu :", err));
+        } else {
+            console.warn("⚠️ Message reçu mais la conversation n'est pas ouverte !");
 
-        // Fonction pour formater la date
-        function formatDate(messageDate, now) {
-            if (
-                messageDate.getDate() === now.getDate() &&
-                messageDate.getMonth() === now.getMonth() &&
-                messageDate.getFullYear() === now.getFullYear()
-            ) {
-                return "Aujourd'hui à " + messageDate.toLocaleTimeString("fr-FR", { hour: "2-digit", minute: "2-digit" });
+            var notifBadge = $("#notif-" + senderId);
+            if (notifBadge.length > 0) {
+                var currentCount = parseInt(notifBadge.text()) || 0;
+                notifBadge.text(currentCount + 1).removeClass("d-none");
+                saveUnreadNotification(senderId, currentCount + 1);
             } else {
-                return messageDate.toLocaleDateString("fr-FR", { weekday: "long" }) + 
-                    " à " + 
-                    messageDate.toLocaleTimeString("fr-FR", { hour: "2-digit", minute: "2-digit" });
+                console.warn("⚠️ Badge non trouvé pour l'utilisateur " + senderId);
             }
         }
+    });
 
-        // Charger les messages dans le bon ordre
-        function selectUser(receiverId, receiverName) {
-            $("#receiverId").val(receiverId);
-            $("#chatTitle").text("Chat avec " + receiverName);
-            $("#chatWindow").empty();
 
-            // Réinitialiser le badge de notification
-            $("#notif-" + receiverId).text("0").addClass("d-none");
 
-            // Charger les anciens messages
-            $.ajax({
-                url: "/Message/GetMessages",
-                type: "GET",
-                data: { receiverId: receiverId },
-                success: function (messages) {
-                    messages.forEach(msg => {
-                        let messageClass = msg.senderId === parseInt(userId) ? "sent" : "received";
-                        let messagedate = new Date(msg.dateEnvoi);
-                        let now = new Date();
-                        let dateDisplay = formatDate(messagedate, now);
 
-                        // Ajouter les messages dans l'ordre naturel
-                        $("#chatWindow").append(`
-                            <div class="message-row ${messageClass}">
-                                <div class="message ${messageClass}">
-                                    <i class="bi bi-person-circle user-icon"></i>
-                                    <div class="message-content">
-                                        <p>${msg.messageText}</p>
-                                        <span class="message-date">${dateDisplay}</span>
-                                    </div>
-                                </div>
-                            </div>
-                        `);
-                    });
+    // 📩 Mettre à jour les ✓✓ Vu pour l'expéditeur
+    connection.on("MessageRead", function (receiverId) {
+        console.log("✅ Messages marqués comme lus par :", receiverId);
+        $(".message-row.sent .message-status").text("✓✓ Vu");
+    });
 
-                    scrollToBottom(); // Assurer que la conversation s'affiche en bas au chargement
-                },
-                error: function (err) {
-                    console.error("❌ Erreur lors du chargement des messages :", err);
-                }
-            });
+    // 🔥 Sauvegarde des notifications non lues
+    function saveUnreadNotification(userId, count) {
+        var unreadNotifications = JSON.parse(localStorage.getItem("unreadNotifications")) || {};
+        unreadNotifications[userId] = count;
+        localStorage.setItem("unreadNotifications", JSON.stringify(unreadNotifications));
+    }
+
+    // 🔄 Restauration des notifications non lues après rechargement
+    function restoreUnreadNotifications() {
+        var unreadNotifications = JSON.parse(localStorage.getItem("unreadNotifications")) || {};
+        for (var userId in unreadNotifications) {
+            var notifBadge = $("#notif-" + userId);
+            if (notifBadge.length > 0) {
+                notifBadge.text(unreadNotifications[userId]).removeClass("d-none");
+            }
         }
+    }
+
+    // 🎯 Sélection d'un utilisateur
+    function selectUser(receiverId, receiverName) {
+    console.log("🔄 Ouverture de la conversation avec :", receiverId);
+
+    $("#receiverId").val(receiverId);
+    $("#chatTitle").text("Chat avec " + receiverName);
+    $("#chatWindow").empty();
+
+    var notifBadge = $("#notif-" + receiverId);
+    if (notifBadge.length > 0 && !notifBadge.hasClass("d-none")) {
+        notifBadge.text("0").addClass("d-none");
+        saveUnreadNotification(receiverId, 0);
+    }
+
+    connection.invoke("MarkMessagesAsRead", parseInt(receiverId), parseInt(userId))
+        .then(() => console.log("✅ Messages marqués comme lus pour", receiverId))
+        .catch(err => console.error("❌ Erreur lors du marquage comme lu :", err));
+
+    // Charger les anciens messages via AJAX
+    $.ajax({
+        url: "/Message/GetMessages",
+        type: "GET",
+        data: { receiverId: receiverId },
+        success: function (messages) {
+            messages.forEach(msg => {
+                let isSent = msg.senderId === parseInt(userId);
+                let messageClass = isSent ? "sent" : "received";
+                let messageDate = new Date(msg.dateEnvoi);
+                let dateDisplay = formatDate(messageDate);
+                let messageStatus = msg.isSeen ? "✓✓ Vu" : "✓✓";
+
+                $("#chatWindow").append(`
+                    <div class="message-container ${messageClass}">
+                        ${isSent ? "" : `<div class="avatar"><i class="bi bi-person-circle user-icon"></i></div>`}
+                        <div class="message ${messageClass}">
+                            <p>${msg.messageText}</p>
+                            <span class="message-date">${dateDisplay}</span>
+                            <span class="message-status">${messageStatus}</span>
+                        </div>
+                        ${isSent ? `<div class="avatar"><i class="bi bi-person-circle user-icon"></i></div>` : ""}
+                    </div>
+                `);
+            });
+
+            scrollToBottom();
+        },
+        error: function (err) {
+            console.error("❌ Erreur chargement messages :", err);
+        }
+    });
+}
 
 
+    function scrollToBottom() {
+        $("#chatWindow").scrollTop($("#chatWindow").prop("scrollHeight"));
+    }
+
+    function formatDate(date) {
+        return date.toLocaleTimeString("fr-FR", { hour: "2-digit", minute: "2-digit" });
+    }
 </script>
 
+
+
 </body>
+
 </html>

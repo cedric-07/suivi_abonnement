@@ -9,7 +9,7 @@ namespace suivi_abonnement.Service.Interface
         int GetOrCreateConversation(int senderId, int receiverId);
         User searchUser(string name);   
         int CountMessagesisRead(int userId);
-        void MarkMessagesAsRead(int userId);
+       void MarkMessagesAsRead(int receiverId, int senderId);
 
     }
 }
