@@ -2005,6 +2005,14 @@
       "PackagePath": "staticwebassets\\lib\\jquery\\dist\\jquery.min.map"
     },
     {
+      "Id": "D:\\STAGE_L3\\suivi_abonnement\\wwwroot\\rotativa\\wkhtmltoimage.exe",
+      "PackagePath": "staticwebassets\\rotativa\\wkhtmltoimage.exe"
+    },
+    {
+      "Id": "D:\\STAGE_L3\\suivi_abonnement\\wwwroot\\rotativa\\wkhtmltopdf.exe",
+      "PackagePath": "staticwebassets\\rotativa\\wkhtmltopdf.exe"
+    },
+    {
       "Id": "D:\\STAGE_L3\\suivi_abonnement\\wwwroot\\src\\fonts\\bootstrap\\bootstrap-icons.css",
       "PackagePath": "staticwebassets\\src\\fonts\\bootstrap\\bootstrap-icons.css"
     },

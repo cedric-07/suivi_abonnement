@@ -102,8 +102,98 @@
             max-height: 90px !important;
             margin-left: 30px !important;
         }
+        /* Badge rouge avec bordure */
+        #notifBadge {
+            background-color: red !important;
+            
+        }
 
-        
+        /* Style du dropdown notifications */
+        #notifList {
+            width: 350px !important;  /* Élargir la liste */
+            max-height: 400px;
+            overflow-y: auto;
+            border-radius: 10px;
+            background: #fff;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+            word-wrap: break-word;
+            white-space: normal;  /* Permettre le retour à la ligne */
+        }
+
+        /* Titre "Notifications" */
+        #notifList .header {
+            background-color: #1E2A3A;
+            color: white;
+            text-align: center;
+            padding: 10px;
+            font-size: 1rem;
+            font-weight: bold;
+            border-radius: 10px 10px 0 0;
+        }
+
+        /* Style pour chaque notification */
+        .notification-item {
+            list-style: none;
+            padding: 10px;
+            transition: background 0.3s ease;
+            border-bottom: 1px solid #ddd;
+            word-wrap: break-word;
+            white-space: normal;  /* Permettre le retour à la ligne */
+        }
+
+        /* Effet hover */
+        .notification-item:hover {
+            background: #fafafa;
+        }
+
+        /* Texte des notifications */
+        .notification-item h6,
+        .notification-item p {
+            font-size: 14px;
+            color: #333;
+            white-space: normal;  /* Permet de ne pas couper les mots */
+            word-break: break-word; /* Casse les mots longs s'ils dépassent */
+            overflow-wrap: break-word; /* Alternative pour assurer le retour à la ligne */
+        }
+
+
+        /* Icône de cloche en rouge pour les notifications non lues */
+        .notification-item .fa-bell {
+            font-size: 18px;
+            border-radius: 50%;
+            padding: 6px;
+            color: white;
+        }
+
+        .notification-item .fa-bell.unread {
+            background-color: #d81616; /* Rouge pour les non lues */
+        }
+
+        .notification-item .fa-bell.read {
+            background-color: #000000; /* Noir pour les lues */
+        }
+
+        /* Texte et description */
+        .notification-item h6 {
+            font-size: 14px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .notification-item p {
+            font-size: 12px;
+            color: #555;
+        }
+
+        /* Icône de validation */
+        .notification-item .fa-circle-thin, 
+        .notification-item .fa-circle {
+            font-size: 18px;
+            cursor: pointer;
+            color: gray;
+        }
+
+
             
         </style>
 </head>
@@ -192,130 +282,18 @@
                         </li>
 
                         <li class="nav-item dropdown pe-2 d-flex align-items-center">
-                            <a href="javascript:;" class="nav-link text-body p-0" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+                            <a href="javascript:;" class="nav-link text-body p-0" id="dropdownMenuButton" data-bs-toggle="dropdown">
                                 <i class="fa fa-bell cursor-pointer"></i>
-                                @if(@ViewBag.NbrNotifications > 0)
-                                {
-                                    <span class="badge badge-danger position-absolute top-0 start-100 translate-middle p-2 border border-light rounded-circle">
-                                        @ViewBag.NbrNotifications
-                                    </span>
-                                }       
+                                <span id="notifBadge" class="badge badge-danger position-absolute top-0 start-100 translate-middle p-2 border border-light rounded-circle" style="display: none;"></span>
                             </a>
-                            <ul class="dropdown-menu dropdown-menu-end px-2 py-3 me-sm-n4" aria-labelledby="dropdownMenuButton" style="border-radius: 10px; background: #fff; box-shadow: 0 6px 8px rgba(11, 33, 226, 0.1); font-size: 0.875rem; width: 250px;">
-                                <div class="text-center pb-2" style="background-color: #1E2A3A; border-radius: 10px 10px 0 0; padding: 10px;">
+                            <ul class="dropdown-menu dropdown-menu-end px-2 py-3 me-sm-n4" aria-labelledby="dropdownMenuButton" id="notifList" >
+                                <div class="text-center pb-2" >
                                     <h5 class="font-weight-bold text-white mb-1" style="font-size: 1rem;">Notifications</h5>
                                 </div>
-
-                                @if (@ViewBag.NbrNotifications > 0 && @ViewBag.Notifications != null)
-                                {
-                                    <div class="scrollable-notifications" style="max-height: 250px; overflow-y: auto;">
-                                        @foreach (var notification in @ViewBag.Notifications)
-                                        {
-                                            <li class="mb-3 notification-item" data-notification-id="@notification.Id" data-createdat="@notification.CreatedAt" style="list-style: none; padding: 0;">
-                                                <a href="#" class="dropdown-item p-2 bg-transparent shadow-none rounded-2 text-decoration-none" style="border-left: none; transition: all 0.3s ease; padding-left: 10px; padding-right: 10px; cursor: pointer;" onclick="markAsRead(@notification.Id)">
-                                                    <div class="d-flex py-1">
-                                                        @if(notification.Status == "non lu")
-                                                        {
-                                                            <div class="d-flex align-items-center me-2">
-                                                                <i class="fa fa-bell text-light" style="font-size: 18px; border-radius: 50%; background-color: #d81616; padding: 6px;"></i>
-                                                            </div>
-                                                        }
-                                                        else
-                                                        {
-                                                            <div class="d-flex align-items-center me-2">
-                                                                <i class="fa fa-bell text-light" style="font-size: 18px; border-radius: 50%; background-color: #000000; padding: 6px;"></i>
-                                                            </div>
-                                                        }
-                                                        <div class="d-flex flex-column justify-content-center" style="width: 100%; word-wrap: break-word;">
-                                                            @if(notification.Status == "lu")
-                                                            {
-                                                                @if(notification.Type == "alert")
-                                                                {
-                                                                    <!-- Titre avec coche pleine pour notification lue -->
-                                                                    <div class="d-flex justify-content-between align-items-center">
-                                                                        <h6 class="text-sm font-weight-bold mb-1" style="margin-bottom: 5px; white-space: normal; overflow: visible; text-overflow: clip;">
-                                                                            @notification.Type
-                                                                        </h6>
-                                                                        <i class="fa fa-circle text-muted" style="font-size: 18px; cursor: pointer;" onclick="markAsRead(@notification.Id)"></i>
-                                                                    </div>
-                                                                    <p class="text-xs mb-2" style="font-size: 0.75rem; color: #000000; white-space: normal; overflow: visible; text-overflow: clip;">
-                                                                        @notification.Message
-                                                                    </p>
-                                                                    <p class="text-xs text-muted mb-0" style="font-size: 0.65rem; color: #000000;">
-                                                                        <i class="fa fa-clock me-1"></i>
-                                                                        <span>@notification.CreatedAt.ToString("dd MMM yyyy")</span>
-                                                                    </p>
-                                                                }
-                                                                else
-                                                                {
-                                                                    <!-- Titre avec coche pleine pour notification lue -->
-                                                                    <div class="d-flex justify-content-between align-items-center">
-                                                                        <h6 class="text-sm font-weight-bold mb-1" style="margin-bottom: 5px; white-space: normal; overflow: visible; text-overflow: clip; color: #000000;">
-                                                                            @notification.Type
-                                                                        </h6>
-                                                                        <i class="fa fa-circle text-muted" style="font-size: 18px; cursor: pointer;" onclick="markAsRead(@notification.Id)"></i>
-                                                                    </div>
-                                                                    <p class="text-xs mb-2 text-muted" style="font-size: 0.75rem;  white-space: normal; overflow: visible; text-overflow: clip;">
-                                                                        @notification.Message
-                                                                    </p>
-                                                                    <p class="text-xs text-muted mb-0" style="font-size: 0.65rem;">
-                                                                        <i class="fa fa-clock me-1"></i>
-                                                                        <span>@notification.CreatedAt.ToString("dd MMM yyyy")</span>
-                                                                    </p>
-                                                                }
-                                                            }
-                                                            else
-                                                            {
-                                                                @if(notification.Type == "alert")
-                                                                {
-                                                                    <!-- Titre avec coche vide pour notification non lue -->
-                                                                    <div class="d-flex justify-content-between align-items-center">
-                                                                        <h6 class="text-sm font-weight-bold mb-1" style="margin-bottom: 5px; white-space: normal; overflow: visible; text-overflow: clip; color: #d81616;">
-                                                                            @notification.Type
-                                                                        </h6>
-                                                                        <i class="fa fa-circle-thin text-muted" style="font-size: 18px; cursor: pointer;" onclick="markAsRead(@notification.Id)"></i>
-                                                                    </div>
-                                                                    <p class="text-xs mb-2" style="font-size: 0.75rem; color: #000000; white-space: normal; overflow: visible; text-overflow: clip;">
-                                                                        @notification.Message
-                                                                    </p>
-                                                                    <p class="text-xs text-muted mb-0" style="font-size: 0.65rem; color: #000000;">
-                                                                        <i class="fa fa-clock me-1"></i>
-                                                                        <span>@notification.CreatedAt.ToString("dd MMM yyyy")</span>
-                                                                    </p>
-                                                                }
-                                                                else
-                                                                {
-                                                                    <!-- Titre avec coche vide pour notification non lue -->
-                                                                    <div class="d-flex justify-content-between align-items-center">
-                                                                        <h6 class="text-sm font-weight-bold mb-1" style="margin-bottom: 5px; white-space: normal; overflow: visible; text-overflow: clip; color: #d81616;">
-                                                                            @notification.Type
-                                                                        </h6>
-                                                                        <i class="fa fa-circle-thin text-muted" style="font-size: 18px; cursor: pointer;" onclick="markAsRead(@notification.Id)"></i>
-                                                                    </div>
-                                                                    <p class="text-xs mb-2" style="font-size: 0.75rem; color: #000000; white-space: normal; overflow: visible; text-overflow: clip;">
-                                                                        @notification.Message
-                                                                    </p>
-                                                                    <p class="text-xs text-muted mb-0" style="font-size: 0.65rem; color: #000000;">
-                                                                        <i class="fa fa-clock me-1"></i>
-                                                                        <span>@notification.CreatedAt.ToString("dd MMM yyyy")</span>
-                                                                    </p>
-                                                                }                                                                  
-                                                            }
-                                                        </div>
-                                                    </div>
-                                                </a>
-                                            </li>
-                                        }
-                                    </div>
-                                }
-                                else
-                                {
-                                    <li class="mb-2">
-                                        <p class="text-xs text-center text-secondary">Aucune notification.</p>
-                                    </li>
-                                }
+                                <div class="scrollable-notifications" style="max-height: 250px; overflow-y: auto;">
+                                    <!-- Notifications dynamiques chargées ici -->
+                                </div>
                             </ul>
-
                         </li>
                         <li class="nav-item d-flex align-items-center">
                             <a href="#logoutModal" data-bs-toggle="modal" class="nav-link text-body font-weight-bold px-0">
@@ -385,7 +363,7 @@
     <script src="../assets/js/core/bootstrap.min.js"></script>
     <script src="../assets/js/plugins/perfect-scrollbar.min.js"></script>
     <script src="../assets/js/plugins/smooth-scrollbar.min.js"></script>
-    <script>
+    @* <script>
         var win = navigator.platform.indexOf('Win') > -1;
         if (win && document.querySelector('#sidenav-scrollbar')) {
             var options = {
@@ -426,7 +404,93 @@
         });
         
 
+    </script> *@
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            function loadNotifications() {
+                $.ajax({
+                    url: "/Notification/GetNotificationsCount",
+                    type: "GET",
+                    success: function (data) {
+                        // Mise à jour du badge de notifications
+                        if (data.notificationCount > 0) {
+                            $("#notifBadge").text(data.notificationCount).show();
+                        } else {
+                            $("#notifBadge").hide();
+                        }
+
+                        // Construction de la liste des notifications
+                        let notifHtml = `
+                            <div class="header">Notifications</div>
+                            <div class="scrollable-notifications">
+                        `;
+
+                        if (data.notifications.length > 0) {
+                            data.notifications.forEach(notification => {
+                                let bellClass = notification.status === "non lu" ? "fa-bell unread" : "fa-bell read";
+                                let titleColor = notification.status === "non lu" ? "#d81616" : "#000000";
+
+                                notifHtml += `
+                                    <li class="notification-item d-flex" data-notification-id="${notification.id}">
+                                        <a href="#" class="dropdown-item d-flex p-2 w-100" onclick="markAsRead(${notification.id})">
+                                            <div class="d-flex align-items-center me-3">
+                                                <i class="fa ${bellClass}"></i>
+                                            </div>
+                                            <div class="d-flex flex-column justify-content-center w-100">
+                                                <div class="d-flex justify-content-between align-items-center">
+                                                    <h6 style="color: ${titleColor};">${notification.type}</h6>
+                                                    <i class="fa ${notification.status === 'non lu' ? 'fa-circle-thin' : 'fa-circle'}"></i>
+                                                </div>
+                                                <p>${notification.message}</p>
+                                                <p class="text-xs text-muted mb-0">
+                                                    <i class="fa fa-clock me-1"></i>
+                                                    <span>${new Date(notification.createdAt).toLocaleDateString()}</span>
+                                                </p>
+                                            </div>
+                                        </a>
+                                    </li>
+                                `;
+                            });
+                        } else {
+                            notifHtml += '<li class="mb-2"><p class="text-xs text-center text-secondary">Aucune notification.</p></li>';
+                        }
+
+                        notifHtml += `</div>`; // Fermeture du div scrollable
+
+                        $("#notifList").html(notifHtml);
+                    },
+                    error: function (xhr) {
+                        console.error("Erreur lors du chargement des notifications :", xhr.responseText);
+                    }
+                });
+            }
+
+            // Charger les notifications au chargement de la page
+            loadNotifications();
+
+            // Recharger les notifications toutes les 30 secondes
+            setInterval(loadNotifications, 30000);
+        });
+
+        function markAsRead(notificationId) {
+            $.ajax({
+                url: "/Notification/MarkAsRead",
+                type: "POST",
+                data: { id: notificationId },
+                success: function () {
+                    loadNotifications();
+                }
+            });
+        }
     </script>
+
+
+
 
     <!-- Github buttons -->
     <script async defer src="https://buttons.github.io/buttons.js"></script>

@@ -1,14 +1,12 @@
-@model suivi_abonnement.Models.AbonnementViewModel
-
 @{
-    ViewData["Title"] = "Liste des Abonnements";
+    ViewData["Title"] = "Acceuil";
     Layout = "~/Views/Shared/LayoutClient/_LayoutClient.cshtml";
 }
-<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
-
-<body class="blog-page">
+<body class="index-page">
   <main class="main">
-    <!-- Page Title -->
+    <!-- Hero Section -->
+
+      <!-- Page Title -->
     <div class="page-title">
       <div class="heading">
         <div class="container">
@@ -21,8 +19,16 @@
         </div>
       </div>
     </div><!-- End Page Title -->
+
+
+    <!-- About Section -->
     
-    <!-- Blog Posts Section -->
+
+
+    <!-- Recent Posts Section -->
+    
+
+    <!-- Contact Section -->
     <section id="blog-posts" class="blog-posts section">
         <div class="container">
             <div class="row gy-4">
@@ -272,107 +278,33 @@
         </div>
     </section><!-- /Blog Posts Section -->
 
-    <!-- Blog Pagination Section -->
-    <section id="blog-pagination" class="blog-pagination section">
-      <div class="container">
-        <div class="d-flex justify-content-center">
-                <ul class="pagination">
-                    <li class="page-item">
-                        <a class="page-link" href="@Url.Action("IndexPage", new { pageNumber = Math.Max(1, ViewBag.CurrentPage - 1) })" aria-label="Previous">
-                            <span aria-hidden="true">&laquo;</span>
-                        </a>
-                    </li>
-                    @for (int i = 1; i <= ViewBag.TotalPages; i++)
-                    {
-                        <li class="page-item @(i == ViewBag.CurrentPage ? "active" : "")">
-                            <a class="page-link" href="@Url.Action("IndexPage", new { pageNumber = i })">
-                                @i
-                            </a>
-                        </li>
-                    }
-                    <li class="page-item">
-                        <a class="page-link" href="@Url.Action("IndexPage", new { pageNumber = Math.Min(ViewBag.TotalPages, ViewBag.CurrentPage + 1) })" aria-label="Next">
-                            <span aria-hidden="true">&raquo;</span>
-                        </a>
-                    </li>
-                </ul>
-        </div>
-      </div>
-    </section><!-- /Blog Pagination Section -->
+  </main><!-- End #main -->
+  <!-- Scroll Top -->
+  <a href="#" id="scroll-top" class="scroll-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
 
-  </main>
-</body>
+  <!-- Preloader -->
 
+  <!-- Vendor JS Files -->
+  <script src="../assetsUser/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script src="../assetsUser/vendor/php-email-form/validate.js"></script>
+  <script src="../assetsUser/vendor/aos/aos.js"></script>
+  <script src="../assetsUser/vendor/glightbox/js/glightbox.min.js"></script>
+  <script src="../assetsUser/vendor/swiper/swiper-bundle.min.js"></script>
+  <script src="../assetsUser/vendor/purecounter/purecounter_vanilla.js"></script>
+  <script src="../assetsUser/vendor/imagesloaded/imagesloaded.pkgd.min.js"></script>
+  <script src="../assetsUser/vendor/isotope-layout/isotope.pkgd.min.js"></script>
+
+  <!-- Main JS File -->
+  <script src="../assetsUser/js/main.js"></script>
 <style>
-  .page-title {
+    .page-title {
       background: linear-gradient(to left, #0d2d5a, #d4d5dd) !important;
       color: #fff;
       padding: 50px 0;
   }
-
 </style>
-<script>
-        document.addEventListener("DOMContentLoaded", function () {
-        const detailModal = document.getElementById('detailModal');
+</body>
 
-        detailModal.addEventListener('show.bs.modal', function (event) {
-            const button = event.relatedTarget; // Bouton "Voir plus" qui a déclenché l'événement
 
-            // Extraire les données depuis les attributs data-*
-            const nom = button.getAttribute('data-nom');
-            const type = button.getAttribute('data-type');
-            const prix = button.getAttribute('data-prix');
-            const description = button.getAttribute('data-description');
-            const categorie = button.getAttribute('data-categorie');
-            const fournisseur = button.getAttribute('data-fournisseur');
-            const departement = button.getAttribute('data-departement');
-            const dateDebut = button.getAttribute('data-datedebut');
-            const expiration = button.getAttribute('data-expiration');
 
-            // Insérer les valeurs dans les éléments du modal
-            detailModal.querySelector('#modalNom').textContent = nom;
-            detailModal.querySelector('#modalType').textContent = `(${type})`;
-            detailModal.querySelector('#modalPrix').textContent = `${prix} Ariary`;
-            detailModal.querySelector('#modalDescription').textContent = description;
-            detailModal.querySelector('#modalCategorie').textContent = categorie;
-            detailModal.querySelector('#modalFournisseur').textContent = fournisseur;
-            detailModal.querySelector('#modalDepartement').textContent = departement;
-            detailModal.querySelector('#modalDateDebut').textContent = dateDebut;
-            detailModal.querySelector('#modalExpiration').textContent = expiration;
-        });
-    });
-
-    document.addEventListener('DOMContentLoaded', function () {
-        if (@(TempData["Message"] != null ? "true" : "false")) {
-            new bootstrap.Modal(document.getElementById('successModal')).show();
-        }
-
-        if (@(TempData["Error"] != null ? "true" : "false")) {
-            new bootstrap.Modal(document.getElementById('errorModal')).show();
-        }
-    });
-
-        <!-- Recharger la page si le formulaire de filtre est vide -->
-        document.addEventListener("DOMContentLoaded", function () {
-        const searchInput = document.querySelector('input[name="keyword"]');
-        const dateDebutFilter = document.getElementById('dateDebutFilter');
-        const dateExpirationFilter = document.getElementById('dateExpirationFilter');
-        const categoryFilter = document.getElementById('categoryFilter');
-        const typeFilter = document.getElementById('TypeFilter');
-
-        // Vérifier si le formulaire est vide
-        const isSearchEmpty = !searchInput.value;
-        const isDateDebutEmpty = !dateDebutFilter.value;
-        const isDateExpirationEmpty = !dateExpirationFilter.value;
-        const isCategoryEmpty = !categoryFilter.value;
-        const isTypeEmpty = !typeFilter.value;
-
-        // Si il n'y a aucune valeur de filtre ou de recherche, recharger la page
-        if (isSearchEmpty && isDateDebutEmpty && isDateExpirationEmpty && isCategoryEmpty && isTypeEmpty) {
-            setTimeout(function () {
-                window.location.reload(); // Recharger la page après un court délai pour laisser le navigateur enregistrer l'état
-            }, 1000); // Délai de 1 seconde
-        }
-    });
-
-</script>
+</html>

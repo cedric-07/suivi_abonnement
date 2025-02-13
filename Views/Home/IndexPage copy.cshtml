@@ -1,0 +1,378 @@
+@model suivi_abonnement.Models.AbonnementViewModel
+
+@{
+    ViewData["Title"] = "Liste des Abonnements";
+    Layout = "~/Views/Shared/LayoutClient/_LayoutClient.cshtml";
+}
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+
+<body class="index-page">
+  <main class="main">
+    <!-- Page Title -->
+    <div class="page-title">
+      <div class="heading">
+        <div class="container">
+          <div class="row d-flex justify-content-center text-center">
+            <div class="col-lg-8">
+              <h1>Listes des Abonnements</h1>
+                <p>Retrouvez ici la liste des abonnements disponibles.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div><!-- End Page Title -->
+    
+    <!-- Blog Posts Section -->
+    <section id="blog-posts" class="blog-posts section">
+        <div class="container">
+            <div class="row gy-4">
+                <div class="row my-3">
+                        <!-- Modal pour le message de succès -->
+                        <div class="modal fade" id="successModal" tabindex="-1" aria-labelledby="successModalLabel" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered">
+                                <div class="modal-content shadow border-0 rounded-4">
+                                    <div class="modal-body text-center py-5">
+                                        <div class="icon-container mb-4">
+                                            <div class="icon-circle bg-light d-flex align-items-center justify-content-center mx-auto" style="width: 80px; height: 80px; border-radius: 50%;">
+                                                <i class="bi bi-check-circle-fill" style="font-size: 40px; color: #28a745;"></i>
+                                            </div>
+                                        </div>
+                                        <h4 class="text-success fw-bold">Succès</h4>
+                                        <p class="text-muted fs-6 mt-3">@TempData["Message"]</p>
+                                        <button type="button" class="btn btn-dark px-5 py-2 rounded-pill text-uppercase mt-4" data-bs-dismiss="modal">
+                                            OK
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Modal pour le message d'erreur -->
+                        <div class="modal fade" id="errorModal" tabindex="-1" aria-labelledby="errorModalLabel" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered">
+                                <div class="modal-content shadow border-0 rounded-4">
+                                    <div class="modal-body text-center py-5">
+                                        <div class="icon-container mb-4">
+                                            <div class="icon-circle bg-light d-flex align-items-center justify-content-center mx-auto" style="width: 80px; height: 80px; border-radius: 50%;">
+                                                <i class="bi bi-x-circle-fill" style="font-size: 40px; color: #dc3545;"></i>
+                                            </div>
+                                        </div>
+                                        <h4 class="text-danger fw-bold">Erreur</h4>
+                                        <p class="text-muted fs-6 mt-3">@TempData["Error"]</p>
+                                        <button type="button" class="btn btn-dark px-5 py-2 rounded-pill text-uppercase mt-4" data-bs-dismiss="modal">
+                                            OK
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <form asp-action="IndexPage" method="get">
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="bi bi-search"></i></span>
+                                    <input type="text" class="form-control" placeholder="Recherche..." name="keyword">
+                                </div>
+                            </form>
+                        </div>
+
+                        <div class="col-md-4">
+                            <div class="dropdown">
+                                <button class="btn dropdown-toggle text-uppercase fw-bold shadow-sm" 
+                                        type="button" 
+                                        id="filterDropdown" 
+                                        data-bs-toggle="dropdown" 
+                                        aria-expanded="false" 
+                                        style="background-color: white; color: #0d2d5a; padding: 8px 15px; border: 1px solid #0d2d5a; border-radius: 50px; font-size: 14px;">
+                                    <i class="bi bi-funnel" style="font-size: 1.2rem; margin-right: 8px; color: #0d2d5a;"></i> Filtrer
+                                </button>
+                                <ul class="dropdown-menu p-3 rounded border-0 shadow-lg" aria-labelledby="filterDropdown" style="width: 300px;">
+                                    <form asp-action="IndexPage" method="get">
+                                        <li class="mb-3">
+                                            <label for="dateDebutFilter" class="form-label text-dark fw-bold" style="font-size: 13px;">Date de début</label>
+                                            <input type="datetime-local" class="form-control form-control-sm rounded-pill shadow-sm" id="dateDebutFilter" name="DateDebut" style="font-size: 12px;">
+                                        </li>
+                                        <li class="mb-3">
+                                            <label for="dateExpirationFilter" class="form-label text-dark fw-bold" style="font-size: 13px;">Date d'expiration</label>
+                                            <input type="datetime-local" class="form-control form-control-sm rounded-pill shadow-sm" id="dateExpirationFilter" name="ExpirationDate" style="font-size: 12px;">
+                                        </li>
+                                        <li class="mb-3">
+                                            <label for="categoryFilter" class="form-label text-dark fw-bold" style="font-size: 13px;">Catégorie</label>
+                                            <select class="form-select form-select-sm rounded-pill shadow-sm" id="categoryFilter" name="idcategorie" style="font-size: 12px;">
+                                                <option disabled selected>--Choisir une catégorie--</option>
+                                                @foreach (var categorie in Model.Categories)
+                                                {
+                                                    <option value="@categorie.Id">@categorie.Nom</option>
+                                                }
+                                            </select>
+                                        </li>
+                                        <li class="mb-3">
+                                            <label for="TypeFilter" class="form-label text-dark fw-bold" style="font-size: 13px;">Type</label>
+                                            <select class="form-select form-select-sm rounded-pill shadow-sm" id="TypeFilter" name="type" style="font-size: 12px;">
+                                                <option disabled selected>--Choisir une type--</option>
+                                                @foreach (var abonnement in Model.Abonnements)
+                                                {
+                                                    <option value="@abonnement.Type">@abonnement.Type</option>
+                                                }
+                                            </select>
+                                        </li>
+                                        <li>
+                                            <button type="submit" class="btn btn-outline-success w-100 rounded-pill text-uppercase fw-bold" style="font-size: 13px; padding: 8px;">Appliquer</button>
+                                        </li>
+                                    </form>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                <div class="container py-4">
+                    @foreach (var abonnement in Model.Abonnements)
+                    {
+                        <div class="card mb-4 shadow-lg rounded" style="border: none;">
+                            <div class="row g-0">
+                                <!-- Section principale -->
+                                <div class="col-md-4 d-flex align-items-center justify-content-center" style="background-color: #f1f3f5;">
+                                    <div class="text-center p-4">
+                                        <h4 class="text-primary">@abonnement.Nom</h4>
+                                        <h6 class="text-muted">(@abonnement.Type)</h6>
+                                        <p class="fw-bold text-success" style="font-size: 1.5rem;">
+                                            @abonnement.Prix.ToString("N2") Ariary
+                                        </p>
+                                        @if (abonnement.DateDebut > DateTime.Now)
+                                        {
+                                            <span class="badge bg-warning">En attente</span>
+                                        }
+                                        else if (abonnement.ExpirationDate < DateTime.Now)
+                                        {
+                                            <span class="badge bg-danger">Expiré</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="badge bg-success">Actif</span>
+                                        }
+                                    </div>
+                                </div>
+
+                                <!-- Section de détails -->
+                                <div class="col-md-8">
+                                    <div class="card-body">
+                                        <h5 class="card-title text-uppercase text-secondary">Détails :</h5>
+                                        <div class="row mb-3">
+                                            <div class="col-md-6">
+                                                <ul class="list-unstyled">
+                                                    <li><strong>Catégorie :</strong> @abonnement.NomCategorie</li>
+                                                    <li><strong>Fournisseur :</strong> @abonnement.NomFournisseur</li>
+                                                    <li><strong>Département :</strong> @abonnement.NomDepartement</li>
+                                                </ul>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <ul class="list-unstyled">
+                                                    <li><strong>Date de début :</strong> @abonnement.DateDebut.ToString("d MMM yyyy")</li>
+                                                    <li><strong>Date d'expiration :</strong> @abonnement.ExpirationDate.ToString("d MMM yyyy")</li>
+                                                </ul>
+                                            </div>
+                                            
+                                        </div>
+
+                                        <div class="text-end">
+                                            <button type="button" 
+                                                    class="btn btn-outline-primary rounded-pill px-4" 
+                                                    data-bs-toggle="modal" 
+                                                    data-bs-target="#detailModal" 
+                                                    data-id="@abonnement.Id"
+                                                    data-nom="@abonnement.Nom"
+                                                    data-type="@abonnement.Type"
+                                                    data-prix="@abonnement.Prix"
+                                                    data-description="@abonnement.Description"
+                                                    data-categorie="@abonnement.NomCategorie"
+                                                    data-fournisseur="@abonnement.NomFournisseur"
+                                                    data-departement="@abonnement.NomDepartement"
+                                                    data-datedebut="@abonnement.DateDebut.ToString("d MMM yyyy")"
+                                                    data-expiration="@abonnement.ExpirationDate.ToString("d MMM yyyy")">
+                                                Voir plus
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                    @if (Model.Abonnements.Count == 0)
+                    {
+                        <div class="alert text-center" style="color: red;" role="alert">
+                            Aucun abonnement trouvé.
+                        </div>
+                    }
+                </div>
+                <div class="modal fade" id="detailModal" tabindex="-1" aria-labelledby="detailModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered modal-lg">
+                        <div class="modal-content">
+                            <!-- En-tête -->
+                            <div class="modal-header bg-primary text-white">
+                                <h5 class="modal-title" id="detailModalLabel">
+                                    <i class="fas fa-info-circle me-2"></i> Détails de l'abonnement
+                                </h5>
+                            </div>
+
+                            <!-- Contenu -->
+                            <div class="modal-body p-4">
+                                <div class="row">
+                                    <!-- Partie gauche : Informations principales -->
+                                    <div class="col-md-6">
+                                        <h4 id="modalNom" class="text-primary"></h4>
+                                        <h6 id="modalType" class="text-muted"></h6>
+                                        <p id="modalPrix" class="fs-5 fw-bold text-success"></p>
+
+                                        <hr>
+                                        <p>
+                                            <strong>Description :</strong> <span id="modalDescription"></span>
+                                        </p>
+                                    </div>
+
+                                    <!-- Partie droite : Informations complémentaires -->
+                                    <div class="col-md-6">
+                                        <ul class="list-unstyled">
+                                            <li class="mb-3">
+                                                <strong><i class="fas fa-tags me-2 text-secondary"></i> Catégorie :</strong>
+                                                <span id="modalCategorie"></span>
+                                            </li>
+                                            <li class="mb-3">
+                                                <strong><i class="fas fa-truck me-2 text-secondary"></i> Fournisseur :</strong>
+                                                <span id="modalFournisseur"></span>
+                                            </li>
+                                            <li class="mb-3">
+                                                <strong><i class="fas fa-building me-2 text-secondary"></i> Département :</strong>
+                                                <span id="modalDepartement"></span>
+                                            </li>
+                                        </ul>
+                                        <hr>
+                                        <ul class="list-unstyled">
+                                            <li class="mb-3">
+                                                <strong><i class="fas fa-calendar-alt me-2 text-secondary"></i> Date de début :</strong>
+                                                <span id="modalDateDebut"></span>
+                                            </li>
+                                            <li>
+                                                <strong><i class="fas fa-hourglass-end me-2 text-secondary"></i> Date d'expiration :</strong>
+                                                <span id="modalExpiration"></span>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Pied de page -->
+                            <div class="modal-footer justify-content-center">
+                                <button type="button" class="btn btn-secondary rounded-pill px-4" data-bs-dismiss="modal">
+                                    <i class="fas fa-times me-1"></i> Fermer
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+        </div>
+    </section><!-- /Blog Posts Section -->
+
+    <!-- Blog Pagination Section -->
+    <section id="blog-pagination" class="blog-pagination section">
+      <div class="container">
+        <div class="d-flex justify-content-center">
+                <ul class="pagination">
+                    <li class="page-item">
+                        <a class="page-link" href="@Url.Action("IndexPage", new { pageNumber = Math.Max(1, ViewBag.CurrentPage - 1) })" aria-label="Previous">
+                            <span aria-hidden="true">&laquo;</span>
+                        </a>
+                    </li>
+                    @for (int i = 1; i <= ViewBag.TotalPages; i++)
+                    {
+                        <li class="page-item @(i == ViewBag.CurrentPage ? "active" : "")">
+                            <a class="page-link" href="@Url.Action("IndexPage", new { pageNumber = i })">
+                                @i
+                            </a>
+                        </li>
+                    }
+                    <li class="page-item">
+                        <a class="page-link" href="@Url.Action("IndexPage", new { pageNumber = Math.Min(ViewBag.TotalPages, ViewBag.CurrentPage + 1) })" aria-label="Next">
+                            <span aria-hidden="true">&raquo;</span>
+                        </a>
+                    </li>
+                </ul>
+        </div>
+      </div>
+    </section><!-- /Blog Pagination Section -->
+
+  </main>
+</body>
+
+<style>
+  .page-title {
+      background: linear-gradient(to left, #0d2d5a, #d4d5dd) !important;
+      color: #fff;
+      padding: 50px 0;
+  }
+
+</style>
+<script>
+        document.addEventListener("DOMContentLoaded", function () {
+        const detailModal = document.getElementById('detailModal');
+
+        detailModal.addEventListener('show.bs.modal', function (event) {
+            const button = event.relatedTarget; // Bouton "Voir plus" qui a déclenché l'événement
+
+            // Extraire les données depuis les attributs data-*
+            const nom = button.getAttribute('data-nom');
+            const type = button.getAttribute('data-type');
+            const prix = button.getAttribute('data-prix');
+            const description = button.getAttribute('data-description');
+            const categorie = button.getAttribute('data-categorie');
+            const fournisseur = button.getAttribute('data-fournisseur');
+            const departement = button.getAttribute('data-departement');
+            const dateDebut = button.getAttribute('data-datedebut');
+            const expiration = button.getAttribute('data-expiration');
+
+            // Insérer les valeurs dans les éléments du modal
+            detailModal.querySelector('#modalNom').textContent = nom;
+            detailModal.querySelector('#modalType').textContent = `(${type})`;
+            detailModal.querySelector('#modalPrix').textContent = `${prix} Ariary`;
+            detailModal.querySelector('#modalDescription').textContent = description;
+            detailModal.querySelector('#modalCategorie').textContent = categorie;
+            detailModal.querySelector('#modalFournisseur').textContent = fournisseur;
+            detailModal.querySelector('#modalDepartement').textContent = departement;
+            detailModal.querySelector('#modalDateDebut').textContent = dateDebut;
+            detailModal.querySelector('#modalExpiration').textContent = expiration;
+        });
+    });
+
+    document.addEventListener('DOMContentLoaded', function () {
+        if (@(TempData["Message"] != null ? "true" : "false")) {
+            new bootstrap.Modal(document.getElementById('successModal')).show();
+        }
+
+        if (@(TempData["Error"] != null ? "true" : "false")) {
+            new bootstrap.Modal(document.getElementById('errorModal')).show();
+        }
+    });
+
+        <!-- Recharger la page si le formulaire de filtre est vide -->
+        document.addEventListener("DOMContentLoaded", function () {
+        const searchInput = document.querySelector('input[name="keyword"]');
+        const dateDebutFilter = document.getElementById('dateDebutFilter');
+        const dateExpirationFilter = document.getElementById('dateExpirationFilter');
+        const categoryFilter = document.getElementById('categoryFilter');
+        const typeFilter = document.getElementById('TypeFilter');
+
+        // Vérifier si le formulaire est vide
+        const isSearchEmpty = !searchInput.value;
+        const isDateDebutEmpty = !dateDebutFilter.value;
+        const isDateExpirationEmpty = !dateExpirationFilter.value;
+        const isCategoryEmpty = !categoryFilter.value;
+        const isTypeEmpty = !typeFilter.value;
+
+        // Si il n'y a aucune valeur de filtre ou de recherche, recharger la page
+        if (isSearchEmpty && isDateDebutEmpty && isDateExpirationEmpty && isCategoryEmpty && isTypeEmpty) {
+            setTimeout(function () {
+                window.location.reload(); // Recharger la page après un court délai pour laisser le navigateur enregistrer l'état
+            }, 1000); // Délai de 1 seconde
+        }
+    });
+
+</script>

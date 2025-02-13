@@ -47,29 +47,6 @@
     .header{
       background: linear-gradient(to left, #0d2d5a, #d4d5dd) !important;
     }
-    #navmenu {
-        background-color: #0d2d5a; /* Couleur de fond */
-        padding: 10px;
-    }
-
-    #navmenu ul {
-        list-style: none;
-        padding: 0;
-        margin: 0;
-        display: flex;
-        align-items: center;
-    }
-
-    #navmenu ul li {
-        margin-right: 20px;
-    }
-
-    #navmenu ul li a {
-        text-decoration: none;
-        color: #fff;
-        font-size: 16px;
-        position: relative;
-    }
 
     #navmenu ul li a.notification .badge {
         background-color: red;
@@ -88,28 +65,34 @@
     }
 
     #navmenu ul li a:hover {
-        color: #00bcd4; /* Couleur d'effet de survol */
+        color: #4adb11; /* Couleur d'effet de survol */
     }
     .logo-custom {
         max-width: 100px !important;
         max-height: 100px !important;
         margin-left: 30px !important;
     }
+  
 
 
   </style>
 </head>
 
-<body class="blog-page">
+<body class="index-page">
 
   <header id="header" class="header fixed-top">
+
+    
+
     <div class="branding d-flex align-items-cente">
+
       <div class="container position-relative d-flex align-items-center justify-content-between">
-          <a class="navbar-brand" href="https://demos.creative-tim.com/soft-ui-dashboard/pages/dashboard.html" target="_blank">
+        <a class="navbar-brand" href="https://demos.creative-tim.com/soft-ui-dashboard/pages/dashboard.html" target="_blank">
               <img src="../assets/img/logo_omnis.png" class="img-fluid logo-custom" alt="main_logo">
           </a>
-          <nav id="navmenu" class="navmenu">
-            <ul>
+
+        <nav id="navmenu" class="navmenu">
+          <ul>
                 <li><a href="@Url.Action("Index", "Home")">Accueil</a></li>
                 <li class="dropdown"><a href="@Url.Action("IndexPage", "Home")"><span>Liste Abonnement</span></a></li>
                 <li><a href="@Url.Action("ContactPage", "Home")">Contact</a></li>
@@ -186,8 +169,9 @@
 
                 <li><a href="#logoutModal" data-bs-toggle="modal" class="logout">Déconnexion</a></li>
             </ul>
-            <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
-        </nav><!-- .nav-menu -->
+          <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
+        </nav>
+
       </div>
 
     </div>
@@ -195,11 +179,13 @@
   </header>
 
   <main class="main">
-      @RenderBody()
-      @RenderSection("scripts", required: false)
+
+    <!-- Hero Section -->
+    @RenderBody()
+    @RenderSection("scripts", required: false)
+
   </main>
 
-  <!--Modal de déconnexion-->
   <div class="modal fade" id="logoutModal" tabindex="-1" aria-labelledby="logoutModalLabel" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
@@ -217,7 +203,6 @@
       </div>
     </div>
   </div>
-  <!--End Modal de déconnexion-->
 
   <footer id="footer" class="footer accent-background">
 
@@ -225,69 +210,71 @@
       <div class="row gy-4">
         <div class="col-lg-5 col-md-12 footer-about">
           <a href="index.html" class="logo d-flex align-items-center">
-            <span class="sitename">OMNIS</span>
+            <span class="sitename">Impact</span>
           </a>
-          <p>OMNIS est un fournisseur leader dans la gestion d'abonnements, offrant des solutions adaptées pour un suivi efficace et performant de vos services stratégiques.</p>
+          <p>Cras fermentum odio eu feugiat lide par naso tierra. Justo eget nada terra videa magna derita valies darta donna mare fermentum iaculis eu non diam phasellus.</p>
           <div class="social-links d-flex mt-4">
-            <a href="https://twitter.com/OMNIS"><i class="bi bi-twitter"></i></a>
-            <a href="https://www.facebook.com/OmnisMadagascar"><i class="bi bi-facebook"></i></a>
-            <a href="https://instagram.com/OMNIS"><i class="bi bi-instagram"></i></a>
-            <a href="https://linkedin.com/company/OMNIS"><i class="bi bi-linkedin"></i></a>
+            <a href=""><i class="bi bi-twitter-x"></i></a>
+            <a href=""><i class="bi bi-facebook"></i></a>
+            <a href=""><i class="bi bi-instagram"></i></a>
+            <a href=""><i class="bi bi-linkedin"></i></a>
           </div>
         </div>
 
         <div class="col-lg-2 col-6 footer-links">
-          <h4>Liens Utiles</h4>
+          <h4>Useful Links</h4>
           <ul>
-            <li><a href="#">Accueil</a></li>
-            <li><a href="#">À propos</a></li>
+            <li><a href="#">Home</a></li>
+            <li><a href="#">About us</a></li>
             <li><a href="#">Services</a></li>
-            <li><a href="#">Conditions d'utilisation</a></li>
-            <li><a href="#">Politique de confidentialité</a></li>
+            <li><a href="#">Terms of service</a></li>
+            <li><a href="#">Privacy policy</a></li>
           </ul>
         </div>
 
         <div class="col-lg-2 col-6 footer-links">
-          <h4>Nos Services</h4>
+          <h4>Our Services</h4>
           <ul>
-            <li><a href="#">Suivi d'abonnement</a></li>
-            <li><a href="#">Analyse de données</a></li>
-            <li><a href="#">Gestion de projet</a></li>
-            <li><a href="#">Support client</a></li>
-            <li><a href="#">Consulting</a></li>
+            <li><a href="#">Web Design</a></li>
+            <li><a href="#">Web Development</a></li>
+            <li><a href="#">Product Management</a></li>
+            <li><a href="#">Marketing</a></li>
+            <li><a href="#">Graphic Design</a></li>
           </ul>
         </div>
 
         <div class="col-lg-3 col-md-12 footer-contact text-center text-md-start">
-          <h4>Contactez-nous</h4>
-          <p>123 Rue des Mines</p>
-          <p>Antananarivo, 101</p>
-          <p>Madagascar</p>
-          <p class="mt-4"><strong>Téléphone :</strong> <span>+261 34 12 345 67</span></p>
-          <p><strong>Email :</strong> <span>contact@omnis.mg</span></p>
+          <h4>Contact Us</h4>
+          <p>A108 Adam Street</p>
+          <p>New York, NY 535022</p>
+          <p>United States</p>
+          <p class="mt-4"><strong>Phone:</strong> <span>+1 5589 55488 55</span></p>
+          <p><strong>Email:</strong> <span>info@example.com</span></p>
         </div>
 
       </div>
     </div>
 
     <div class="container copyright text-center mt-4">
-      <p>© <span>Copyright</span> <strong class="px-1 sitename">OMNIS</strong> <span>Tous droits réservés</span></p>
+      <p>© <span>Copyright</span> <strong class="px-1 sitename">Impact</strong> <span>All Rights Reserved</span></p>
       <div class="credits">
-        Conçu par <a href="https://bootstrapmade.com/">BootstrapMade</a>
+        <!-- All the links in the footer should remain intact. -->
+        <!-- You can delete the links only if you've purchased the pro version. -->
+        <!-- Licensing information: https://bootstrapmade.com/license/ -->
+        <!-- Purchase the pro version with working PHP/AJAX contact form: [buy-url] -->
+        Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a>
       </div>
     </div>
 
   </footer>
 
-
   <!-- Scroll Top -->
   <a href="#" id="scroll-top" class="scroll-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
 
   <!-- Preloader -->
-  <div id="preloader"></div>
 
   <!-- Vendor JS Files -->
-  <script src="../assetsUser/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+ <script src="../assetsUser/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
   <script src="../assetsUser/vendor/php-email-form/validate.js"></script>
   <script src="../assetsUser/vendor/aos/aos.js"></script>
   <script src="../assetsUser/vendor/glightbox/js/glightbox.min.js"></script>
@@ -300,39 +287,7 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate-unobtrusive/3.2.12/jquery.validate.unobtrusive.min.js"></script>
 
   <!-- Main JS File -->
-  <script src="../assetsUser/js/main.js"></script>
-    <script>
-  $(document).ready(function () {
-    // Envoie la requête Ajax lorsque l'utilisateur clique sur une notification
-    $(".dropdown-item").click(function (e) {
-      e.preventDefault();  // Empêche la soumission du formulaire classique
-      var notificationId = $(this).closest('form').find('input[name="notificationId"]').val();
-
-      // Envoie la requête Ajax
-      $.ajax({
-        type: "POST",
-        url: '@Url.Action("MarkNotificationAsRead", "Notification")', // URL de l'action du contrôleur
-        data: { notificationId: notificationId },
-        success: function (response) {
-          if (response.success) {
-            // Redirige l'utilisateur en fonction de la réponse
-            if (response.redirectUrl) {
-              window.location.href = response.redirectUrl;
-            }
-          } else {
-            alert("Une erreur s'est produite lors de la mise à jour de la notification.");
-          }
-        },
-        error: function () {
-          alert("Une erreur est survenue.");
-        }
-      });
-    });
-  });
-</script>
-
-
-
+  <script src="assets/js/main.js"></script>
 
 </body>
 

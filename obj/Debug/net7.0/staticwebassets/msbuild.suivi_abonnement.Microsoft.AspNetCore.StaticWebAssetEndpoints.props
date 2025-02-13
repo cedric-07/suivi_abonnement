@@ -6000,6 +6000,30 @@
       <EndpointProperties><![CDATA[[{"Name":"integrity","Value":"sha256-hjIBkvmgxQXbNXK3B9YQ3t06RwLuQSQzC/dpvuB/lMk="}]]]></EndpointProperties>
       <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"no-cache"},{"Name":"Content-Length","Value":"1117"},{"Name":"Content-Type","Value":"text/plain"},{"Name":"ETag","Value":"\u0022hjIBkvmgxQXbNXK3B9YQ3t06RwLuQSQzC/dpvuB/lMk=\u0022"},{"Name":"Last-Modified","Value":"Sat, 25 Jan 2025 12:51:12 GMT"}]]]></ResponseHeaders>
     </StaticWebAssetEndpoint>
+    <StaticWebAssetEndpoint Include="_content/suivi_abonnement/rotativa/wkhtmltoimage.exe">
+      <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\rotativa\wkhtmltoimage.exe'))</AssetFile>
+      <Selectors><![CDATA[[]]]></Selectors>
+      <EndpointProperties><![CDATA[[{"Name":"integrity","Value":"sha256-BrLMDmZWAoyvWZdnLfVxd1GGQMOeCnyqIdFntxs5\u002Bxs="}]]]></EndpointProperties>
+      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"no-cache"},{"Name":"Content-Length","Value":"30184960"},{"Name":"Content-Type","Value":"application/vnd.microsoft.portable-executable"},{"Name":"ETag","Value":"\u0022BrLMDmZWAoyvWZdnLfVxd1GGQMOeCnyqIdFntxs5\u002Bxs=\u0022"},{"Name":"Last-Modified","Value":"Wed, 10 Jun 2020 20:04:02 GMT"}]]]></ResponseHeaders>
+    </StaticWebAssetEndpoint>
+    <StaticWebAssetEndpoint Include="_content/suivi_abonnement/rotativa/wkhtmltoimage.unmdmt38q6.exe">
+      <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\rotativa\wkhtmltoimage.exe'))</AssetFile>
+      <Selectors><![CDATA[[]]]></Selectors>
+      <EndpointProperties><![CDATA[[{"Name":"fingerprint","Value":"unmdmt38q6"},{"Name":"integrity","Value":"sha256-BrLMDmZWAoyvWZdnLfVxd1GGQMOeCnyqIdFntxs5\u002Bxs="},{"Name":"label","Value":"_content/suivi_abonnement/rotativa/wkhtmltoimage.exe"}]]]></EndpointProperties>
+      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"max-age=31536000, immutable"},{"Name":"Content-Length","Value":"30184960"},{"Name":"Content-Type","Value":"application/vnd.microsoft.portable-executable"},{"Name":"ETag","Value":"\u0022BrLMDmZWAoyvWZdnLfVxd1GGQMOeCnyqIdFntxs5\u002Bxs=\u0022"},{"Name":"Last-Modified","Value":"Wed, 10 Jun 2020 20:04:02 GMT"}]]]></ResponseHeaders>
+    </StaticWebAssetEndpoint>
+    <StaticWebAssetEndpoint Include="_content/suivi_abonnement/rotativa/wkhtmltopdf.exe">
+      <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\rotativa\wkhtmltopdf.exe'))</AssetFile>
+      <Selectors><![CDATA[[]]]></Selectors>
+      <EndpointProperties><![CDATA[[{"Name":"integrity","Value":"sha256-2bPSyBSW6Lulzfa832\u002BD48S2LRVHoQhrw4xqa/GryGk="}]]]></EndpointProperties>
+      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"no-cache"},{"Name":"Content-Length","Value":"30235648"},{"Name":"Content-Type","Value":"application/vnd.microsoft.portable-executable"},{"Name":"ETag","Value":"\u00222bPSyBSW6Lulzfa832\u002BD48S2LRVHoQhrw4xqa/GryGk=\u0022"},{"Name":"Last-Modified","Value":"Wed, 10 Jun 2020 20:03:24 GMT"}]]]></ResponseHeaders>
+    </StaticWebAssetEndpoint>
+    <StaticWebAssetEndpoint Include="_content/suivi_abonnement/rotativa/wkhtmltopdf.jhzul28502.exe">
+      <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\rotativa\wkhtmltopdf.exe'))</AssetFile>
+      <Selectors><![CDATA[[]]]></Selectors>
+      <EndpointProperties><![CDATA[[{"Name":"fingerprint","Value":"jhzul28502"},{"Name":"integrity","Value":"sha256-2bPSyBSW6Lulzfa832\u002BD48S2LRVHoQhrw4xqa/GryGk="},{"Name":"label","Value":"_content/suivi_abonnement/rotativa/wkhtmltopdf.exe"}]]]></EndpointProperties>
+      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"max-age=31536000, immutable"},{"Name":"Content-Length","Value":"30235648"},{"Name":"Content-Type","Value":"application/vnd.microsoft.portable-executable"},{"Name":"ETag","Value":"\u00222bPSyBSW6Lulzfa832\u002BD48S2LRVHoQhrw4xqa/GryGk=\u0022"},{"Name":"Last-Modified","Value":"Wed, 10 Jun 2020 20:03:24 GMT"}]]]></ResponseHeaders>
+    </StaticWebAssetEndpoint>
     <StaticWebAssetEndpoint Include="_content/suivi_abonnement/src/fonts/bootstrap/bootstrap-icons.css">
       <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\src\fonts\bootstrap\bootstrap-icons.css'))</AssetFile>
       <Selectors><![CDATA[[]]]></Selectors>

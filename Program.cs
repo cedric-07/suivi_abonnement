@@ -6,6 +6,8 @@ using suivi_abonnement.Service.Interface;
 using suivi_abonnement.Service;
 using suivi_abonnement.Repository;
 using suivi_abonnement.Hubs;
+using Rotativa.AspNetCore;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Ajouter les services nécessaires
@@ -57,6 +59,9 @@ if (!app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
+
+//Package Rotativa.AspNetCore pour les fichiers PDF
+app.UseRotativa();
 
 app.UseRouting();
 

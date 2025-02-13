@@ -2149,6 +2149,18 @@
           "lib/netstandard2.0/NuGet.Versioning.dll": {}
         }
       },
+      "Rotativa.AspNetCore/1.4.0": {
+        "type": "package",
+        "compile": {
+          "lib/net7.0/Rotativa.AspNetCore.dll": {}
+        },
+        "runtime": {
+          "lib/net7.0/Rotativa.AspNetCore.dll": {}
+        },
+        "frameworkReferences": [
+          "Microsoft.AspNetCore.App"
+        ]
+      },
       "runtime.debian.8-x64.runtime.native.System.Security.Cryptography.OpenSsl/4.3.0": {
         "type": "package",
         "runtimeTargets": {
@@ -3647,10 +3659,10 @@
           }
         }
       },
-      "System.Text.Json/8.0.2": {
+      "System.Text.Json/7.0.0": {
         "type": "package",
         "dependencies": {
-          "System.Text.Encodings.Web": "8.0.0"
+          "System.Text.Encodings.Web": "7.0.0"
         },
         "compile": {
           "lib/net7.0/System.Text.Json.dll": {
@@ -6865,6 +6877,24 @@
         "lib/netstandard2.0/NuGet.Versioning.dll",
         "nuget.versioning.6.6.1.nupkg.sha512",
         "nuget.versioning.nuspec"
+      ]
+    },
+    "Rotativa.AspNetCore/1.4.0": {
+      "sha512": "zn0KgqCQqiTuNPYgeqrIJxXafjJUfDJBcUJIhAV5NgWSCX3DOEeg339zMJTbzcCyoJgGPL5LrG+IKZ3k8/Uk9Q==",
+      "type": "package",
+      "path": "rotativa.aspnetcore/1.4.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "README.md",
+        "lib/net5.0/Rotativa.AspNetCore.dll",
+        "lib/net6.0/Rotativa.AspNetCore.dll",
+        "lib/net7.0/Rotativa.AspNetCore.dll",
+        "lib/net8.0/Rotativa.AspNetCore.dll",
+        "lib/netcoreapp3.1/Rotativa.AspNetCore.dll",
+        "lib/netstandard2.0/Rotativa.AspNetCore.dll",
+        "rotativa.aspnetcore.1.4.0.nupkg.sha512",
+        "rotativa.aspnetcore.nuspec"
       ]
     },
     "runtime.debian.8-x64.runtime.native.System.Security.Cryptography.OpenSsl/4.3.0": {
@@ -10380,16 +10410,16 @@
         "useSharedDesignerContext.txt"
       ]
     },
-    "System.Text.Json/8.0.2": {
-      "sha512": "29KA2StjWDYp32FvREifawRtNpTziLE1xyuDV9pVQ+MsaE9bIcIieP0io/eZZeLMxR+Nx9zI55RtUtpVpEIdeg==",
+    "System.Text.Json/7.0.0": {
+      "sha512": "DaGSsVqKsn/ia6RG8frjwmJonfos0srquhw09TlT8KRw5I43E+4gs+/bZj4K0vShJ5H9imCuXupb4RmS+dBy3w==",
       "type": "package",
-      "path": "system.text.json/8.0.2",
+      "path": "system.text.json/7.0.0",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
         "Icon.png",
         "LICENSE.TXT",
-        "PACKAGE.md",
+        "README.md",
         "THIRD-PARTY-NOTICES.TXT",
         "analyzers/dotnet/roslyn3.11/cs/System.Text.Json.SourceGeneration.dll",
         "analyzers/dotnet/roslyn3.11/cs/cs/System.Text.Json.SourceGeneration.resources.dll",
@@ -10444,11 +10474,9 @@
         "lib/net6.0/System.Text.Json.xml",
         "lib/net7.0/System.Text.Json.dll",
         "lib/net7.0/System.Text.Json.xml",
-        "lib/net8.0/System.Text.Json.dll",
-        "lib/net8.0/System.Text.Json.xml",
         "lib/netstandard2.0/System.Text.Json.dll",
         "lib/netstandard2.0/System.Text.Json.xml",
-        "system.text.json.8.0.2.nupkg.sha512",
+        "system.text.json.7.0.0.nupkg.sha512",
         "system.text.json.nuspec",
         "useSharedDesignerContext.txt"
       ]
@@ -10997,7 +11025,8 @@
       "Microsoft.AspNetCore.SignalR >= 1.2.0",
       "Microsoft.VisualStudio.Web.CodeGeneration.Design >= 7.0.12",
       "MySql.Data >= 8.0.11",
-      "System.Text.Json >= 8.0.2"
+      "Rotativa.AspNetCore >= 1.4.0",
+      "System.Text.Json >= 7.0.0"
     ]
   },
   "packageFolders": {
@@ -11067,9 +11096,13 @@
             "target": "Package",
             "version": "[8.0.11, )"
           },
+          "Rotativa.AspNetCore": {
+            "target": "Package",
+            "version": "[1.4.0, )"
+          },
           "System.Text.Json": {
             "target": "Package",
-            "version": "[8.0.2, )"
+            "version": "[7.0.0, )"
           }
         },
         "imports": [
@@ -11118,17 +11151,7 @@
       "code": "NU1903",
       "level": "Warning",
       "warningLevel": 1,
-      "message": "Package 'System.Text.Json' 8.0.2 has a known high severity vulnerability, https://github.com/advisories/GHSA-8g4q-xg66-9fp4",
-      "libraryId": "System.Text.Json",
-      "targetGraphs": [
-        "net7.0"
-      ]
-    },
-    {
-      "code": "NU1903",
-      "level": "Warning",
-      "warningLevel": 1,
-      "message": "Package 'System.Text.Json' 8.0.2 has a known high severity vulnerability, https://github.com/advisories/GHSA-hh2w-p6rv-4g7w",
+      "message": "Le package 'System.Text.Json' 7.0.0 présente une vulnérabilité de gravité élevé(e) connue, https://github.com/advisories/GHSA-hh2w-p6rv-4g7w.",
       "libraryId": "System.Text.Json",
       "targetGraphs": [
         "net7.0"

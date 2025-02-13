@@ -43,6 +43,32 @@
                 return userRole == "admin" ? View("~/Views/Shared/Navbar/NavbarAdmin.cshtml") : View("~/Views/Shared/Navbar/NavbarUser.cshtml");
             }
 
+            public JsonResult GetNotificationsCount()
+            {
+                int userId = HttpContext.Session.GetInt32("UserId") ?? 0;
+                var userRole = HttpContext.Session.GetString("UserRole");
+
+                if (string.IsNullOrEmpty(userRole) || userId == 0)
+                {
+                    throw new Exception("Vous n'êtes pas connecté");
+                }
+
+
+                var notifications = userRole == "admin" ? _notificationService.GetNotificationsForAdmin() : _notificationService.GetNotificationsForClient();
+
+                int notificationCount = notifications?.Count(n => n.Status == "non lu") ?? 0;
+
+                // Vérification des notifications avant de les passer à la vue
+                if (notifications == null || !notifications.Any())
+                {
+                    return Json(new {notifications , notificationCount});
+                }
+                else
+                {
+                    return Json(new { notifications, notificationCount });
+                }
+            }
+
 
             // Action pour marquer une notification comme lue
             [HttpPost]

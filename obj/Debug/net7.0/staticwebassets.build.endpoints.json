@@ -41003,6 +41003,170 @@
       ]
     },
     {
+      "Route": "rotativa/wkhtmltoimage.exe",
+      "AssetFile": "rotativa/wkhtmltoimage.exe",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "no-cache"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "30184960"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "application/vnd.microsoft.portable-executable"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"BrLMDmZWAoyvWZdnLfVxd1GGQMOeCnyqIdFntxs5+xs=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Wed, 10 Jun 2020 20:04:02 GMT"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-BrLMDmZWAoyvWZdnLfVxd1GGQMOeCnyqIdFntxs5+xs="
+        }
+      ]
+    },
+    {
+      "Route": "rotativa/wkhtmltoimage.unmdmt38q6.exe",
+      "AssetFile": "rotativa/wkhtmltoimage.exe",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "30184960"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "application/vnd.microsoft.portable-executable"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"BrLMDmZWAoyvWZdnLfVxd1GGQMOeCnyqIdFntxs5+xs=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Wed, 10 Jun 2020 20:04:02 GMT"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "unmdmt38q6"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-BrLMDmZWAoyvWZdnLfVxd1GGQMOeCnyqIdFntxs5+xs="
+        },
+        {
+          "Name": "label",
+          "Value": "rotativa/wkhtmltoimage.exe"
+        }
+      ]
+    },
+    {
+      "Route": "rotativa/wkhtmltopdf.exe",
+      "AssetFile": "rotativa/wkhtmltopdf.exe",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "no-cache"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "30235648"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "application/vnd.microsoft.portable-executable"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"2bPSyBSW6Lulzfa832+D48S2LRVHoQhrw4xqa/GryGk=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Wed, 10 Jun 2020 20:03:24 GMT"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-2bPSyBSW6Lulzfa832+D48S2LRVHoQhrw4xqa/GryGk="
+        }
+      ]
+    },
+    {
+      "Route": "rotativa/wkhtmltopdf.jhzul28502.exe",
+      "AssetFile": "rotativa/wkhtmltopdf.exe",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "30235648"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "application/vnd.microsoft.portable-executable"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"2bPSyBSW6Lulzfa832+D48S2LRVHoQhrw4xqa/GryGk=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Wed, 10 Jun 2020 20:03:24 GMT"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "jhzul28502"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-2bPSyBSW6Lulzfa832+D48S2LRVHoQhrw4xqa/GryGk="
+        },
+        {
+          "Name": "label",
+          "Value": "rotativa/wkhtmltopdf.exe"
+        }
+      ]
+    },
+    {
       "Route": "src/fonts/bootstrap/bootstrap-icons.css",
       "AssetFile": "src/fonts/bootstrap/bootstrap-icons.css",
       "Selectors": [],

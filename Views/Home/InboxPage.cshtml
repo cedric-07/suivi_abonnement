@@ -83,12 +83,15 @@
             background-color: #dcf8c6;
             text-align: right;
             border-bottom-right-radius: 0;
+            margin-right: 10px;
         }
 
         .message.received {
             background-color: #fff;
             border-bottom-left-radius: 0;
-        }
+                margin-left: 10px;
+            }
+
         .message-date {
             display: block;
             font-size: 12px;
@@ -405,8 +408,6 @@
         }
     });
 }
-
-
     function scrollToBottom() {
         $("#chatWindow").scrollTop($("#chatWindow").prop("scrollHeight"));
     }

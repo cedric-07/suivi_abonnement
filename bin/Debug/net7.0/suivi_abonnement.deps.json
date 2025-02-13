@@ -12,7 +12,8 @@
           "Microsoft.AspNetCore.SignalR": "1.2.0",
           "Microsoft.VisualStudio.Web.CodeGeneration.Design": "7.0.12",
           "MySql.Data": "8.0.11",
-          "System.Text.Json": "8.0.2"
+          "Rotativa.AspNetCore": "1.4.0",
+          "System.Text.Json": "7.0.0"
         },
         "runtime": {
           "suivi_abonnement.dll": {}
@@ -751,7 +752,7 @@
           "System.Reflection.MetadataLoadContext": "6.0.0",
           "System.Security.Principal.Windows": "5.0.0",
           "System.Text.Encoding.CodePages": "6.0.0",
-          "System.Text.Json": "8.0.2",
+          "System.Text.Json": "7.0.0",
           "System.Threading.Tasks.Dataflow": "6.0.0"
         },
         "runtime": {
@@ -1023,7 +1024,7 @@
           "Microsoft.CodeAnalysis.Scripting.Common": "4.4.0",
           "Microsoft.CodeAnalysis.Workspaces.Common": "4.4.0",
           "Microsoft.DiaSymReader": "1.4.0",
-          "System.Text.Json": "8.0.2",
+          "System.Text.Json": "7.0.0",
           "System.Threading.Tasks.Extensions": "4.5.4"
         },
         "runtime": {
@@ -1623,6 +1624,14 @@
           "lib/netstandard2.0/NuGet.Versioning.dll": {
             "assemblyVersion": "6.6.1.2",
             "fileVersion": "6.6.1.2"
+          }
+        }
+      },
+      "Rotativa.AspNetCore/1.4.0": {
+        "runtime": {
+          "lib/net7.0/Rotativa.AspNetCore.dll": {
+            "assemblyVersion": "1.4.0.0",
+            "fileVersion": "1.4.0.0"
           }
         }
       },
@@ -2337,15 +2346,9 @@
           }
         }
       },
-      "System.Text.Json/8.0.2": {
+      "System.Text.Json/7.0.0": {
         "dependencies": {
           "System.Text.Encodings.Web": "8.0.0"
-        },
-        "runtime": {
-          "lib/net7.0/System.Text.Json.dll": {
-            "assemblyVersion": "8.0.0.0",
-            "fileVersion": "8.0.224.6711"
-          }
         }
       },
       "System.Text.RegularExpressions/4.3.0": {
@@ -3313,6 +3316,13 @@
       "path": "nuget.versioning/6.6.1",
       "hashPath": "nuget.versioning.6.6.1.nupkg.sha512"
     },
+    "Rotativa.AspNetCore/1.4.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-zn0KgqCQqiTuNPYgeqrIJxXafjJUfDJBcUJIhAV5NgWSCX3DOEeg339zMJTbzcCyoJgGPL5LrG+IKZ3k8/Uk9Q==",
+      "path": "rotativa.aspnetcore/1.4.0",
+      "hashPath": "rotativa.aspnetcore.1.4.0.nupkg.sha512"
+    },
     "runtime.debian.8-x64.runtime.native.System.Security.Cryptography.OpenSsl/4.3.0": {
       "type": "package",
       "serviceable": true,
@@ -3915,12 +3925,12 @@
       "path": "system.text.encodings.web/8.0.0",
       "hashPath": "system.text.encodings.web.8.0.0.nupkg.sha512"
     },
-    "System.Text.Json/8.0.2": {
+    "System.Text.Json/7.0.0": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-29KA2StjWDYp32FvREifawRtNpTziLE1xyuDV9pVQ+MsaE9bIcIieP0io/eZZeLMxR+Nx9zI55RtUtpVpEIdeg==",
-      "path": "system.text.json/8.0.2",
-      "hashPath": "system.text.json.8.0.2.nupkg.sha512"
+      "sha512": "sha512-DaGSsVqKsn/ia6RG8frjwmJonfos0srquhw09TlT8KRw5I43E+4gs+/bZj4K0vShJ5H9imCuXupb4RmS+dBy3w==",
+      "path": "system.text.json/7.0.0",
+      "hashPath": "system.text.json.7.0.0.nupkg.sha512"
     },
     "System.Text.RegularExpressions/4.3.0": {
       "type": "package",

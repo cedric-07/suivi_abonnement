@@ -1,75 +1,129 @@
-@model IEnumerable<suivi_abonnement.Models.Abonnement>;
-
+@model suivi_abonnement.Models.Abonnement
 
 <!DOCTYPE html>
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Abonnement - Page PDF</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Facture - @Model.Nom</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
     <style>
-        .ticket {
-            border: 2px solid #007bff;
-            padding: 20px;
-            border-radius: 15px;
-            margin: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        }
-
-        .ticket-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-
-        .ticket-icon {
-            font-size: 40px;
-            color: #007bff;
-        }
-
-        .ticket-details {
-            margin-top: 15px;
-        }
-
-        .ticket-footer {
-            margin-top: 20px;
-            text-align: center;
+        body {
+            font-family: 'Montserrat', sans-serif;
             font-size: 14px;
-            color: #6c757d;
+            background-color: #f8f9fa;
+            padding: 20px;
+        }
+        .invoice-container {
+            max-width: 800px;
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        }
+        .header-title {
+            font-size: 24px;
+            font-weight: bold;
+            color: #0d2d5a;
+        }
+        .section-title {
+            font-weight: bold;
+            font-size: 16px;
+            color: #0d2d5a;
+            margin-bottom: 5px;
+        }
+        .section-content {
+            font-size: 14px;
+            color: #555;
+        }
+        .divider {
+            border-bottom: 2px solid #ddd;
+            margin: 10px 0;
+        }
+        .logo-custom {
+            max-width: 70px !important; /* Ajuste selon ton besoin */
+            max-height: 70px !important;
+            margin-left: 0 !important;
+            padding-top: 10px !important;
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1 class="my-4">Détails de l'Abonnement</h1>
 
-        @foreach (var abonnement in Model)
-        {
-            <div class="ticket">
-                <div class="ticket-header">
-                    <div class="ticket-icon">
-                        <i class="bi bi-file-earmark-check"></i> <!-- Icône Bootstrap -->
-                    </div>
-                    <h3 class="mb-0">@abonnement.Nom</h3>
-                </div>
-                <div class="ticket-details">
-                    <p><strong>Description :</strong> @abonnement.Description</p>
-                    <p><strong>Prix :</strong> @abonnement.Prix €</p>
-                    <p><strong>Type :</strong> @abonnement.Type</p>
-                    <p><strong>Date de début :</strong> @abonnement.DateDebut.ToString("dd MMMM yyyy")</p>
-                    <p><strong>Date d'expiration :</strong> @abonnement.ExpirationDate.ToString("dd MMMM yyyy")</p>
-                    <p><strong>Catégorie :</strong> @abonnement.NomCategorie</p>
-                    <p><strong>Fournisseur :</strong> @abonnement.NomFournisseur</p>
-                </div>
-                <div class="ticket-footer">
-                    <p>Merci pour votre abonnement avec @abonnement.NomFournisseur</p>
-                </div>
+<div class="container d-flex justify-content-center">
+    <div class="invoice-container p-4">
+        
+        <!-- Section en-tête avec logo et adresse entreprise -->
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <div>
+                 <a class="navbar-brand" href="https://demos.creative-tim.com/soft-ui-dashboard/pages/dashboard.html" target="_blank">
+                    <img src="../assets/img/logo_omnis.png" class="img-fluid logo-custom" alt="main_logo">
+                </a>
+                <p class="mb-1">Adresse : 123 Rue Ambohijatovo, Antananarivo, Madagascar</p>
+                <p class="mb-1">Téléphone : +123 456 789</p>
+                <p class="mb-0">Email : OmnisMdg@yahoo.com</p>
             </div>
-        }
-    </div>
+           
+        </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>
+        <!-- Titre de la facture -->
+        <h5 class="text-center text-primary mb-4 text-bold">Détails de l'abonnement - @Model.Nom</h5>
+
+        <!-- Détails de l'abonnement -->
+        <div class="mb-3">
+            <div class="section-title">Description :</div>
+            <div class="section-content">@Model.Description</div>
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="row">
+            <div class="col-md-6">
+                <div class="section-title">Prix :</div>
+                <div class="section-content">@Model.Prix.ToString("N2") Ariary</div>
+            </div>
+            <div class="col-md-6">
+                <div class="section-title">Type :</div>
+                <div class="section-content">@Model.Type</div>
+            </div>
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="row">
+            <div class="col-md-6">
+                <div class="section-title">Catégorie :</div>
+                <div class="section-content">@Model.NomCategorie</div>
+            </div>
+            <div class="col-md-6">
+                <div class="section-title">Fournisseur :</div>
+                <div class="section-content">@Model.NomFournisseur</div>
+            </div>
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="row">
+            <div class="col-md-6">
+                <div class="section-title">Département :</div>
+                <div class="section-content">@Model.NomDepartement</div>
+            </div>
+            <div class="col-md-6">
+                <div class="section-title">Date de début :</div>
+                <div class="section-content">@Model.DateDebut.ToString("d MMM yyyy")</div>
+            </div>
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="section-title">Date d'expiration :</div>
+        <div class="section-content">@Model.ExpirationDate.ToString("d MMM yyyy")</div>
+
+    </div>
+</div>
+
 </body>
 </html>

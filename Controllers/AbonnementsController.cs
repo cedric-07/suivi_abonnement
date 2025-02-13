@@ -1,12 +1,17 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Razor.Compilation;
+using Microsoft.AspNetCore.Mvc.Filters;
 using suivi_abonnement.Models;
 using suivi_abonnement.Service.Interface;
 using System.Collections.Generic;
 using suivi_abonnement.Service.Interface;
 using suivi_abonnement.Repository.Interface;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Rotativa.AspNetCore;
+using System;
+using System.Linq;
+
 namespace suivi_abonnement.Controllers
 {
     public class AbonnementsController : Controller
@@ -28,6 +33,38 @@ namespace suivi_abonnement.Controllers
             _departementService = departementService;
             _notificationService = notificationService;
             _httpContextAccessor = httpContextAccessor;
+        }
+
+        //Controller de notifications
+
+        public override void OnActionExecuting(ActionExecutingContext context)
+        {
+            int userId = HttpContext.Session.GetInt32("UserId") ?? 0;
+            var userRole = HttpContext.Session.GetString("UserRole");
+
+            _notificationService.SendNotification();
+            List<Notification> notifications = new List<Notification>();
+
+            if (userRole == "admin")
+            {
+                notifications = _notificationService.GetNotificationsForAdmin();
+            }
+            else if (userRole == "client")
+            {
+                notifications = _notificationService.GetNotificationsForClient();
+            }
+
+            if (notifications == null || !notifications.Any())
+            {
+                Console.WriteLine("Aucune notification trouvée.");
+            }
+
+            int notificationCount = notifications?.Count(n => n.Status == "non lu") ?? 0;
+
+            ViewBag.Notifications = notifications;
+            ViewBag.NbrNotifications = notificationCount;
+
+            base.OnActionExecuting(context);
         }
 
         // GET: AbonnementsController
@@ -420,6 +457,22 @@ namespace suivi_abonnement.Controllers
                 TempData["Error"] = "Une erreur s'est produite : " + ex.Message;
                 return RedirectToAction("Index");
             }
+        }
+
+        public IActionResult ExportToPdf(int id)
+        {
+            var abonnement = _abonnementService.GetAbonnementById(id);
+            if (abonnement == null)
+            {
+                Console.WriteLine("Aucun abonnement trouvé pour l'ID : " + id);
+                return NotFound();
+            }
+
+            return new ViewAsPdf("~/Views/AdminPage/PdfPage.cshtml", abonnement)
+            {
+                FileName = $"{abonnement.Nom}Details.pdf"
+            };
+            
         }
     }
 }

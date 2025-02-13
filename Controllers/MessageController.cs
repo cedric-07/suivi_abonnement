@@ -6,6 +6,7 @@ using suivi_abonnement.Hubs;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using Microsoft.AspNetCore.Mvc.Filters;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
@@ -15,6 +16,7 @@ namespace suivi_abonnement.Controllers
     {
         private readonly IMessageService _messageService;
         private readonly IUserService _userService;
+        private readonly INotificationService _notificationService;
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly IHubContext<MessageHub> _hubContext;
 
@@ -22,12 +24,44 @@ namespace suivi_abonnement.Controllers
             IMessageService messageService, 
             IUserService userService, 
             IHttpContextAccessor httpContextAccessor, 
+            INotificationService notificationService,
             IHubContext<MessageHub> hubContext)
         {
             _messageService = messageService;
             _userService = userService;
+            _notificationService = notificationService;
             _httpContextAccessor = httpContextAccessor;
             _hubContext = hubContext;
+        }
+
+        public override void OnActionExecuting(ActionExecutingContext context)
+        {
+            int userId = HttpContext.Session.GetInt32("UserId") ?? 0;
+            var userRole = HttpContext.Session.GetString("UserRole");
+
+            _notificationService.SendNotification();
+            List<Notification> notifications = new List<Notification>();
+
+            if (userRole == "admin")
+            {
+                notifications = _notificationService.GetNotificationsForAdmin();
+            }
+            else if (userRole == "client")
+            {
+                notifications = _notificationService.GetNotificationsForClient();
+            }
+
+            if (notifications == null || !notifications.Any())
+            {
+                Console.WriteLine("Aucune notification trouvée.");
+            }
+
+            int notificationCount = notifications?.Count(n => n.Status == "non lu") ?? 0;
+
+            ViewBag.Notifications = notifications;
+            ViewBag.NbrNotifications = notificationCount;
+
+            base.OnActionExecuting(context);
         }
 
         [HttpGet]
