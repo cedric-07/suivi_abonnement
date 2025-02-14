@@ -409,7 +409,7 @@ namespace suivi_abonnement.Controllers
             }
         }
 
-        public IActionResult HistoriqueDetail(int pageNumberActifs = 1 , int pageNumberEnAttente = 1 , int pageNumberExpires = 1)
+        public IActionResult HistoriqueDetail(int pageNumberActifs = 1 , int pageNumberEnAttente = 1 , int pageNumberExpires = 1 , int pageNumberClients = 1)
         {
             try
             {
@@ -426,6 +426,18 @@ namespace suivi_abonnement.Controllers
                 int totalEnAttente = _abonnementService.CountTotalAbonnementsEnAttente();
                 int totalExpires = _abonnementService.CountTotalAbonnementsInactif();
 
+                //Client abonnées////////////////////////////////////////////////////////
+                List<VAbonnementClient> abonnement = _abonnementService.getListVAbonnement(pageNumberClients, pageSize) ?? new List<VAbonnementClient>();
+                int nbrlcient = _abonnementService.NbrClientAbonne();
+                Console.WriteLine("Nombre de clients abonnées : " + nbrlcient);
+                int totalAbonnements = _abonnementService.CountTotalVAbonnement();
+
+                ViewBag.CurrentPage = pageNumberClients;
+                ViewBag.TotalPages = (int)Math.Ceiling((double)totalAbonnements / pageSize);
+                ViewBag.TotalAbonnements = totalAbonnements;
+                ViewBag.NbrClientAbonne = nbrlcient;
+                ////end client abonnées////////////////////////////////////////////////////////
+
                 var viewModel = new GlobalViewModel
                 {
                     HistoriqueViewModel = new HistoriqueViewModel
@@ -441,7 +453,11 @@ namespace suivi_abonnement.Controllers
                         TotalExpires = totalExpires,
                         TotalPagesActifs = (int)Math.Ceiling((double)totalActifs / pageSize),
                         TotalPagesEnAttente = (int)Math.Ceiling((double)totalEnAttente / pageSize),
-                        TotalPagesExpirés = (int)Math.Ceiling((double)totalExpires / pageSize)
+                        TotalPagesExpirés = (int)Math.Ceiling((double)totalExpires / pageSize),
+
+                        ////Client abonnées////////////////////////////////////////////////////////
+                        Abonnements = abonnement,
+                        
                     }
                 };
 

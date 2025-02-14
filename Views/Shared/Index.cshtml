@@ -122,7 +122,7 @@
 
         /* Titre "Notifications" */
         #notifList .header {
-            background-color: #1E2A3A;
+            background-color: rgb(5, 34, 73);
             color: white;
             text-align: center;
             padding: 10px;
@@ -150,7 +150,7 @@
         .notification-item h6,
         .notification-item p {
             font-size: 14px;
-            color: #333;
+            color: #000000;
             white-space: normal;  /* Permet de ne pas couper les mots */
             word-break: break-word; /* Casse les mots longs s'ils dépassent */
             overflow-wrap: break-word; /* Alternative pour assurer le retour à la ligne */
@@ -182,7 +182,7 @@
 
         .notification-item p {
             font-size: 12px;
-            color: #555;
+            color: #0c169e;
         }
 
         /* Icône de validation */
@@ -190,10 +190,16 @@
         .notification-item .fa-circle {
             font-size: 18px;
             cursor: pointer;
-            color: gray;
+            color: rgb(252, 5, 5);
         }
 
-
+        .notification-status.read {
+            color: gray;
+        }
+        .notification-text.read {
+            opacity: 0.6;
+            color: #555;
+        }
             
         </style>
 </head>
@@ -252,7 +258,7 @@
                 </li>
 
                 <li class="nav-item">
-                    <a class="nav-link  " href="@Url.Action("HistoriquePage", "Abonnements")">
+                    <a class="nav-link  " href="@Url.Action("HistoriqueDetail", "Abonnements")">
                         <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-clock-history" viewBox="0 0 16 16">
                                 <path d="M8.515 1.019A7 7 0 0 0 8 1V0a8 8 0 0 1 .589.022zm2.004.45a7 7 0 0 0-.985-.299l.219-.976q.576.129 1.126.342zm1.37.71a7 7 0 0 0-.439-.27l.493-.87a8 8 0 0 1 .979.654l-.615.789a7 7 0 0 0-.418-.302zm1.834 1.79a7 7 0 0 0-.653-.796l.724-.69q.406.429.747.91zm.744 1.352a7 7 0 0 0-.214-.468l.893-.45a8 8 0 0 1 .45 1.088l-.95.313a7 7 0 0 0-.179-.483m.53 2.507a7 7 0 0 0-.1-1.025l.985-.17q.1.58.116 1.17zm-.131 1.538q.05-.254.081-.51l.993.123a8 8 0 0 1-.23 1.155l-.964-.267q.069-.247.12-.501m-.952 2.379q.276-.436.486-.908l.914.405q-.24.54-.555 1.038zm-.964 1.205q.183-.183.35-.378l.758.653a8 8 0 0 1-.401.432z"/>
@@ -409,68 +415,68 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
     <script>
-        $(document).ready(function () {
-            function loadNotifications() {
-                $.ajax({
-                    url: "/Notification/GetNotificationsCount",
-                    type: "GET",
-                    success: function (data) {
-                        // Mise à jour du badge de notifications
-                        if (data.notificationCount > 0) {
-                            $("#notifBadge").text(data.notificationCount).show();
-                        } else {
-                            $("#notifBadge").hide();
-                        }
+        function loadNotifications() {
+            console.log("Rechargement des notifications...");
 
-                        // Construction de la liste des notifications
-                        let notifHtml = `
-                            <div class="header">Notifications</div>
-                            <div class="scrollable-notifications">
-                        `;
+            $.ajax({
+                url: "/Notification/GetNotificationsCount",
+                type: "GET",
+                success: function (data) {
+                    console.log("Données reçues:", data);
 
-                        if (data.notifications.length > 0) {
-                            data.notifications.forEach(notification => {
-                                let bellClass = notification.status === "non lu" ? "fa-bell unread" : "fa-bell read";
-                                let titleColor = notification.status === "non lu" ? "#d81616" : "#000000";
-
-                                notifHtml += `
-                                    <li class="notification-item d-flex" data-notification-id="${notification.id}">
-                                        <a href="#" class="dropdown-item d-flex p-2 w-100" onclick="markAsRead(${notification.id})">
-                                            <div class="d-flex align-items-center me-3">
-                                                <i class="fa ${bellClass}"></i>
-                                            </div>
-                                            <div class="d-flex flex-column justify-content-center w-100">
-                                                <div class="d-flex justify-content-between align-items-center">
-                                                    <h6 style="color: ${titleColor};">${notification.type}</h6>
-                                                    <i class="fa ${notification.status === 'non lu' ? 'fa-circle-thin' : 'fa-circle'}"></i>
-                                                </div>
-                                                <p>${notification.message}</p>
-                                                <p class="text-xs text-muted mb-0">
-                                                    <i class="fa fa-clock me-1"></i>
-                                                    <span>${new Date(notification.createdAt).toLocaleDateString()}</span>
-                                                </p>
-                                            </div>
-                                        </a>
-                                    </li>
-                                `;
-                            });
-                        } else {
-                            notifHtml += '<li class="mb-2"><p class="text-xs text-center text-secondary">Aucune notification.</p></li>';
-                        }
-
-                        notifHtml += `</div>`; // Fermeture du div scrollable
-
-                        $("#notifList").html(notifHtml);
-                    },
-                    error: function (xhr) {
-                        console.error("Erreur lors du chargement des notifications :", xhr.responseText);
+                    // Mettre à jour le badge de notification
+                    if (data.notificationCount > 0) {
+                        $("#notifBadge").text(data.notificationCount).show();
+                    } else {
+                        $("#notifBadge").hide();
                     }
-                });
-            }
 
-            // Charger les notifications au chargement de la page
+                    // Construction de la liste des notifications
+                    let notifHtml = `
+                        <div class="header">Notifications</div>
+                        <div class="scrollable-notifications">
+                    `;
+
+                    if (data.notifications.length > 0) {
+                        data.notifications.forEach(notification => {
+                            let isUnread = notification.status === "non lu";
+                            let statusClass = isUnread ? "unread" : "read";
+                            let bellClass = isUnread ? "fa-bell notification-icon unread" : "fa-bell notification-icon read";
+                            let bgClass = isUnread ? "notification-item unread" : "notification-item read";
+
+                            notifHtml += `
+                                <li class="${bgClass} d-flex" data-notification-id="${notification.id}">
+                                    <a href="#" class="dropdown-item d-flex p-2 w-100" onclick="markAsRead(${notification.id})">
+                                        <div class="d-flex align-items-center me-3">
+                                            <i class="fa ${bellClass}"></i>
+                                        </div>
+                                        <div class="d-flex flex-column justify-content-center w-100">
+                                            <p class="notification-text ${statusClass}">${notification.message}</p>
+                                            <p class="text-xs text-muted mb-0">
+                                                <i class="fa fa-clock me-1"></i>
+                                                <span>${new Date(notification.createdAt).toLocaleDateString()}</span>
+                                            </p>
+                                        </div>
+                                    </a>
+                                </li>
+                            `;
+                        });
+                    } else {
+                        notifHtml += '<li class="mb-2"><p class="text-xs text-center text-secondary">Aucune notification.</p></li>';
+                    }
+
+                    notifHtml += `</div>`; // Fermeture du div scrollable
+                    $("#notifList").html(notifHtml);
+                },
+                error: function (xhr) {
+                    console.error("Erreur lors du chargement des notifications :", xhr.responseText);
+                }
+            });
+        }
+
+        // Exécuter au chargement de la page
+        $(document).ready(function () {
             loadNotifications();
 
             // Recharger les notifications toutes les 30 secondes
@@ -478,12 +484,29 @@
         });
 
         function markAsRead(notificationId) {
+            console.log("Tentative de marquer comme lu:", notificationId);
+
             $.ajax({
-                url: "/Notification/MarkAsRead",
+                url: "/Notification/MarkNotificationAsRead",
                 type: "POST",
-                data: { id: notificationId },
-                success: function () {
-                    loadNotifications();
+                data: { notificationId: notificationId },
+                success: function (response) {
+                    console.log("Réponse du serveur:", response);
+
+                    // Sélectionner l'élément correspondant et modifier son affichage
+                    let notifItem = $(`li[data-notification-id='${notificationId}']`);
+                    notifItem.removeClass("unread").addClass("read"); // Changer la classe de l'élément
+                    notifItem.find(".notification-text").removeClass("unread").addClass("read"); // Modifier le texte
+                    notifItem.find(".notification-icon").removeClass("unread").addClass("read"); // Modifier l'icône de cloche
+                    notifItem.find("a").removeAttr("onclick"); // Désactiver le clic une fois marqué comme lu
+
+                    // Vérifier si toutes les notifications sont lues et masquer le badge
+                    if ($(".notification-item.unread").length === 0) {
+                        $("#notifBadge").hide();
+                    }
+                },
+                error: function (xhr) {
+                    console.error("Erreur lors de la requête markAsRead:", xhr.responseText);
                 }
             });
         }
