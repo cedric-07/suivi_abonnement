@@ -138,7 +138,7 @@ namespace suivi_abonnement.Repository
         }
         public Abonnement GetAbonnementById(int id)
         {
-            Abonnement abonnement = null; // Initialisation à null pour le cas où aucun abonnement n'est trouvé.
+            Abonnement abonnement = new Abonnement(); // Initialisation à un nouvel objet Abonnement pour éviter les valeurs nulles.
             try
             {
                 using (var connection = new MySqlConnection(_connectionString))
@@ -1008,7 +1008,7 @@ namespace suivi_abonnement.Repository
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
-                return null;
+                return new List<VAbonnementClient>();
             }
             return abonnementList;
 
@@ -1249,7 +1249,11 @@ namespace suivi_abonnement.Repository
         //Client
         public List<VAbonnementClient> getAbonnementsExpiredOnMonthClient()
         {
-            int userId = _httpContextAccessor.HttpContext.Session.GetInt32("UserId") ?? 0;
+            int userId = 0;
+            if (_httpContextAccessor.HttpContext != null)
+            {
+                userId = _httpContextAccessor.HttpContext.Session.GetInt32("UserId") ?? 0;
+            }
             List<VAbonnementClient> abonnements = new List<VAbonnementClient>();
             try
             {
@@ -1353,7 +1357,11 @@ namespace suivi_abonnement.Repository
 
         public List<VAbonnementClient> getAbonnementsExpiredOnWeekClient()
         {
-            int userId = _httpContextAccessor.HttpContext.Session.GetInt32("UserId") ?? 0;
+            int userId = 0;
+            if (_httpContextAccessor.HttpContext != null && _httpContextAccessor.HttpContext.Session != null)
+            {
+                userId = _httpContextAccessor.HttpContext.Session.GetInt32("UserId") ?? 0;
+            }
             List<VAbonnementClient> abonnements = new List<VAbonnementClient>();
             try
             {

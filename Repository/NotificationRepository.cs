@@ -22,7 +22,12 @@ namespace suivi_abonnement.Service
 
         public void SendNotification()
         {
-            var userRole = _httpContextAccessor.HttpContext.Session.GetString("UserRole");
+            var userRole = _httpContextAccessor.HttpContext?.Session?.GetString("UserRole");
+
+            if (userRole == null)
+            {
+                throw new Exception("UserRole is not set in the session.");
+            }
 
             try
             {
@@ -50,80 +55,7 @@ namespace suivi_abonnement.Service
             }
         }
 
-        // public void SendNotificationByRoleAdmin()
-        // {
-        //     try
-        //     {
-        //         using (var connection = new MySqlConnection(connectionString))
-        //         {
-        //             connection.Open();
-
-        //             // Notification pour abonnements expirant dans 30 et 7 jours
-        //             string query = @"SELECT 
-        //                                 a.abonnement_id,
-        //                                 a.nom,
-        //                                 u.id AS iduser,
-        //                                 u.username,
-        //                                 u.email,
-        //                                 DATEDIFF(a.expiration_date, CURDATE()) AS jours_restants
-        //                             FROM abonnements a
-        //                             JOIN users u ON u.role = 'admin'
-        //                             WHERE DATEDIFF(a.expiration_date, CURDATE()) BETWEEN 0 AND 30";
-
-        //             using (var command = new MySqlCommand(query, connection))
-        //             {
-
-        //                 using (var reader = command.ExecuteReader())
-        //                 {
-        //                     if (reader.HasRows)
-        //                     {
-        //                         while (reader.Read())
-        //                         {
-        //                             int userId = reader.GetInt32("iduser");
-        //                             int abonnementId = reader.GetInt32("abonnement_id");
-        //                             int joursRestants = reader.GetInt32("jours_restants");
-        //                             string nomAbonnement = reader.GetString("nom");
-        //                             string nomClient = reader.GetString("username");
-        //                             string emailClient = reader.GetString("email");
-
-        //                             string message;
-        //                             string type;
-
-        //                             if (joursRestants <= 7)
-        //                             {
-        //                                 message = $"L'abonnement {nomAbonnement} va expirer dans {joursRestants} jour(s)";
-        //                                 type = "Rappel";
-        //                             }
-        //                             else
-        //                             {
-        //                                 message = $"L'abonnement {nomAbonnement} va expirer dans {joursRestants} jours";
-        //                                 type = "Alerte";
-        //                             }
-
-        //                             try
-        //                             {
-        //                                 CreateNotification(userId, abonnementId, message, type); // Utilisation du type dynamique
-        //                             }
-        //                             catch (Exception ex)
-        //                             {
-        //                                 Console.WriteLine($"Erreur lors de la création de la notification pour {userId}: {ex.Message}");
-        //                                 Console.WriteLine(ex.StackTrace);
-        //                             }
-        //                         }
-        //                     }
-        //                     else
-        //                     {
-        //                         Console.WriteLine("Aucune donnée trouvée pour la requête.");
-        //                     }
-        //                 }
-        //             }
-        //         }
-        //     }
-        //     catch (Exception e)
-        //     {
-        //         throw new Exception("Une erreur s'est produite lors de l'envoi des notifications : " + e.Message);
-        //     }
-        // }
+        
 
         public void SendNotificationByRoleAdmin()
         {
@@ -162,7 +94,7 @@ namespace suivi_abonnement.Service
                                     string message = type + " : L'abonnement " + nomAbonnement + " va expirer dans " + joursRestants + " jours";
                                     CreateNotification(userId, abonnementId, message, type);
                                 }
-                                else 
+                                else if (joursRestants <= 7)
                                 {
                                     string type = "Alerte";
                                     string message = type + " : L'abonnement " + nomAbonnement + " va expirer dans " + joursRestants + " jours";
@@ -179,81 +111,6 @@ namespace suivi_abonnement.Service
             }
         }
 
-
-
-        // public void SendNotificationByRoleUser()
-        // {
-        //     try
-        //     {
-        //         using (var connection = new MySqlConnection(connectionString))
-        //         {
-        //             connection.Open();
-
-        //             // Notification pour abonnements expirant dans 30 et 7 jours
-        //             string query = @"SELECT idclient , abonnement_id , nomabonnement , nomclient , emailclient , idclient , DATEDIFF(expiration_date, CURDATE()) AS jours_restants 
-        //                             FROM v_abonnements_par_client WHERE roleclient = 'user' AND DATEDIFF(expiration_date, CURDATE()) BETWEEN 0 AND 30";
-
-        //             using (var command = new MySqlCommand(query, connection))
-        //             {
-
-        //                 using (var reader = command.ExecuteReader())
-        //                 {
-        //                     while (reader.Read())
-        //                     {
-        //                         int userId = reader.GetInt32("idclient");
-        //                         int abonnementId = reader.GetInt32("abonnement_id");
-        //                         int joursRestants = reader.GetInt32("jours_restants");
-        //                         string nomAbonnement = reader.GetString("nomabonnement");
-        //                         string nomClient = reader.GetString("nomclient");
-        //                         string emailClient = reader.GetString("emailclient");
-
-        //                         string message;
-        //                         string type;
-
-        //                         if (joursRestants <= 7)
-        //                         {
-        //                             message = $"L'abonnement {nomAbonnement} de {nomClient} va expirer dans {joursRestants} jour(s)";
-        //                             type = "Rappel";
-        //                         }
-        //                         else
-        //                         {
-        //                             message = $"L'abonnement {nomAbonnement} de {nomClient} va expirer dans {joursRestants} jours";
-        //                             type = "Alerte";
-        //                         }
-
-        //                         try
-        //                         {
-        //                             CreateNotification(userId, abonnementId, message, type); // Utilisation du type dynamique
-        //                         }
-        //                         catch (Exception ex)
-        //                         {
-        //                             Console.WriteLine($"Erreur pour {userId}: {ex.Message}");
-        //                         }
-        //                     }
-        //                 }
-        //             }
-        //         }
-        //     }
-        //     catch (Exception e)
-        //     {
-        //         throw new Exception("Une erreur s'est produite lors de l'envoi des notifications : " + e.Message);
-        //     }
-        // }
-
-        private int CalculerJoursOuvres(DateTime startDate, DateTime endDate)
-        {
-            int joursOuvres = 0;
-
-            for (DateTime date = startDate; date <= endDate; date = date.AddDays(1))
-            {
-                if (date.DayOfWeek != DayOfWeek.Saturday && date.DayOfWeek != DayOfWeek.Sunday)
-                {
-                    joursOuvres++;
-                }
-            }
-
-            return joursOuvres;
-        }
 
         public void SendNotificationByRoleUser()
         {
@@ -284,7 +141,7 @@ namespace suivi_abonnement.Service
                                     string message = type + " : Votre abonnement " + nomAbonnement + " va expirer dans " + joursRestants + " jours";
                                     CreateNotification(userId, abonnementId, message, type);
                                 }
-                                else
+                                else if (joursRestants <= 7)
                                 {
                                     string type = "Alerte";
                                     string message = type + " : Votre abonnement " + nomAbonnement + " va expirer dans " + joursRestants + " jours";
@@ -341,6 +198,7 @@ namespace suivi_abonnement.Service
                             command.ExecuteNonQuery();
                         }
                     }
+                    
                 }
                 catch (MySqlException ex)
                 {
@@ -360,7 +218,11 @@ namespace suivi_abonnement.Service
         public List<Notification> GetNotificationsForClient()
         {
             List<Notification> notifications = new List<Notification>();
-            int userId = _httpContextAccessor.HttpContext.Session.GetInt32("UserId") ?? 0;
+            int userId = 0;
+            if (_httpContextAccessor.HttpContext?.Session != null)
+            {
+                userId = _httpContextAccessor.HttpContext.Session.GetInt32("UserId") ?? 0;
+            }
             try
             {
                 using (var connection = new MySqlConnection(connectionString))

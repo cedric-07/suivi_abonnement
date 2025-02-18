@@ -6,7 +6,7 @@ namespace suivi_abonnement
     public class Departement
     {
         public int Id { get; set; }
-        public string Nom { get; set; }
+        public string? Nom { get; set; }
         
     }
 }

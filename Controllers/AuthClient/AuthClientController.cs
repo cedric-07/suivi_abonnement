@@ -91,6 +91,12 @@ namespace suivi_abonnement_omnis.Controllers.Authentification
             if (ModelState.IsValid)
             {
                 // Vérifier si l'email existe déjà
+                if (string.IsNullOrWhiteSpace(user.Email))
+                {
+                    TempData["Error"] = "L'email ne peut pas être vide.";
+                    return View(user);
+                }
+
                 var userByEmail = _userService.GetUserByEmail(user.Email);
                 if (userByEmail != null)
                 {
@@ -98,7 +104,7 @@ namespace suivi_abonnement_omnis.Controllers.Authentification
                     return RedirectToAction("Register", "AuthClient");
                 }
                 //Le mot de passe doit contenir au moins 8 caractères, une lettre majuscule, une lettre minuscule, un chiffre et un caractère spécial.
-                string password = user.Password;
+                string password = user.Password ?? string.Empty;
                 if (!Regex.IsMatch(password, @"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^\da-zA-Z]).{8,}$"))
                 {
                     TempData["Error"] = "Le mot de passe doit contenir au moins 8 caractères, une lettre majuscule, une lettre minuscule, un chiffre et un caractère spécial.";
@@ -149,7 +155,12 @@ namespace suivi_abonnement_omnis.Controllers.Authentification
             // Si le token est généré, on envoie l'email
             var resetUrl = Url.Action("ResetPassword", "AuthClient", new { token = token, email = email }, Request.Scheme);
             var smtpServer = configuration["EmailSettings:SmtpServer"];
-            var smtpPort = int.Parse(configuration["EmailSettings:SmtpPort"]);
+            var smtpPortString = configuration["EmailSettings:SmtpPort"];
+            if (string.IsNullOrEmpty(smtpPortString))
+            {
+                throw new ArgumentNullException("SmtpPort configuration is missing.");
+            }
+            var smtpPort = int.Parse(smtpPortString);
             var senderEmail = "OMNIS Madagascar <" + configuration["EmailSettings:SenderEmail"] + ">";
 
             var message = new MailMessage();
@@ -193,6 +204,11 @@ namespace suivi_abonnement_omnis.Controllers.Authentification
                 return View(model);
             }
 
+            if (string.IsNullOrWhiteSpace(model.Token) || string.IsNullOrWhiteSpace(model.Email))
+            {
+                TempData["Error"] = "Token ou email invalide.";
+                return View(model);
+            }
             bool result = _userService.ResetPassword(model.Token, model.NewPassword, model.Email);
 
             if (!result)

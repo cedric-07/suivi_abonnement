@@ -69,8 +69,8 @@ namespace suivi_abonnement.Controllers
         {
             try
             {
-                int userId = _httpContextAccessor.HttpContext.Session.GetInt32("UserId") ?? 0;
-                var userRole = _httpContextAccessor.HttpContext.Session.GetString("UserRole");
+                int userId = _httpContextAccessor.HttpContext?.Session?.GetInt32("UserId") ?? 0;
+                var userRole = _httpContextAccessor.HttpContext?.Session?.GetString("UserRole");
 
                 if (userId == 0)
                 {
@@ -114,6 +114,7 @@ namespace suivi_abonnement.Controllers
             }
             catch (Exception ex)
             {
+                Console.WriteLine($"❌ Erreur dans Index: {ex.Message}");
                 TempData["Error"] = "Une erreur s'est produite lors du chargement des messages.";
                 return RedirectToAction("Index");
             }
@@ -126,7 +127,7 @@ namespace suivi_abonnement.Controllers
         {
             try
             {
-                int senderId = _httpContextAccessor.HttpContext.Session.GetInt32("UserId") ?? 0;
+                int senderId = _httpContextAccessor.HttpContext?.Session?.GetInt32("UserId") ?? 0;
 
                 if (senderId == 0)
                 {
@@ -173,7 +174,7 @@ namespace suivi_abonnement.Controllers
         [HttpGet("Message/searchUser")]
         public IActionResult searchUser(string name)
         {
-            var userRole = _httpContextAccessor.HttpContext.Session.GetString("UserRole");
+            var userRole = _httpContextAccessor.HttpContext?.Session?.GetString("UserRole");
             try
             {
                 var user = _messageService.searchUser(name);
@@ -211,7 +212,7 @@ namespace suivi_abonnement.Controllers
         {
             try
             {
-                int userId = _httpContextAccessor.HttpContext.Session.GetInt32("UserId") ?? 0;
+                int userId = _httpContextAccessor.HttpContext?.Session?.GetInt32("UserId") ?? 0;
                 if (userId == 0)
                     return Json(new { count = 0 });
 
@@ -247,7 +248,7 @@ namespace suivi_abonnement.Controllers
         [HttpGet]
         public IActionResult GetMessages(int receiverId)
         {
-            int userId = _httpContextAccessor.HttpContext.Session.GetInt32("UserId") ?? 0;
+            int userId = _httpContextAccessor.HttpContext?.Session?.GetInt32("UserId") ?? 0;
             try
             {
                 var messages = _messageService.GetMessagesForConversation(userId, receiverId);

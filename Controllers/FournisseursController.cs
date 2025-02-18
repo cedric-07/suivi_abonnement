@@ -147,16 +147,16 @@ namespace suivi_abonnement.Controllers
                 if (fournisseurToEdit != null)
                 {
                     TempData["Message"] = "Fournisseur mis à jour avec succès";
-                    return RedirectToAction("IndexFournisseurPage");
+                    return RedirectToAction("Index");
                 }
                 
                 // Redirection vers la page des abonnements après la mise à jour
-                return RedirectToAction("IndexFournisseurPage");
+                return RedirectToAction("Index");
             }
             catch (Exception ex)
             {
                 TempData["Error"] = "Une erreur s'est produite lors de la mise à jour : " + ex.Message;
-                return RedirectToAction("IndexFournisseurPage");
+                return RedirectToAction("Index");
             }
         }
 
@@ -166,7 +166,7 @@ namespace suivi_abonnement.Controllers
         public ActionResult Delete(int id)
         {
             _fournisseurService.DeleteFournisseur(id);
-            return RedirectToAction("IndexFournisseurPage");
+            return RedirectToAction("Index");
         }
 
     }

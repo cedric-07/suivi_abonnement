@@ -2,6 +2,7 @@
 @{
     ViewData["Title"] = "Liste des Abonnements";
     Layout = "~/Views/Shared/Index.cshtml";
+    }
 }
 <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
 
@@ -97,10 +98,12 @@
                         <li class="mb-3">
                             <label for="categoryFilter" class="form-label text-dark fw-bold" style="font-size: 13px;">Catégorie</label>
                             <select class="form-select form-select-sm rounded-pill shadow-sm" id="categoryFilter" name="idcategorie" style="font-size: 12px;">
-                                <option disabled selected>--Choisir une catégorie--</option>
-                                @foreach (var categorie in Model.AbonnementViewModel.Categories)
+                                @if (Model?.AbonnementViewModel?.Categories != null)
                                 {
-                                    <option value="@categorie.Id">@categorie.Nom</option>
+                                    @foreach (var categorie in Model.AbonnementViewModel.Categories)
+                                    {
+                                        <option value="@categorie.Id">@categorie.Nom</option>
+                                    }
                                 }
                             </select>
                         </li>
@@ -108,9 +111,12 @@
                             <label for="TypeFilter" class="form-label text-dark fw-bold" style="font-size: 13px;">Type</label>
                             <select class="form-select form-select-sm rounded-pill shadow-sm" id="TypeFilter" name="type" style="font-size: 12px;">
                                 <option disabled selected>--Choisir une type--</option>
-                                @foreach (var abonnement in Model.AbonnementViewModel.Abonnements)
+                                @if (Model?.AbonnementViewModel?.Abonnements != null)
                                 {
-                                    <option value="@abonnement.Type">@abonnement.Type</option>
+                                    @foreach (var abonnement in Model.AbonnementViewModel.Abonnements)
+                                    {
+                                        <option value="@abonnement.Type">@abonnement.Type</option>
+                                    }
                                 }
                             </select>
                         </li>
@@ -151,180 +157,193 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach (var abonnement in Model.AbonnementViewModel.Abonnements)
+                    @if (Model?.AbonnementViewModel?.Abonnements?.Count == 0)
                     {
-                        <tr
-                            data_id="@abonnement.Id"
-                            data_nom="@abonnement.Nom"
-                            data_type="@abonnement.Type"
-                            data_prix="@abonnement.Prix"
-                            data_dateDebut="@abonnement.DateDebut"
-                            data_expirationDate="@abonnement.ExpirationDate"
-                            data_nomcategorie="@abonnement.NomCategorie"
-                            data_nomfournisseur="@abonnement.NomFournisseur"
-                            data_description="@abonnement.Description"
-                            data_datedebut="@abonnement.DateDebut"
-                            data_expirationdate="@abonnement.ExpirationDate"
-                            data_nomdepartement="@abonnement.NomDepartement">
-                            <td>@abonnement.Nom</td>
-                            <td>@abonnement.Prix.ToString("N2")</td>
-                            <td>@abonnement.NomFournisseur</td>
-                            <td>@abonnement.DateDebut.ToString("d MMM yyyy")</td>
-                            <td>@abonnement.ExpirationDate.ToString("d MMM yyyy")</td>
-                            <td>
-                                @if (abonnement.DateDebut > DateTime.Now)
-                                {
-                                    <span class="badge bg-warning">En attente</span>
-                                }
-                                else if (abonnement.ExpirationDate < DateTime.Now)
-                                {
-                                    <span class="badge bg-danger">Expiré</span>
-                                }
-                                else
-                                {
-                                    <span class="badge bg-success">Actif</span>
-                                }
-                            </td>
-                            <td>
-                                <span class="action-icons">
-                                    <!-- Détails Form -->
-                                    <form action="@Url.Action("Details", "Abonnements")" method="get" style="display: inline;">
-                                        <input type="hidden" name="Id" value="@abonnement.Id" />
-                                        <button type="submit" class="icon-button">
-                                            <i class='fas fa-eye view' title='Voir les détails' style="color: darkblue"></i>
-                                        </button>
-                                    </form>
 
-                                    <!-- Modifier Icon -->
-                                    <i class="fas fa-edit edit" title="Modifier" data-bs-toggle="modal" data-bs-target="#modalEdit-@abonnement.Id"></i>
-
-                                    <!-- Supprimer Icon -->
-                                    <i class="fas fa-trash delete" title="Supprimer" data-bs-toggle="modal" data-bs-target="#modalDelete-@abonnement.Id"></i>
-                                </span>
-                            </td>
-
-                        </tr>
-                        <!--Modal pour modifier un abonnement-->
-                        <div class="modal fade" id="modalEdit-@abonnement.Id" tabindex="-1" aria-labelledby="editModalLabel-@abonnement.Id" aria-hidden="true">
-                            <div class="modal-dialog modal-dialog-centered modal-lg">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h5 class="modal-title" id="editModalLabel-@abonnement.Id">Modifier l'abonnement</h5>
-                                    </div>
-                                    <div class="modal-body">
-                                        <form asp-action="Edit" method="post">
-                                            <input type="hidden" name="Id" value="@abonnement.Id"/>
-
-                                            <!-- Section 1: Informations générales -->
-                                            <div class="row mb-3">
-                                                <div class="col-md-6">
-                                                    <label for="nom-@abonnement.Id" class="form-label">Nom</label>
-                                                    <input type="text" class="form-control" id="nom-@abonnement.Id" name="Nom" value="@abonnement.Nom" required>
-                                                </div>
-                                                <div class="col-md-6">
-                                                    <label for="type-@abonnement.Id" class="form-label">Type</label>
-                                                    <select name="Type" class="form-select" id="type-@abonnement.Id"  value="@abonnement.Type" required>
-                                                        <option value="Mensuel">Mensuel</option>
-                                                        <option value="Annuel">Annuel</option>
-                                                    </select>
-                                                </div>
-                                            </div>
-
-                                            <!-- Section 2: Informations financières -->
-                                            <div class="row mb-3">
-                                                <div class="col-md-6">
-                                                    <label for="prix-@abonnement.Id" class="form-label">Prix</label>
-                                                    <input type="number" class="form-control" id="prix-@abonnement.Id" name="Prix" value="@abonnement.Prix" required>
-                                                </div>
-                                                <div class="col-md-6">
-                                                    <label for="description-@abonnement.Id" class="form-label">Description</label>
-                                                    <textarea class="form-control text-wrap" id="description-@abonnement.Id" name="Description" rows="3" required>@abonnement.Description</textarea>
-                                                </div>
-                                            </div>
-
-                                            <!-- Section 3: Dates -->
-                                            <div class="row mb-3">
-                                                <div class="col-md-6">
-                                                    <label for="expirationDate-@abonnement.Id" class="form-label">Date d'expiration</label>
-                                                    <input type="datetime-local" class="form-control" id="expirationDate-@abonnement.Id" name="ExpirationDate" value="@abonnement.ExpirationDate.ToString("yyyy-MM-ddTHH:mm")" required>
-                                                </div>
-                                                <div class="col-md-6">
-                                                    <label for="dateDebut-@abonnement.Id" class="form-label">Date de début</label>
-                                                    <input type="datetime-local" class="form-control" id="dateDebut-@abonnement.Id" name="DateDebut" value="@abonnement.DateDebut.ToString("yyyy-MM-ddTHH:mm")" required>
-                                                </div>
-                                            </div>
-                                            <!-- Section 4 : categorie , fournisseurs , departement-->
-
-                                            <div class="row mb-3">
-                                                <div class="col-md-6">
-                                                    <label for="categorie-@abonnement.Id" class="form-label">Catégorie</label>
-                                                    <select class="form-select" id="idcategorie-@abonnement.Id" name="idcategorie"  value="@abonnement.NomCategorie" required>
-                                                        <option disabled selected hidden>--Choisir une catégorie--</option>
-                                                        @foreach (var categorie in Model.AbonnementViewModel.Categories)
-                                                        {
-                                                            <option value="@categorie.Id">@categorie.Nom</option>
-                                                        }
-                                                    </select>
-                                                </div>
-                                                <div class="col-md-6">
-                                                    <label for="fournisseur-@abonnement.Id" class="form-label">Fournisseur</label>
-                                                    <select class="form-select" id="fournisseur-@abonnement.Id" name="idfournisseur" value="@abonnement.NomFournisseur" required>
-                                                        <option disabled selected hidden>--Choisir un fournisseur--</option>
-                                                        @foreach (var fournisseur in Model.AbonnementViewModel.Fournisseurs)
-                                                        {
-                                                            <option value="@fournisseur.Id">@fournisseur.Nom</option>
-                                                        }
-                                                    </select>
-                                                </div>
-                                                
-                                            </div>
-                                            <div class="row mb-3">
-                                                <div class="col-md-6">
-                                                    <label for="departement-@abonnement.Id" class="form-label">Département</label>
-                                                    <select class="form-select" id="departement-@abonnement.Id" name="idDepartement" value="@abonnement.NomDepartement" required>
-                                                        <option disabled selected hidden>--Choisir un département--</option>
-                                                        @foreach (var departement in Model.AbonnementViewModel.Departements)
-                                                        {
-                                                            <option value="@departement.Id">@departement.Nom</option>
-                                                        }
-                                                    </select>
-                                                </div>
-                                            </div>
-                                            <div class="d-flex justify-content-start gap-3 mt-3">
-                                                <button type="submit" class="btn" style="background-color: #0b3d91; color: white; padding: 6px 15px; font-size: 13px; border-radius: 5px;">
-                                                    MODIFIER
-                                                </button>
-                                                <button type="button" class="btn" data-bs-dismiss="modal" style="background-color: #4e70ac; color: white; padding: 6px 15px; font-size: 13px; border-radius: 5px;">
-                                                    ANNULER
-                                                </button>
-                                            </div>
-                                        </form>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- Modal pour la suppression d'un abonnement -->
-                        <div class="modal fade" id="modalDelete-@abonnement.Id" tabindex="-1" aria-labelledby="deleteModalLabel-@abonnement.Id" aria-hidden="true">
-                            <div class="modal-dialog modal-dialog-centered">
-                                <div class="modal-content">
-                                    <div class="modal-header  text-white" style="background-color: #0d2d5a;">
-                                        <h5 class="modal-title" id="deleteModalLabel-@abonnement.Id">Confirmation de suppression</h5>
-                                    </div>
-                                    <div class="modal-body">
-                                            <p>Êtes-vous sûr de vouloir supprimer <strong class="text-danger">@abonnement.Nom</strong>?</p>
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn" data-bs-dismiss="modal" style="background-color: #3263a8; color: white;">NON</button>
-                                        <form asp-action="Delete" method="post">
+                        @foreach (var abonnement in Model.AbonnementViewModel.Abonnements)
+                        {
+                            <tr
+                                data_id="@abonnement.Id"
+                                data_nom="@abonnement.Nom"
+                                data_type="@abonnement.Type"
+                                data_prix="@abonnement.Prix"
+                                data_dateDebut="@abonnement.DateDebut"
+                                data_expirationDate="@abonnement.ExpirationDate"
+                                data_nomcategorie="@abonnement.NomCategorie"
+                                data_nomfournisseur="@abonnement.NomFournisseur"
+                                data_description="@abonnement.Description"
+                                data_datedebut="@abonnement.DateDebut"
+                                data_expirationdate="@abonnement.ExpirationDate"
+                                data_nomdepartement="@abonnement.NomDepartement">
+                                <td>@abonnement.Nom</td>
+                                <td>@abonnement.Prix.ToString("N2")</td>
+                                <td>@abonnement.NomFournisseur</td>
+                                <td>@abonnement.DateDebut.ToString("d MMM yyyy")</td>
+                                <td>@abonnement.ExpirationDate.ToString("d MMM yyyy")</td>
+                                <td>
+                                    @if (abonnement.DateDebut > DateTime.Now)
+                                    {
+                                        <span class="badge bg-warning">En attente</span>
+                                    }
+                                    else if (abonnement.ExpirationDate < DateTime.Now)
+                                    {
+                                        <span class="badge bg-danger">Expiré</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-success">Actif</span>
+                                    }
+                                </td>
+                                <td>
+                                    <span class="action-icons">
+                                        <!-- Détails Form -->
+                                        <form action="@Url.Action("Details", "Abonnements")" method="get" style="display: inline;">
                                             <input type="hidden" name="Id" value="@abonnement.Id" />
-                                            <button type="submit" class="btn " style="background-color: #0d2d5a; color: white;">OUI</button>
+                                            <button type="submit" class="icon-button">
+                                                <i class='fas fa-eye view' title='Voir les détails' style="color: darkblue"></i>
+                                            </button>
                                         </form>
+
+                                        <!-- Modifier Icon -->
+                                        <i class="fas fa-edit edit" title="Modifier" data-bs-toggle="modal" data-bs-target="#modalEdit-@abonnement.Id"></i>
+
+                                        <!-- Supprimer Icon -->
+                                        <i class="fas fa-trash delete" title="Supprimer" data-bs-toggle="modal" data-bs-target="#modalDelete-@abonnement.Id"></i>
+                                    </span>
+                                </td>
+
+                            </tr>
+                            <!--Modal pour modifier un abonnement-->
+                            <div class="modal fade" id="modalEdit-@abonnement.Id" tabindex="-1" aria-labelledby="editModalLabel-@abonnement.Id" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered modal-lg">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="editModalLabel-@abonnement.Id">Modifier l'abonnement</h5>
+                                        </div>
+                                        <div class="modal-body">
+                                            <form asp-action="Edit" method="post">
+                                                <input type="hidden" name="Id" value="@abonnement.Id"/>
+
+                                                <!-- Section 1: Informations générales -->
+                                                <div class="row mb-3">
+                                                    <div class="col-md-6">
+                                                        <label for="nom-@abonnement.Id" class="form-label">Nom</label>
+                                                        <input type="text" class="form-control" id="nom-@abonnement.Id" name="Nom" value="@abonnement.Nom" required>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <label for="type-@abonnement.Id" class="form-label">Type</label>
+                                                        <select name="Type" class="form-select" id="type-@abonnement.Id"  value="@abonnement.Type" required>
+                                                            <option value="Mensuel">Mensuel</option>
+                                                            <option value="Annuel">Annuel</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+
+                                                <!-- Section 2: Informations financières -->
+                                                <div class="row mb-3">
+                                                    <div class="col-md-6">
+                                                        <label for="prix-@abonnement.Id" class="form-label">Prix</label>
+                                                        <input type="number" class="form-control" id="prix-@abonnement.Id" name="Prix" value="@abonnement.Prix" required>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <label for="description-@abonnement.Id" class="form-label">Description</label>
+                                                        <textarea class="form-control text-wrap" id="description-@abonnement.Id" name="Description" rows="3" required>@abonnement.Description</textarea>
+                                                    </div>
+                                                </div>
+
+                                                <!-- Section 3: Dates -->
+                                                <div class="row mb-3">
+                                                    <div class="col-md-6">
+                                                        <label for="expirationDate-@abonnement.Id" class="form-label">Date d'expiration</label>
+                                                        <input type="datetime-local" class="form-control" id="expirationDate-@abonnement.Id" name="ExpirationDate" value="@abonnement.ExpirationDate.ToString("yyyy-MM-ddTHH:mm")" required>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <label for="dateDebut-@abonnement.Id" class="form-label">Date de début</label>
+                                                        <input type="datetime-local" class="form-control" id="dateDebut-@abonnement.Id" name="DateDebut" value="@abonnement.DateDebut.ToString("yyyy-MM-ddTHH:mm")" required>
+                                                    </div>
+                                                </div>
+                                                <!-- Section 4 : categorie , fournisseurs , departement-->
+
+                                                <div class="row mb-3">
+                                                    <div class="col-md-6">
+                                                        <label for="categorie-@abonnement.Id" class="form-label">Catégorie</label>
+                                                        <select class="form-select" id="idcategorie-@abonnement.Id" name="idcategorie"  value="@abonnement.NomCategorie" required>
+                                                            <option disabled selected hidden>--Choisir une catégorie--</option>
+                                                            @if (Model?.AbonnementViewModel?.Categories != null)
+                                                            {
+                                                                @foreach (var categorie in Model.AbonnementViewModel.Categories)
+                                                                {
+                                                                    <option value="@categorie.Id">@categorie.Nom</option>
+                                                                }
+                                                            }
+                                                        </select>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <label for="fournisseur-@abonnement.Id" class="form-label">Fournisseur</label>
+                                                        <select class="form-select" id="fournisseur-@abonnement.Id" name="idfournisseur" value="@abonnement.NomFournisseur" required>
+                                                            <option disabled selected hidden>--Choisir un fournisseur--</option>
+                                                            @if (Model?.AbonnementViewModel?.Fournisseurs != null)
+                                                            {
+                                                                @foreach (var fournisseur in Model.AbonnementViewModel.Fournisseurs)
+                                                                {
+                                                                    <option value="@fournisseur.Id">@fournisseur.Nom</option>
+                                                                }
+                                                            }
+                                                        </select>
+                                                    </div>
+                                                    
+                                                </div>
+                                                <div class="row mb-3">
+                                                    <div class="col-md-6">
+                                                        <label for="departement-@abonnement.Id" class="form-label">Département</label>
+                                                        <select class="form-select" id="departement-@abonnement.Id" name="idDepartement" value="@abonnement.NomDepartement" required>
+                                                            <option disabled selected hidden>--Choisir un département--</option>
+                                                            @if (Model?.AbonnementViewModel?.Departements != null)
+                                                            {
+                                                                @foreach (var departement in Model.AbonnementViewModel.Departements)
+                                                                {
+                                                                    <option value="@departement.Id">@departement.Nom</option>
+                                                                }
+                                                            }
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="d-flex justify-content-start gap-3 mt-3">
+                                                    <button type="submit" class="btn" style="background-color: #0b3d91; color: white; padding: 6px 15px; font-size: 13px; border-radius: 5px;">
+                                                        MODIFIER
+                                                    </button>
+                                                    <button type="button" class="btn" data-bs-dismiss="modal" style="background-color: #4e70ac; color: white; padding: 6px 15px; font-size: 13px; border-radius: 5px;">
+                                                        ANNULER
+                                                    </button>
+                                                </div>
+                                            </form>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                            <!-- Modal pour la suppression d'un abonnement -->
+                            <div class="modal fade" id="modalDelete-@abonnement.Id" tabindex="-1" aria-labelledby="deleteModalLabel-@abonnement.Id" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered">
+                                    <div class="modal-content">
+                                        <div class="modal-header  text-white" style="background-color: #0d2d5a;">
+                                            <h5 class="modal-title" id="deleteModalLabel-@abonnement.Id">Confirmation de suppression</h5>
+                                        </div>
+                                        <div class="modal-body">
+                                                <p>Êtes-vous sûr de vouloir supprimer <strong class="text-danger">@abonnement.Nom</strong>?</p>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn" data-bs-dismiss="modal" style="background-color: #3263a8; color: white;">NON</button>
+                                            <form asp-action="Delete" method="post">
+                                                <input type="hidden" name="Id" value="@abonnement.Id" />
+                                                <button type="submit" class="btn " style="background-color: #0d2d5a; color: white;">OUI</button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        }
                     }
-                    @if (Model.AbonnementViewModel.Abonnements.Count == 0)
+                    else
                     {
                         <tr>
                             <td colspan="7" class="text-center">Aucun abonnement trouvé</td>

@@ -3,6 +3,7 @@
 @{
     ViewData["Title"] = "Liste des Abonnements";
     Layout = "~/Views/Shared/Index.cshtml";
+    
 }
 
 <!DOCTYPE html>
@@ -104,7 +105,12 @@
         .list-group-item {
             cursor: pointer;
             border: none;
+            margin-bottom: 8px; /* Ajoute un espace entre chaque élément */
+            padding: 10px; /* Ajuste le padding pour l'alignement */
+            border-radius: 5px; /* Optionnel : arrondi pour un effet plus doux */
+            background: none; /* Optionnel : couleur de fond pour mieux différencier */
         }
+
         .message-row {
             align-items: center;
             margin-bottom: 10px;
@@ -151,17 +157,24 @@
                         <input type="text" class="form-control" placeholder="Rechercher...">
                     </div>
                 </form>
-                <ul class="list-group" id="userList">
-                    @foreach (var user in Model?.Users)
+                    @if (Model?.Users != null)
                     {
-                        <li class="list-group-item d-flex align-items-center" onclick="selectUser(@user.Id, '@user.Username')">
-                            <div class="me-3">
-                                <i class="fas fa-user-circle fa-2x"></i>
-                            </div>
-                            <span>@user.Username</span>
-                            <span class="user-status @(user.IsConnected ? "online" : "offline")"></span>
-                            <span id="notif-@user.Id" class="badge bg-danger ms-auto d-none">0</span>
-                        </li>
+                    
+                        @foreach (var user in Model.Users)
+                        {
+                            <li class="list-group-item d-flex align-items-center" onclick="selectUser(@user.Id, '@user.Username')">
+                                <div class="me-3">
+                                    <i class="fas fa-user-circle fa-2x"></i>
+                                </div>
+                                <span>@user.Username</span>
+                                <span class="user-status @(user.IsConnected ? "online" : "offline")"></span>
+                                <span id="notif-@user.Id" class="badge bg-danger ms-auto d-none"></span>
+                            </li>
+                        }
+                    }
+                    else
+                    {
+                        <p>Aucun utilisateur trouvé.</p>
                     }
                 </ul>
 
@@ -172,36 +185,10 @@
                     <h5 id="chatTitle">Sélectionnez un utilisateur</h5>
                 </div>
                 <div id="chatWindow" class="message-list">
-                    @foreach (var message in Model.Messages)
-                    {
-                        if (message.SenderId == Model.CurrentUserId)
-                        {
-                            <div class="message-row sent">
-                                <div class="avatar-sender">
-                                    <i class="fas fa-user-circle user-icon"></i>
-                                </div>
-                                <div class="sent">
-                                    <p>@message.MessageText</p>
-                                    <span class="message-date">@message.DateEnvoi</span>
-                                </div>
-                            </div>
-                        }
-                        else
-                        {
-                            <div class="message-row received">
-                                <div class="avatar-receiver">
-                                    <i class="fas fa-user-circle user-icon"></i>
-                                </div>
-                                <div class="message received">
-                                    <p>@message.MessageText</p>
-                                    <span class="message-date">@message.DateEnvoi</span>
-                                </div>
-                            </div>
-                        }
-                    }
+                    
                 </div>
                 <div class="message-input d-flex">
-                    <input type="hidden" id="receiverId" value="@Model.ReceiverId">
+                    <input type="hidden" id="receiverId" value="@Model?.ReceiverId">
                     <textarea  id="messageText" class="form-control me-2" placeholder="Écrivez un message..."></textarea>
                     <button id="sendButton" class="btn btn-primary"><i class="fas fa-paper-plane"></i></button>
                 </div>
@@ -262,7 +249,7 @@
                 $("#chatWindow").append(`
                     <div class="message-container sent">
                         <div class="message sent">
-                            <p>${message}</p>
+                            <p>${convertLinksToHtml(message)}</p>
                             <span class="message-date">${dateDisplay}</span>
                             <span class="message-status">${messageStatus}</span>
                         </div>
@@ -274,6 +261,14 @@
             })
             .catch(err => console.error("❌ Erreur d'envoi de message via SignalR :", err));
     });
+
+    function convertLinksToHtml(message) {
+        let urlPattern = /(https?:\/\/[^\s]+)/g;
+        return message.replace(urlPattern, function(url) {
+            return `<a href="${url}" target="_blank">${url}</a>`;
+        });
+    }
+
 
 
     // 📬 Notification de nouveau message
@@ -287,7 +282,13 @@
             var notifBadge = $("#notif-" + senderId);
             if (notifBadge.length > 0) {
                 var currentCount = parseInt(notifBadge.text()) || 0;
-                notifBadge.text(currentCount + 1).removeClass("d-none");
+                var newCount = currentCount + 1;
+                if(newCount > 0){
+                    notifBadge.text(newCount).removeClass("d-none");
+                }
+                else{
+                    notifBadge.text(newCount).addClass("d-none");
+                }
                 saveUnreadNotification(senderId, currentCount + 1);
             } else {
                 console.warn("⚠️ Badge non trouvé pour l'utilisateur " + senderId);
@@ -312,7 +313,7 @@
                 <div class="message-container received">
                     <div class="avatar"><i class="bi bi-person-circle user-icon"></i></div>
                     <div class="message received">
-                        <p>${message}</p>
+                        <p>${convertLinksToHtml(message)}</p>
                         <span class="message-date">${dateDisplay}</span>
                         <span class="message-status">${messageStatus}</span>
                     </div>
@@ -359,11 +360,18 @@
         var unreadNotifications = JSON.parse(localStorage.getItem("unreadNotifications")) || {};
         for (var userId in unreadNotifications) {
             var notifBadge = $("#notif-" + userId);
+            var count = unreadNotifications[userId];
+
             if (notifBadge.length > 0) {
-                notifBadge.text(unreadNotifications[userId]).removeClass("d-none");
+                if (count > 0) {
+                    notifBadge.text(count).removeClass("d-none");
+                } else {
+                    notifBadge.addClass("d-none");
+                }
             }
         }
     }
+
 
     // 🎯 Sélection d'un utilisateur
     function selectUser(receiverId, receiverName) {
@@ -378,6 +386,7 @@
         notifBadge.text("0").addClass("d-none");
         saveUnreadNotification(receiverId, 0);
     }
+
 
     connection.invoke("MarkMessagesAsRead", parseInt(receiverId), parseInt(userId))
         .then(() => console.log("✅ Messages marqués comme lus pour", receiverId))

@@ -2,6 +2,7 @@
 @{
     ViewData["Title"] = "Liste des Fournisseurs";
     Layout = "~/Views/Shared/Index.cshtml";
+    }
 }
 <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
 <!-- Modal pour le message de succès -->
@@ -84,19 +85,28 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach (var fournisseur in Model.FournisseurViewModel.Fournisseurs)
+                    @if (Model.FournisseurViewModel?.Fournisseurs != null)
+                    {
+                        
+                        @foreach (var fournisseur in Model.FournisseurViewModel.Fournisseurs)
+                        {
+                            <tr>
+                                <td>@fournisseur.Nom</td>
+                                <td>@fournisseur.Email</td>
+                                <td>@fournisseur.Telephone</td>
+                                <td>
+                                        <span class="action-icons">
+                                            <i class="fas fa-edit edit" title="Modifier" data-bs-toggle="modal" data-bs-target="#modalEdit-@fournisseur.Id"></i>
+                                            <i class="fas fa-trash delete" title="Supprimer" data-bs-toggle="modal" data-bs-target="#modalDelete-@fournisseur.Id"></i>
+                                        </span>
+                                    </td>
+                            </tr>
+                        }
+                    }
+                    else
                     {
                         <tr>
-                            <td>@fournisseur.Nom</td>
-                            <td>@fournisseur.Email</td>
-                            <td>@fournisseur.Telephone</td>
-                            <td>
-                                    <span class="action-icons">
-                                        <i class="fas fa-eye view" title="Voir les détails" data-bs-toggle="modal" data-bs-target="#modalView-@fournisseur.Id"></i>
-                                        <i class="fas fa-edit edit" title="Modifier" data-bs-toggle="modal" data-bs-target="#modalEdit-@fournisseur.Id"></i>
-                                        <i class="fas fa-trash delete" title="Supprimer" data-bs-toggle="modal" data-bs-target="#modalDelete-@fournisseur.Id"></i>
-                                    </span>
-                                </td>
+                            <td colspan="4" class="text-center">Aucun fournisseur trouvé</td>
                         </tr>
                     }
                     
@@ -104,6 +114,110 @@
             </table>
         </div>
     </div>
+    <!-- Modal de modification -->
+    @if (Model.FournisseurViewModel?.Fournisseurs != null)
+    {
+        @foreach (var fournisseur in Model.FournisseurViewModel.Fournisseurs)
+        {
+            <div class="modal fade" id="modalEdit-@fournisseur.Id" tabindex="-1" aria-labelledby="modalEditLabel-@fournisseur.Id" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="modalEditLabel-@fournisseur.Id">Modifier le Fournisseur @fournisseur.Nom</h5>
+                        </div>
+                        <form method="post" asp-action="Edit" class="form">
+                            <div class="modal-body">
+                                <input type="hidden" name="Id" value="@fournisseur.Id" />
+                                <div class="mb-3">
+                                    <label for="nom-@fournisseur.Id" class="form-label">Nom</label>
+                                    <input type="text" class="form-control" id="nom-@fournisseur.Id" name="Nom" value="@fournisseur.Nom" required>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="email-@fournisseur.Id" class="form-label">Email</label>
+                                    <input type="email" class="form-control" id="email-@fournisseur.Id" name="Email" value="@fournisseur.Email" required>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="telephone-@fournisseur.Id" class="form-label">Téléphone</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text">+231</span>
+                                        <input type="tel" class="form-control" id="telephone-@fournisseur.Id" name="Telephone" value="@(fournisseur.Telephone != null ? fournisseur.Telephone.Replace("+231", "") : "")" required>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+                                <button type="submit" class="btn btn-primary">Enregistrer</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        }
+    }
+
+    <!-- Modal de suppression -->
+    @if (Model.FournisseurViewModel?.Fournisseurs != null)
+    {
+        @foreach (var fournisseur in Model.FournisseurViewModel.Fournisseurs)
+        {
+            <div class="modal fade" id="modalDelete-@fournisseur.Id" tabindex="-1" aria-labelledby="modalDeleteLabel-@fournisseur.Id" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="modalDeleteLabel-@fournisseur.Id">Supprimer le Fournisseur @fournisseur.Nom</h5>
+                        </div>
+                        <div class="modal-body">
+                            <h6 class="text-center">Êtes-vous sûr de vouloir supprimer le fournisseur @fournisseur.Nom ?</h6>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+                            <form asp-action="Delete" method="post">
+                                <input type="hidden" name="Id" value="@fournisseur.Id" />
+                                <button type="submit" class="btn btn-danger">Supprimer</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    }
+    <!---Modal de détails-->
+    @if (Model.FournisseurViewModel?.Fournisseurs != null)
+    {
+        @foreach (var fournisseur in Model.FournisseurViewModel.Fournisseurs)
+        {
+            <div class="modal fade" id="modalView-@fournisseur.Id" tabindex="-1" aria-labelledby="modalViewLabel-@fournisseur.Id" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="modalViewLabel-@fournisseur.Id">Fournisseur @fournisseur.Nom</h5>
+                        </div>
+                        <div class="modal-body">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <p class="title">Nom</p>
+                                    <p>@fournisseur.Nom</p>
+                                </div>
+                                <div class="col-md-6">
+                                    <p class="title">Email</p>
+                                    <p>@fournisseur.Email</p>
+                                </div>
+                                <div class="col-md-6">
+                                    <p class="title">Téléphone</p>
+                                    <p>@fournisseur.Telephone</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    }
 
     <div class="d-flex justify-content-center mt-4">
         <nav>

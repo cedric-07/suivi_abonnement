@@ -10,9 +10,9 @@ namespace suivi_abonnement.Controllers
          private readonly IAbonnementService _abonnementService;
         private readonly IFournisseurService _fournisseurService;
         private readonly ICategorieService _categorieService;
-        private readonly HttpContextAccessor _httpContextAccessor;
-        private readonly IMessageService _messageService;
-        private readonly UserService _userService;
+        private readonly HttpContextAccessor? _httpContextAccessor;
+        private readonly IMessageService? _messageService;
+        private readonly UserService? _userService;
         private readonly AbonnementViewModel abonnementViewModel = new AbonnementViewModel();
         private readonly AbonnementStatViewModel abonnementStatViewModel = new AbonnementStatViewModel();
         private readonly INotificationService _notificationService;
@@ -146,9 +146,6 @@ namespace suivi_abonnement.Controllers
         {
             return View();
         }
-
-
-        
-
+    
     }
 }

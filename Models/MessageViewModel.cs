@@ -10,6 +10,8 @@ namespace suivi_abonnement.Models
 
         public MessageViewModel()
         {
+            Users = new List<User>();
+            adminUser = new List<User>();
             Messages = new List<Message>();
         }
     }

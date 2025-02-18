@@ -75,4 +75,5 @@ app.MapControllerRoute(
     pattern: "{controller=AuthClient}/{action=Login}/{id?}");
 
 app.MapHub<MessageHub>("/messageHub");  // 👈 Ajoute le hub SignalR
+app.MapHub<NotificationHub>("/notificationHub");  // 👈 Ajoute le hub SignalR
 app.Run();

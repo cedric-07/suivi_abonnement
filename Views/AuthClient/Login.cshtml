@@ -120,7 +120,7 @@
 
 
     // Vérifiez si ShowModal est défini dans TempData et si c'est vrai, affichez le modal
-    @if (TempData["ShowModal"] != null && TempData["ShowModal"].ToString() == "true")
+    @if (TempData["ShowModal"]?.ToString() == "true")
     {
         <text>
             $(document).ready(function() {

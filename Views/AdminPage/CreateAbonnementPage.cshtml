@@ -118,9 +118,12 @@
                         <label for="idfournisseur" class="form-label fw-bold">Fournisseur</label>
                         <select class="form-select input-custom" id="idfournisseur" name="idfournisseur" required>
                             <option disabled selected hidden>--Choisir un fournisseur--</option>
-                            @foreach (var fournisseur in Model.AbonnementViewModel.Fournisseurs)
+                            @if (Model?.AbonnementViewModel?.Fournisseurs != null)
                             {
-                                <option value="@fournisseur.Id">@fournisseur.Nom</option>
+                                @foreach (var fournisseur in Model.AbonnementViewModel.Fournisseurs)
+                                {
+                                    <option value="@fournisseur.Id">@fournisseur.Nom</option>
+                                }
                             }
                         </select>
                     </div>
@@ -128,9 +131,12 @@
                         <label for="idcategorie" class="form-label fw-bold">Catégorie</label>
                         <select class="form-select input-custom" id="idcategorie" name="idcategorie" required>
                             <option disabled selected hidden>--Choisir une catégorie--</option>
-                            @foreach (var categorie in Model.AbonnementViewModel.Categories)
+                            @if (Model?.AbonnementViewModel?.Categories != null)
                             {
-                                <option value="@categorie.Id">@categorie.Nom</option>
+                                @foreach (var categorie in Model.AbonnementViewModel.Categories)
+                                {
+                                    <option value="@categorie.Id">@categorie.Nom</option>
+                                }
                             }
                         </select>
                     </div>
@@ -140,9 +146,12 @@
                         <label for="idDepartement" class="form-label fw-bold">Département</label>
                         <select class="form-select input-custom" id="idDepartement" name="idDepartement" required>
                             <option disabled selected hidden>--Choisir un département--</option>
-                            @foreach (var departement in Model.AbonnementViewModel.Departements)
+                            @if (Model?.AbonnementViewModel?.Departements != null)
                             {
-                                <option value="@departement.Id">@departement.Nom</option>
+                                @foreach (var departement in Model.AbonnementViewModel.Departements)
+                                {
+                                    <option value="@departement.Id">@departement.Nom</option>
+                                }
                             }
                         </select>
                     </div>

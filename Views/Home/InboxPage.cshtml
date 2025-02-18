@@ -144,16 +144,19 @@
                     </div>
                 </form>
                 <ul class="list-group" id="userList">
-                    @foreach (var user in Model?.MessageViewModel.Users)
+                    @if (Model?.MessageViewModel?.Users != null)
                     {
-                        <li class="list-group-item d-flex align-items-center" onclick="selectUser(@user.Id, '@user.Username')">
-                            <div class="me-3">
-                                <i class="fas fa-user-circle fa-2x"></i>
-                            </div>
-                            <span>@user.Username</span>
-                            <span class="user-status @(user.IsConnected ? "online" : "offline")"></span>
-                            <span id="notif-@user.Id" class="badge bg-danger ms-auto d-none">0</span>
-                        </li>
+                        @foreach (var user in Model.MessageViewModel.Users)
+                        {
+                            <li class="list-group-item d-flex align-items-center" onclick="selectUser(@user.Id, '@user.Username')">
+                                <div class="me-3">
+                                    <i class="fas fa-user-circle fa-2x"></i>
+                                </div>
+                                <span>@user.Username</span>
+                                <span class="user-status @(user.IsConnected ? "online" : "offline")"></span>
+                                <span id="notif-@user.Id" class="badge bg-danger ms-auto d-none">0</span>
+                            </li>
+                        }
                     }
                 </ul>
 
@@ -164,36 +167,39 @@
                     <h5 id="chatTitle">Sélectionnez un utilisateur</h5>
                 </div>
                 <div id="chatWindow" class="message-list">
-                    @foreach (var message in Model.MessageViewModel.Messages)
+                    @if (Model?.MessageViewModel?.Messages != null)
                     {
-                        if (message.SenderId == Model.MessageViewModel.CurrentUserId)
+                        @foreach (var message in Model.MessageViewModel.Messages)
                         {
-                            <div class="message-row sent">
-                                <div class="avatar-sender">
-                                    <i class="fas fa-user-circle user-icon"></i>
+                            if (message.SenderId == Model.MessageViewModel.CurrentUserId)
+                            {
+                                <div class="message-row sent">
+                                    <div class="avatar-sender">
+                                        <i class="fas fa-user-circle user-icon"></i>
+                                    </div>
+                                    <div class="sent">
+                                        <p>@message.MessageText</p>
+                                        <span class="message-date">@message.DateEnvoi</span>
+                                    </div>
                                 </div>
-                                <div class="sent">
-                                    <p>@message.MessageText</p>
-                                    <span class="message-date">@message.DateEnvoi</span>
+                            }
+                            else
+                            {
+                                <div class="message-row received">
+                                    <div class="avatar-receiver">
+                                        <i class="fas fa-user-circle user-icon"></i>
+                                    </div>
+                                    <div class="message received">
+                                        <p>@message.MessageText</p>
+                                        <span class="message-date">@message.DateEnvoi</span>
+                                    </div>
                                 </div>
-                            </div>
-                        }
-                        else
-                        {
-                            <div class="message-row received">
-                                <div class="avatar-receiver">
-                                    <i class="fas fa-user-circle user-icon"></i>
-                                </div>
-                                <div class="message received">
-                                    <p>@message.MessageText</p>
-                                    <span class="message-date">@message.DateEnvoi</span>
-                                </div>
-                            </div>
+                            }
                         }
                     }
                 </div>
                 <div class="message-input d-flex">
-                    <input type="hidden" id="receiverId" value="@Model.MessageViewModel.ReceiverId">
+                    <input type="hidden" id="receiverId" value="@(Model?.MessageViewModel?.ReceiverId ?? 0)">
                     <textarea  id="messageText" class="form-control me-2" placeholder="Écrivez un message..."></textarea>
                     <button id="sendButton" class="btn btn-primary"><i class="fas fa-paper-plane"></i></button>
                 </div>

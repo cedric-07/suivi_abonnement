@@ -49,7 +49,7 @@ namespace suivi_abonnement.Repository
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
-                return null;
+                return new List<Fournisseur>();
             }
             return fournisseurs;
         }
@@ -118,7 +118,7 @@ namespace suivi_abonnement.Repository
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
-                return null;
+                return new List<Fournisseur>();
             }
             return fournisseurs;
 
@@ -144,7 +144,7 @@ namespace suivi_abonnement.Repository
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
-                return null;
+                throw new InvalidOperationException("Failed to update fournisseur.");
             }
             return fournisseur;
         }
@@ -171,7 +171,7 @@ namespace suivi_abonnement.Repository
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
-                return null;
+                throw new InvalidOperationException("Failed to update fournisseur.");
             }
             return fournisseur;
         }
@@ -183,19 +183,42 @@ namespace suivi_abonnement.Repository
                 using (var connection = new MySqlConnection(connectionString))
                 {
                     connection.Open();
-                    string query = "DELETE FROM fournisseurs WHERE fournisseur_id = @id";
-                    using (var command = new MySqlCommand(query, connection))
+
+                    // Supprimer d'abord les notifications liées aux abonnements du fournisseur
+                    string deleteNotificationsQuery = @"
+                        DELETE FROM notifications 
+                        WHERE idabonnement IN (SELECT abonnement_id FROM abonnements WHERE idfournisseur= @id)";
+                    using (var command = new MySqlCommand(deleteNotificationsQuery, connection))
                     {
                         command.Parameters.AddWithValue("@id", id);
                         command.ExecuteNonQuery();
                     }
+
+                    // Ensuite, supprimer les abonnements liés au fournisseur
+                    string deleteAbonnementsQuery = "DELETE FROM abonnements WHERE idfournisseur = @id";
+                    using (var command = new MySqlCommand(deleteAbonnementsQuery, connection))
+                    {
+                        command.Parameters.AddWithValue("@id", id);
+                        command.ExecuteNonQuery();
+                    }
+
+                    // Enfin, supprimer le fournisseur
+                    string deleteFournisseurQuery = "DELETE FROM fournisseurs WHERE fournisseur_id = @id";
+                    using (var command = new MySqlCommand(deleteFournisseurQuery, connection))
+                    {
+                        command.Parameters.AddWithValue("@id", id);
+                        command.ExecuteNonQuery();
+                    }
+
                     connection.Close();
                 }
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+                Console.WriteLine($"Erreur : {ex.Message}");
             }
         }
+
+
     }
 }

@@ -8,16 +8,16 @@ namespace suivi_abonnement.Repository
     public class UserRepository : IUserRepository
     {
         private readonly string connectionString;
-        private readonly HttpContextAccessor _httpContextAccessor;
+        private readonly IHttpContextAccessor _httpContextAccessor;
         public UserRepository(IConfiguration configuration , IHttpContextAccessor httpContextAccessor)
         {
             connectionString = "server=localhost;port=3306;database=suivi_abonnement_omnis_db;user=root;password=;SslMode=None";
-            httpContextAccessor = _httpContextAccessor;
+            _httpContextAccessor = httpContextAccessor;
         }
 
         public User Login(string email, string password)
         {
-            User user = null;
+            User user = new User();
             try
             {
                 using (var connection = new MySqlConnection(connectionString))
@@ -33,7 +33,7 @@ namespace suivi_abonnement.Repository
                         {
                             if (reader.Read())
                             {
-                                string storedPassword = reader["password"].ToString();
+                                string storedPassword = reader["password"]?.ToString() ?? string.Empty;
                                 if (BCrypt.Net.BCrypt.Verify(password, storedPassword))
                                 {
                                     user = new User
@@ -41,7 +41,7 @@ namespace suivi_abonnement.Repository
                                         Id = Convert.ToInt32(reader["id"]),
                                         Username = reader["username"].ToString(),
                                         Email = reader["email"].ToString(),
-                                        Role = reader["role"].ToString(),
+                                        Role = reader["role"]?.ToString() ?? string.Empty,
                                         IsConnected = reader.GetBoolean("isconnected")
                                     };
 
@@ -176,10 +176,9 @@ namespace suivi_abonnement.Repository
                     else
                     {
                         Console.WriteLine("Password reset token generation failed.");
-                        return null;
+                        return string.Empty;
                     }
                 }
-                connection.Close();
             }
         }
 
@@ -231,7 +230,7 @@ namespace suivi_abonnement.Repository
         //Get User by email
         public User GetUserByEmail(string email)
         {
-            User user = null;
+            User user = new User();
             try
             {
                 using (var connection = new MySqlConnection(connectionString))
@@ -251,7 +250,7 @@ namespace suivi_abonnement.Repository
                                     Id = Convert.ToInt32(reader["id"]),
                                     Username = reader["username"].ToString(),
                                     Email = reader["email"].ToString(),
-                                    Role = reader["role"].ToString()
+                                    Role = reader["role"]?.ToString() ?? string.Empty
                                 };
                             }
                         }
@@ -268,7 +267,7 @@ namespace suivi_abonnement.Repository
 
         public User GetRoleByUser(string role)
         {
-            User user = null;
+            User user = new User();
             try
             {
                 using (var connection = new MySqlConnection(connectionString))
@@ -286,7 +285,7 @@ namespace suivi_abonnement.Repository
                                     Id = Convert.ToInt32(reader["id"]),
                                     Username = reader["username"].ToString(),
                                     Email = reader["email"].ToString(),
-                                    Role = reader["role"].ToString()
+                                    Role = reader["role"]?.ToString() ?? string.Empty
                                 };
                             }
                         }
@@ -329,7 +328,7 @@ namespace suivi_abonnement.Repository
                                     Id = Convert.ToInt32(reader["id"]),
                                     Username = reader["username"].ToString(),
                                     Email = reader["email"].ToString(),
-                                    Role = reader["role"].ToString(),
+                                    Role = reader["role"]?.ToString() ?? string.Empty,
                                     IsConnected = reader.GetBoolean("isconnected")
                                 });
                             }
@@ -350,7 +349,7 @@ namespace suivi_abonnement.Repository
 
         public User GetUserById(int id)
         {
-            User user = null;
+            User user = new User();
             try
             {
                 using (var connection = new MySqlConnection(connectionString))
@@ -368,7 +367,7 @@ namespace suivi_abonnement.Repository
                                     Id = Convert.ToInt32(reader["id"]),
                                     Username = reader["username"].ToString(),
                                     Email = reader["email"].ToString(),
-                                    Role = reader["role"].ToString()
+                                    Role = reader["role"]?.ToString() ?? string.Empty
                                 };
                             }
                         }
@@ -405,7 +404,7 @@ namespace suivi_abonnement.Repository
                                     Id = Convert.ToInt32(reader["id"]),
                                     Username = reader["username"].ToString(),
                                     Email = reader["email"].ToString(),
-                                    Role = reader["role"].ToString()
+                                    Role = reader["role"]?.ToString() ?? string.Empty
                                 });
                             }
                         }

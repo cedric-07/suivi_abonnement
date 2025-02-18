@@ -110,49 +110,52 @@
                       @if (ViewBag.Notifications != null && ViewBag.Notifications.Count > 0)
                       {
                           <div class="scrollable-notifications" style="max-height: 250px; overflow-y: auto;">
-                              @foreach (var notification in ViewBag.Notifications as List<Notification>)
+                              @if (ViewBag.Notifications is List<Notification> notifications)
                               {
-                                  var cssClass = notification.Status == "non lu" ? "font-weight-bold bg-light" : "text-muted";
-                                  var notificationStatus = notification.Status == "non lu" ? "Mark as Read" : "Read";
+                                  @foreach (var notification in ViewBag.Notifications)
+                                  {
+                                      var cssClass = notification.Status == "non lu" ? "font-weight-bold bg-light" : "text-muted";
+                                      var notificationStatus = notification.Status == "non lu" ? "Mark as Read" : "Read";
 
-                                  <li class="mb-3" style="list-style: none; padding: 0;">
-                                      <form asp-action="MarkNotificationAsRead" asp-controller="Notification" method="post">
-                                          <input type="hidden" name="notificationId" value="@notification.Id" />
-                                          <a class="dropdown-item p-2 bg-transparent shadow-none rounded-2 @cssClass" 
-                                            onclick="this.closest('form').submit()" style="border-left: none; transition: all 0.3s ease; padding-left: 10px; padding-right: 10px; cursor: pointer;">
-                                              <div class="d-flex py-1">
-                                                  <div class="d-flex align-items-center me-2">
-                                                      <!-- Icône de notification -->
-                                                      <i class="fa fa-bell text-light" style="font-size: 18px; border-radius: 50%; background-color: #c70909; padding: 12px; display: inline-block; width: 40px; height: 40px; text-align: center; line-height: 18px;"></i>
-                                                      
-                                                      <!-- Icône de coche ou alerte en fonction du statut -->
-                                                      @if (notification.Status == "lu")
-                                                      {
-                                                          <i class="fa fa-circle text-success ms-2" style="font-size: 15px;"></i>
-                                                      }
+                                      <li class="mb-3" style="list-style: none; padding: 0;">
+                                          <form asp-action="MarkNotificationAsRead" asp-controller="Notification" method="post">
+                                              <input type="hidden" name="notificationId" value="@notification.Id" />
+                                              <a class="dropdown-item p-2 bg-transparent shadow-none rounded-2 @cssClass" 
+                                                onclick="this.closest('form').submit()" style="border-left: none; transition: all 0.3s ease; padding-left: 10px; padding-right: 10px; cursor: pointer;">
+                                                  <div class="d-flex py-1">
+                                                      <div class="d-flex align-items-center me-2">
+                                                          <!-- Icône de notification -->
+                                                          <i class="fa fa-bell text-light" style="font-size: 18px; border-radius: 50%; background-color: #c70909; padding: 12px; display: inline-block; width: 40px; height: 40px; text-align: center; line-height: 18px;"></i>
+                                                          
+                                                          <!-- Icône de coche ou alerte en fonction du statut -->
+                                                          @if (notification.Status == "lu")
+                                                          {
+                                                              <i class="fa fa-circle text-success ms-2" style="font-size: 15px;"></i>
+                                                          }
 
-                                                  </div>
-                                                  
-                                                  <div class="d-flex flex-column justify-content-center" style="width: 100%; word-wrap: break-word;">
-                                                      <h6 class="text-sm font-weight-bold mb-1" style="margin-bottom: 8px; font-size: 1rem; line-height: 1.4; color: @((notification.Status == "non lu") ? "#fd0404" : "#b3b0b0");">
-                                                          @((notification.Status == "non lu") ? notification.Type : notification.Type)
-                                                      </h6>
+                                                      </div>
                                                       
-                                                      <!-- Description de la notification -->
-                                                      <p class="text-xs mb-2" style="font-size: 0.875rem; color: @((notification.Status == "non lu") ? "#020208" : "#b3b0b0"); line-height: 1.5; white-space: normal; overflow: visible; text-overflow: clip;">
-                                                          @notification.Message
-                                                      </p>
-                                                      
-                                                      <!-- Date de la notification -->
-                                                      <p class="text-xs text-muted mb-0" style="font-size: 0.75rem; color: #1f1a1a; line-height: 1.4;">
-                                                          <i class="fa fa-clock me-1"></i>
-                                                          <span>@notification.CreatedAt.ToString("dd MMM yyyy")</span>
-                                                      </p>
+                                                      <div class="d-flex flex-column justify-content-center" style="width: 100%; word-wrap: break-word;">
+                                                          <h6 class="text-sm font-weight-bold mb-1" style="margin-bottom: 8px; font-size: 1rem; line-height: 1.4; color: @((notification.Status == "non lu") ? "#fd0404" : "#b3b0b0");">
+                                                              @((notification.Status == "non lu") ? notification.Type : notification.Type)
+                                                          </h6>
+                                                          
+                                                          <!-- Description de la notification -->
+                                                          <p class="text-xs mb-2" style="font-size: 0.875rem; color: @((notification.Status == "non lu") ? "#020208" : "#b3b0b0"); line-height: 1.5; white-space: normal; overflow: visible; text-overflow: clip;">
+                                                              @notification.Message
+                                                          </p>
+                                                          
+                                                          <!-- Date de la notification -->
+                                                          <p class="text-xs text-muted mb-0" style="font-size: 0.75rem; color: #1f1a1a; line-height: 1.4;">
+                                                              <i class="fa fa-clock me-1"></i>
+                                                              <span>@notification.CreatedAt.ToString("dd MMM yyyy")</span>
+                                                          </p>
+                                                      </div>
                                                   </div>
-                                              </div>
-                                          </a>
-                                      </form>
-                                  </li>
+                                              </a>
+                                          </form>
+                                      </li>
+                                  }
                               }
                           </div>
                       }

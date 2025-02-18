@@ -87,14 +87,23 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach (var abonnement in Model.HistoriqueViewModel.Abonnements)
+                    @if (Model?.HistoriqueViewModel?.Abonnements?.Count > 0)
                     {
-                        <tr>
-                            <td>@abonnement.Client</td>
-                            <td>@abonnement.Email</td>
-                            <td>@abonnement.Departement</td>
-                            <td>@abonnement.Abonnement</td>
-                        </tr>
+                        foreach (var client in Model.HistoriqueViewModel.Abonnements)
+                        {
+                            <tr>
+                                <td>@client.Client</td>
+                                <td>@client.Email</td>
+                                <td>@client.Departement</td>
+                                <td>@client.Abonnement</td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <div class="text-center py-5">
+                            <h4 class="text-muted">Aucun abonnement actif</h4>
+                        </div>
                     }
                 </tbody>
             </table>

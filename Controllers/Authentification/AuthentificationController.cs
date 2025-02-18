@@ -91,6 +91,12 @@ namespace suivi_abonnement_omnis.Controllers.Authentification
         {
             if (ModelState.IsValid)
             {
+                if (string.IsNullOrWhiteSpace(user.Email))
+                {
+                    TempData["Error"] = "L'email ne peut pas être vide.";
+                    return RedirectToAction("Register", "Authentification");
+                }
+
                 var userByEmail = _userService.GetUserByEmail(user.Email);
                 if (userByEmail != null)
                 {
@@ -142,7 +148,11 @@ namespace suivi_abonnement_omnis.Controllers.Authentification
             // Si le token est généré, on envoie l'email
             var resetUrl = Url.Action("ResetPassword", "Authentification", new { token = token, email = email }, Request.Scheme);
             var smtpServer = configuration["EmailSettings:SmtpServer"];
-            var smtpPort = int.Parse(configuration["EmailSettings:SmtpPort"]);
+            if (!int.TryParse(configuration["EmailSettings:SmtpPort"], out var smtpPort))
+            {
+                TempData["Error"] = "Invalid SMTP port configuration.";
+                return View();
+            }
             var senderEmail = "OMNIS Madagascar <" + configuration["EmailSettings:SenderEmail"] + ">";
 
             var message = new MailMessage();
@@ -185,6 +195,12 @@ namespace suivi_abonnement_omnis.Controllers.Authentification
             if (model.NewPassword != model.ConfirmPassword)
             {
                 TempData["Error"] = "Les mots de passe ne correspondent pas.";
+                return View(model);
+            }
+
+            if (string.IsNullOrEmpty(model.Token) || string.IsNullOrEmpty(model.Email))
+            {
+                TempData["Error"] = "Token ou email invalide.";
                 return View(model);
             }
 

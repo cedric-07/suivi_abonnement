@@ -1,16 +1,8 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Razor.Compilation;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using suivi_abonnement.Models;
 using suivi_abonnement.Service.Interface;
-using System.Collections.Generic;
-using suivi_abonnement.Service.Interface;
-using suivi_abonnement.Repository.Interface;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Rotativa.AspNetCore;
-using System;
-using System.Linq;
 
 namespace suivi_abonnement.Controllers
 {
@@ -136,7 +128,7 @@ namespace suivi_abonnement.Controllers
                     Suspendus = abonnementsSuspendus,
                     RevenusAnnuels = revenusAnnuels,
                     RevenusMensuels = revenusMensuels,
-                    Notifications = notifications,
+                    Notifications = notifications ?? new List<Notification>(),
                     NbrClient = nbrlcient,
                     Abonnements = abonnementfournisseur
                 }

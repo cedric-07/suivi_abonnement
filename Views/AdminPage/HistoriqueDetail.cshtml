@@ -203,7 +203,7 @@
                         <h5 class="title-card">Liste abonnements Actifs</h5>
                     </div>
                     <div class="table-responsive">
-                        @if (Model.HistoriqueViewModel.Actifs.Count > 0)
+                        @if (Model?.HistoriqueViewModel?.Actifs?.Count > 0)
                         {
                             <table class="table">
                                 <thead>
@@ -236,19 +236,31 @@
                 <div class="d-flex justify-content-center mt-3" id="pagination-actif">
                     <nav class="text-center mb-3">
                         <!-- Affichage du nombre total de pages -->
-                        <p style="color: #0d2d5a;">Pages @Model.HistoriqueViewModel.CurrentPageActifs sur @Model.HistoriqueViewModel.TotalPagesActifs</p>
+                        <p style="color: #0d2d5a;">Pages @Model?.HistoriqueViewModel?.CurrentPageActifs sur @Model?.HistoriqueViewModel?.TotalPagesActifs</p>
                         <ul class="pagination justify-content-center">
                             <!-- Bouton Précédent -->
-                            <li class="page-item @(Model.HistoriqueViewModel.CurrentPageActifs == 1 ? "disabled" : "")">
-                                <a class="page-link" 
-                                href="@Url.Action("HistoriqueDetail", new { pageNumberActifs = Math.Max(1, Model.HistoriqueViewModel.CurrentPageActifs - 1), pageNumberEnAttente = Model.HistoriqueViewModel.CurrentPageEnAttente, pageNumberExpires = Model.HistoriqueViewModel.CurrentPageExpirés })" 
-                                aria-label="Précédent">
-                                &laquo;
-                                </a>
-                            </li>
+                            @if (Model != null && Model.HistoriqueViewModel != null)
+                            {
+                                <li class="page-item @(Model.HistoriqueViewModel.CurrentPageActifs == 1 ? "disabled" : "")">
+                                    <a class="page-link" 
+                                    href="@Url.Action("HistoriqueDetail", new { pageNumberActifs = Math.Max(1, Model.HistoriqueViewModel.CurrentPageActifs - 1), pageNumberEnAttente = Model.HistoriqueViewModel.CurrentPageEnAttente, pageNumberExpires = Model.HistoriqueViewModel.CurrentPageExpirés })" 
+                                    aria-label="Précédent">
+                                    &laquo;
+                                    </a>
+                                </li>
+                            }
+                            else
+                            {
+                                <li class="page-item disabled">
+                                    <a class="page-link" 
+                                    aria-label="Précédent">
+                                    &laquo;
+                                    </a>
+                                </li>
+                            }
 
                             <!-- Pages dynamiques -->
-                            @for (int i = 1; i <= Model.HistoriqueViewModel.TotalPagesActifs; i++)
+                            @for (int i = 1; i <= Model?.HistoriqueViewModel?.TotalPagesActifs; i++)
                             {
                                 <li class="page-item @(i == Model.HistoriqueViewModel.CurrentPageActifs ? "active" : "")">
                                     <a class="page-link" 
@@ -260,13 +272,25 @@
                             }
 
                             <!-- Bouton Suivant -->
-                            <li class="page-item @(Model.HistoriqueViewModel.CurrentPageActifs == Model.HistoriqueViewModel.TotalPagesActifs ? "disabled" : "")">
-                                <a class="page-link" 
-                                href="@Url.Action("HistoriqueDetail", new { pageNumberActifs = Math.Min(Model.HistoriqueViewModel.TotalPagesActifs, Model.HistoriqueViewModel.CurrentPageActifs + 1), pageNumberEnAttente = Model.HistoriqueViewModel.CurrentPageEnAttente, pageNumberExpires = Model.HistoriqueViewModel.CurrentPageExpirés })"
-                                aria-label="Suivant">
-                                &raquo;
-                                </a>
-                            </li>
+                            @if (Model != null && Model.HistoriqueViewModel != null)
+                            {
+                                <li class="page-item @(Model.HistoriqueViewModel.CurrentPageActifs == Model.HistoriqueViewModel.TotalPagesActifs ? "disabled" : "")">
+                                    <a class="page-link" 
+                                    href="@Url.Action("HistoriqueDetail", new { pageNumberActifs = Math.Min(Model.HistoriqueViewModel.TotalPagesActifs, Model.HistoriqueViewModel.CurrentPageActifs + 1), pageNumberEnAttente = Model.HistoriqueViewModel.CurrentPageEnAttente, pageNumberExpires = Model.HistoriqueViewModel.CurrentPageExpirés })"
+                                    aria-label="Suivant">
+                                    &raquo;
+                                    </a>
+                                </li>
+                            }
+                            else
+                            {
+                                <li class="page-item disabled">
+                                    <a class="page-link" 
+                                    aria-label="Suivant">
+                                    &raquo;
+                                    </a>
+                                </li>
+                            }
                         </ul>
                     </nav>
                 </div>   
@@ -278,7 +302,7 @@
                         <h5 class="title-card">Liste abonnements Expirés</h5>
                     </div>
                     <div class="table-responsive">
-                        @if (Model.HistoriqueViewModel.Expirés.Count > 0)
+                        @if (Model?.HistoriqueViewModel?.Expirés?.Count > 0)
                         {
                             <table class="table">
                                 <thead>
@@ -311,19 +335,31 @@
                 <div class="d-flex justify-content-center mt-3" id="pagination-expirer">
                     <nav class="text-center mb-3">
                         <!-- Affichage du nombre total de pages -->
-                        <p style="color: #0d2d5a;">Pages @Model.HistoriqueViewModel.CurrentPageExpirés sur @Model.HistoriqueViewModel.TotalPagesExpirés</p>
+                        <p style="color: #0d2d5a;">Pages @Model?.HistoriqueViewModel?.CurrentPageExpirés sur @Model?.HistoriqueViewModel?.TotalPagesExpirés</p>
                         <ul class="pagination justify-content-center">
                             <!-- Bouton Précédent -->
-                            <li class="page-item @(Model.HistoriqueViewModel.CurrentPageExpirés == 1 ? "disabled" : "")">
-                                <a class="page-link" 
-                                href="@Url.Action("HistoriqueDetail", new { pageNumberActifs = Model.HistoriqueViewModel.CurrentPageActifs, pageNumberEnAttente = Model.HistoriqueViewModel.CurrentPageEnAttente, pageNumberExpires = Math.Max(1, Model.HistoriqueViewModel.CurrentPageExpirés - 1) })" 
-                                aria-label="Précédent">
-                                &laquo;
-                                </a>
-                            </li>
+                            @if (Model != null && Model.HistoriqueViewModel != null)
+                            {
+                                <li class="page-item @(Model.HistoriqueViewModel.CurrentPageExpirés == 1 ? "disabled" : "")">
+                                    <a class="page-link" 
+                                    href="@Url.Action("HistoriqueDetail", new { pageNumberActifs = Model.HistoriqueViewModel.CurrentPageActifs, pageNumberEnAttente = Model.HistoriqueViewModel.CurrentPageEnAttente, pageNumberExpires = Math.Max(1, Model.HistoriqueViewModel.CurrentPageExpirés - 1) })" 
+                                    aria-label="Précédent">
+                                    &laquo;
+                                    </a>
+                                </li>
+                            }
+                            else
+                            {
+                                <li class="page-item disabled">
+                                    <a class="page-link" 
+                                    aria-label="Précédent">
+                                    &laquo;
+                                    </a>
+                                </li>
+                            }
 
                             <!-- Pages dynamiques -->
-                            @for (int i = 1; i <= Model.HistoriqueViewModel.TotalPagesExpirés; i++)
+                            @for (int i = 1; i <= Model?.HistoriqueViewModel?.TotalPagesExpirés; i++)
                             {
                                 <li class="page-item @(i == Model.HistoriqueViewModel.CurrentPageExpirés ? "active" : "")">
                                     <a class="page-link" 
@@ -335,13 +371,25 @@
                             }
 
                             <!-- Bouton Suivant -->
-                            <li class="page-item @(Model.HistoriqueViewModel.CurrentPageExpirés == Model.HistoriqueViewModel.TotalPagesExpirés ? "disabled" : "")">
-                                <a class="page-link" 
-                                href="@Url.Action("HistoriqueDetail", new { pageNumberActifs = Model.HistoriqueViewModel.CurrentPageActifs, pageNumberEnAttente = Model.HistoriqueViewModel.CurrentPageEnAttente, pageNumberExpires = Math.Min(Model.HistoriqueViewModel.TotalPagesExpirés, Model.HistoriqueViewModel.CurrentPageExpirés + 1) })"
-                                aria-label="Suivant">
-                                &raquo;
-                                </a>
-                            </li>
+                            @if (Model != null && Model.HistoriqueViewModel != null)
+                            {
+                                <li class="page-item @(Model.HistoriqueViewModel.CurrentPageExpirés == Model.HistoriqueViewModel.TotalPagesExpirés ? "disabled" : "")">
+                                    <a class="page-link" 
+                                    href="@Url.Action("HistoriqueDetail", new { pageNumberActifs = Model.HistoriqueViewModel.CurrentPageActifs, pageNumberEnAttente = Model.HistoriqueViewModel.CurrentPageEnAttente, pageNumberExpires = Math.Min(Model.HistoriqueViewModel.TotalPagesExpirés, Model.HistoriqueViewModel.CurrentPageExpirés + 1) })"
+                                    aria-label="Suivant">
+                                    &raquo;
+                                    </a>
+                                </li>
+                            }
+                            else
+                            {
+                                <li class="page-item disabled">
+                                    <a class="page-link" 
+                                    aria-label="Suivant">
+                                    &raquo;
+                                    </a>
+                                </li>
+                            }
                         </ul>
                     </nav>
                 </div>
@@ -353,7 +401,7 @@
                         <h5 class="title-card">Liste abonnements En attente</h5>
                     </div>
                     <div class="table-responsive">
-                        @if (Model.HistoriqueViewModel.EnAttente.Count > 0)
+                        @if (Model?.HistoriqueViewModel?.EnAttente?.Count > 0)
                         {
                             <table class="table">
                                 <thead>
@@ -386,22 +434,37 @@
                 <div class="d-flex justify-content-center mt-3" id="pagination-en-attente">
                     <nav>
                         <!-- Affichage du nombre total de pages -->
-                        <p class="text-center mb-3" style="color: #0d2d5a;">
-                            Pages @Model.HistoriqueViewModel.CurrentPageEnAttente sur @Model.HistoriqueViewModel.TotalPagesEnAttente
-                        </p>
+                        @if (Model != null && Model.HistoriqueViewModel != null)
+                        {
+                            <p class="text-center mb-3" style="color: #0d2d5a;">
+                                Pages @Model.HistoriqueViewModel.CurrentPageEnAttente sur @Model.HistoriqueViewModel.TotalPagesEnAttente
+                            </p>
+                        }
                         <ul class="pagination justify-content-center" style="margin: 0; padding: 0; list-style: none;">
                             <!-- Bouton Précédent -->
-                            <li class="page-item @(Model.HistoriqueViewModel.CurrentPageEnAttente == 1 ? "disabled" : "")">
-                                <a class="page-link" 
-                                style="border-radius: 0; padding: 10px 15px;" 
-                                href="@Url.Action("HistoriqueDetail", new { pageNumberActifs = Model.HistoriqueViewModel.CurrentPageActifs, pageNumberEnAttente = Math.Max(1, Model.HistoriqueViewModel.CurrentPageEnAttente - 1), pageNumberExpires = Model.HistoriqueViewModel.CurrentPageExpirés })"
-                                aria-label="Précédent">
-                                &laquo;
-                                </a>
-                            </li>
-
+                            @if (Model != null && Model.HistoriqueViewModel != null)
+                            {
+                                <li class="page-item @(Model.HistoriqueViewModel.CurrentPageEnAttente == 1 ? "disabled" : "")">
+                                    <a class="page-link" 
+                                    style="border-radius: 0; padding: 10px 15px;" 
+                                    href="@Url.Action("HistoriqueDetail", new { pageNumberActifs = Model.HistoriqueViewModel.CurrentPageActifs, pageNumberEnAttente = Math.Max(1, Model.HistoriqueViewModel.CurrentPageEnAttente - 1), pageNumberExpires = Model.HistoriqueViewModel.CurrentPageExpirés })"
+                                    aria-label="Précédent">
+                                    &laquo;
+                                    </a>
+                                </li>
+                            }
+                            else
+                            {
+                                <li class="page-item disabled">
+                                    <a class="page-link" 
+                                    style="border-radius: 0; padding: 10px 15px;" 
+                                    aria-label="Précédent">
+                                    &laquo;
+                                    </a>
+                                </li>
+                            }
                             <!-- Pages dynamiques -->
-                            @for (int i = 1; i <= Model.HistoriqueViewModel.TotalPagesEnAttente; i++)
+                            @for (int i = 1; i <= Model?.HistoriqueViewModel?.TotalPagesEnAttente; i++)
                             {
                                 <li class="page-item @(i == Model.HistoriqueViewModel.CurrentPageEnAttente ? "active" : "")">
                                     <a class="page-link" 
@@ -413,14 +476,27 @@
                             }
 
                             <!-- Bouton Suivant -->
-                            <li class="page-item @(Model.HistoriqueViewModel.CurrentPageEnAttente == Model.HistoriqueViewModel.TotalPagesEnAttente ? "disabled" : "")">
-                                <a class="page-link" 
-                                style="border-radius: 0; padding: 10px 15px;" 
-                                href="@Url.Action("HistoriqueDetail", new { pageNumberActifs = Model.HistoriqueViewModel.CurrentPageActifs, pageNumberEnAttente = Math.Min(Model.HistoriqueViewModel.TotalPagesEnAttente, Model.HistoriqueViewModel.CurrentPageEnAttente + 1), pageNumberExpires = Model.HistoriqueViewModel.CurrentPageExpirés })"
-                                aria-label="Suivant">
-                                &raquo;
-                                </a>
-                            </li>
+                            @if (Model != null && Model.HistoriqueViewModel != null)
+                            {
+                                <li class="page-item @(Model.HistoriqueViewModel.CurrentPageEnAttente == Model.HistoriqueViewModel.TotalPagesEnAttente ? "disabled" : "")">
+                                    <a class="page-link" 
+                                    style="border-radius: 0; padding: 10px 15px;" 
+                                    href="@Url.Action("HistoriqueDetail", new { pageNumberActifs = Model.HistoriqueViewModel.CurrentPageActifs, pageNumberEnAttente = Math.Min(Model.HistoriqueViewModel.TotalPagesEnAttente, Model.HistoriqueViewModel.CurrentPageEnAttente + 1), pageNumberExpires = Model.HistoriqueViewModel.CurrentPageExpirés })"
+                                    aria-label="Suivant">
+                                    &raquo;
+                                    </a>
+                                </li>
+                            }
+                            else
+                            {
+                                <li class="page-item disabled">
+                                    <a class="page-link" 
+                                    style="border-radius: 0; padding: 10px 15px;" 
+                                    aria-label="Suivant">
+                                    &raquo;
+                                    </a>
+                                </li>
+                            }
                         </ul>
                     </nav>
                 </div>
@@ -432,7 +508,7 @@
                         <h5 class="title-card">Liste de(s) client(s) et leur(s) abonnement(s)</h5>
                     </div>
                     <div class="table-responsive">
-                        @if (Model.HistoriqueViewModel.Abonnements.Count > 0)
+                        @if (Model?.HistoriqueViewModel?.Abonnements?.Count > 0)
                         {
                             <table class="table">
                                 <thead>

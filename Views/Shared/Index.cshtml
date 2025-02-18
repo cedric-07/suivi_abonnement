@@ -30,6 +30,7 @@
     <style>
         /* Style de base pour les éléments de menu */
         /* Style de base pour les éléments de menu */
+
         .nav-item .nav-link {
             font-family: 'Montserrat', sans-serif !important; /* Applique la police Montserrat */
             color: black !important; /* Définit la couleur du texte */
@@ -122,14 +123,14 @@
 
         /* Titre "Notifications" */
         #notifList .header {
-            background-color: rgb(5, 34, 73);
-            color: white;
-            text-align: center;
-            padding: 10px;
-            font-size: 1rem;
-            font-weight: bold;
-            border-radius: 10px 10px 0 0;
-        }
+        background-color: rgb(5, 34, 73);
+        color: white;
+        text-align: center;
+        padding: 10px;
+        font-size: 1rem;
+        font-weight: bold;
+        border-radius: 10px 10px 0 0;
+    }
 
         /* Style pour chaque notification */
         .notification-item {
@@ -269,7 +270,6 @@
                         <span class="nav-link-text ms-1">Historique</span>
                     </a>
                 </li>
-                
             </ul>
         </div>
     </aside>
@@ -432,7 +432,7 @@
                         $("#notifBadge").hide();
                     }
 
-                    // Construction de la liste des notifications
+                    // Construire la liste des notifications
                     let notifHtml = `
                         <div class="header">Notifications</div>
                         <div class="scrollable-notifications">
@@ -475,14 +475,6 @@
             });
         }
 
-        // Exécuter au chargement de la page
-        $(document).ready(function () {
-            loadNotifications();
-
-            // Recharger les notifications toutes les 30 secondes
-            setInterval(loadNotifications, 30000);
-        });
-
         function markAsRead(notificationId) {
             console.log("Tentative de marquer comme lu:", notificationId);
 
@@ -493,24 +485,35 @@
                 success: function (response) {
                     console.log("Réponse du serveur:", response);
 
-                    // Sélectionner l'élément correspondant et modifier son affichage
+                    // Sélectionner l'élément et modifier son affichage
                     let notifItem = $(`li[data-notification-id='${notificationId}']`);
-                    notifItem.removeClass("unread").addClass("read"); // Changer la classe de l'élément
-                    notifItem.find(".notification-text").removeClass("unread").addClass("read"); // Modifier le texte
-                    notifItem.find(".notification-icon").removeClass("unread").addClass("read"); // Modifier l'icône de cloche
-                    notifItem.find("a").removeAttr("onclick"); // Désactiver le clic une fois marqué comme lu
+                    notifItem.removeClass("unread").addClass("read");
+                    notifItem.find(".notification-text").removeClass("unread").addClass("read");
+                    notifItem.find(".notification-icon").removeClass("unread").addClass("read");
+                    notifItem.find("a").removeAttr("onclick"); // Désactiver le clic après lecture
 
-                    // Vérifier si toutes les notifications sont lues et masquer le badge
+                    // Vérifier s'il reste des notifications non lues
                     if ($(".notification-item.unread").length === 0) {
                         $("#notifBadge").hide();
                     }
+
+                    // 🔄 Recharger les notifications en arrière-plan après 2 secondes
+                    setTimeout(loadNotifications, 2000);
                 },
                 error: function (xhr) {
                     console.error("Erreur lors de la requête markAsRead:", xhr.responseText);
                 }
             });
         }
+
+        $(document).ready(function () {
+            loadNotifications();
+
+            // 🔄 Rafraîchir les notifications toutes les 30 secondes
+            setInterval(loadNotifications, 30000);
+        });
     </script>
+
 
 
 
