@@ -5,7 +5,7 @@ namespace suivi_abonnement.Repository.Interface
     {
         List<Message> GetMessagesForConversation(int user1Id, int user2Id);
         int CreateConversation(int user1Id, int user2Id);
-        void SendMessage(int senderId, int receiverId, string messageText);
+        void SendMessage(int senderId, int receiverId, string messageText , string fileUrl);
         int GetOrCreateConversation(int senderId, int receiverId);
         User searchUser(string name);
         int CountMessagesisRead(int userId);

@@ -4,6 +4,13 @@
     ViewData["Title"] = "Formulaire d'Abonnement";
     Layout = "~/Views/Shared/Index.cshtml";
 }
+<style>
+    .form-label {
+        
+        font-size: 10px;
+        font-weight: bold;
+        }
+</style>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
 
 
@@ -74,11 +81,11 @@
                 <div class="row mb-3">
                     <div class="col-md-6">
                         <label for="nom" class="form-label fw-bold">Nom</label>
-                        <input type="text" class="form-control input-custom" id="nom" name="Nom" placeholder="Entrez le nom" required>
+                        <input type="text" class="form-control input-custom text-muted text-sm" id="nom" name="Nom" placeholder="Entrez le nom" required>
                     </div>
                     <div class="col-md-6">
                         <label for="description" class="form-label fw-bold">Description</label>
-                        <textarea class="form-control input-custom" id="description" name="Description" rows="2" placeholder="Entrez une description" required></textarea>
+                        <textarea class="form-control input-custom text-muted text-sm" id="description" name="Description" rows="2" placeholder="Entrez une description" required></textarea>
                     </div>
                 </div>
 
@@ -86,11 +93,11 @@
                 <div class="row mb-3">
                     <div class="col-md-6">
                         <label for="prix" class="form-label fw-bold">Prix</label>
-                        <input type="number" class="form-control input-custom" id="prix" name="Prix" placeholder="0.00" required>
+                        <input type="number" class="form-control input-custom text-muted text-sm" id="prix" name="Prix" placeholder="0.00" required>
                     </div>
                     <div class="col-md-6">
                         <label for="typeAbonnement" class="form-label fw-bold">Type d'abonnement</label>
-                        <select class="form-select input-custom" id="typeAbonnement" name="Type" required>
+                        <select class="form-select input-custom text-muted text-sm" id="typeAbonnement" name="Type" required>
                             <option disabled selected hidden>--Choisir un type--</option>
                             <option value="Annuel">Annuel</option>
                             <option value="Mensuel">Mensuel</option>
@@ -104,11 +111,11 @@
                 <div class="row mb-3">
                     <div class="col-md-6">
                         <label for="dateDebut" class="form-label fw-bold">Date de début</label>
-                        <input type="datetime-local" class="form-control input-custom" id="dateDebut" name="DateDebut" required>
+                        <input type="datetime-local" class="form-control input-custom text-muted text-sm" id="dateDebut" name="DateDebut" required>
                     </div>
                     <div class="col-md-6">
                         <label for="expirationDate" class="form-label fw-bold">Date d'expiration</label>
-                        <input type="datetime-local" class="form-control input-custom" id="expirationDate" name="ExpirationDate" required>
+                        <input type="datetime-local" class="form-control input-custom text-muted text-sm" id="expirationDate" name="ExpirationDate" required>
                     </div>
                 </div>
 
@@ -116,7 +123,7 @@
                 <div class="row mb-3">
                     <div class="col-md-6">
                         <label for="idfournisseur" class="form-label fw-bold">Fournisseur</label>
-                        <select class="form-select input-custom" id="idfournisseur" name="idfournisseur" required>
+                        <select class="form-select input-custom text-muted text-sm" id="idfournisseur" name="idfournisseur" required>
                             <option disabled selected hidden>--Choisir un fournisseur--</option>
                             @if (Model?.AbonnementViewModel?.Fournisseurs != null)
                             {
@@ -129,7 +136,7 @@
                     </div>
                     <div class="col-md-6">
                         <label for="idcategorie" class="form-label fw-bold">Catégorie</label>
-                        <select class="form-select input-custom" id="idcategorie" name="idcategorie" required>
+                        <select class="form-select input-custom text-muted text-sm" id="idcategorie" name="idcategorie" required>
                             <option disabled selected hidden>--Choisir une catégorie--</option>
                             @if (Model?.AbonnementViewModel?.Categories != null)
                             {
@@ -144,7 +151,7 @@
                 <div class="row">
                     <div class="col-md-6">
                         <label for="idDepartement" class="form-label fw-bold">Département</label>
-                        <select class="form-select input-custom" id="idDepartement" name="idDepartement" required>
+                        <select class="form-select input-custom text-muted text-sm" id="idDepartement" name="idDepartement" required>
                             <option disabled selected hidden>--Choisir un département--</option>
                             @if (Model?.AbonnementViewModel?.Departements != null)
                             {

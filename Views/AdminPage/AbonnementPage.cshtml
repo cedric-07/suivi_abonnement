@@ -2,7 +2,6 @@
 @{
     ViewData["Title"] = "Liste des Abonnements";
     Layout = "~/Views/Shared/Index.cshtml";
-    }
 }
 <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
 
@@ -157,7 +156,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @if (Model?.AbonnementViewModel?.Abonnements?.Count == 0)
+                    @if (Model?.AbonnementViewModel?.Abonnements?.Count > 0)
                     {
 
                         @foreach (var abonnement in Model.AbonnementViewModel.Abonnements)

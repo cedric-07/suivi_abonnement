@@ -99,75 +99,20 @@
                 <li><a href="@Url.Action("Index", "Message")">Boite Messages</a></li>
                 <!-- Menu déroulant des notifications -->
                 <li class="dropdown">
-                    <a href="#" class="notification" data-bs-toggle="dropdown" aria-expanded="false">
-                        <span>Notifications</span>
-                        <span class="badge">@ViewBag.NotificationCount</span>
-                    </a>
+                  <a href="#" class="notification" data-bs-toggle="dropdown" aria-expanded="false">
+                      <span>Notifications</span>
+                      <span id="notifBadge" class="badge" style="display:none;">0</span>
+                  </a>
 
-                    <!-- Menu déroulant avec style amélioré pour les notifications -->
-                    <ul class="dropdown-menu dropdown-menu-end px-3 py-3 me-sm-n4" style="border-radius: 10px; background: #fff; box-shadow: 0 6px 8px rgba(11, 33, 226, 0.1); font-size: 0.875rem; width: 300px;">
-                      <!-- Liste des notifications -->
-                      @if (ViewBag.Notifications != null && ViewBag.Notifications.Count > 0)
-                      {
-                          <div class="scrollable-notifications" style="max-height: 250px; overflow-y: auto;">
-                              @if (ViewBag.Notifications is List<Notification> notifications)
-                              {
-                                  @foreach (var notification in ViewBag.Notifications)
-                                  {
-                                      var cssClass = notification.Status == "non lu" ? "font-weight-bold bg-light" : "text-muted";
-                                      var notificationStatus = notification.Status == "non lu" ? "Mark as Read" : "Read";
+                  <!-- Menu déroulant avec style amélioré pour les notifications -->
+                  <ul class="dropdown-menu dropdown-menu-end px-3 py-3 me-sm-n4" 
+                      style="border-radius: 10px; background: #fff; box-shadow: 0 6px 8px rgba(11, 33, 226, 0.1); font-size: 0.875rem; width: 300px;">
+                      
+                      <div class="scrollable-notifications" style="max-height: 250px; overflow-y: auto;" id="notifList">
+                          <!-- Les notifications seront injectées ici dynamiquement -->
+                      </div>
 
-                                      <li class="mb-3" style="list-style: none; padding: 0;">
-                                          <form asp-action="MarkNotificationAsRead" asp-controller="Notification" method="post">
-                                              <input type="hidden" name="notificationId" value="@notification.Id" />
-                                              <a class="dropdown-item p-2 bg-transparent shadow-none rounded-2 @cssClass" 
-                                                onclick="this.closest('form').submit()" style="border-left: none; transition: all 0.3s ease; padding-left: 10px; padding-right: 10px; cursor: pointer;">
-                                                  <div class="d-flex py-1">
-                                                      <div class="d-flex align-items-center me-2">
-                                                          <!-- Icône de notification -->
-                                                          <i class="fa fa-bell text-light" style="font-size: 18px; border-radius: 50%; background-color: #c70909; padding: 12px; display: inline-block; width: 40px; height: 40px; text-align: center; line-height: 18px;"></i>
-                                                          
-                                                          <!-- Icône de coche ou alerte en fonction du statut -->
-                                                          @if (notification.Status == "lu")
-                                                          {
-                                                              <i class="fa fa-circle text-success ms-2" style="font-size: 15px;"></i>
-                                                          }
-
-                                                      </div>
-                                                      
-                                                      <div class="d-flex flex-column justify-content-center" style="width: 100%; word-wrap: break-word;">
-                                                          <h6 class="text-sm font-weight-bold mb-1" style="margin-bottom: 8px; font-size: 1rem; line-height: 1.4; color: @((notification.Status == "non lu") ? "#fd0404" : "#b3b0b0");">
-                                                              @((notification.Status == "non lu") ? notification.Type : notification.Type)
-                                                          </h6>
-                                                          
-                                                          <!-- Description de la notification -->
-                                                          <p class="text-xs mb-2" style="font-size: 0.875rem; color: @((notification.Status == "non lu") ? "#020208" : "#b3b0b0"); line-height: 1.5; white-space: normal; overflow: visible; text-overflow: clip;">
-                                                              @notification.Message
-                                                          </p>
-                                                          
-                                                          <!-- Date de la notification -->
-                                                          <p class="text-xs text-muted mb-0" style="font-size: 0.75rem; color: #1f1a1a; line-height: 1.4;">
-                                                              <i class="fa fa-clock me-1"></i>
-                                                              <span>@notification.CreatedAt.ToString("dd MMM yyyy")</span>
-                                                          </p>
-                                                      </div>
-                                                  </div>
-                                              </a>
-                                          </form>
-                                      </li>
-                                  }
-                              }
-                          </div>
-                      }
-                      else
-                      {
-                          <li class="mb-2">
-                              <p class="text-xs text-center text-secondary">Aucune notification.</p>
-                          </li>
-                      }
                   </ul>
-
-
                 </li>
 
                 <li><a href="#logoutModal" data-bs-toggle="modal" class="logout">Déconnexion</a></li>
@@ -288,9 +233,128 @@
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.5/jquery.validate.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate-unobtrusive/3.2.12/jquery.validate.unobtrusive.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/3.1.20/signalr.min.js"></script>
 
   <!-- Main JS File -->
   <script src="assets/js/main.js"></script>
+
+
+  <script>
+    $(document).ready(function () {
+        console.log("🔍 Initialisation de SignalR...");
+
+        var userId = @Context.Session.GetInt32("UserId") ?? 0;
+        console.log("🔍 Vérification SignalR - userId:", userId);
+
+        var connection = new signalR.HubConnectionBuilder()
+            .withUrl("/notificationHub?userId=" + userId)
+            .configureLogging(signalR.LogLevel.Information)
+            .build();
+
+        function startConnection() {
+            connection.start().then(function () {
+                console.log("✅ SignalR connecté avec userId:", userId);
+            }).catch(function (err) {
+                console.error("❌ Erreur de connexion SignalR :", err.toString());
+                setTimeout(startConnection, 5000);
+            });
+        }
+
+        connection.onclose(function (error) {
+            console.error("🚨 SignalR déconnecté :", error);
+            setTimeout(startConnection, 5000);
+        });
+
+        startConnection();
+
+        connection.on("LoadNotifications", function (notifications, unreadCount) {
+            updateNotificationBadge(unreadCount);
+            renderNotifications(notifications);
+        });
+
+        connection.on("ReceiveNotification", function (notifications, unreadCount) {
+            updateNotificationBadge(unreadCount);
+            renderNotifications(notifications);
+        });
+
+        connection.on("UpdateNotifications", function (notifications, unreadCount) {
+            console.log("✅ Mise à jour des notifications après lecture !");
+            updateNotificationBadge(unreadCount);
+            renderNotifications(notifications);
+        });
+
+        function updateNotificationBadge(notificationCount) {
+            console.log("🔄 Mise à jour du badge :", notificationCount);
+
+            if (notificationCount > 0) {
+                $("#notifBadge").text(notificationCount).show();
+            } else {
+                $("#notifBadge").text("").hide(); // Assurez-vous que la valeur est bien réinitialisée
+            }
+        }
+
+        function renderNotifications(notifications) {
+            let notifHtml = `<div class="scrollable-notifications">`;
+
+            if (notifications.length > 0) {
+                notifications.forEach(notification => {
+                    let isUnread = notification.status === "non lu";
+                    let bgClass = isUnread ? "font-weight-bold bg-light" : "text-muted";
+
+                    notifHtml += `
+                        <li class="mb-3" style="list-style: none; padding: 0;" data-notification-id="${notification.id}">
+                            <a href="#" class="dropdown-item p-2 bg-transparent shadow-none rounded-2 ${bgClass}" 
+                               onclick="markAsRead(${notification.id})" 
+                               style="border-left: none; transition: all 0.3s ease; padding-left: 10px; padding-right: 10px; cursor: pointer;">
+                                <div class="d-flex py-1">
+                                    <div class="d-flex align-items-center me-2">
+                                        <i class="fa fa-bell text-light" 
+                                           style="font-size: 18px; border-radius: 50%; background-color: #c70909; padding: 12px; 
+                                                  display: inline-block; width: 40px; height: 40px; text-align: center; line-height: 18px;">
+                                        </i>
+                                        ${notification.status === "lu" ? `<i class="fa fa-circle text-success ms-2" style="font-size: 15px;"></i>` : ""}
+                                    </div>
+                                    <div class="d-flex flex-column justify-content-center" 
+                                         style="width: 100%; word-wrap: break-word;">
+                                        <h6 class="text-sm font-weight-bold mb-1" 
+                                            style="margin-bottom: 8px; font-size: 1rem; line-height: 1.4; 
+                                                   color: ${isUnread ? "#fd0404" : "#b3b0b0"};">
+                                            ${notification.type}
+                                        </h6>
+                                        <p class="text-xs mb-2" 
+                                           style="font-size: 0.875rem; color: ${isUnread ? "#020208" : "#b3b0b0"}; 
+                                                  line-height: 1.5; white-space: normal; overflow: visible; text-overflow: clip;">
+                                            ${notification.message}
+                                        </p>
+                                        <p class="text-xs text-muted mb-0" 
+                                           style="font-size: 0.75rem; color: #1f1a1a; line-height: 1.4;">
+                                            <i class="fa fa-clock me-1"></i>
+                                            <span>${new Date(notification.createdAt).toLocaleDateString()}</span>
+                                        </p>
+                                    </div>
+                                </div>
+                            </a>
+                        </li>`;
+                });
+            } else {
+                notifHtml += '<li><p class="text-xs text-center text-secondary">Aucune notification.</p></li>';
+            }
+
+            notifHtml += `</div>`;
+            $("#notifList").html(notifHtml);
+        }
+
+        window.markAsRead = function (notificationId) {
+            connection.invoke("MarkNotificationAsRead", userId, notificationId)
+                .catch(function (err) {
+                    console.error("❌ Erreur SignalR MarkNotificationAsRead :", err.toString());
+                });
+        };
+    });
+</script>
+
+
 
 </body>
 

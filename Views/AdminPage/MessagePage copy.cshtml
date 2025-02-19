@@ -1,0 +1,554 @@
+@model suivi_abonnement.Models.MessageViewModel
+
+@{
+    ViewData["Title"] = "Liste des Abonnements";
+    Layout = "~/Views/Shared/Index.cshtml";
+    
+}
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Boîte de Messages</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f0f2f5;
+            font-family: Roboto, Helvetica, Arial, sans-serif;
+        }
+        .chat-container {
+            height: 85vh;
+            display: flex;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0px 4px 10px rgba(0,0,0,0.1);
+        }
+        .chat-list {
+            width: 30%;
+            background: white;
+        }
+        .chat-box {
+            width: 70%;
+            display: flex;
+            flex-direction: column;
+            background: #e5ddd5;
+        }
+        .chat-header {
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: darkblue;
+
+        }
+        .message-container {
+            display: flex;
+            align-items: flex-end;
+            margin-bottom: 10px;
+        }
+
+        .message-container.sent {
+            justify-content: flex-end;
+        }
+
+        .message-container.received {
+            justify-content: flex-start;
+        }
+        .avatar i {
+            font-size: 30px;
+            color: #6c757d;
+        }
+        .message-list {
+            flex: 1;
+            padding: 15px;
+            overflow-y: auto;
+            color: darkblue;
+        }
+        .message-input {
+            padding: 10px;
+            background: white;
+            border-top: 1px solid #ddd;
+        }
+        .message {
+            max-width: 70%;
+            padding: 10px;
+            border-radius: 15px;
+            position: relative;
+            font-size: 14px;
+        }
+        .message.sent {
+            background-color: #dcf8c6;
+            text-align: right;
+            border-bottom-right-radius: 0;
+        }
+
+        .message.received {
+            background-color: #fff;
+            border-bottom-left-radius: 0;
+        }
+        .message-date {
+            display: block;
+            font-size: 12px;
+            color: #888;
+            margin-top: 5px;
+        }
+
+        .message-status {
+            font-size: 12px;
+            color: #34b7f1;
+            margin-left: 5px;
+        }
+        .list-group-item {
+            cursor: pointer;
+            border: none;
+            margin-bottom: 8px; /* Ajoute un espace entre chaque élément */
+            padding: 10px; /* Ajuste le padding pour l'alignement */
+            border-radius: 5px; /* Optionnel : arrondi pour un effet plus doux */
+            background: none; /* Optionnel : couleur de fond pour mieux différencier */
+        }
+
+        .message-row {
+            align-items: center;
+            margin-bottom: 10px;
+            height: auto;
+            width: 30%;
+            border-radius: 15px;
+        }
+
+        .badge {
+            font-size: 0.8rem;
+            border-radius: 50%;
+            padding: 5px 8px;
+            margin-left: auto;
+            margin-right: 10px;
+        }
+        .title {
+            font-weight: bold;
+            font-size: 0.8em;
+            color: #0d2d5a;
+            letter-spacing: 1px;
+        }
+        /* Style du bouton d'attachement */
+        .btn-file {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px; /* Taille du bouton */
+            height: 40px;
+            border-radius: 50%; /* Forme ronde */
+            background-color: #f1f1f1; /* Couleur de fond */
+            border: none;
+            cursor: pointer;
+            transition: background 0.3s ease-in-out;
+            font-size: 1.3rem; /* Taille de l'icône */
+            color: #555; /* Couleur de l'icône */
+        }
+
+        .btn-file:hover {
+            background-color: #e0e0e0; /* Changement de couleur au survol */
+        }
+
+        .btn-file i {
+            pointer-events: none; /* Évite que l'icône intercepte les clics */
+        }
+
+        /* Masquer l'input file natif */
+        #fileInput {
+            display: none;
+        }
+
+        /* Style de l'aperçu du fichier */
+        #filePreview {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 5px;
+        }
+
+        #filePreview img {
+            max-width: 50px; /* Taille des images attachées */
+            border-radius: 8px;
+        }
+
+        #filePreview p {
+            font-size: 14px;
+            color: #333;
+            background: #f9f9f9;
+            padding: 5px 10px;
+            border-radius: 5px;
+        }
+
+        
+    </style>
+</head>
+<body>
+    <div class="container-fluid fade-in visible">
+         <div class="row align-items-center">
+            <div class="col mb-4">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb bg-transparent mb-0">
+                        <li class="breadcrumb-item"><i class="bi bi-house-door-fill me-1"></i>Pages</li>
+                        <li class="breadcrumb-item active" aria-current="page"><i class="bi bi-chat-fill me-1"></i>Boite de messages</li>
+                    </ol>
+                    <h3 class="title">Boite de messages</h3>
+                </nav>
+            </div>
+        </div>
+        <div class="chat-container">
+            <div class="chat-list p-3">
+                <h5 class="mb-3">Conversations</h5>
+                <form class="mb-3">
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="fa fa-search"></i></span>
+                        <input type="text" class="form-control" placeholder="Rechercher...">
+                    </div>
+                </form>
+                    @if (Model?.Users != null)
+                    {
+                    
+                        @foreach (var user in Model.Users)
+                        {
+                            <li class="list-group-item d-flex align-items-center" onclick="selectUser(@user.Id, '@user.Username')">
+                                <div class="me-3">
+                                    <i class="fas fa-user-circle fa-2x"></i>
+                                </div>
+                                <span>@user.Username</span>
+                                <span class="user-status @(user.IsConnected ? "online" : "offline")"></span>
+                                <span id="notif-@user.Id" class="badge bg-danger ms-auto d-none"></span>
+                            </li>
+                        }
+                    }
+                    else
+                    {
+                        <p>Aucun utilisateur trouvé.</p>
+                    }
+                </ul>
+
+
+            </div>
+            <div class="chat-box">
+                <div class="chat-header">
+                    <h5 id="chatTitle">Sélectionnez un utilisateur</h5>
+                </div>
+                <div id="chatWindow" class="message-list">
+                    
+                </div>
+                <div class="message-input d-flex">
+                    <label for="fileInput" class="btn-file me-2">
+                        <i class="fas fa-paperclip"></i>
+                    </label>
+                    <input type="file" id="fileInput" accept="image/*, video/*, .pdf, .doc, .docx, .txt">
+                    <input type="hidden" id="receiverId" value="@Model?.ReceiverId">
+                    <textarea  id="messageText" class="form-control me-2" placeholder="Écrivez un message..."></textarea>
+                    <button id="sendButton" class="btn btn-primary"><i class="fas fa-paper-plane"></i></button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/3.1.20/signalr.min.js"></script>
+    <script>
+        var userId = '@(Context.Session.GetInt32("UserId"))';
+        var connection = new signalR.HubConnectionBuilder()
+            .withUrl("/messageHub")
+            .withAutomaticReconnect()
+            .build();
+
+        // 🚀 Connexion SignalR avec reconnexion automatique
+        function startConnection() {
+            connection.start().then(() => {
+                console.log("✅ SignalR connecté !");
+                restoreUnreadNotifications();
+            }).catch(err => {
+                console.error("❌ Erreur de connexion SignalR :", err);
+                setTimeout(startConnection, 5000);
+            });
+        }
+
+        startConnection();
+
+        connection.onreconnecting(() => console.warn("⚠️ SignalR tente de se reconnecter..."));
+        connection.onreconnected(() => {
+            console.log("✅ SignalR reconnecté !");
+            restoreUnreadNotifications();
+        });
+        connection.onclose(() => {
+            console.error("❌ SignalR déconnecté, tentative de reconnexion...");
+            setTimeout(startConnection, 5000);
+        });
+
+        // 📩 Fonction d'envoi de message
+        $("#sendButton").click(async function () {
+            var receiverId = $("#receiverId").val();
+            var message = $("#messageText").val().trim();
+            var fileInput = document.getElementById("fileInput");
+            var file = fileInput.files[0];
+            var fileUrl = null;
+
+            if (!receiverId || (!message && !file)) {
+                console.warn("⚠️ Impossible d'envoyer : ni message ni fichier.");
+                return;
+            }
+
+            // 🔹 1. Si un fichier est sélectionné, on l'upload via l'API REST
+            if (file) {
+                let formData = new FormData();
+                formData.append("file", file);
+
+                try {
+                    let response = await fetch(/upload", {
+                        method: "POST",
+                        body: formData
+                    });
+
+                    if (!response.ok) {
+                        throw new Error("❌ Échec de l'upload du fichier.");
+                    }
+
+                    let result = await response.json();
+                    fileUrl = result.fileUrl;
+                    console.log("✅ Fichier uploadé :", fileUrl);
+                } catch (err) {
+                    console.error(err);
+                    return;
+                }
+            }
+
+            // 🔹 2. Envoyer le message via SignalR
+            connection.invoke("SendMessageToReceiver", parseInt(receiverId), message, null, fileUrl)
+                .then(() => {
+                    console.log("✅ Message envoyé via SignalR.");
+                    var messageDate = new Date();
+                    var dateDisplay = formatDate(messageDate);
+                    let messageStatus = "✓ Envoyé"; 
+
+                    $("#messageText").val(""); // Effacer le champ texte après l'envoi
+                    fileInput.value = ""; // Réinitialiser le fichier sélectionné
+
+                    // 🔹 3. Ajouter le message ou le fichier dans le chat
+                    let fileLink = fileUrl ? `<a href="${fileUrl}" target="_blank">📄 Télécharger le fichier</a>` : "";
+
+                    $("#chatWindow").append(`
+                        <div class="message-container sent">
+                            <div class="message sent">
+                                <p>${convertLinksToHtml(message)}</p>
+                                ${fileLink}
+                                <span class="message-date">${dateDisplay}</span>
+                                <span class="message-status">${messageStatus}</span>
+                            </div>
+                            <div class="avatar"><i class="bi bi-person-circle user-icon"></i></div>
+                        </div>
+                    `);
+
+                    scrollToBottom();
+                })
+                .catch(err => console.error("❌ Erreur d'envoi de message via SignalR :", err));
+        });
+
+
+        // 🔹 Fonction pour convertir un fichier en Base64
+        function toBase64(file) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.readAsDataURL(file);
+                reader.onload = () => resolve(reader.result);
+                reader.onerror = (error) => reject(error);
+            });
+        }
+        $("#fileInput").change(function () {
+    var file = this.files[0];
+    if (file) {
+        console.log("📂 Fichier sélectionné :", file.name);
+    } else {
+        console.warn("⚠️ Aucun fichier sélectionné.");
+    }
+});
+
+
+
+
+        function convertLinksToHtml(message) {
+            let urlPattern = /(https?:\/\/[^\s]+)/g;
+            return message.replace(urlPattern, function(url) {
+                return `<a href="${url}" target="_blank">${url}</a>`;
+            });
+        }
+
+
+
+        // 📬 Notification de nouveau message
+        connection.on("NotifyNewMessage", function (senderId) {
+            console.log("📬 Nouveau message de :", senderId);
+
+            var currentReceiverId = $("#receiverId").val();
+            if (parseInt(currentReceiverId) !== senderId) {
+                console.log("⚠️ Affichage d'une notification");
+
+                var notifBadge = $("#notif-" + senderId);
+                if (notifBadge.length > 0) {
+                    var currentCount = parseInt(notifBadge.text()) || 0;
+                    var newCount = currentCount + 1;
+                    if(newCount > 0){
+                        notifBadge.text(newCount).removeClass("d-none");
+                    }
+                    else{
+                        notifBadge.text(newCount).addClass("d-none");
+                    }
+                    saveUnreadNotification(senderId, currentCount + 1);
+                } else {
+                    console.warn("⚠️ Badge non trouvé pour l'utilisateur " + senderId);
+                }
+            }
+        });
+
+        // 📩 Réception d'un message
+        connection.on("ReceiveMessage", function (senderId, message, fileUrl) {
+            console.log("📩 Message reçu de :", senderId);
+
+            var currentReceiverId = $("#receiverId").val();
+            var messageDate = new Date();
+            var dateDisplay = formatDate(messageDate);
+            let messageStatus = "✓✓";
+
+            let fileLink = fileUrl ? `<a href="${fileUrl}" target="_blank">📄 Télécharger le fichier</a>` : "";
+
+            if (parseInt(currentReceiverId) === senderId) {
+                console.log("✅ Affichage du message en temps réel");
+
+                $("#chatWindow").append(`
+                    <div class="message-container received">
+                        <div class="avatar"><i class="bi bi-person-circle user-icon"></i></div>
+                        <div class="message received">
+                            <p>${convertLinksToHtml(message)}</p>
+                            ${fileLink}
+                            <span class="message-date">${dateDisplay}</span>
+                            <span class="message-status">${messageStatus}</span>
+                        </div>
+                    </div>
+                `);
+                scrollToBottom();
+
+                // 🔥 Marquer comme lu dès réception du message
+                connection.invoke("MarkMessagesAsRead", parseInt(senderId), parseInt(userId))
+                    .then(() => console.log("✅ Messages marqués comme lus pour", senderId))
+                    .catch(err => console.error("❌ Erreur lors du marquage comme lu :", err));
+            } else {
+                console.warn("⚠️ Message reçu mais la conversation n'est pas ouverte !");
+
+                var notifBadge = $("#notif-" + senderId);
+                if (notifBadge.length > 0) {
+                    var currentCount = parseInt(notifBadge.text()) || 0;
+                    notifBadge.text(currentCount + 1).removeClass("d-none");
+                    saveUnreadNotification(senderId, currentCount + 1);
+                } else {
+                    console.warn("⚠️ Badge non trouvé pour l'utilisateur " + senderId);
+                }
+            }
+        });
+
+
+
+
+
+        // 📩 Mettre à jour les ✓✓ Vu pour l'expéditeur
+        connection.on("MessageRead", function (receiverId) {
+            console.log("✅ Messages marqués comme lus par :", receiverId);
+            $(".message-row.sent .message-status").text("✓✓ Vu");
+        });
+
+        // 🔥 Sauvegarde des notifications non lues
+        function saveUnreadNotification(userId, count) {
+            var unreadNotifications = JSON.parse(localStorage.getItem("unreadNotifications")) || {};
+            unreadNotifications[userId] = count;
+            localStorage.setItem("unreadNotifications", JSON.stringify(unreadNotifications));
+        }
+
+        // 🔄 Restauration des notifications non lues après rechargement
+        function restoreUnreadNotifications() {
+            var unreadNotifications = JSON.parse(localStorage.getItem("unreadNotifications")) || {};
+            for (var userId in unreadNotifications) {
+                var notifBadge = $("#notif-" + userId);
+                var count = unreadNotifications[userId];
+
+                if (notifBadge.length > 0) {
+                    if (count > 0) {
+                        notifBadge.text(count).removeClass("d-none");
+                    } else {
+                        notifBadge.addClass("d-none");
+                    }
+                }
+            }
+        }
+
+
+        // 🎯 Sélection d'un utilisateur
+        function selectUser(receiverId, receiverName) {
+        console.log("🔄 Ouverture de la conversation avec :", receiverId);
+
+        $("#receiverId").val(receiverId);
+        $("#chatTitle").text("Chat avec " + receiverName);
+        $("#chatWindow").empty();
+
+        var notifBadge = $("#notif-" + receiverId);
+        if (notifBadge.length > 0 && !notifBadge.hasClass("d-none")) {
+            notifBadge.text("0").addClass("d-none");
+            saveUnreadNotification(receiverId, 0);
+        }
+
+
+        connection.invoke("MarkMessagesAsRead", parseInt(receiverId), parseInt(userId))
+            .then(() => console.log("✅ Messages marqués comme lus pour", receiverId))
+            .catch(err => console.error("❌ Erreur lors du marquage comme lu :", err));
+
+        // Charger les anciens messages via AJAX
+        $.ajax({
+            url: "/Message/GetMessages",
+            type: "GET",
+            data: { receiverId: receiverId },
+            success: function (messages) {
+                messages.forEach(msg => {
+                    let isSent = msg.senderId === parseInt(userId);
+                    let messageClass = isSent ? "sent" : "received";
+                    let messageDate = new Date(msg.dateEnvoi);
+                    let dateDisplay = formatDate(messageDate);
+                    let messageStatus = msg.isSeen ? "✓✓ Vu" : "✓✓";
+
+                    $("#chatWindow").append(`
+                        <div class="message-container ${messageClass}">
+                            ${isSent ? "" : `<div class="avatar"><i class="bi bi-person-circle user-icon"></i></div>`}
+                            <div class="message ${messageClass}">
+                                <p>${msg.messageText}</p>
+                                <span class="message-date">${dateDisplay}</span>
+                                <span class="message-status">${messageStatus}</span>
+                            </div>
+                            ${isSent ? `<div class="avatar"><i class="bi bi-person-circle user-icon"></i></div>` : ""}
+                        </div>
+                    `);
+                });
+
+                scrollToBottom();
+            },
+            error: function (err) {
+                console.error("❌ Erreur chargement messages :", err);
+            }
+        });
+    }
+
+
+    function scrollToBottom() {
+        $("#chatWindow").scrollTop($("#chatWindow").prop("scrollHeight"));
+    }
+
+    function formatDate(date) {
+        return date.toLocaleTimeString("fr-FR", { hour: "2-digit", minute: "2-digit" });
+    }
+</script>
+
+
+</body>
+
+</html>

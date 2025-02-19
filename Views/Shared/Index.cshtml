@@ -30,10 +30,21 @@
     <style>
         /* Style de base pour les éléments de menu */
         /* Style de base pour les éléments de menu */
+        .navbar-nav i
+        {
+            font-size: 1.0rem !important; /* Taille de l'icône */
+            transition: all 0.3s ease-in-out !important; /* Transition fluide pour tous les effets */
+        }
+
+        #notifBadge {
+            font-size: 0.8rem; /* Ajuste selon besoin */      
+            text-align: center;
+            line-height: 5px; /* Centrer le texte verticalement */
+        }
 
         .nav-item .nav-link {
             font-family: 'Montserrat', sans-serif !important; /* Applique la police Montserrat */
-            color: black !important; /* Définit la couleur du texte */
+            color: rgb(1, 7, 85) !important; /* Définit la couleur du texte */
             padding: 12px 15px !important; /* Espace autour du texte */
             border-radius: 8px; /* Ajoute un arrondi aux coins */
             transition: all 0.3s ease-in-out !important; /* Transition fluide pour tous les effets */
@@ -48,8 +59,9 @@
             transform: translateY(-3px) !important; /* Translation vers le haut pour un effet de mouvement */
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15) !important; /* Ajout d'une ombre subtile au survol */
             background-color: #2c3e50 !important;
-            font-weight: bold; !important; /* Met le texte en gras au survol */
+            font-weight: bold !important; /* Met le texte en gras au survol */
             transition: transform 0.1s ease, color 0.1s ease, box-shadow 0.1s ease !important; /* Transition fluide pour tous les changements */
+            cursor: pointer !important; /* Curseur de la souris en main pour indiquer un lien */
         }
 
             /* Ajout d'un soulignement animé au survol */
@@ -61,6 +73,7 @@
             width: 0;
             height: 2px;
             transition: width 0.3s ease-in-out !important; /* Transition fluide */
+
         }
 
             /* Soulignement étendu au survol */
@@ -201,6 +214,8 @@
             opacity: 0.6;
             color: #555;
         }
+
+        
             
         </style>
 </head>
@@ -283,17 +298,17 @@
                     <ul class="navbar-nav justify-content-end">
                         <li class="nav-item d-flex align-items-center">
                             <a href="@Url.Action("Index", "Message")" class="nav-link text-body p-0">
-                                <i class="fa fa-envelope cursor-pointer"></i>
+                                <i class="fa fa-envelope-open cursor-pointer" title="Messages"></i>
                             </a>
                         </li>
 
                         <li class="nav-item dropdown pe-2 d-flex align-items-center">
                             <a href="javascript:;" class="nav-link text-body p-0" id="dropdownMenuButton" data-bs-toggle="dropdown">
-                                <i class="fa fa-bell cursor-pointer"></i>
+                                <i class="fa fa-bell cursor-pointer" title="Notifications"></i>
                                 <span id="notifBadge" class="badge badge-danger position-absolute top-0 start-100 translate-middle p-2 border border-light rounded-circle" style="display: none;"></span>
                             </a>
                             <ul class="dropdown-menu dropdown-menu-end px-2 py-3 me-sm-n4" aria-labelledby="dropdownMenuButton" id="notifList" >
-                                <div class="text-center pb-2" >
+                                <div class="text-center pb-2">
                                     <h5 class="font-weight-bold text-white mb-1" style="font-size: 1rem;">Notifications</h5>
                                 </div>
                                 <div class="scrollable-notifications" style="max-height: 250px; overflow-y: auto;">
@@ -303,8 +318,8 @@
                         </li>
                         <li class="nav-item d-flex align-items-center">
                             <a href="#logoutModal" data-bs-toggle="modal" class="nav-link text-body font-weight-bold px-0">
-                                <i class="fa fa-sign-out-alt me-sm-1"></i>
-                                <span class="d-sm-inline d-none">Déconnexion</span>
+                                <i class="fa fa-sign-out-alt me-sm-1" title="Déconnexion"></i>
+                                @* <span class="d-sm-inline d-none" style="font-size: 1.2em;">Déconnexion</span> *@
                             </a>
                         </li>
 
@@ -369,150 +384,144 @@
     <script src="../assets/js/core/bootstrap.min.js"></script>
     <script src="../assets/js/plugins/perfect-scrollbar.min.js"></script>
     <script src="../assets/js/plugins/smooth-scrollbar.min.js"></script>
-    @* <script>
-        var win = navigator.platform.indexOf('Win') > -1;
-        if (win && document.querySelector('#sidenav-scrollbar')) {
-            var options = {
-                damping: '0.5'
-            }
-            Scrollbar.init(document.querySelector('#sidenav-scrollbar'), options);
-        }
 
-        function markAsRead(notificationId) {
-            $.ajax({
-                url: '@Url.Action("MarkNotificationAsRead", "Notification")',
-                type: 'POST',
-                data: { notificationId: notificationId },
-                success: function (response) {
-                    if (response.success) {
-                        // Si la notification est marquée comme lue, on peut retirer l'élément ou changer son apparence
-                        $('li[data-notification-id="' + notificationId + '"]').fadeOut();
-                        // Recharger la page après la mise à jour
-                        location.reload();
-                    } else {
-                        alert("Erreur lors de la mise à jour de la notification.");
-                    }
-                },
-                error: function () {
-                    alert("Erreur de communication avec le serveur.");
-                }
-            });
-        }
-
-        $(document).ready(function () {
-            var notifications = $(".notification-item").get();
-            notifications.sort(function (a, b) {
-                var dateA = new Date($(a).data('createdat'));
-                var dateB = new Date($(b).data('createdat'));
-                return dateB - dateA;  // Tri décroissant : le plus récent en haut
-            });
-            $(".scrollable-notifications").html(notifications);  // Réorganiser les éléments
-        });
-        
-
-    </script> *@
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script>
-        function loadNotifications() {
-            console.log("Rechargement des notifications...");
 
-            $.ajax({
-                url: "/Notification/GetNotificationsCount",
-                type: "GET",
-                success: function (data) {
-                    console.log("Données reçues:", data);
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/3.1.20/signalr.min.js"></script>
 
-                    // Mettre à jour le badge de notification
-                    if (data.notificationCount > 0) {
-                        $("#notifBadge").text(data.notificationCount).show();
-                    } else {
-                        $("#notifBadge").hide();
-                    }
+<script>
+    $(document).ready(function () {
+        console.log("🔍 Initialisation de SignalR...");
 
-                    // Construire la liste des notifications
-                    let notifHtml = `
-                        <div class="header">Notifications</div>
-                        <div class="scrollable-notifications">
-                    `;
+        var userId = @Context.Session.GetInt32("UserId") ?? 0;
+        console.log("🔍 Vérification SignalR - userId:", userId);
 
-                    if (data.notifications.length > 0) {
-                        data.notifications.forEach(notification => {
-                            let isUnread = notification.status === "non lu";
-                            let statusClass = isUnread ? "unread" : "read";
-                            let bellClass = isUnread ? "fa-bell notification-icon unread" : "fa-bell notification-icon read";
-                            let bgClass = isUnread ? "notification-item unread" : "notification-item read";
+        var connection = new signalR.HubConnectionBuilder()
+            .withUrl("/notificationHub?userId=" + userId)
+            .configureLogging(signalR.LogLevel.Information)
+            .build();
 
-                            notifHtml += `
-                                <li class="${bgClass} d-flex" data-notification-id="${notification.id}">
-                                    <a href="#" class="dropdown-item d-flex p-2 w-100" onclick="markAsRead(${notification.id})">
-                                        <div class="d-flex align-items-center me-3">
-                                            <i class="fa ${bellClass}"></i>
-                                        </div>
-                                        <div class="d-flex flex-column justify-content-center w-100">
-                                            <p class="notification-text ${statusClass}">${notification.message}</p>
-                                            <p class="text-xs text-muted mb-0">
-                                                <i class="fa fa-clock me-1"></i>
-                                                <span>${new Date(notification.createdAt).toLocaleDateString()}</span>
-                                            </p>
-                                        </div>
-                                    </a>
-                                </li>
-                            `;
-                        });
-                    } else {
-                        notifHtml += '<li class="mb-2"><p class="text-xs text-center text-secondary">Aucune notification.</p></li>';
-                    }
-
-                    notifHtml += `</div>`; // Fermeture du div scrollable
-                    $("#notifList").html(notifHtml);
-                },
-                error: function (xhr) {
-                    console.error("Erreur lors du chargement des notifications :", xhr.responseText);
-                }
+        // 🔄 Connexion SignalR avec gestion des erreurs
+        function startConnection() {
+            connection.start().then(function () {
+                console.log("✅ SignalR connecté avec userId:", userId);
+            }).catch(function (err) {
+                console.error("❌ Erreur de connexion SignalR :", err.toString());
+                setTimeout(startConnection, 5000); // Reconnexion automatique après 5s
             });
         }
 
-        function markAsRead(notificationId) {
-            console.log("Tentative de marquer comme lu:", notificationId);
-
-            $.ajax({
-                url: "/Notification/MarkNotificationAsRead",
-                type: "POST",
-                data: { notificationId: notificationId },
-                success: function (response) {
-                    console.log("Réponse du serveur:", response);
-
-                    // Sélectionner l'élément et modifier son affichage
-                    let notifItem = $(`li[data-notification-id='${notificationId}']`);
-                    notifItem.removeClass("unread").addClass("read");
-                    notifItem.find(".notification-text").removeClass("unread").addClass("read");
-                    notifItem.find(".notification-icon").removeClass("unread").addClass("read");
-                    notifItem.find("a").removeAttr("onclick"); // Désactiver le clic après lecture
-
-                    // Vérifier s'il reste des notifications non lues
-                    if ($(".notification-item.unread").length === 0) {
-                        $("#notifBadge").hide();
-                    }
-
-                    // 🔄 Recharger les notifications en arrière-plan après 2 secondes
-                    setTimeout(loadNotifications, 2000);
-                },
-                error: function (xhr) {
-                    console.error("Erreur lors de la requête markAsRead:", xhr.responseText);
-                }
-            });
-        }
-
-        $(document).ready(function () {
-            loadNotifications();
-
-            // 🔄 Rafraîchir les notifications toutes les 30 secondes
-            setInterval(loadNotifications, 30000);
+        connection.onclose(function (error) {
+            console.error("🚨 SignalR déconnecté :", error);
+            console.log("🔄 Tentative de reconnexion...");
+            setTimeout(startConnection, 5000);
         });
-    </script>
+
+        startConnection();
+
+        // 📌 Charger les notifications existantes dès la connexion
+        connection.on("LoadNotifications", function (notifications, unreadCount) {
+            console.log("🔄 Chargement des notifications existantes...");
+            updateNotificationBadge(unreadCount);
+            renderNotifications(notifications);
+        });
+
+        // 📌 Réception des nouvelles notifications en temps réel
+        connection.on("ReceiveNotification", function (notifications, unreadCount) {
+            console.log("📩 Nouvelle notification reçue !");
+            updateNotificationBadge(unreadCount);
+            renderNotifications(notifications);
+        });
+
+        // 📌 Mise à jour après marquage comme lu
+        connection.on("UpdateNotifications", function (notifications, unreadCount) {
+            console.log("✅ Mise à jour des notifications après lecture !");
+            updateNotificationBadge(unreadCount);
+            renderNotifications(notifications);
+        });
+
+        // 📌 Mise à jour du badge de notifications
+        function updateNotificationBadge(notificationCount) {
+            console.log("🔄 Mise à jour du badge :", notificationCount);
+
+            if (notificationCount > 0) {
+                $("#notifBadge").text(notificationCount).show();
+            } else {
+                $("#notifBadge").text("").hide(); // Assurez-vous que la valeur est bien réinitialisée
+            }
+        }
+
+
+
+        // 📌 Affichage dynamique des notifications avec le bon style
+        function renderNotifications(notifications) {
+            let notifHtml = `
+                <div class="header">Notifications</div>
+                <div class="scrollable-notifications">
+            `;
+
+            if (notifications.length > 0) {
+                notifications.forEach(notification => {
+                    let isUnread = notification.status === "non lu";
+                    let statusClass = isUnread ? "unread" : "read";
+                    let bellClass = isUnread ? "fa-bell notification-icon unread" : "fa-bell notification-icon read";
+                    let bgClass = isUnread ? "notification-item unread" : "notification-item read";
+                    const date = new Date(notification.createdAt).toLocaleString("fr-FR", {
+                                            day: "2-digit",
+                                            month: "long",   // "janvier", "février", etc.
+                                            year: "numeric",
+                                            hour: "2-digit",
+                                            minute: "2-digit",
+                                            hourCycle: "h23" // Force le format 24h sans AM/PM
+                                        }).replace(":", "h:");
+
+                    notifHtml += `
+                        <li class="${bgClass} d-flex" data-notification-id="${notification.id}">
+                            <a href="#" class="dropdown-item d-flex p-2 w-100" onclick="markAsRead(${notification.id})">
+                                <div class="d-flex align-items-center me-3">
+                                    <i class="fa ${bellClass}"></i>
+                                </div>
+                                <div class="d-flex flex-column justify-content-center w-100">
+                                    <p class="notification-text ${statusClass}">${notification.message}</p>
+                                    <p class="text-xs text-muted mb-0">
+                                        <i class="fa fa-clock me-1"></i>
+                                        <span>${date}</span>
+                                    </p>
+                                </div>
+                            </a>
+                        </li>
+                    `;
+                });
+            } else {
+                notifHtml += '<li class="mb-2"><p class="text-xs text-center text-secondary">Aucune notification.</p></li>';
+            }
+
+            notifHtml += `</div>`; // Fermeture du div scrollable
+            $("#notifList").html(notifHtml);
+        }
+
+        // 📌 Marquer une notification comme lue via SignalR
+        window.markAsRead = function (notificationId) {
+            console.log("🔹 Marquage comme lu via SignalR:", notificationId);
+            connection.invoke("MarkNotificationAsRead", userId, notificationId)
+                .catch(function (err) {
+                    console.error("❌ Erreur SignalR MarkNotificationAsRead :", err.toString());
+                });
+        };
+    });
+</script>
+
+
+
+
+
+
+
+
 
 
 

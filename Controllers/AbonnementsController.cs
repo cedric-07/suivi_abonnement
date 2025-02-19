@@ -6,7 +6,7 @@ using Rotativa.AspNetCore;
 
 namespace suivi_abonnement.Controllers
 {
-    public class AbonnementsController : Controller
+    public class AbonnementsController : BaseController
     {
         private readonly IAbonnementService _abonnementService;
         private readonly IFournisseurService _fournisseurService;
@@ -17,7 +17,7 @@ namespace suivi_abonnement.Controllers
         private readonly IHttpContextAccessor _httpContextAccessor;        
         private readonly IDepartementService _departementService;
         private readonly User user = new User();
-        public AbonnementsController(IAbonnementService abonnementService, IFournisseurService fournisseurService, ICategorieService categorieService, IDepartementService departementService , INotificationService notificationService , IHttpContextAccessor httpContextAccessor)
+        public AbonnementsController(IAbonnementService abonnementService, IFournisseurService fournisseurService, ICategorieService categorieService, IDepartementService departementService , INotificationService notificationService , IHttpContextAccessor httpContextAccessor ):base(notificationService)
         {
             _abonnementService = abonnementService;
             _fournisseurService = fournisseurService;
@@ -29,35 +29,10 @@ namespace suivi_abonnement.Controllers
 
         //Controller de notifications
 
-        public override void OnActionExecuting(ActionExecutingContext context)
-        {
-            int userId = HttpContext.Session.GetInt32("UserId") ?? 0;
-            var userRole = HttpContext.Session.GetString("UserRole");
+        
 
-            _notificationService.SendNotification();
-            List<Notification> notifications = new List<Notification>();
 
-            if (userRole == "admin")
-            {
-                notifications = _notificationService.GetNotificationsForAdmin();
-            }
-            else if (userRole == "client")
-            {
-                notifications = _notificationService.GetNotificationsForClient();
-            }
 
-            if (notifications == null || !notifications.Any())
-            {
-                Console.WriteLine("Aucune notification trouvée.");
-            }
-
-            int notificationCount = notifications?.Count(n => n.Status == "non lu") ?? 0;
-
-            ViewBag.Notifications = notifications;
-            ViewBag.NbrNotifications = notificationCount;
-
-            base.OnActionExecuting(context);
-        }
 
         // GET: AbonnementsController
         

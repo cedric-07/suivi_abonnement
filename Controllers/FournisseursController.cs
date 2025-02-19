@@ -7,44 +7,19 @@ using suivi_abonnement.Service.Interface;
 using Microsoft.AspNetCore.Mvc.Filters;
 namespace suivi_abonnement.Controllers
 {
-    public class FournisseursController : Controller
+    public class FournisseursController : BaseController
     {
         private readonly IFournisseurService _fournisseurService;
         private readonly INotificationService _notificationService;
-        public FournisseursController(IFournisseurService fournisseurService , INotificationService notificationService)
+        public FournisseursController(IFournisseurService fournisseurService , INotificationService notificationService): base(notificationService)
         {
             this._fournisseurService = fournisseurService;
             this._notificationService = notificationService;
         }
-        public override void OnActionExecuting(ActionExecutingContext context)
-        {
-            int userId = HttpContext.Session.GetInt32("UserId") ?? 0;
-            var userRole = HttpContext.Session.GetString("UserRole");
+        
 
-            _notificationService.SendNotification();
-            List<Notification> notifications = new List<Notification>();
 
-            if (userRole == "admin")
-            {
-                notifications = _notificationService.GetNotificationsForAdmin();
-            }
-            else if (userRole == "client")
-            {
-                notifications = _notificationService.GetNotificationsForClient();
-            }
 
-            if (notifications == null || !notifications.Any())
-            {
-                Console.WriteLine("Aucune notification trouvée.");
-            }
-
-            int notificationCount = notifications?.Count(n => n.Status == "non lu") ?? 0;
-
-            ViewBag.Notifications = notifications;
-            ViewBag.NbrNotifications = notificationCount;
-
-            base.OnActionExecuting(context);
-        }
 
 
         

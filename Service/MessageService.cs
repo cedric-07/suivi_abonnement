@@ -19,9 +19,9 @@ namespace suivi_abonnement.Service
         {
             return _messageRepository.CreateConversation(senderId, receiverId);
         }
-        public void SendMessage(int senderId, int receiverId, string messageText)
+        public void SendMessage(int senderId, int receiverId, string messageText , string fileUrl = null)
         {
-            _messageRepository.SendMessage(senderId, receiverId, messageText);
+            _messageRepository.SendMessage(senderId, receiverId, messageText, fileUrl);
         }
         public int GetOrCreateConversation(int senderId, int receiverId)
         {

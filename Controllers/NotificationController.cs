@@ -1,18 +1,23 @@
     using Microsoft.AspNetCore.Mvc;
     using suivi_abonnement.Service.Interface;
+    using Microsoft.AspNetCore.Mvc.Filters;
     using System;
     using suivi_abonnement.Models;
     namespace suivi_abonnement.Controllers
     {
-        public class NotificationController : Controller
+        public class NotificationController : BaseController
         {
             private readonly INotificationService _notificationService;
 
             // Injection de dépendance pour accéder à INotificationService
-            public NotificationController(INotificationService notificationService)
+            public NotificationController(INotificationService notificationService): base(notificationService)
             {
                 _notificationService = notificationService;
             }
+            
+
+            
+
 
             public IActionResult Index()
             {
