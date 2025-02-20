@@ -51,124 +51,130 @@ namespace suivi_abonnement.Hubs
             }
         }
 
-        
-
-        // public async Task SendMessageToReceiver(int receiverId, string message)
-        // {
-        //     try
-        //     {
-        //         var senderId = Context.GetHttpContext()?.Session.GetInt32("UserId");
-
-        //         if (!senderId.HasValue || string.IsNullOrEmpty(message))
-        //         {
-        //             Console.WriteLine($"❌ [SendMessageToReceiver] Erreur SignalR: senderId ou message invalide. senderId: {senderId}, message: '{message}'");
-        //             return;
-        //         }
-
-        //         Console.WriteLine($"📩 [SendMessageToReceiver] Message reçu de {senderId.Value} à {receiverId}: {message}");
-        //         message = ConvertLinksToHtmlLinks(message);
-
-        //         _messageService.SendMessage(senderId.Value, receiverId, message);
-
-        //         if (ConnectedUsers.ContainsKey(receiverId))
-        //         {
-        //             foreach (var connectionId in ConnectedUsers[receiverId])
-        //             {
-        //                 Console.WriteLine($"🔗 [SendMessageToReceiver] Envoi du message à {connectionId} via SignalR");
-        //                 await Clients.Client(connectionId).SendAsync("ReceiveMessage", senderId.Value, message);
-        //             }
-        //         }
-        //         else
-        //         {
-        //             Console.WriteLine($"⚠️ [SendMessageToReceiver] Utilisateur {receiverId} n'est pas en ligne.");
-        //         }
-
-        //         // 🔥 Toujours envoyer `NotifyNewMessage` si la conversation n'est pas ouverte
-        //         await Clients.User(receiverId.ToString()).SendAsync("NotifyNewMessage", senderId.Value);
-        //         Console.WriteLine($"📬 [SendMessageToReceiver] SignalR - NotifyNewMessage envoyé à l'utilisateur {receiverId} (de {senderId.Value})");
-
-        //         // 🔥 Envoyer le nombre de messages non lus
-        //         await SendUnreadMessagesCount(receiverId);
-        //     }
-        //     catch (Exception ex)
-        //     {
-        //         Console.WriteLine($"❌ [SendMessageToReceiver] Erreur dans SendMessage (SignalR) : {ex.Message}");
-        //     }
-        // }
 
 
-        public async Task SendMessageToReceiver(int receiverId, string message)
+
+
+
+        //public async Task SendMessageToReceiver(int receiverId, string message)
+        //{
+        //    try
+        //    {
+        //        var senderId = Context.GetHttpContext()?.Session.GetInt32("UserId");
+
+        //        if (!senderId.HasValue || string.IsNullOrEmpty(message))
+        //        {
+        //            Console.WriteLine($"❌ [SendMessageToReceiver] Erreur SignalR: senderId ou message invalide. senderId: {senderId}, message: '{message}'");
+        //            return;
+        //        }
+
+        //        // 🔥 Convertir les liens AVANT d'envoyer le message
+        //        string formattedMessage = ConvertLinksToHtmlLinks(message);
+
+        //        Console.WriteLine($"📩 [SendMessageToReceiver] Message formaté de {senderId.Value} à {receiverId}: {formattedMessage}");
+
+        //        // 🔥 Enregistrer en base avec le message formaté (si nécessaire)
+        //        _messageService.SendMessage(senderId.Value, receiverId, formattedMessage);
+
+        //        // 🔥 Envoyer le message converti au destinataire
+        //        if (ConnectedUsers.ContainsKey(receiverId))
+        //        {
+        //            foreach (var connectionId in ConnectedUsers[receiverId])
+        //            {
+        //                Console.WriteLine($"🔗 [SendMessageToReceiver] Envoi du message formaté à {connectionId} via SignalR");
+        //                await Clients.Client(connectionId).SendAsync("ReceiveMessage", senderId.Value, formattedMessage);
+        //            }
+        //        }
+        //        else
+        //        {
+        //            Console.WriteLine($"⚠️ [SendMessageToReceiver] Utilisateur {receiverId} n'est pas en ligne.");
+        //        }
+
+        //        // 🔥 Toujours envoyer la notification de nouveau message
+        //        await Clients.User(receiverId.ToString()).SendAsync("NotifyNewMessage", senderId.Value);
+        //        Console.WriteLine($"📬 [SendMessageToReceiver] SignalR - NotifyNewMessage envoyé à l'utilisateur {receiverId} (de {senderId.Value})");
+
+        //        // 🔥 Envoyer le nombre de messages non lus
+        //        await SendUnreadMessagesCount(receiverId);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        Console.WriteLine($"❌ [SendMessageToReceiver] Erreur dans SendMessage (SignalR) : {ex.Message}");
+        //    }
+        //}
+
+
+        public async Task SendMessageToReceiver(int receiverId, string message, string? filePath = null)
         {
             try
             {
                 var senderId = Context.GetHttpContext()?.Session.GetInt32("UserId");
 
-                if (!senderId.HasValue || string.IsNullOrEmpty(message))
+                if (!senderId.HasValue || (string.IsNullOrWhiteSpace(message) && string.IsNullOrWhiteSpace(filePath)))
                 {
-                    Console.WriteLine($"❌ [SendMessageToReceiver] Erreur SignalR: senderId ou message invalide. senderId: {senderId}, message: '{message}'");
+                    Console.WriteLine($"❌ [SendMessageToReceiver] Erreur : senderId invalide ou aucun fichier/message.");
                     return;
                 }
 
-                // 🔥 Convertir les liens AVANT d'envoyer le message
-                string formattedMessage = ConvertLinksToHtmlLinks(message);
-                
-                Console.WriteLine($"📩 [SendMessageToReceiver] Message formaté de {senderId.Value} à {receiverId}: {formattedMessage}");
+                // 🔥 Enregistrement du message dans la base de données
+                _messageService.SendMessage(senderId.Value, receiverId, message, filePath ?? string.Empty);
 
-                // 🔥 Enregistrer en base avec le message formaté (si nécessaire)
-                _messageService.SendMessage(senderId.Value, receiverId, formattedMessage);
+                var messageType = !string.IsNullOrEmpty(filePath) ? _messageService.DetectedFile(filePath) : 0;
 
-                // 🔥 Envoyer le message converti au destinataire
-                if (ConnectedUsers.ContainsKey(receiverId))
+                var messageData = new
                 {
-                    foreach (var connectionId in ConnectedUsers[receiverId])
-                    {
-                        Console.WriteLine($"🔗 [SendMessageToReceiver] Envoi du message formaté à {connectionId} via SignalR");
-                        await Clients.Client(connectionId).SendAsync("ReceiveMessage", senderId.Value, formattedMessage);
-                    }
-                }
-                else
+                    senderId = senderId.Value,
+                    message = message,
+                    filePath = filePath,
+                    messageType = messageType
+                };
+
+                // 🔥 Envoi en temps réel via SignalR
+                if (ConnectedUsers.TryGetValue(receiverId, out var connections))
                 {
-                    Console.WriteLine($"⚠️ [SendMessageToReceiver] Utilisateur {receiverId} n'est pas en ligne.");
+                    await Clients.Clients(connections).SendAsync("ReceiveMessage", messageData);
                 }
 
-                // 🔥 Toujours envoyer la notification de nouveau message
+                // 🔔 Notification de nouveau message
                 await Clients.User(receiverId.ToString()).SendAsync("NotifyNewMessage", senderId.Value);
-                Console.WriteLine($"📬 [SendMessageToReceiver] SignalR - NotifyNewMessage envoyé à l'utilisateur {receiverId} (de {senderId.Value})");
-
-                // 🔥 Envoyer le nombre de messages non lus
                 await SendUnreadMessagesCount(receiverId);
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"❌ [SendMessageToReceiver] Erreur dans SendMessage (SignalR) : {ex.Message}");
+                Console.WriteLine($"❌ [SendMessageToReceiver] Erreur : {ex.Message}");
             }
         }
 
 
-    //    private string ConvertLinksToHtmlLinks(string messageText)
-    //     {
-    //         if (string.IsNullOrWhiteSpace(messageText))
-    //             return messageText;
-
-    //         // 🔹 Regex amélioré pour capturer aussi les liens sans http/https
-    //         string pattern = @"((http|https):\/\/[^\s]+)|(\bwww\.[^\s]+)";
-
-    //         return Regex.Replace(messageText, pattern, match =>
-    //         {
-    //             string url = match.Value;
-
-    //             // Ajoute "http://" si ce n'est pas un lien absolu
-    //             if (!url.StartsWith("http", StringComparison.OrdinalIgnoreCase))
-    //             {
-    //                 url = "http://" + url;
-    //             }
-
-    //             return $"<a href=\"{url}\" target=\"_blank\">{match.Value}</a>";
-    //         });
-    //     }
 
 
-    private string ConvertLinksToHtmlLinks(string messageText)
+
+
+
+        //    private string ConvertLinksToHtmlLinks(string messageText)
+        //     {
+        //         if (string.IsNullOrWhiteSpace(messageText))
+        //             return messageText;
+
+        //         // 🔹 Regex amélioré pour capturer aussi les liens sans http/https
+        //         string pattern = @"((http|https):\/\/[^\s]+)|(\bwww\.[^\s]+)";
+
+        //         return Regex.Replace(messageText, pattern, match =>
+        //         {
+        //             string url = match.Value;
+
+        //             // Ajoute "http://" si ce n'est pas un lien absolu
+        //             if (!url.StartsWith("http", StringComparison.OrdinalIgnoreCase))
+        //             {
+        //                 url = "http://" + url;
+        //             }
+
+        //             return $"<a href=\"{url}\" target=\"_blank\">{match.Value}</a>";
+        //         });
+        //     }
+
+
+        private string ConvertLinksToHtmlLinks(string messageText)
     {
         if (string.IsNullOrWhiteSpace(messageText))
             return messageText;

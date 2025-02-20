@@ -3849,6 +3849,42 @@
       "PackagePath": "staticwebassets\\src\\styles\\theme.css"
     },
     {
+      "Id": "D:\\STAGE_L3\\suivi_abonnement\\wwwroot\\uploads\\178e3821-110f-49f2-a4d9-a6ac8484920c.jpg",
+      "PackagePath": "staticwebassets\\uploads\\178e3821-110f-49f2-a4d9-a6ac8484920c.jpg"
+    },
+    {
+      "Id": "D:\\STAGE_L3\\suivi_abonnement\\wwwroot\\uploads\\2b486cfa-a148-4c8c-ae20-fcffd2482c9c.jpg",
+      "PackagePath": "staticwebassets\\uploads\\2b486cfa-a148-4c8c-ae20-fcffd2482c9c.jpg"
+    },
+    {
+      "Id": "D:\\STAGE_L3\\suivi_abonnement\\wwwroot\\uploads\\510cda6f-4c8a-4015-85cb-ea0a25484405.pdf",
+      "PackagePath": "staticwebassets\\uploads\\510cda6f-4c8a-4015-85cb-ea0a25484405.pdf"
+    },
+    {
+      "Id": "D:\\STAGE_L3\\suivi_abonnement\\wwwroot\\uploads\\5791a783-8db6-4a10-9ae8-568f968d13a9.png",
+      "PackagePath": "staticwebassets\\uploads\\5791a783-8db6-4a10-9ae8-568f968d13a9.png"
+    },
+    {
+      "Id": "D:\\STAGE_L3\\suivi_abonnement\\wwwroot\\uploads\\5b4e4753-be05-44cb-b6a5-6c2d05de11b6.pdf",
+      "PackagePath": "staticwebassets\\uploads\\5b4e4753-be05-44cb-b6a5-6c2d05de11b6.pdf"
+    },
+    {
+      "Id": "D:\\STAGE_L3\\suivi_abonnement\\wwwroot\\uploads\\892a0043-e5c6-47ff-9bfd-53d0b79e48d5.jpg",
+      "PackagePath": "staticwebassets\\uploads\\892a0043-e5c6-47ff-9bfd-53d0b79e48d5.jpg"
+    },
+    {
+      "Id": "D:\\STAGE_L3\\suivi_abonnement\\wwwroot\\uploads\\a57baa5b-5679-411d-9e88-3dfd183e5ca8.pdf",
+      "PackagePath": "staticwebassets\\uploads\\a57baa5b-5679-411d-9e88-3dfd183e5ca8.pdf"
+    },
+    {
+      "Id": "D:\\STAGE_L3\\suivi_abonnement\\wwwroot\\uploads\\e93eae4a-7555-45d3-a983-f127cbdcc978.pdf",
+      "PackagePath": "staticwebassets\\uploads\\e93eae4a-7555-45d3-a983-f127cbdcc978.pdf"
+    },
+    {
+      "Id": "D:\\STAGE_L3\\suivi_abonnement\\wwwroot\\uploads\\fddd2cc6-52a3-431a-8676-7f9d5b21aded.jpg",
+      "PackagePath": "staticwebassets\\uploads\\fddd2cc6-52a3-431a-8676-7f9d5b21aded.jpg"
+    },
+    {
       "Id": "D:\\STAGE_L3\\suivi_abonnement\\wwwroot\\vendors\\fonts\\FontAwesome.otf",
       "PackagePath": "staticwebassets\\vendors\\fonts\\FontAwesome.otf"
     },

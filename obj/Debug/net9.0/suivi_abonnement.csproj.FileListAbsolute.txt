@@ -1,3 +1,13 @@
+D:\STAGE_L3\suivi_abonnement\obj\Debug\net9.0\suivi_abonnement.csproj.AssemblyReference.cache
+D:\STAGE_L3\suivi_abonnement\obj\Debug\net9.0\suivi_abonnement.GeneratedMSBuildEditorConfig.editorconfig
+D:\STAGE_L3\suivi_abonnement\obj\Debug\net9.0\suivi_abonnement.AssemblyInfoInputs.cache
+D:\STAGE_L3\suivi_abonnement\obj\Debug\net9.0\suivi_abonnement.AssemblyInfo.cs
+D:\STAGE_L3\suivi_abonnement\obj\Debug\net9.0\suivi_abonnement.csproj.CoreCompileInputs.cache
+D:\STAGE_L3\suivi_abonnement\obj\Debug\net9.0\suivi_abonnement.MvcApplicationPartsAssemblyInfo.cs
+D:\STAGE_L3\suivi_abonnement\obj\Debug\net9.0\suivi_abonnement.MvcApplicationPartsAssemblyInfo.cache
+D:\STAGE_L3\suivi_abonnement\obj\Debug\net9.0\suivi_abonnement.RazorAssemblyInfo.cache
+D:\STAGE_L3\suivi_abonnement\obj\Debug\net9.0\suivi_abonnement.RazorAssemblyInfo.cs
+D:\STAGE_L3\suivi_abonnement\obj\Debug\net9.0\suivi_abonnement.sourcelink.json
 D:\STAGE_L3\suivi_abonnement\bin\Debug\net9.0\appsettings.Development.json
 D:\STAGE_L3\suivi_abonnement\bin\Debug\net9.0\appsettings.json
 D:\STAGE_L3\suivi_abonnement\bin\Debug\net9.0\suivi_abonnement.staticwebassets.runtime.json
@@ -58,6 +68,7 @@ D:\STAGE_L3\suivi_abonnement\bin\Debug\net9.0\System.Net.WebSockets.WebSocketPro
 D:\STAGE_L3\suivi_abonnement\bin\Debug\net9.0\System.Reflection.MetadataLoadContext.dll
 D:\STAGE_L3\suivi_abonnement\bin\Debug\net9.0\System.Security.Cryptography.ProtectedData.dll
 D:\STAGE_L3\suivi_abonnement\bin\Debug\net9.0\System.Security.Permissions.dll
+D:\STAGE_L3\suivi_abonnement\bin\Debug\net9.0\System.Text.Json.dll
 D:\STAGE_L3\suivi_abonnement\bin\Debug\net9.0\System.Windows.Extensions.dll
 D:\STAGE_L3\suivi_abonnement\bin\Debug\net9.0\af\Humanizer.resources.dll
 D:\STAGE_L3\suivi_abonnement\bin\Debug\net9.0\ar\Humanizer.resources.dll
@@ -203,16 +214,6 @@ D:\STAGE_L3\suivi_abonnement\bin\Debug\net9.0\runtimes\unix\lib\net6.0\System.Dr
 D:\STAGE_L3\suivi_abonnement\bin\Debug\net9.0\runtimes\win\lib\net6.0\System.Drawing.Common.dll
 D:\STAGE_L3\suivi_abonnement\bin\Debug\net9.0\runtimes\win\lib\net6.0\System.Security.Cryptography.ProtectedData.dll
 D:\STAGE_L3\suivi_abonnement\bin\Debug\net9.0\runtimes\win\lib\net6.0\System.Windows.Extensions.dll
-D:\STAGE_L3\suivi_abonnement\obj\Debug\net9.0\suivi_abonnement.csproj.AssemblyReference.cache
-D:\STAGE_L3\suivi_abonnement\obj\Debug\net9.0\suivi_abonnement.GeneratedMSBuildEditorConfig.editorconfig
-D:\STAGE_L3\suivi_abonnement\obj\Debug\net9.0\suivi_abonnement.AssemblyInfoInputs.cache
-D:\STAGE_L3\suivi_abonnement\obj\Debug\net9.0\suivi_abonnement.AssemblyInfo.cs
-D:\STAGE_L3\suivi_abonnement\obj\Debug\net9.0\suivi_abonnement.csproj.CoreCompileInputs.cache
-D:\STAGE_L3\suivi_abonnement\obj\Debug\net9.0\suivi_abonnement.MvcApplicationPartsAssemblyInfo.cs
-D:\STAGE_L3\suivi_abonnement\obj\Debug\net9.0\suivi_abonnement.MvcApplicationPartsAssemblyInfo.cache
-D:\STAGE_L3\suivi_abonnement\obj\Debug\net9.0\suivi_abonnement.RazorAssemblyInfo.cache
-D:\STAGE_L3\suivi_abonnement\obj\Debug\net9.0\suivi_abonnement.RazorAssemblyInfo.cs
-D:\STAGE_L3\suivi_abonnement\obj\Debug\net9.0\suivi_abonnement.sourcelink.json
 D:\STAGE_L3\suivi_abonnement\obj\Debug\net9.0\scopedcss\Views\Shared\_Layout.cshtml.rz.scp.css
 D:\STAGE_L3\suivi_abonnement\obj\Debug\net9.0\scopedcss\bundle\suivi_abonnement.styles.css
 D:\STAGE_L3\suivi_abonnement\obj\Debug\net9.0\scopedcss\projectbundle\suivi_abonnement.bundle.scp.css
@@ -824,4 +825,3 @@ D:\STAGE_L3\suivi_abonnement\obj\Debug\net9.0\refint\suivi_abonnement.dll
 D:\STAGE_L3\suivi_abonnement\obj\Debug\net9.0\suivi_abonnement.pdb
 D:\STAGE_L3\suivi_abonnement\obj\Debug\net9.0\suivi_abonnement.genruntimeconfig.cache
 D:\STAGE_L3\suivi_abonnement\obj\Debug\net9.0\ref\suivi_abonnement.dll
-D:\STAGE_L3\suivi_abonnement\bin\Debug\net9.0\System.Text.Json.dll

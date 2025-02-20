@@ -83,47 +83,52 @@
 
                         <div class="col-md-4">
                             <div class="dropdown">
-                                <button class="btn dropdown-toggle text-uppercase fw-bold shadow-sm" 
-                                        type="button" 
-                                        id="filterDropdown" 
-                                        data-bs-toggle="dropdown" 
-                                        aria-expanded="false" 
+                                <button class="btn dropdown-toggle text-uppercase fw-bold shadow-sm"
+                                        type="button"
+                                        id="filterDropdown"
+                                        data-bs-toggle="dropdown"
+                                        aria-expanded="false"
                                         style="background-color: white; color: #0d2d5a; padding: 8px 15px; border: 1px solid #0d2d5a; border-radius: 50px; font-size: 14px;">
                                     <i class="bi bi-funnel" style="font-size: 1.2rem; margin-right: 8px; color: #0d2d5a;"></i> Filtrer
                                 </button>
                                 <ul class="dropdown-menu p-3 rounded border-0 shadow-lg" aria-labelledby="filterDropdown" style="width: 300px;">
                                     <form asp-action="IndexPage" method="get">
-                                        <li class="mb-3">
-                                            <label for="dateDebutFilter" class="form-label text-dark fw-bold" style="font-size: 13px;">Date de début</label>
-                                            <input type="datetime-local" class="form-control form-control-sm rounded-pill shadow-sm" id="dateDebutFilter" name="DateDebut" style="font-size: 12px;">
-                                        </li>
-                                        <li class="mb-3">
-                                            <label for="dateExpirationFilter" class="form-label text-dark fw-bold" style="font-size: 13px;">Date d'expiration</label>
-                                            <input type="datetime-local" class="form-control form-control-sm rounded-pill shadow-sm" id="dateExpirationFilter" name="ExpirationDate" style="font-size: 12px;">
-                                        </li>
-                                        <li class="mb-3">
-                                            <label for="categoryFilter" class="form-label text-dark fw-bold" style="font-size: 13px;">Catégorie</label>
-                                            <select class="form-select form-select-sm rounded-pill shadow-sm" id="categoryFilter" name="idcategorie" style="font-size: 12px;">
-                                                <option disabled selected>--Choisir une catégorie--</option>
-                                                @foreach (var categorie in Model.Categories)
+                                    <li class="mb-3">
+                                        <label for="dateDebutFilter" class="form-label text-dark fw-bold" style="font-size: 13px;">Date de début</label>
+                                        <input type="datetime-local" class="form-control form-control-sm rounded-pill shadow-sm" id="dateDebutFilter" name="DateDebut" style="font-size: 12px;">
+                                    </li>
+                                    <li class="mb-3">
+                                        <label for="dateExpirationFilter" class="form-label text-dark fw-bold" style="font-size: 13px;">Date d'expiration</label>
+                                        <input type="datetime-local" class="form-control form-control-sm rounded-pill shadow-sm" id="dateExpirationFilter" name="ExpirationDate" style="font-size: 12px;">
+                                    </li>
+                                    <li class="mb-3">
+                                        <label for="categoryFilter" class="form-label text-dark fw-bold" style="font-size: 13px;">Catégorie</label>
+                                        <select class="form-select form-select-sm rounded-pill shadow-sm" id="categoryFilter" name="idcategorie" style="font-size: 12px;">
+                                                @if (Model?.Categories != null)
                                                 {
+                                                    @foreach (var categorie in Model.Categories)
+                                                    {
                                                     <option value="@categorie.Id">@categorie.Nom</option>
+                                                    }
                                                 }
-                                            </select>
-                                        </li>
-                                        <li class="mb-3">
-                                            <label for="TypeFilter" class="form-label text-dark fw-bold" style="font-size: 13px;">Type</label>
-                                            <select class="form-select form-select-sm rounded-pill shadow-sm" id="TypeFilter" name="type" style="font-size: 12px;">
-                                                <option disabled selected>--Choisir une type--</option>
-                                                @foreach (var abonnement in Model.Abonnements)
+                                        </select>
+                                    </li>
+                                    <li class="mb-3">
+                                        <label for="TypeFilter" class="form-label text-dark fw-bold" style="font-size: 13px;">Type</label>
+                                        <select class="form-select form-select-sm rounded-pill shadow-sm" id="TypeFilter" name="type" style="font-size: 12px;">
+                                            <option disabled selected>--Choisir une type--</option>
+                                                @if (Model?.Abonnements != null)
                                                 {
+                                                    @foreach (var abonnement in Model.Abonnements)
+                                                    {
                                                     <option value="@abonnement.Type">@abonnement.Type</option>
+                                                    }
                                                 }
-                                            </select>
-                                        </li>
-                                        <li>
-                                            <button type="submit" class="btn btn-outline-success w-100 rounded-pill text-uppercase fw-bold" style="font-size: 13px; padding: 8px;">Appliquer</button>
-                                        </li>
+                                        </select>
+                                    </li>
+                                    <li>
+                                        <button type="submit" class="btn btn-outline-success w-100 rounded-pill text-uppercase fw-bold" style="font-size: 13px; padding: 8px;">Appliquer</button>
+                                    </li>
                                     </form>
                                 </ul>
                             </div>

@@ -7,6 +7,7 @@ using suivi_abonnement.Service;
 using suivi_abonnement.Repository;
 using suivi_abonnement.Hubs;
 using Rotativa.AspNetCore;
+using Microsoft.Extensions.FileProviders;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -73,6 +74,14 @@ app.UseAuthorization();
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=AuthClient}/{action=Login}/{id?}");
+
+app.UseStaticFiles(new StaticFileOptions
+{
+    FileProvider = new PhysicalFileProvider(
+        Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "uploads")),
+    RequestPath = "/uploads"
+});
+
 
 app.MapHub<MessageHub>("/messageHub");  // 👈 Ajoute le hub SignalR
 app.MapHub<NotificationHub>("/notificationHub");  // 👈 Ajoute le hub SignalR

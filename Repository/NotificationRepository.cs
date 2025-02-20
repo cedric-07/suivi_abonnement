@@ -238,7 +238,6 @@ namespace suivi_abonnement.Service
 
                             if (existingCount > 0)
                             {
-                                Console.WriteLine($"⚠️ Notification déjà existante pour userId={userId}, abonnementId={abonnementId}");
                                 return;
                             }
                         }

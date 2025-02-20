@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 
 namespace suivi_abonnement.Controllers
 {
+
     public class MessageController : Controller
     {
         private readonly IMessageService _messageService;
@@ -34,34 +35,66 @@ namespace suivi_abonnement.Controllers
             _hubContext = hubContext;
         }
 
-        public override void OnActionExecuting(ActionExecutingContext context)
+       
+        [HttpPost("Message/UploadFile")] // 🔥 Route explicite
+        public async Task<IActionResult> UploadFile([FromForm] IFormFile file)
         {
-            int userId = HttpContext.Session.GetInt32("UserId") ?? 0;
-            var userRole = HttpContext.Session.GetString("UserRole");
-
-            _notificationService.SendNotification();
-            List<Notification> notifications = new List<Notification>();
-
-            if (userRole == "admin")
+            if (file == null || file.Length == 0)
             {
-                notifications = _notificationService.GetNotificationsForAdmin();
-            }
-            else if (userRole == "client")
-            {
-                notifications = _notificationService.GetNotificationsForClient();
+                return BadRequest("Aucun fichier sélectionné.");
             }
 
-            if (notifications == null || !notifications.Any())
+            try
             {
-                Console.WriteLine("Aucune notification trouvée.");
+                string filePath = await Task.Run(() => _messageService.UploadFile(file)); // 🔥 Stocke et retourne le chemin
+
+                if (string.IsNullOrEmpty(filePath))
+                {
+                    return StatusCode(500, "Le fichier n'a pas pu être enregistré.");
+                }
+
+                return Ok(new { filePath });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Erreur lors de l'upload : {ex.Message}");
+            }
+        }
+
+        [HttpGet("uploads/{filename}")]
+        public IActionResult GetUploadFile(string filename)
+        {
+            var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "uploads", filename);
+            if (!System.IO.File.Exists(filePath))
+            {
+                return NotFound("Le fichier n'existe pas.");
             }
 
-            int notificationCount = notifications?.Count(n => n.Status == "non lu") ?? 0;
+            var fileBytes = System.IO.File.ReadAllBytes(filePath);
+            var contentType = GetContentType(filePath);
+            return File(fileBytes, contentType, filename);
+        }
+        private string GetContentType(string path)
+        {
+            var types = new Dictionary<string, string>
+            {
+                { ".jpg", "image/jpeg" },
+                { ".jpeg", "image/jpeg" },
+                { ".png", "image/png" },
+                { ".gif", "image/gif" },
+                { ".bmp", "image/bmp" },
+                { ".pdf", "application/pdf" },
+                { ".doc", "application/msword" },
+                { ".docx", "application/vnd.openxmlformats-officedocument.wordprocessingml.document" },
+                { ".xls", "application/vnd.ms-excel" },
+                { ".xlsx", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" },
+                { ".ppt", "application/vnd.ms-powerpoint" },
+                { ".pptx", "application/vnd.openxmlformats-officedocument.presentationml.presentation" },
+                { ".txt", "text/plain" }
+            };
 
-            ViewBag.Notifications = notifications;
-            ViewBag.NbrNotifications = notificationCount;
-
-            base.OnActionExecuting(context);
+            var ext = Path.GetExtension(path).ToLowerInvariant();
+            return types.ContainsKey(ext) ? types[ext] : "application/octet-stream";
         }
 
         [HttpGet]
@@ -123,7 +156,7 @@ namespace suivi_abonnement.Controllers
        
 
         [HttpPost("Message/SendMessage")]
-        public async Task<IActionResult> SendMessageToReceiver(int receiverId, string messageText)
+        public async Task<IActionResult> SendMessageToReceiver(int receiverId, string messageText , IFormFile file)
         {
             try
             {
@@ -144,8 +177,12 @@ namespace suivi_abonnement.Controllers
                 messageText = ConvertLinksToHtmlLinks(messageText);
 
                 Console.WriteLine($"📩 Message envoyé de {senderId} à {receiverId}: {messageText}");
-
-                _messageService.SendMessage(senderId, receiverId, messageText);
+                string? filePath = null;
+                if (file != null && file.Length > 0)
+                {
+                    filePath = _messageService.UploadFile(file);
+                }
+                _messageService.SendMessage(senderId, receiverId, messageText, filePath?? string.Empty);
 
                 await _hubContext.Clients.User(receiverId.ToString())
                     .SendAsync("ReceiveMessage", senderId, messageText);

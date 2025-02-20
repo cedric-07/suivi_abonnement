@@ -19,9 +19,9 @@ namespace suivi_abonnement.Service
         {
             return _messageRepository.CreateConversation(senderId, receiverId);
         }
-        public void SendMessage(int senderId, int receiverId, string messageText , string fileUrl = null)
+        public void SendMessage(int senderId, int receiverId, string messageText , string filePath)
         {
-            _messageRepository.SendMessage(senderId, receiverId, messageText, fileUrl);
+            _messageRepository.SendMessage(senderId, receiverId, messageText, filePath);
         }
         public int GetOrCreateConversation(int senderId, int receiverId)
         {
@@ -39,6 +39,17 @@ namespace suivi_abonnement.Service
         {
             _messageRepository.MarkMessagesAsRead(receiverId, senderId);
         }
-       
+
+        public int DetectedFile(string filePath)
+        {
+            return _messageRepository.DetectedFile( filePath);
+        }
+        public string UploadFile(IFormFile file)
+        {
+            return  _messageRepository.UploadFile(file);
+        }
+
+
+
     }
 }

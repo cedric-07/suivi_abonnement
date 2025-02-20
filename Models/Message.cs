@@ -9,6 +9,7 @@ namespace suivi_abonnement.Models
         public int SenderId { get; set; }
         public int ReceiverId { get; set; }
         public int ConversationId { get; set; }
-        public string? fileUrl{get; set; } 
+        public string? filePath { get; set; } 
+        public int messageType {get; set; }
     }
 }

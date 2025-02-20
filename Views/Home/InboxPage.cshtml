@@ -89,7 +89,9 @@
         .message.received {
             background-color: #fff;
             border-bottom-left-radius: 0;
-                margin-left: 10px;
+            margin-left: 10px;
+            width: auto;
+            word-wrap: break-word;
             }
 
         .message-date {
@@ -129,7 +131,175 @@
             color: #0d2d5a;
             letter-spacing: 1px;
         }
-        
+
+        .message-image {
+            max-width: 200px;
+            border-radius: 8px;
+            display: block;
+            margin: 5px 0;
+        }
+
+        .message-file {
+            display: flex;
+            align-items: center;
+            background: #f0f0f0;
+            padding: 8px;
+            border-radius: 5px;
+            text-decoration: none;
+            color: #333;
+        }
+
+            .message-file i {
+                font-size: 20px;
+                margin-right: 5px;
+            }
+
+
+        /* 📎 Style du bouton d’attachement */
+        .attach-btn {
+            background: none;
+            border: none;
+            font-size: 20px;
+            cursor: pointer;
+        }
+
+            .attach-btn:hover {
+                color: #60ee13;
+            }
+         .send-btn {
+            background: none;
+            border: none;
+            font-size: 20px;
+            cursor: pointer;
+            color: #41b70a;
+        }
+
+        /* 📂 Prévisualisation du fichier sélectionné */
+        .file-preview-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 10px;
+            padding: 8px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+        }
+
+        .preview-image {
+            max-width: 100px;
+            max-height: 100px;
+            border-radius: 8px;
+        }
+
+        .file-name {
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        /* ❌ Bouton d'annulation */
+        #removeFile {
+            font-size: 12px;
+            padding: 4px 8px;
+        }
+
+        .file-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: #f8f9fa;
+            padding: 10px;
+            border-radius: 8px;
+            max-width: 250px;
+        }
+
+        .file-icon i {
+            font-size: 3em; /* Icône grande */
+            color: #6c757d;
+        }
+
+        .file-info {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .file-name {
+            font-size: 4px;
+            color: #007bff;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .file-name:hover {
+            text-decoration: underline;
+        }
+
+        .download-button {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+            font-size: 10px;
+            padding: 5px 10px;
+             background: #08056c;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            margin-top: 5px;
+            font-weight: bold;
+        }
+
+        .download-button i {
+            font-size: 16px;
+        }
+
+        .download-button:hover {
+            background: #0056b3;
+        }
+
+        .image-container {
+            position: relative;
+            display: inline-block;
+        }
+
+        .message-image {
+            width: 200px; /* Taille ajustable */
+            height: auto;
+            border-radius: 8px;
+            transition: filter 0.3s ease-in-out;
+        }
+
+        .blurred {
+            filter: blur(10px); /* Flou avant téléchargement */
+        }
+
+        .download-overlay {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0, 0, 0, 0.6);
+            color: white;
+            padding: 10px;
+            border-radius: 50%;
+            font-size: 24px;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 50px;
+            height: 50px;
+        }
+
+        .download-overlay:hover {
+            background: rgba(0, 0, 0, 0.8);
+        }
+
+        /* Supprimer le blur après téléchargement */
+        .image-container a:active + .message-image,
+        .image-container a:focus + .message-image {
+            filter: none;
+        }
     </style>
 </head>
 <body>
@@ -198,10 +368,30 @@
                         }
                     }
                 </div>
-                <div class="message-input d-flex">
-                    <input type="hidden" id="receiverId" value="@(Model?.MessageViewModel?.ReceiverId ?? 0)">
-                    <textarea  id="messageText" class="form-control me-2" placeholder="Écrivez un message..."></textarea>
-                    <button id="sendButton" class="btn btn-primary"><i class="fas fa-paper-plane"></i></button>
+                <div class="message-input d-flex align-items-center">
+                    <input type="hidden" id="receiverId" value="@Model?.MessageViewModel?.ReceiverId">
+
+                    <!-- Bouton d'attachement -->
+                    <button id="attachButton" class=" attach-btn me-2">
+                        <i class="fas fa-paperclip"></i>
+                    </button>
+
+                    <!-- Champ de sélection de fichier caché -->
+                    <input type="file" id="fileInput" accept=".jpg,.jpeg,.png,.gif,.pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx" style="display: none;">
+
+                    <!-- Zone de texte pour le message -->
+                    <textarea id="messageText" class="form-control me-2" placeholder="Écrivez un message..."></textarea>
+
+                    <!-- Bouton d'envoi -->
+                    <button id="sendButton" class="send-btn ">
+                        <i class="fas fa-paper-plane"></i>
+                    </button>
+                </div>
+
+                <!-- Zone de prévisualisation du fichier avant envoi -->
+                <div id="filePreviewContainer" class="file-preview-container" style="display: none;">
+                    <div id="filePreview"></div>
+                    <button id="removeFile" class="btn btn-danger btn-sm">❌ Annuler</button>
                 </div>
             </div>
         </div>
@@ -210,10 +400,9 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/3.1.20/signalr.min.js"></script>
     <script>
     var userId = '@(Context.Session.GetInt32("UserId"))';
-    var connection = new signalR.HubConnectionBuilder()
-        .withUrl("/messageHub")
-        .withAutomaticReconnect()
-        .build();
+            var connection = new signalR.HubConnectionBuilder()
+            .withUrl("/messageHub")
+            .build();
 
     // 🚀 Connexion SignalR avec reconnexion automatique
     function startConnection() {
@@ -238,40 +427,164 @@
         setTimeout(startConnection, 5000);
     });
 
-    // 📩 Fonction d'envoi de message
-    $("#sendButton").click(function () {
-        var receiverId = $("#receiverId").val();
-        var message = $("#messageText").val();
 
-        if (!receiverId || !message.trim()) {
-            console.warn("⚠️ Impossible d'envoyer : receiverId ou message est vide.");
-            return;
+
+    // 📩 Fonction d'envoi de message
+        $(document).ready(function () {
+            $("#attachButton").click(function () {
+                $("#fileInput").click();
+            });
+
+            $("#fileInput").change(function () {
+                var file = this.files[0];
+
+                if (file) {
+                    var fileName = file.name;
+                    var fileExtension = fileName.split('.').pop().toLowerCase();
+
+                    if (["jpg", "jpeg", "png", "gif"].includes(fileExtension)) {
+                        var reader = new FileReader();
+                        reader.onload = function (e) {
+                            $("#filePreview").html(`<img src="${e.target.result}" class="preview-image">`);
+                        };
+                        reader.readAsDataURL(file);
+                    } else {
+                        $("#filePreview").html(`<p class="file-name"><i class="fas fa-file-alt"></i> ${fileName}</p>`);
+                    }
+
+                    $("#filePreviewContainer").show();
+                }
+            });
+
+            $("#removeFile").click(function () {
+                $("#fileInput").val("");
+                $("#filePreviewContainer").hide();
+                $("#filePreview").html("");
+            });
+
+            $("#sendButton").click(async function () {
+                var receiverId = $("#receiverId").val();
+                var fileInput = $("#fileInput")[0];
+                var file = fileInput.files.length > 0 ? fileInput.files[0] : null;
+                var message = $("#messageText").val().trim();
+
+                if (!receiverId || (!file && message === "")) {
+                    console.warn("⚠️ Impossible d'envoyer : aucun fichier ni message.");
+                    return;
+                }
+
+                let filePath = null;
+
+                // 🔄 Upload du fichier si présent
+                if (file) {
+                    let formData = new FormData();
+                    formData.append("file", file);
+
+                    try {
+                        let uploadUrl = "/Message/UploadFile";
+                        console.log("📡 Tentative d'upload vers :", uploadUrl);
+
+                        let response = await fetch(uploadUrl, {
+                            method: "POST",
+                            body: formData
+                        });
+
+                        if (!response.ok) {
+                            throw new Error(`Erreur HTTP ${response.status} - ${response.statusText}`);
+                        }
+
+                        let result = await response.json();
+                        filePath = result.filePath;
+
+                        if (filePath) {
+                            filePath = filePath.startsWith("/uploads/") ? filePath : `/uploads/${filePath.split('/').pop()}`;
+                        }
+
+                        console.log("✅ Fichier uploadé avec succès :", filePath);
+                    } catch (error) {
+                        console.error("❌ Erreur d'upload :", error);
+                        alert("Erreur lors de l'upload du fichier. Vérifiez la console.");
+                    }
+                }
+
+                // 🔥 Envoi du message via SignalR
+                connection.invoke("SendMessageToReceiver", parseInt(receiverId), message, filePath)
+                    .then(() => {
+                        console.log("✅ Message/Fichier envoyé via SignalR.");
+                        $("#messageText").val("");
+                        $("#fileInput").val("");
+                        $("#filePreviewContainer").hide();
+                        $("#filePreview").html("");
+
+                        var messageDate = new Date();
+                        var dateDisplay = formatDate(messageDate);
+
+                        // 🔥 Construire messageContent avec texte + fichier
+                        let messageContent = "";
+
+                        if (message) {
+                            messageContent += `<p class="message-text">${convertLinksToHtml(message)}</p>`;
+                        }
+
+                        if (filePath) {
+                            if (/\.(jpg|jpeg|png|gif)$/i.test(filePath)) {
+                                messageContent += `
+                                <div class="image-container">
+                                    <img src="${filePath}" class="message-image blurred" alt="Image envoyée" />
+                                    <a href="${filePath}" download class="download-overlay">
+                                        <i class="fas fa-download"></i>
+                                    </a>
+                                </div>
+                            `;
+                            } else {
+                                let fileName = file.name;
+                                messageContent += `
+                                    <div class="file-container">
+                                        <div class="file-icon">
+                                            <i class="fas fa-file-pdf"></i>
+                                        </div>
+                                        <div class="file-info">
+                                            <a href="${filePath}" target="_blank" class="file-name text-muted">${fileName}</a>
+                                            <a href="${filePath}" download class="download-button">
+                                                <i class="fas fa-download"></i> Télécharger
+                                            </a>
+                                        </div>
+                                    </div>
+                                `;
+
+                            }
+                        }
+
+                        // 📨 Affichage du message dans le chat
+                        $("#chatWindow").append(`
+                            <div class="message-container sent">
+                                <div class="message sent">
+                                    ${messageContent}
+                                    <span class="message-date">${dateDisplay}</span>
+                                    <span class="message-status">✓ Envoyé</span>
+                                </div>
+                                <div class="avatar"><i class="bi bi-person-circle user-icon"></i></div>
+                            </div>
+                        `);
+
+                        scrollToBottom();
+                    })
+                    .catch(err => console.error("❌ Erreur d'envoi via SignalR :", err));
+            });
+
+        });
+
+
+
+
+
+        function convertLinksToHtml(message) {
+            let urlPattern = /(https?:\/\/[^\s]+)/g;
+            return message.replace(urlPattern, function(url) {
+                return `<a href="${url}" target="_blank">${url}</a>`;
+            });
         }
 
-        connection.invoke("SendMessageToReceiver", parseInt(receiverId), message)
-            .then(() => {
-                console.log("✅ Message envoyé via SignalR.");
-                var messageDate = new Date();
-                var dateDisplay = formatDate(messageDate);
-                let messageStatus = "✓ Envoyé"; // Statut initial avant lecture
-
-                $("#messageText").val(""); // Effacer le champ texte après l'envoi
-
-                $("#chatWindow").append(`
-                    <div class="message-container sent">
-                        <div class="message sent">
-                            <p>${message}</p>
-                            <span class="message-date">${dateDisplay}</span>
-                            <span class="message-status">${messageStatus}</span>
-                        </div>
-                        <div class="avatar"><i class="bi bi-person-circle user-icon"></i></div>
-                    </div>
-                `);
-
-                scrollToBottom();
-            })
-            .catch(err => console.error("❌ Erreur d'envoi de message via SignalR :", err));
-    });
 
 
     // 📬 Notification de nouveau message
@@ -285,7 +598,13 @@
             var notifBadge = $("#notif-" + senderId);
             if (notifBadge.length > 0) {
                 var currentCount = parseInt(notifBadge.text()) || 0;
-                notifBadge.text(currentCount + 1).removeClass("d-none");
+                var newCount = currentCount + 1;
+                if(newCount > 0){
+                    notifBadge.text(newCount).removeClass("d-none");
+                }
+                else{
+                    notifBadge.text(newCount).addClass("d-none");
+                }
                 saveUnreadNotification(senderId, currentCount + 1);
             } else {
                 console.warn("⚠️ Badge non trouvé pour l'utilisateur " + senderId);
@@ -294,50 +613,112 @@
     });
 
     // 📩 Réception d'un message
-    connection.on("ReceiveMessage", function (senderId, message) {
-        console.log("📩 Message reçu de :", senderId);
+     connection.on("ReceiveMessage", function (data) {
+            console.log("📩 Message/Fichier reçu de :", data.senderId);
 
-        var currentReceiverId = $("#receiverId").val();
-        var messageDate = new Date();
-        var dateDisplay = formatDate(messageDate);
-        let messageStatus = "✓✓"; // Statut initial avant lecture
+            var currentReceiverId = $("#receiverId").val();
+            var messageDate = new Date();
+            var dateDisplay = formatDate(messageDate);
+            let messageStatus = "✓✓"; // Statut initial avant lecture
 
+            // 🔗 Correction de l'URL du fichier
+            let fileUrl = data.filePath ? (data.filePath.startsWith("/uploads/") ? data.filePath : `/uploads/${data.filePath.split('/').pop()}`) : null;
 
-        if (parseInt(currentReceiverId) === senderId) {
-            console.log("✅ Affichage du message en temps réel");
+            let messageContent = "";
 
-            $("#chatWindow").append(`
-                <div class="message-container received">
-                    <div class="avatar"><i class="bi bi-person-circle user-icon"></i></div>
-                    <div class="message received">
-                        <p>${message}</p>
-                        <span class="message-date">${dateDisplay}</span>
-                        <span class="message-status">${messageStatus}</span>
+            // 💬 Ajouter le texte du message s'il existe
+            if (data.message) {
+                messageContent += `<p class="message-text">${convertLinksToHtml(data.message)}</p>`;
+            }
+
+            // 📂 Vérifier si un fichier est attaché
+            if (data.filePath) {
+                let fileUrl = `/uploads/${data.filePath.split('/').pop()}`;
+
+                // 📷 Image
+                if (/\.(jpg|jpeg|png|gif|bmp)$/i.test(data.filePath)) {
+                   messageContent += `
+                    <div class="image-container">
+                        <img src="${fileUrl}" class="message-image blurred" alt="Image reçue" />
+                        <a href="${fileUrl}" download class="download-overlay">
+                            <i class="fas fa-download"></i>
+                        </a>
                     </div>
-                </div>
-            `);
-            scrollToBottom();
+                `;
+                }
+                // 📄 Document
+                else if (/\.(pdf|doc|docx|xls|xlsx|ppt|pptx|txt)$/i.test(data.filePath)) {
+                    let fileName = data.filePath.split('/').pop();
+                    messageContent += `
+                        <div class="file-container">
+                            <div class="file-icon">
+                                <i class="fas fa-file-pdf"></i>
+                            </div>
+                            <div class="file-info">
+                                <a href="${fileUrl}" target="_blank" class="file-name text-muted">${fileName}</a>
+                                <a href="${fileUrl}" download class="download-button">
+                                    <i class="fas fa-download"></i> Télécharger
+                                </a>
+                            </div>
+                        </div>
+                    `;
 
-            // 🔥 Marquer comme lu dès réception du message
-            connection.invoke("MarkMessagesAsRead", parseInt(senderId), parseInt(userId))
-                .then(() => console.log("✅ Messages marqués comme lus pour", senderId))
-                .catch(err => console.error("❌ Erreur lors du marquage comme lu :", err));
-        } else {
+                }
+
+                // 🎥 Vidéo
+                else if (/\.(mp4|webm|ogg)$/i.test(data.filePath)) {
+                    messageContent += `<video controls class="message-video">
+                        <source src="${fileUrl}" type="video/mp4">
+                        Votre navigateur ne supporte pas la lecture des vidéos.
+                    </video>`;
+                }
+                // 🔊 Audio
+                else if (/\.(mp3|wav)$/i.test(data.filePath)) {
+                    messageContent += `<audio controls class="message-audio">
+                        <source src="${fileUrl}" type="audio/mpeg">
+                        Votre navigateur ne supporte pas la lecture audio.
+                    </audio>`;
+                }
+                // 📂 Autres fichiers
+                else {
+                    let fileName = data.filePath.split('/').pop();
+                    messageContent += `<a href="${fileUrl}" target="_blank">${fileName}</a>`;
+                }
+            }
+
+
+            if (parseInt(currentReceiverId) === data.senderId) {
+                console.log("✅ Affichage du message en temps réel");
+
+                $("#chatWindow").append(`
+                    <div class="message-container received">
+                        <div class="avatar"><i class="bi bi-person-circle user-icon"></i></div>
+                        <div class="message received">
+                            ${messageContent}
+                            <span class="message-date">${dateDisplay}</span>
+                            <span class="message-status">${messageStatus}</span>
+                        </div>
+                    </div>
+               `);
+               scrollToBottom();
+
+                // 🔥 Marquer comme lu dès réception du message
+               connection.invoke("MarkMessagesAsRead", parseInt(data.senderId), parseInt(userId))
+               .then(() => console.log("✅ Messages marqués comme lus pour", data.senderId))
+               .catch(err => console.error("❌ Erreur lors du marquage comme lu :", err));
+            } else {
             console.warn("⚠️ Message reçu mais la conversation n'est pas ouverte !");
 
-            var notifBadge = $("#notif-" + senderId);
+            var notifBadge = $("#notif-" + data.senderId);
             if (notifBadge.length > 0) {
-                var currentCount = parseInt(notifBadge.text()) || 0;
-                notifBadge.text(currentCount + 1).removeClass("d-none");
-                saveUnreadNotification(senderId, currentCount + 1);
+               var currentCount = parseInt(notifBadge.text()) || 0;
+               notifBadge.text(currentCount + 1).removeClass("d-none");
+               saveUnreadNotification(data.senderId, currentCount + 1);
             } else {
-                console.warn("⚠️ Badge non trouvé pour l'utilisateur " + senderId);
-            }
+               console.warn("⚠️ Badge non trouvé pour l'utilisateur " + data.senderId);
+            }   
         }
-    });
-
-
-
+     });
 
     // 📩 Mettre à jour les ✓✓ Vu pour l'expéditeur
     connection.on("MessageRead", function (receiverId) {
@@ -357,11 +738,18 @@
         var unreadNotifications = JSON.parse(localStorage.getItem("unreadNotifications")) || {};
         for (var userId in unreadNotifications) {
             var notifBadge = $("#notif-" + userId);
+            var count = unreadNotifications[userId];
+
             if (notifBadge.length > 0) {
-                notifBadge.text(unreadNotifications[userId]).removeClass("d-none");
+                if (count > 0) {
+                    notifBadge.text(count).removeClass("d-none");
+                } else {
+                    notifBadge.addClass("d-none");
+                }
             }
         }
     }
+
 
     // 🎯 Sélection d'un utilisateur
     function selectUser(receiverId, receiverName) {
@@ -377,43 +765,109 @@
         saveUnreadNotification(receiverId, 0);
     }
 
+
     connection.invoke("MarkMessagesAsRead", parseInt(receiverId), parseInt(userId))
         .then(() => console.log("✅ Messages marqués comme lus pour", receiverId))
         .catch(err => console.error("❌ Erreur lors du marquage comme lu :", err));
 
     // Charger les anciens messages via AJAX
-    $.ajax({
-        url: "/Message/GetMessages",
-        type: "GET",
-        data: { receiverId: receiverId },
-        success: function (messages) {
-            messages.forEach(msg => {
-                let isSent = msg.senderId === parseInt(userId);
-                let messageClass = isSent ? "sent" : "received";
-                let messageDate = new Date(msg.dateEnvoi);
-                let dateDisplay = formatDate(messageDate);
-                let messageStatus = msg.isSeen ? "✓✓ Vu" : "✓✓";
+        $.ajax({
+            url: "/Message/GetMessages",
+            type: "GET",
+            data: { receiverId: receiverId },
+            success: function (messages) {
+                messages.forEach(msg => {
+                    let isSent = msg.senderId === parseInt(userId);
+                    let messageClass = isSent ? "sent" : "received";
+                    let messageDate = new Date(msg.dateEnvoi);
+                    let dateDisplay = formatDate(messageDate);
+                    let messageStatus = msg.isSeen ? "✓✓ Vu" : "✓✓";
 
-                $("#chatWindow").append(`
-                    <div class="message-container ${messageClass}">
-                        ${isSent ? "" : `<div class="avatar"><i class="bi bi-person-circle user-icon"></i></div>`}
-                        <div class="message ${messageClass}">
-                            <p>${msg.messageText}</p>
-                            <span class="message-date">${dateDisplay}</span>
-                            <span class="message-status">${messageStatus}</span>
+                    let messageContent = "";
+
+                    // Vérifier s'il y a du texte
+                    if (msg.messageText) {
+                        messageContent += `<p class="message-text">${convertLinksToHtml(msg.messageText)}</p>`;
+                    }
+
+                    // Vérifier s'il y a un fichier
+                    if (msg.filePath) {
+                        let fileUrl = `/uploads/${msg.filePath.split('/').pop()}`;
+                        
+                        if (/\.(jpg|jpeg|png|gif|bmp)$/i.test(msg.filePath)) {
+                            messageContent += `
+                            <div class="image-container">
+                                <img src="${fileUrl}" class="message-image blurred" alt="Image envoyée" />
+                                <a href="${fileUrl}" download class="download-overlay" onclick="removeBlur(this)">
+                                    <i class="fas fa-download"></i>
+                                </a>
+                            </div>
+                        `;
+                        } else if (/\.(pdf|doc|docx|xls|xlsx|ppt|pptx|txt)$/i.test(msg.filePath))
+                         {
+                            let fileName = msg.filePath.split('/').pop();
+                            messageContent += `
+                                <div class="file-container">
+                                    <div class="file-icon">
+                                        <i class="fas fa-file-pdf"></i>
+                                    </div>
+                                    <div class="file-info">
+                                        <a href="${fileUrl}" target="_blank" class="file-name text-muted">${fileName}</a>
+                                        <a href="${fileUrl}" download class="download-button">
+                                            <i class="fas fa-download"></i> Télécharger
+                                        </a>
+                                    </div>
+                                </div>
+                            `;
+
+
+                        } else if (/\.(mp4|webm|ogg)$/i.test(msg.filePath)) {
+                            messageContent += `<video controls class="message-video">
+                                <source src="${fileUrl}" type="video/mp4">
+                                Votre navigateur ne supporte pas la lecture des vidéos.
+                            </video>`;
+                        } else if (/\.(mp3|wav)$/i.test(msg.filePath)) {
+                            messageContent += `<audio controls class="message-audio">
+                                <source src="${fileUrl}" type="audio/mpeg">
+                                Votre navigateur ne supporte pas la lecture audio.
+                            </audio>`;
+                        } else {
+                            let fileName = msg.filePath.split('/').pop();
+                            messageContent += `<a href="${fileUrl}" target="_blank">${fileName}</a>`;
+                        }
+                    }
+                    
+
+
+                    $("#chatWindow").append(`
+                        <div class="message-container ${messageClass}">
+                            ${isSent ? "" : `<div class="avatar"><i class="bi bi-person-circle user-icon"></i></div>`}
+                            <div class="message ${messageClass}">
+                                ${messageContent}
+                                <span class="message-date">${dateDisplay}</span>
+                                <span class="message-status">${messageStatus}</span>
+                            </div>
+                            ${isSent ? `<div class="avatar"><i class="bi bi-person-circle user-icon"></i></div>` : ""}
                         </div>
-                        ${isSent ? `<div class="avatar"><i class="bi bi-person-circle user-icon"></i></div>` : ""}
-                    </div>
-                `);
-            });
+                    `);
+                });
 
-            scrollToBottom();
-        },
-        error: function (err) {
-            console.error("❌ Erreur chargement messages :", err);
-        }
-    });
+                scrollToBottom();
+            },
+            error: function (err) {
+                console.error("❌ Erreur chargement messages :", err);
+            }
+        });
+
+
 }
+    function removeBlur(element) {
+        let image = element.previousElementSibling;
+        image.classList.remove("blurred");
+    }
+
+
+
     function scrollToBottom() {
         $("#chatWindow").scrollTop($("#chatWindow").prop("scrollHeight"));
     }

@@ -22,15 +22,15 @@ namespace suivi_abonnement.Repository
                 {
                     connection.Open();
                     string query = @"
-                        SELECT * 
-                        FROM messages 
-                        WHERE idconversation IN (
-                            SELECT conversation_id 
-                            FROM conversations 
-                            WHERE (user1_id = @user1Id AND user2_id = @user2Id) 
-                               OR (user1_id = @user2Id AND user2_id = @user1Id)
-                        ) 
-                        ORDER BY sentat ASC";
+                SELECT * 
+                FROM messages 
+                WHERE idconversation IN (
+                    SELECT conversation_id 
+                    FROM conversations 
+                    WHERE (user1_id = @user1Id AND user2_id = @user2Id) 
+                       OR (user1_id = @user2Id AND user2_id = @user1Id)
+                ) 
+                ORDER BY sentat ASC";
 
                     using (var command = new MySqlCommand(query, connection))
                     {
@@ -41,6 +41,9 @@ namespace suivi_abonnement.Repository
                         {
                             while (reader.Read())
                             {
+                                string? filePath = reader.IsDBNull(reader.GetOrdinal("file_path")) ? null : reader.GetString("file_path");
+                                Console.WriteLine($"DEBUG: filePath = {filePath}"); // 🔍 Vérifie la valeur
+
                                 messages.Add(new Message
                                 {
                                     Id = reader.GetInt32("message_id"),
@@ -49,7 +52,8 @@ namespace suivi_abonnement.Repository
                                     IsRead = reader.GetBoolean("isread"),
                                     SenderId = reader.GetInt32("senderid"),
                                     ReceiverId = reader.GetInt32("receiverid"),
-                                    ConversationId = reader.GetInt32("idconversation")
+                                    ConversationId = reader.GetInt32("idconversation"),
+                                    filePath = filePath
                                 });
                             }
                         }
@@ -63,6 +67,7 @@ namespace suivi_abonnement.Repository
 
             return messages;
         }
+
 
         public int CreateConversation(int user1Id, int user2Id)
         {
@@ -89,14 +94,101 @@ namespace suivi_abonnement.Repository
             return conversationId;
         }
 
-        public void SendMessage(int senderId, int receiverId, string messageText)
+        private static bool isImage(string filePath)
+        {
+            string[] imageExtensions = { ".jpg", ".jpeg", ".png", ".gif", ".bmp" };
+            return imageExtensions.Contains(Path.GetExtension(filePath));
+        }
+
+        private static bool isFile(string filePath)
+        {
+            string[] fileExtensions = { ".pdf", ".doc", ".docx", ".xls", ".xlsx", ".ppt", ".pptx" };
+            return fileExtensions.Contains(Path.GetExtension(filePath));
+        }
+
+        public int DetectedFile(string filePath)
+        {
+            switch (filePath)
+            {
+                case string a when isImage(a):
+                    return 1;
+                case string b when isFile(b):
+                    return 2;
+                default:
+                    return 0;
+            }
+        }
+
+        public string UploadFile(IFormFile file)
+        {
+            if (file == null || file.Length == 0)
+            {
+                throw new ArgumentException("Fichier non valide.");
+            }
+
+            var allowedExtensions = new HashSet<string> { ".jpg", ".jpeg", ".png", ".gif", ".pdf", ".doc", ".docx", ".xls", ".xlsx", ".ppt", ".pptx" };
+            var extension = Path.GetExtension(file.FileName).ToLowerInvariant();
+
+            if (!allowedExtensions.Contains(extension))
+            {
+                throw new ArgumentException("Extension de fichier non autorisée.");
+            }
+
+            // Limiter la taille du fichier (ex: 5 Mo)
+            const long maxFileSize = 5 * 1024 * 1024;
+            if (file.Length > maxFileSize)
+            {
+                throw new ArgumentException("Fichier trop volumineux.");
+            }
+
+            var uniqueFileName = $"{Guid.NewGuid()}{extension}";
+            var uploadFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "uploads");
+
+            if (!Directory.Exists(uploadFolder))
+            {
+                Directory.CreateDirectory(uploadFolder);
+            }
+
+            var filePath = Path.Combine(uploadFolder, uniqueFileName);
+
+            try
+            {
+                using (var stream = new FileStream(filePath, FileMode.Create))
+                {
+                    file.CopyTo(stream);
+                }
+                Console.WriteLine($"✅ Fichier uploadé : {filePath}");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"❌ Erreur d'upload : {ex.Message}");
+                return string.Empty;
+            }
+
+            return $"/uploads/{uniqueFileName}"; // Retourne l'URL relative pour la BDD
+        }
+
+
+        public void SendMessage(int senderId, int receiverId, string messageText, string filePath)
         {
             if (senderId == 0 || receiverId == 0)
             {
                 throw new ArgumentException("SenderId ou ReceiverId non valide.");
             }
 
+            if (string.IsNullOrWhiteSpace(messageText) && string.IsNullOrWhiteSpace(filePath))
+            {
+                throw new ArgumentException("Impossible d'envoyer un message vide sans fichier.");
+            }
+
             int conversationId = GetOrCreateConversation(senderId, receiverId);
+            int messageType = 0;
+
+            // 📂 Si un fichier est présent, on détecte son type ici !
+            if (!string.IsNullOrEmpty(filePath))
+            {
+                messageType = DetectedFile(filePath);
+            }
 
             try
             {
@@ -107,47 +199,54 @@ namespace suivi_abonnement.Repository
                     {
                         try
                         {
-
-                            // Insertion du message
                             string query = @"
-                                INSERT INTO messages (senderid, receiverid, messagetext, sentat, isread, idconversation) 
-                                VALUES (@senderId, @receiverId, @messageText, NOW(), false, @conversationId)";
+        INSERT INTO messages (senderid, receiverid, messagetext, sentat, isread, idconversation, file_path, message_type)
+        VALUES (@senderId, @receiverId, @messageText, NOW(), false, @conversationId, @filePath, @messageType)";
 
                             using (var command = new MySqlCommand(query, connection, transaction))
                             {
                                 command.Parameters.AddWithValue("@senderId", senderId);
                                 command.Parameters.AddWithValue("@receiverId", receiverId);
-                                command.Parameters.AddWithValue("@messageText", messageText);
+                                command.Parameters.AddWithValue("@messageText", (object)messageText ?? DBNull.Value);
                                 command.Parameters.AddWithValue("@conversationId", conversationId);
+                                command.Parameters.AddWithValue("@filePath", (object)filePath ?? DBNull.Value);
+                                command.Parameters.AddWithValue("@messageType", messageType);
                                 command.ExecuteNonQuery();
                             }
 
-
-                            // Mise à jour de l'heure du dernier message dans la conversation
-                            string updatequery = "UPDATE conversations SET LastMessageat = NOW() WHERE conversation_id = @conversationId";
-                            using (var updatecommand = new MySqlCommand(updatequery, connection, transaction))
+                            string updateQuery = "UPDATE conversations SET LastMessageat = NOW() WHERE conversation_id = @conversationId";
+                            using (var updateCommand = new MySqlCommand(updateQuery, connection, transaction))
                             {
-                                updatecommand.Parameters.AddWithValue("@conversationId", conversationId);
-                                updatecommand.ExecuteNonQuery();
+                                updateCommand.Parameters.AddWithValue("@conversationId", conversationId);
+                                updateCommand.ExecuteNonQuery();
                             }
 
-                            // Validation de la transaction
                             transaction.Commit();
                         }
                         catch (Exception ex)
                         {
-                            // En cas d'erreur, on annule la transaction
                             transaction.Rollback();
-                            throw new System.Exception($"Erreur lors de l'envoi du message : {ex.Message}");
+                            if (!string.IsNullOrEmpty(filePath))
+                            {
+                                var fullPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", filePath.TrimStart('/'));
+                                if (File.Exists(fullPath))
+                                {
+                                    File.Delete(fullPath);
+                                }
+                            }
+                            throw new Exception($"Erreur lors de l'envoi du message : {ex.Message}");
                         }
                     }
                 }
             }
-            catch (System.Exception ex)
+            catch (Exception ex)
             {
-                throw new System.Exception($"Erreur lors de l'envoi du message : {ex.Message}");
+                throw new Exception($"Erreur lors de l'envoi du message : {ex.Message}");
             }
         }
+
+
+
 
 
         public int GetOrCreateConversation(int senderId, int receiverId)
