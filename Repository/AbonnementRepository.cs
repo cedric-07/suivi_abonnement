@@ -242,25 +242,93 @@ namespace suivi_abonnement.Repository
         }
 
         //ADMINISTRATEUR
+        // public string deleteAbonnement(int id)
+        // {
+        //     try
+        //     {
+        //         using (var connection = new MySqlConnection(_connectionString))
+        //         {
+        //             connection.Open();
+
+        //             // Commencer une transaction
+        //             using (var transaction = connection.BeginTransaction())
+        //             {
+        //                 try
+        //                 {
+        //                     // Supprimer les notifications associées
+        //                     string deleteNotificationsQuery = "DELETE FROM notifications WHERE idabonnement = @id";
+        //                     using (var deleteNotificationsCommand = new MySqlCommand(deleteNotificationsQuery, connection, transaction))
+        //                     {
+        //                         deleteNotificationsCommand.Parameters.AddWithValue("@id", id);
+        //                         deleteNotificationsCommand.ExecuteNonQuery();
+        //                     }
+
+        //                     // Supprimer l'abonnement
+        //                     string deleteAbonnementQuery = "DELETE FROM abonnements WHERE abonnement_id = @id";
+        //                     using (var deleteAbonnementCommand = new MySqlCommand(deleteAbonnementQuery, connection, transaction))
+        //                     {
+        //                         deleteAbonnementCommand.Parameters.AddWithValue("@id", id);
+        //                         var result = deleteAbonnementCommand.ExecuteNonQuery();
+
+        //                         if (result > 0)
+        //                         {
+        //                             // Valider la transaction
+        //                             transaction.Commit();
+        //                             return "Abonnement supprimé avec succès.";
+        //                         }
+        //                         else
+        //                         {
+        //                             // Annuler la transaction si l'abonnement n'existe pas
+        //                             transaction.Rollback();
+        //                             return "L'abonnement n'a pas été trouvé.";
+        //                         }
+        //                     }
+        //                 }
+        //                 catch
+        //                 {
+        //                     // Annuler la transaction en cas d'erreur
+        //                     transaction.Rollback();
+        //                     throw;
+        //                 }
+        //             }
+        //         }
+        //     }
+        //     catch (Exception ex)
+        //     {
+        //         Console.WriteLine("Erreur lors de la suppression : " + ex.Message);
+        //         return "Erreur lors de la suppression de l'abonnement.";
+        //     }
+        // }
+
         public string deleteAbonnement(int id)
         {
+            if (id <= 0)
+            {
+                return "ID d'abonnement invalide.";
+            }
+
             try
             {
                 using (var connection = new MySqlConnection(_connectionString))
                 {
                     connection.Open();
 
-                    // Commencer une transaction
                     using (var transaction = connection.BeginTransaction())
                     {
                         try
                         {
-                            // Supprimer les notifications associées
-                            string deleteNotificationsQuery = "DELETE FROM notifications WHERE idabonnement = @id";
-                            using (var deleteNotificationsCommand = new MySqlCommand(deleteNotificationsQuery, connection, transaction))
+                            // Vérifier si l'abonnement est utilisé dans notifications
+                            string checkNotificationsQuery = "SELECT COUNT(*) FROM notifications WHERE idabonnement = @id";
+                            using (var checkNotificationsCommand = new MySqlCommand(checkNotificationsQuery, connection, transaction))
                             {
-                                deleteNotificationsCommand.Parameters.AddWithValue("@id", id);
-                                deleteNotificationsCommand.ExecuteNonQuery();
+                                checkNotificationsCommand.Parameters.AddWithValue("@id", id);
+                                int notificationCount = Convert.ToInt32(checkNotificationsCommand.ExecuteScalar());
+
+                                if (notificationCount > 0)
+                                {
+                                    transaction.Rollback();
+                                    return "Impossible de supprimer l'abonnement car il est encore utilisé dans les notifications.";
+                                }
                             }
 
                             // Supprimer l'abonnement
@@ -272,33 +340,35 @@ namespace suivi_abonnement.Repository
 
                                 if (result > 0)
                                 {
-                                    // Valider la transaction
                                     transaction.Commit();
                                     return "Abonnement supprimé avec succès.";
                                 }
                                 else
                                 {
-                                    // Annuler la transaction si l'abonnement n'existe pas
                                     transaction.Rollback();
                                     return "L'abonnement n'a pas été trouvé.";
                                 }
                             }
                         }
-                        catch
+                        catch (MySqlException ex)
                         {
-                            // Annuler la transaction en cas d'erreur
                             transaction.Rollback();
-                            throw;
+                            return $"Erreur MySQL : {ex.Message}";
+                        }
+                        catch (Exception ex)
+                        {
+                            transaction.Rollback();
+                            return $"Erreur inattendue : {ex.Message}";
                         }
                     }
                 }
             }
             catch (Exception ex)
             {
-                Console.WriteLine("Erreur lors de la suppression : " + ex.Message);
-                return "Erreur lors de la suppression de l'abonnement.";
+                return $"❌ Erreur de connexion à la base de données : {ex.Message}";
             }
         }
+
 
         //ADMINISTRATEUR
         public List<Abonnement> searchMultiplyAbonnement(string keyword)

@@ -297,38 +297,31 @@ namespace suivi_abonnement.Controllers
 
 
         // GET: AbonnementsController/Delete/5
-        public ActionResult Delete(int id)
+       public ActionResult Delete(int id)
         {
             try
             {
-                // Appeler la méthode de suppression avec gestion des notifications
                 string message = _abonnementService.deleteAbonnement(id);
 
-                // Gérer le retour du message
-                if (message == "Abonnement et ses notifications associées supprimés avec succès.")
+                if (message == "Abonnement supprimé avec succès.")
                 {
                     TempData["Message"] = message;
-                    return RedirectToAction("AbonnementPage");
-                }
-                else if (message == "L'abonnement n'a pas été trouvé.")
-                {
-                    TempData["Error"] = "L'abonnement demandé n'existe pas.";
-                    return RedirectToAction("AbonnementPage");
                 }
                 else
                 {
-                    TempData["Error"] = "Une erreur s'est produite lors de la suppression de l'abonnement.";
-                    return RedirectToAction("AbonnementPage");
+                    TempData["Error"] = message; // Directement utiliser le message renvoyé par le service
                 }
+
+                return RedirectToAction("AbonnementPage");
             }
             catch (Exception ex)
             {
-                // En cas d'exception, afficher un message d'erreur générique
                 Console.WriteLine("Erreur lors de la suppression : " + ex.Message);
                 TempData["Error"] = "Une erreur inattendue s'est produite.";
                 return RedirectToAction("AbonnementPage");
             }
         }
+
 
 
         //Controllers pour le cote client

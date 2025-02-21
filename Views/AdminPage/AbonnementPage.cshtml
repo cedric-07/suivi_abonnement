@@ -97,6 +97,7 @@
                         <li class="mb-3">
                             <label for="categoryFilter" class="form-label text-dark fw-bold" style="font-size: 13px;">Catégorie</label>
                             <select class="form-select form-select-sm rounded-pill shadow-sm" id="categoryFilter" name="idcategorie" style="font-size: 12px;">
+                                <option disabled selected hidden>--Choisir une catégorie--</option>
                                 @if (Model?.AbonnementViewModel?.Categories != null)
                                 {
                                     @foreach (var categorie in Model.AbonnementViewModel.Categories)
@@ -109,7 +110,7 @@
                         <li class="mb-3">
                             <label for="TypeFilter" class="form-label text-dark fw-bold" style="font-size: 13px;">Type</label>
                             <select class="form-select form-select-sm rounded-pill shadow-sm" id="TypeFilter" name="type" style="font-size: 12px;">
-                                <option disabled selected>--Choisir une type--</option>
+                                <option disabled selected hidden>--Choisir une type--</option>
                                 @if (Model?.AbonnementViewModel?.Abonnements != null)
                                 {
                                     @foreach (var abonnement in Model.AbonnementViewModel.Abonnements)

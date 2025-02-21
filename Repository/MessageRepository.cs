@@ -141,7 +141,8 @@ namespace suivi_abonnement.Repository
                 throw new ArgumentException("Fichier trop volumineux.");
             }
 
-            var uniqueFileName = $"{Guid.NewGuid()}{extension}";
+            // Utiliser le nom de fichier réel
+            var originalFileName = Path.GetFileName(file.FileName); // Récupère le vrai nom du fichier
             var uploadFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "uploads");
 
             if (!Directory.Exists(uploadFolder))
@@ -149,15 +150,27 @@ namespace suivi_abonnement.Repository
                 Directory.CreateDirectory(uploadFolder);
             }
 
-            var filePath = Path.Combine(uploadFolder, uniqueFileName);
+            var filePath = Path.Combine(uploadFolder, originalFileName);
+
+            // Vérifier si le fichier existe déjà pour éviter les conflits
+            int count = 1;
+            string fileNameOnly = Path.GetFileNameWithoutExtension(originalFileName);
+            string newFilePath = filePath;
+
+            while (File.Exists(newFilePath))
+            {
+                string tempFileName = $"{fileNameOnly}({count}){extension}";
+                newFilePath = Path.Combine(uploadFolder, tempFileName);
+                count++;
+            }
 
             try
             {
-                using (var stream = new FileStream(filePath, FileMode.Create))
+                using (var stream = new FileStream(newFilePath, FileMode.Create))
                 {
                     file.CopyTo(stream);
                 }
-                Console.WriteLine($"✅ Fichier uploadé : {filePath}");
+                Console.WriteLine($"✅ Fichier uploadé : {newFilePath}");
             }
             catch (Exception ex)
             {
@@ -165,8 +178,9 @@ namespace suivi_abonnement.Repository
                 return string.Empty;
             }
 
-            return $"/uploads/{uniqueFileName}"; // Retourne l'URL relative pour la BDD
+            return $"/uploads/{Path.GetFileName(newFilePath)}"; // Retourne l'URL relative pour la BDD
         }
+
 
 
         public void SendMessage(int senderId, int receiverId, string messageText, string filePath)

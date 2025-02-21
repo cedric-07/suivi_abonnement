@@ -194,7 +194,8 @@
 
         .file-name {
             font-size: 14px;
-            font-weight: bold;
+            color: #007bff;
+            font-weight: small;
         }
 
         /* ❌ Bouton d'annulation */
@@ -224,7 +225,7 @@
         }
 
         .file-name {
-            font-size: 4px;
+            font-size: 12px;
             color: #007bff;
             text-decoration: none;
             font-weight: bold;
@@ -300,6 +301,9 @@
         .image-container a:focus + .message-image {
             filter: none;
         }
+        .pdf {
+            color: #840741;
+        }
     </style>
 </head>
 <body>
@@ -307,12 +311,7 @@
         <div class="chat-container">
             <div class="chat-list p-3">
                 <h5 class="mb-3">Conversations</h5>
-                <form class="mb-3">
-                    <div class="input-group">
-                        <span class="input-group-text"><i class="fa fa-search"></i></span>
-                        <input type="text" class="form-control" placeholder="Rechercher...">
-                    </div>
-                </form>
+                
                 <ul class="list-group" id="userList">
                     @if (Model?.MessageViewModel?.Users != null)
                     {
@@ -541,7 +540,7 @@
                                 messageContent += `
                                     <div class="file-container">
                                         <div class="file-icon">
-                                            <i class="fas fa-file-pdf"></i>
+                                            <i class="pdf fas fa-file-pdf"></i>
                                         </div>
                                         <div class="file-info">
                                             <a href="${filePath}" target="_blank" class="file-name text-muted">${fileName}</a>
@@ -652,7 +651,7 @@
                     messageContent += `
                         <div class="file-container">
                             <div class="file-icon">
-                                <i class="fas fa-file-pdf"></i>
+                                <i class="pdf fas fa-file-pdf"></i>
                             </div>
                             <div class="file-info">
                                 <a href="${fileUrl}" target="_blank" class="file-name text-muted">${fileName}</a>
@@ -809,7 +808,7 @@
                             messageContent += `
                                 <div class="file-container">
                                     <div class="file-icon">
-                                        <i class="fas fa-file-pdf"></i>
+                                        <i class="pdf fas fa-file-pdf"></i>
                                     </div>
                                     <div class="file-info">
                                         <a href="${fileUrl}" target="_blank" class="file-name text-muted">${fileName}</a>

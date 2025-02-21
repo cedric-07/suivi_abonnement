@@ -36,14 +36,10 @@
               "RelativeDocumentMoniker": "Repository\\FournisseurRepository.cs",
               "ToolTip": "D:\\STAGE_L3\\suivi_abonnement\\Repository\\FournisseurRepository.cs",
               "RelativeToolTip": "Repository\\FournisseurRepository.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAACgAAAAAAAAAAAAwwAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-02-20T11:13:42.835Z",
               "EditorCaption": ""
-            },
-            {
-              "$type": "Bookmark",
-              "Name": "ST:0:0:{aa2115a1-9712-457b-9047-dbb71ca2cdd2}"
             },
             {
               "$type": "Document",
@@ -55,8 +51,7 @@
               "RelativeToolTip": "Views\\Home\\IndexPage.cshtml",
               "ViewState": "AgIAACABAAAAAAAAAAAgwDEBAAAyAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-02-20T10:43:35.734Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-02-20T10:43:35.734Z"
             }
           ]
         }

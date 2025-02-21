@@ -3,12 +3,12 @@
   "WorkspaceRootPath": "D:\\STAGE_L3\\suivi_abonnement\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{CD639EE7-C34B-4FDD-94EA-4B83E4F0C0A6}|suivi_abonnement.csproj|d:\\stage_l3\\suivi_abonnement\\views\\home\\indexpage.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{CD639EE7-C34B-4FDD-94EA-4B83E4F0C0A6}|suivi_abonnement.csproj|solutionrelative:views\\home\\indexpage.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+      "AbsoluteMoniker": "D:0:0:{CD639EE7-C34B-4FDD-94EA-4B83E4F0C0A6}|suivi_abonnement.csproj|d:\\stage_l3\\suivi_abonnement\\repository\\fournisseurrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{CD639EE7-C34B-4FDD-94EA-4B83E4F0C0A6}|suivi_abonnement.csproj|solutionrelative:repository\\fournisseurrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{CD639EE7-C34B-4FDD-94EA-4B83E4F0C0A6}|suivi_abonnement.csproj|d:\\stage_l3\\suivi_abonnement\\views\\adminpage\\abonnementpage.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{CD639EE7-C34B-4FDD-94EA-4B83E4F0C0A6}|suivi_abonnement.csproj|solutionrelative:views\\adminpage\\abonnementpage.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+      "AbsoluteMoniker": "D:0:0:{CD639EE7-C34B-4FDD-94EA-4B83E4F0C0A6}|suivi_abonnement.csproj|d:\\stage_l3\\suivi_abonnement\\views\\home\\indexpage.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{CD639EE7-C34B-4FDD-94EA-4B83E4F0C0A6}|suivi_abonnement.csproj|solutionrelative:views\\home\\indexpage.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     }
   ],
   "DocumentGroupContainers": [
@@ -18,7 +18,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 330,
-          "SelectedChildIndex": 3,
+          "SelectedChildIndex": 2,
           "Children": [
             {
               "$type": "Bookmark",
@@ -29,12 +29,21 @@
               "Name": "ST:0:0:{3ae79031-e1bc-11d0-8f78-00a0c9110057}"
             },
             {
-              "$type": "Bookmark",
-              "Name": "ST:0:0:{aa2115a1-9712-457b-9047-dbb71ca2cdd2}"
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "FournisseurRepository.cs",
+              "DocumentMoniker": "D:\\STAGE_L3\\suivi_abonnement\\Repository\\FournisseurRepository.cs",
+              "RelativeDocumentMoniker": "Repository\\FournisseurRepository.cs",
+              "ToolTip": "D:\\STAGE_L3\\suivi_abonnement\\Repository\\FournisseurRepository.cs",
+              "RelativeToolTip": "Repository\\FournisseurRepository.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-02-20T11:13:42.835Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 1,
               "Title": "IndexPage.cshtml",
               "DocumentMoniker": "D:\\STAGE_L3\\suivi_abonnement\\Views\\Home\\IndexPage.cshtml",
               "RelativeDocumentMoniker": "Views\\Home\\IndexPage.cshtml",
@@ -42,21 +51,7 @@
               "RelativeToolTip": "Views\\Home\\IndexPage.cshtml",
               "ViewState": "AgIAACABAAAAAAAAAAAgwDEBAAAyAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-02-20T10:43:35.734Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "AbonnementPage.cshtml",
-              "DocumentMoniker": "D:\\STAGE_L3\\suivi_abonnement\\Views\\AdminPage\\AbonnementPage.cshtml",
-              "RelativeDocumentMoniker": "Views\\AdminPage\\AbonnementPage.cshtml",
-              "ToolTip": "D:\\STAGE_L3\\suivi_abonnement\\Views\\AdminPage\\AbonnementPage.cshtml",
-              "RelativeToolTip": "Views\\AdminPage\\AbonnementPage.cshtml",
-              "ViewState": "AgIAAHEBAAAAAAAAAAAwwCIAAABdAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-02-20T10:43:01.873Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-02-20T10:43:35.734Z"
             }
           ]
         }
