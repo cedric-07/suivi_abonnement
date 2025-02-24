@@ -11536,13 +11536,13 @@
       <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\suivi_abonnement.ep5ti928nx.bundle.scp.css'))</AssetFile>
       <Selectors><![CDATA[[]]]></Selectors>
       <EndpointProperties><![CDATA[[{"Name":"integrity","Value":"sha256-3gezbv4NyqiYEVoHyHMVt8JIHthUqX6/dYEwuENdKpk="}]]]></EndpointProperties>
-      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"no-cache"},{"Name":"Content-Length","Value":"1133"},{"Name":"Content-Type","Value":"text/css"},{"Name":"ETag","Value":"\u00223gezbv4NyqiYEVoHyHMVt8JIHthUqX6/dYEwuENdKpk=\u0022"},{"Name":"Last-Modified","Value":"Thu, 20 Feb 2025 07:08:21 GMT"}]]]></ResponseHeaders>
+      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"no-cache"},{"Name":"Content-Length","Value":"1133"},{"Name":"Content-Type","Value":"text/css"},{"Name":"ETag","Value":"\u00223gezbv4NyqiYEVoHyHMVt8JIHthUqX6/dYEwuENdKpk=\u0022"},{"Name":"Last-Modified","Value":"Mon, 24 Feb 2025 08:41:05 GMT"}]]]></ResponseHeaders>
     </StaticWebAssetEndpoint>
     <StaticWebAssetEndpoint Include="_content/suivi_abonnement/suivi_abonnement.ep5ti928nx.bundle.scp.css">
       <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\suivi_abonnement.ep5ti928nx.bundle.scp.css'))</AssetFile>
       <Selectors><![CDATA[[]]]></Selectors>
       <EndpointProperties><![CDATA[[{"Name":"fingerprint","Value":"ep5ti928nx"},{"Name":"integrity","Value":"sha256-3gezbv4NyqiYEVoHyHMVt8JIHthUqX6/dYEwuENdKpk="},{"Name":"label","Value":"_content/suivi_abonnement/suivi_abonnement.bundle.scp.css"}]]]></EndpointProperties>
-      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"max-age=31536000, immutable"},{"Name":"Content-Length","Value":"1133"},{"Name":"Content-Type","Value":"text/css"},{"Name":"ETag","Value":"\u00223gezbv4NyqiYEVoHyHMVt8JIHthUqX6/dYEwuENdKpk=\u0022"},{"Name":"Last-Modified","Value":"Thu, 20 Feb 2025 07:08:21 GMT"}]]]></ResponseHeaders>
+      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"max-age=31536000, immutable"},{"Name":"Content-Length","Value":"1133"},{"Name":"Content-Type","Value":"text/css"},{"Name":"ETag","Value":"\u00223gezbv4NyqiYEVoHyHMVt8JIHthUqX6/dYEwuENdKpk=\u0022"},{"Name":"Last-Modified","Value":"Mon, 24 Feb 2025 08:41:05 GMT"}]]]></ResponseHeaders>
     </StaticWebAssetEndpoint>
     <StaticWebAssetEndpoint Include="_content/suivi_abonnement/uploads/178e3821-110f-49f2-a4d9-a6ac8484920c.4ec5vytymo.jpg">
       <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\uploads\178e3821-110f-49f2-a4d9-a6ac8484920c.jpg'))</AssetFile>
@@ -11735,6 +11735,42 @@
       <Selectors><![CDATA[[]]]></Selectors>
       <EndpointProperties><![CDATA[[{"Name":"fingerprint","Value":"x6psqycg1j"},{"Name":"integrity","Value":"sha256-d6/BqeV1cajj8FyQ/fD7/6VSCWFPQ2yWjiyx/r6AFZE="},{"Name":"label","Value":"_content/suivi_abonnement/uploads/TV PlusDetails.pdf"}]]]></EndpointProperties>
       <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"max-age=31536000, immutable"},{"Name":"Content-Length","Value":"52140"},{"Name":"Content-Type","Value":"application/pdf"},{"Name":"ETag","Value":"\u0022d6/BqeV1cajj8FyQ/fD7/6VSCWFPQ2yWjiyx/r6AFZE=\u0022"},{"Name":"Last-Modified","Value":"Fri, 21 Feb 2025 05:44:27 GMT"}]]]></ResponseHeaders>
+    </StaticWebAssetEndpoint>
+    <StaticWebAssetEndpoint Include="_content/suivi_abonnement/uploads/WallpaperDog-10807682.jpg">
+      <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\uploads\WallpaperDog-10807682.jpg'))</AssetFile>
+      <Selectors><![CDATA[[]]]></Selectors>
+      <EndpointProperties><![CDATA[[{"Name":"integrity","Value":"sha256-gFLA8NfrOa0SYd4TWgMhzjDQO6E0fDkPqv5wJ9kvRUo="}]]]></EndpointProperties>
+      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"max-age=3600, must-revalidate"},{"Name":"Content-Length","Value":"154336"},{"Name":"Content-Type","Value":"image/jpeg"},{"Name":"ETag","Value":"\u0022gFLA8NfrOa0SYd4TWgMhzjDQO6E0fDkPqv5wJ9kvRUo=\u0022"},{"Name":"Last-Modified","Value":"Fri, 21 Feb 2025 09:26:22 GMT"}]]]></ResponseHeaders>
+    </StaticWebAssetEndpoint>
+    <StaticWebAssetEndpoint Include="_content/suivi_abonnement/uploads/WallpaperDog-10807682.k3cd0h7yw1.jpg">
+      <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\uploads\WallpaperDog-10807682.jpg'))</AssetFile>
+      <Selectors><![CDATA[[]]]></Selectors>
+      <EndpointProperties><![CDATA[[{"Name":"fingerprint","Value":"k3cd0h7yw1"},{"Name":"integrity","Value":"sha256-gFLA8NfrOa0SYd4TWgMhzjDQO6E0fDkPqv5wJ9kvRUo="},{"Name":"label","Value":"_content/suivi_abonnement/uploads/WallpaperDog-10807682.jpg"}]]]></EndpointProperties>
+      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"max-age=31536000, immutable"},{"Name":"Content-Length","Value":"154336"},{"Name":"Content-Type","Value":"image/jpeg"},{"Name":"ETag","Value":"\u0022gFLA8NfrOa0SYd4TWgMhzjDQO6E0fDkPqv5wJ9kvRUo=\u0022"},{"Name":"Last-Modified","Value":"Fri, 21 Feb 2025 09:26:22 GMT"}]]]></ResponseHeaders>
+    </StaticWebAssetEndpoint>
+    <StaticWebAssetEndpoint Include="_content/suivi_abonnement/uploads/wp4369720-vw-golf-wallpapers(1).137zml8rnm.jpg">
+      <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\uploads\wp4369720-vw-golf-wallpapers(1).jpg'))</AssetFile>
+      <Selectors><![CDATA[[]]]></Selectors>
+      <EndpointProperties><![CDATA[[{"Name":"fingerprint","Value":"137zml8rnm"},{"Name":"integrity","Value":"sha256-Y2eLrTZ4CCKJoBwSdzKkkEjcOwF\u002BWsuErhQP3OFh5aI="},{"Name":"label","Value":"_content/suivi_abonnement/uploads/wp4369720-vw-golf-wallpapers(1).jpg"}]]]></EndpointProperties>
+      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"max-age=31536000, immutable"},{"Name":"Content-Length","Value":"150008"},{"Name":"Content-Type","Value":"image/jpeg"},{"Name":"ETag","Value":"\u0022Y2eLrTZ4CCKJoBwSdzKkkEjcOwF\u002BWsuErhQP3OFh5aI=\u0022"},{"Name":"Last-Modified","Value":"Mon, 24 Feb 2025 11:02:39 GMT"}]]]></ResponseHeaders>
+    </StaticWebAssetEndpoint>
+    <StaticWebAssetEndpoint Include="_content/suivi_abonnement/uploads/wp4369720-vw-golf-wallpapers(1).jpg">
+      <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\uploads\wp4369720-vw-golf-wallpapers(1).jpg'))</AssetFile>
+      <Selectors><![CDATA[[]]]></Selectors>
+      <EndpointProperties><![CDATA[[{"Name":"integrity","Value":"sha256-Y2eLrTZ4CCKJoBwSdzKkkEjcOwF\u002BWsuErhQP3OFh5aI="}]]]></EndpointProperties>
+      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"max-age=3600, must-revalidate"},{"Name":"Content-Length","Value":"150008"},{"Name":"Content-Type","Value":"image/jpeg"},{"Name":"ETag","Value":"\u0022Y2eLrTZ4CCKJoBwSdzKkkEjcOwF\u002BWsuErhQP3OFh5aI=\u0022"},{"Name":"Last-Modified","Value":"Mon, 24 Feb 2025 11:02:39 GMT"}]]]></ResponseHeaders>
+    </StaticWebAssetEndpoint>
+    <StaticWebAssetEndpoint Include="_content/suivi_abonnement/uploads/wp4369720-vw-golf-wallpapers.137zml8rnm.jpg">
+      <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\uploads\wp4369720-vw-golf-wallpapers.jpg'))</AssetFile>
+      <Selectors><![CDATA[[]]]></Selectors>
+      <EndpointProperties><![CDATA[[{"Name":"fingerprint","Value":"137zml8rnm"},{"Name":"integrity","Value":"sha256-Y2eLrTZ4CCKJoBwSdzKkkEjcOwF\u002BWsuErhQP3OFh5aI="},{"Name":"label","Value":"_content/suivi_abonnement/uploads/wp4369720-vw-golf-wallpapers.jpg"}]]]></EndpointProperties>
+      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"max-age=31536000, immutable"},{"Name":"Content-Length","Value":"150008"},{"Name":"Content-Type","Value":"image/jpeg"},{"Name":"ETag","Value":"\u0022Y2eLrTZ4CCKJoBwSdzKkkEjcOwF\u002BWsuErhQP3OFh5aI=\u0022"},{"Name":"Last-Modified","Value":"Mon, 24 Feb 2025 08:26:54 GMT"}]]]></ResponseHeaders>
+    </StaticWebAssetEndpoint>
+    <StaticWebAssetEndpoint Include="_content/suivi_abonnement/uploads/wp4369720-vw-golf-wallpapers.jpg">
+      <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\uploads\wp4369720-vw-golf-wallpapers.jpg'))</AssetFile>
+      <Selectors><![CDATA[[]]]></Selectors>
+      <EndpointProperties><![CDATA[[{"Name":"integrity","Value":"sha256-Y2eLrTZ4CCKJoBwSdzKkkEjcOwF\u002BWsuErhQP3OFh5aI="}]]]></EndpointProperties>
+      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"max-age=3600, must-revalidate"},{"Name":"Content-Length","Value":"150008"},{"Name":"Content-Type","Value":"image/jpeg"},{"Name":"ETag","Value":"\u0022Y2eLrTZ4CCKJoBwSdzKkkEjcOwF\u002BWsuErhQP3OFh5aI=\u0022"},{"Name":"Last-Modified","Value":"Mon, 24 Feb 2025 08:26:54 GMT"}]]]></ResponseHeaders>
     </StaticWebAssetEndpoint>
     <StaticWebAssetEndpoint Include="_content/suivi_abonnement/uploads/wp4369740-vw-golf-wallpapers.e5k2xcpguh.jpg">
       <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\uploads\wp4369740-vw-golf-wallpapers.jpg'))</AssetFile>

@@ -418,5 +418,37 @@ namespace suivi_abonnement.Repository
             }
             return adminUser;
         }
+
+       public string GetUserEmail(int userId)
+        {
+            string email = string.Empty;
+            try
+            {
+                using (var connection = new MySqlConnection(connectionString))
+                {
+                    connection.Open();
+                    using (var command = new MySqlCommand("SELECT email FROM users WHERE id = @Id", connection))
+                    {
+                        command.Parameters.Add("@userId", MySqlDbType.Int32).Value = userId;
+                        using (var reader = command.ExecuteReader())
+                        {
+                            if (reader.Read())
+                            {
+                                email = reader["email"].ToString();
+                            }
+                        }
+                    }
+                }
+            }
+            catch (MySqlException sqlEx)
+            {
+                Console.WriteLine($"Database error: {sqlEx.Message}");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Unexpected error: {ex.Message}");
+            }
+            return email;
+        }
     }
 }

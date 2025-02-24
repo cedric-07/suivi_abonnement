@@ -12,7 +12,8 @@ namespace suivi_abonnement.Service.Interface
         List<User> GetAllUsers();
         User GetUserById(int id);
         List<User> GetAdmin();
-        void Logout(int userId);    
+        void Logout(int userId);   
+        string GetUserEmail(int userId); 
         
 
     }

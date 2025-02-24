@@ -162,10 +162,7 @@ namespace suivi_abonnement.Service
             }
         }
 
-
-
-
-            // public void CreateNotification(int userId, int abonnementId, string message , string type)
+            // public void CreateNotification(int userId, int abonnementId, string message, string type)
             // {
             //     try
             //     {
@@ -173,49 +170,42 @@ namespace suivi_abonnement.Service
             //         {
             //             connection.Open();
 
-            //             // Vérification si la notification existe déjà
             //             string checkAbonnementIsExist = "SELECT COUNT(*) FROM notifications WHERE idabonnement = @idabonnement AND iduser = @iduser";
             //             using (var checkcommand = new MySqlCommand(checkAbonnementIsExist, connection))
             //             {
             //                 checkcommand.Parameters.AddWithValue("@idabonnement", abonnementId);
             //                 checkcommand.Parameters.AddWithValue("@iduser", userId);
 
-            //                 int AbonnementexistingToNotify = Convert.ToInt32(checkcommand.ExecuteScalar());
+            //                 int existingCount = Convert.ToInt32(checkcommand.ExecuteScalar());
 
-            //                 if (AbonnementexistingToNotify > 0)
+            //                 if (existingCount > 0)
             //                 {
-            //                     return; // Sortie de la méthode si la notification existe déjà
+            //                     return;
             //                 }
             //             }
 
-            //             // Insertion de la nouvelle notification
             //             string insertquery = "INSERT INTO notifications (message, type, status, idabonnement, iduser, created_at) " +
             //                                 "VALUES (@message, @type, 'non lu', @idabonnement, @iduser, NOW())";
 
             //             using (var command = new MySqlCommand(insertquery, connection))
             //             {
             //                 command.Parameters.AddWithValue("@message", message);
-            //                 command.Parameters.AddWithValue("@type", type); // ou autre type selon votre logique
+            //                 command.Parameters.AddWithValue("@type", type);
             //                 command.Parameters.AddWithValue("@idabonnement", abonnementId);
             //                 command.Parameters.AddWithValue("@iduser", userId);
             //                 command.ExecuteNonQuery();
             //             }
             //         }
 
-                    
-                    
-            //     }
-            //     catch (MySqlException ex)
-            //     {
-            //         // Gestion spécifique des erreurs MySQL
-            //         Console.WriteLine($"Erreur MySQL : {ex.Message}");
-            //         throw new Exception("Erreur lors de l'insertion de la notification dans la base de données.", ex);
+            //         // 🔥 Envoyer la notification en temps réel après l'insertion dans la base de données
+            //         var notificationCount = GetUnreadNotificationCount(userId);
+            //         _hubContext.Clients.User(userId.ToString()).SendAsync("ReceiveNotification", message, notificationCount);
+            //         Console.WriteLine($"📨 Notification en temps réel envoyée à {userId}");
+
             //     }
             //     catch (Exception ex)
             //     {
-            //         // Gestion des autres erreurs
-            //         Console.WriteLine($"Erreur générale : {ex.Message}");
-            //         throw new Exception("Une erreur s'est produite lors de la création de la notification.", ex);
+            //         Console.WriteLine($"❌ Erreur lors de la création de la notification : {ex.Message}");
             //     }
             // }
 
@@ -238,6 +228,7 @@ namespace suivi_abonnement.Service
 
                             if (existingCount > 0)
                             {
+                                Console.WriteLine("⚠ Notification déjà existante pour cet abonnement.");
                                 return;
                             }
                         }
@@ -255,17 +246,21 @@ namespace suivi_abonnement.Service
                         }
                     }
 
-                    // 🔥 Envoyer la notification en temps réel après l'insertion dans la base de données
+                    // 🔥 Envoyer la notification en temps réel après l'insertion
                     var notificationCount = GetUnreadNotificationCount(userId);
                     _hubContext.Clients.User(userId.ToString()).SendAsync("ReceiveNotification", message, notificationCount);
                     Console.WriteLine($"📨 Notification en temps réel envoyée à {userId}");
 
+                    // 🔥 Envoyer un email via SignalR
+                    // _hubContext.Clients.All.SendAsync("SendEmailNotificationToUser", userId, "Notification d'Abonnement", message);
+                    _hubContext.Clients.User(userId.ToString()).SendAsync("SendEmailNotificationToUser", userId, "Notification d'Abonnement", message);
                 }
                 catch (Exception ex)
                 {
                     Console.WriteLine($"❌ Erreur lors de la création de la notification : {ex.Message}");
                 }
             }
+
 
             private int GetUnreadNotificationCount(int userId)
             {

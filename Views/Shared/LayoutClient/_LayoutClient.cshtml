@@ -79,13 +79,8 @@
 </head>
 
 <body class="index-page">
-
   <header id="header" class="header fixed-top">
-
-    
-
     <div class="branding d-flex align-items-cente">
-
       <div class="container position-relative d-flex align-items-center justify-content-between">
         <a class="navbar-brand" href="https://demos.creative-tim.com/soft-ui-dashboard/pages/dashboard.html" target="_blank">
               <img src="../assets/img/logo_omnis.png" class="img-fluid logo-custom" alt="main_logo">
@@ -127,11 +122,22 @@
   </header>
 
   <main class="main">
-
     <!-- Hero Section -->
     @RenderBody()
     @RenderSection("scripts", required: false)
 
+    <div id="alertBox" style="
+        display: none;
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        background-color: #28a745;
+        color: white;
+        padding: 10px 20px;
+        border-radius: 5px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    ">
+    </div>
   </main>
 
   <div class="modal fade" id="logoutModal" tabindex="-1" aria-labelledby="logoutModalLabel" aria-hidden="true">
@@ -278,11 +284,29 @@
             renderNotifications(notifications);
         });
 
+        
+
         connection.on("UpdateNotifications", function (notifications, unreadCount) {
             console.log("✅ Mise à jour des notifications après lecture !");
             updateNotificationBadge(unreadCount);
             renderNotifications(notifications);
         });
+
+       connection.on("EmailSentNotification", (message) => {
+    console.log("📧 Email envoyé :", message);
+    showMessage(message);
+});
+
+function showMessage(message) {
+    let alertBox = document.getElementById("alertBox");
+    alertBox.innerText = message;
+    alertBox.style.display = "block";
+
+    setTimeout(() => {
+        alertBox.style.display = "none";
+    }, 5000);
+}
+
 
         function updateNotificationBadge(notificationCount) {
             console.log("🔄 Mise à jour du badge :", notificationCount);

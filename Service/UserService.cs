@@ -50,5 +50,9 @@ namespace suivi_abonnement.Service
         {
             _userRepository.Logout(userId);
         }
+        public string GetUserEmail(int userId)
+        {
+            return _userRepository.GetUserEmail(userId);
+        }
     }
 }

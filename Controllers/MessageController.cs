@@ -208,40 +208,34 @@ namespace suivi_abonnement.Controllers
             return Regex.Replace(messageText, pattern, replacement);
         }
 
-        [HttpGet("Message/searchUser")]
-        public IActionResult searchUser(string name)
+        [HttpGet("Message/SearchUser")]
+        public IActionResult SearchUser([FromQuery] string name)
         {
-            var userRole = _httpContextAccessor.HttpContext?.Session?.GetString("UserRole");
-            try
-            {
-                var user = _messageService.searchUser(name);
-                if (user != null && user.Id > 0)
-                {
-                    var model = new MessageViewModel
-                    {
-                        ReceiverId = user.Id,
-                        Users = new List<User> { user }
-                    };
+            int userId = _httpContextAccessor.HttpContext?.Session?.GetInt32("UserId") ?? 0;
 
-                    return userRole == "admin" 
-                        ? View("~/Views/AdminPage/MessagePage.cshtml", model) 
-                        : View("~/Views/Home/InboxPage.cshtml", model);
-                }
-                else
-                {
-                    TempData["Error"] = "Aucun utilisateur trouvé avec ce nom.";
-                    return userRole == "admin" 
-                        ? View("~/Views/AdminPage/MessagePage.cshtml") 
-                        : View("~/Views/Home/InboxPage.cshtml");
-                }
-            }
-            catch (Exception ex)
+            name = name.Trim();
+
+            if (string.IsNullOrWhiteSpace(name))
             {
-                Console.WriteLine("Erreur lors de la recherche de l'utilisateur : " + ex.Message);
-                return userRole == "admin" 
-                    ? View("~/Views/AdminPage/MessagePage.cshtml") 
-                    : View("~/Views/Home/InboxPage.cshtml");
+                return BadRequest(new { success = false, message = "Le nom de l'utilisateur est invalide." });
             }
+
+            var user = _messageService.searchUser(name);
+
+            if (user == null)
+            {
+                return NotFound(new { success = false, message = "Aucun utilisateur trouvé." });
+            }
+            
+            var messages = _messageService.GetMessagesForConversation(userId, user.Id);
+            
+
+            return Ok(new
+            {
+                success = true,
+                user,
+                messages
+            });
         }
 
         [HttpGet("Message/GetUnreadMessagesCount")]

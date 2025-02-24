@@ -8,6 +8,7 @@ using suivi_abonnement.Repository;
 using suivi_abonnement.Hubs;
 using Rotativa.AspNetCore;
 using Microsoft.Extensions.FileProviders;
+using Microsoft.AspNetCore.SignalR;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -44,6 +45,8 @@ builder.Services.AddScoped<INotificationRepository, NotificationRepository>();
 builder.Services.AddScoped<INotificationService, NotificationService>();
 builder.Services.AddScoped<IMessageRepository, MessageRepository>();
 builder.Services.AddScoped<IMessageService, MessageService>();
+builder.Services.AddScoped<INotifyEmailRepository, NotifyEmailRepository>();
+builder.Services.AddScoped<INotifyEmailService, NotifyEmailService>();
 
 
 // Configurer les services nécessaires

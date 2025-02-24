@@ -310,18 +310,19 @@ namespace suivi_abonnement.Repository
             return conversationId;
         }
 
-        public User searchUser(string name)
+        public User? searchUser(string name)
         {
-            User user = new User();
             try
             {
                 using (var connection = new MySqlConnection(_connectionString))
                 {
                     connection.Open();
+                    Console.WriteLine($"🔍 Recherche de l'utilisateur : '{name}'");
+
                     string query = @"
-                        SELECT * 
+                        SELECT id, username, email, password ,role, isconnected
                         FROM users 
-                        WHERE username = @name";
+                        WHERE  username = @name";
 
                     using (var command = new MySqlCommand(query, connection))
                     {
@@ -331,20 +332,33 @@ namespace suivi_abonnement.Repository
                         {
                             if (reader.Read())
                             {
-                                user.Id = reader.GetInt32("id");
-                                user.Username = reader.GetString("username");
+
+                                return new User
+                                {
+                                    Id = reader.GetInt32("id"),
+                                    Username = reader.GetString("username"),
+                                    Email = reader.GetString("email"),
+                                    Role = reader.GetString("role"),
+                                    Password = reader.GetString("password"),
+                                    IsConnected = reader.GetBoolean("isconnected")
+                                };
                             }
                         }
                     }
                 }
             }
-            catch (System.Exception ex)
+            catch (Exception ex)
             {
-                throw new System.Exception($"Erreur lors de la recherche de l'utilisateur : {ex.Message}");
+                Console.WriteLine($"❌ Erreur SQL : {ex.Message}");
+                throw new Exception($"Erreur lors de la recherche de l'utilisateur : {ex.Message}");
             }
 
-            return user;
+            return null;
         }
+
+
+
+
 
         public int CountMessagesisRead(int userId)
         {

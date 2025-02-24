@@ -24,6 +24,7 @@
             height: 85vh;
             display: flex;
             border-radius: 10px;
+            
             overflow: hidden;
             box-shadow: 0px 4px 10px rgba(0,0,0,0.1);
         }
@@ -329,9 +330,10 @@
                 <form class="mb-3">
                     <div class="input-group">
                         <span class="input-group-text"><i class="fa fa-search"></i></span>
-                        <input type="text" class="form-control" placeholder="Rechercher...">
+                        <input type="text" id="searchUser" class="form-control" placeholder="Rechercher un utilisateur...">
                     </div>
                 </form>
+                <ul id="userResults" class="list-group">
                     @if (Model?.Users != null)
                     {
                     
@@ -748,16 +750,16 @@
 
     // 🎯 Sélection d'un utilisateur
     function selectUser(receiverId, receiverName) {
-    console.log("🔄 Ouverture de la conversation avec :", receiverId);
+        console.log("🔄 Ouverture de la conversation avec :", receiverId);
 
-    $("#receiverId").val(receiverId);
-    $("#chatTitle").text("Chat avec " + receiverName);
-    $("#chatWindow").empty();
+        $("#receiverId").val(receiverId);
+        $("#chatTitle").text("Discution avec " + receiverName);
+        $("#chatWindow").empty();
 
-    var notifBadge = $("#notif-" + receiverId);
-    if (notifBadge.length > 0 && !notifBadge.hasClass("d-none")) {
-        notifBadge.text("0").addClass("d-none");
-        saveUnreadNotification(receiverId, 0);
+        var notifBadge = $("#notif-" + receiverId);
+        if (notifBadge.length > 0 && !notifBadge.hasClass("d-none")) {
+            notifBadge.text("0").addClass("d-none");
+            saveUnreadNotification(receiverId, 0);
     }
 
 
@@ -777,6 +779,7 @@
                     let messageDate = new Date(msg.dateEnvoi);
                     let dateDisplay = formatDate(messageDate);
                     let messageStatus = msg.isSeen ? "✓✓ Vu" : "✓✓";
+                    
 
                     let messageContent = "";
 
@@ -853,9 +856,8 @@
                 console.error("❌ Erreur chargement messages :", err);
             }
         });
+    }
 
-
-}
     function removeBlur(element) {
         let image = element.previousElementSibling;
         image.classList.remove("blurred");
@@ -870,6 +872,43 @@
     function formatDate(date) {
         return date.toLocaleTimeString("fr-FR", { hour: "2-digit", minute: "2-digit" });
     }
+
+    //search user
+    $(document).ready(function () {
+        $("#searchUser").on("input", function () {
+            var query = $(this).val().trim();
+
+            if (query.length < 2) {
+                $("#userResults").html("");
+                return;
+            }
+
+            $.ajax({
+                url: "/Message/SearchUser",
+                type: "GET",
+                data: { name: query },
+                success: function (response) {
+                    var user = response.user;
+                    var messages = response.messages;
+                    
+                    var html = `
+                        <li class="list-group-item d-flex align-items-center" onclick="selectUser(${user.id}, '${user.username}')">
+                            <div class="me-3">
+                                <i class="fas fa-user-circle fa-2x"></i>
+                            </div>
+                            <span>${user.username}</span>
+                            <span class="user-status ${user.isConnected ? 'online' : 'offline'}"></span>
+                        </li>`;
+
+                    $("#userResults").html(html);
+                },
+                error: function () {
+                    $("#userResults").html("<p class='text-muted'>Aucun utilisateur trouvé</p>");
+                }
+            });
+        });
+    });
+
 </script>
 
 

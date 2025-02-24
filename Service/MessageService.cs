@@ -27,7 +27,7 @@ namespace suivi_abonnement.Service
         {
             return _messageRepository.GetOrCreateConversation(senderId, receiverId);
         }
-        public User searchUser(string name)
+        public User? searchUser(string name)
         {
             return _messageRepository.searchUser(name);
         }
