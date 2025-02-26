@@ -13,6 +13,10 @@
         public List<Abonnement>? listeAbonnementEnAttente { get; set; }
         public List<Dictionary<string, object>>? RevenusAnnuels { get; set; }
         public List<Dictionary<string, object>>? RevenusMensuels { get; set; }
+        public int NbrAbonnementActif { get; set; }
+        public int NbrAbonnementEnAttente { get; set; }
+        public int NbrAbonnementExpire { get; set; }
+        public List<System.Collections.Generic.Dictionary<string, object>>? AbonnementsParUser { get; set; }
         public int Page { get; set; }
         public int PageSize { get; set; }
     }

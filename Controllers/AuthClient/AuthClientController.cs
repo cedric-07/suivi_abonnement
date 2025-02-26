@@ -13,14 +13,18 @@ namespace suivi_abonnement_omnis.Controllers.Authentification
         private readonly IUserService _userService;
         private readonly IDepartementService _departementService;
         private readonly IConfiguration configuration;
+        private readonly INotificationService _notificationService;
+        private readonly INotifyEmailService _notifyEmailService;
         private readonly IHttpContextAccessor httpContextAccessor;
         
-        public AuthClientController(IConfiguration configuration , IHttpContextAccessor httpContextAccessor , IUserService userService , IDepartementService departementService)
+        public AuthClientController(IConfiguration configuration , IHttpContextAccessor httpContextAccessor , IUserService userService , IDepartementService departementService, INotificationService notificationService, INotifyEmailService notifyEmailService)
         {
             _userService = userService;
             this.configuration = configuration;
             this.httpContextAccessor = httpContextAccessor;
             _departementService = departementService;
+            _notifyEmailService = notifyEmailService;
+            _notificationService = notificationService;
         }
 
         // GET: AuthClientController
@@ -43,19 +47,127 @@ namespace suivi_abonnement_omnis.Controllers.Authentification
             try
             {
                 var user = _userService.Login(email, password);
-                
+
                 if (user != null)
                 {
-                    // Stockage de l'utilisateur dans la session ou tout autre système de gestion d'état si nécessaire
+                    // 🔥 Stockage de l'utilisateur dans la session
                     HttpContext.Session.SetString("UserRole", user.Role);
                     HttpContext.Session.SetInt32("UserId", user.Id);
 
+                    // 🔥 Vérifier les notifications non lues
+                    var notifications = _notificationService.GetUnreadNotifications(user.Id);
+
+                    if (notifications.Any())
+                    {
+                        string subject = "🔔 Vous avez de nouvelles notifications";
+
+                        string message = $@"
+                        <html>
+                        <head>
+                            <style>
+                                body {{
+                                    font-family: Arial, sans-serif;
+                                    background-color: #f4f4f4;
+                                    margin: 0;
+                                    padding: 0;
+                                }}
+                                .container {{
+                                    max-width: 600px;
+                                    margin: 20px auto;
+                                    background: #ffffff;
+                                    padding: 20px;
+                                    border-radius: 8px;
+                                    box-shadow: 0px 0px 10px rgba(0,0,0,0.1);
+                                }}
+                                .header {{
+                                    text-align: center;
+                                    padding: 10px;
+                                    background-color: #007bff;
+                                    color: white;
+                                    font-size: 18px;
+                                    font-weight: bold;
+                                    border-top-left-radius: 8px;
+                                    border-top-right-radius: 8px;
+                                }}
+                                .content {{
+                                    padding: 20px;
+                                    text-align: left;
+                                    color: #333;
+                                }}
+                                .notification-list {{
+                                    background: #f9f9f9;
+                                    padding: 10px;
+                                    border-radius: 5px;
+                                    margin-top: 10px;
+                                }}
+                                .notification-item {{
+                                    padding: 10px;
+                                    border-bottom: 1px solid #ddd;
+                                }}
+                                .notification-item:last-child {{
+                                    border-bottom: none;
+                                }}
+                                .footer {{
+                                    text-align: center;
+                                    padding: 10px;
+                                    font-size: 14px;
+                                    color: #777;
+                                }}
+                                .button {{
+                                    display: inline-block;
+                                    padding: 10px 15px;
+                                    margin-top: 10px;
+                                    background-color: #007bff;
+                                    color: #fff;
+                                    text-decoration: none;
+                                    border-radius: 5px;
+                                    font-weight: bold;
+                                }}
+                                .button:hover {{
+                                    background-color: #0056b3;
+                                }}
+                            </style>
+                        </head>
+                        <body>
+                            <div class='container'>
+                                <div class='header'>📢 Nouvelle(s) Notification(s)</div>
+                                <div class='content'>
+                                    <p>Bonjour <strong>{user.Username}</strong>,</p>
+                                    <p>Vous avez <strong>{notifications.Count}</strong> notifications non lues :</p>
+                                    <div class='notification-list'>";
+
+                        foreach (var notif in notifications)
+                        {
+                            message += $"<div class='notification-item'>🔔 {notif.Message}</div>";
+                        }
+
+                        message += $@"
+                                    </div>
+                                    <p><a href='https://votre-site.com/notifications' class='button'>Voir mes notifications</a></p>
+                                </div>
+                                <div class='footer'>Ceci est un email automatique, merci de ne pas répondre.</div>
+                            </div>
+                        </body>
+                        </html>";
+
+                        // 🔥 Envoyer un e-mail automatique avec le template amélioré
+                        if (!string.IsNullOrEmpty(user.Email))
+                        {
+                            _notifyEmailService.SendEmailAsync(user.Email, subject, message).Wait();
+                            TempData["Notification"] = "Vous avez des notifications non lues. Vérifiez votre boîte de réception dans vos emails !";
+                            TempData["UserEmail"] = user.Email;
+                        }
+                        Console.WriteLine($"📧 Email automatique envoyé à {user.Email}");
+                    }
+
+
+                    // Rediriger selon le rôle
                     switch (user.Role)
                     {
                         case "user":
                             return RedirectToAction("Index", "Home");
                         default:
-                            TempData["Error"] = "Vous n'êtes pas autorisé à accéder à cette page , veuillez contacter l'administrateur.";
+                            TempData["Error"] = "Vous n'êtes pas autorisé à accéder à cette page, veuillez contacter l'administrateur.";
                             return View(new User());
                     }
                 }
@@ -72,6 +184,7 @@ namespace suivi_abonnement_omnis.Controllers.Authentification
                 return View(new User());
             }
         }
+
 
 
 

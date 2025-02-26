@@ -127,6 +127,30 @@
     </style>
 </head>
 <body>
+    @* @if (TempData["Notification"] != null && TempData["UserEmail"] != null)
+    {
+        <div class="modal fade" id="notificationModal" tabindex="-1" aria-labelledby="notificationModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="notificationModalLabel">🔔 Nouvelle Notification</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p>@TempData["Notification"]</p>
+                    </div>
+                    <div class="modal-footer">
+                        <a href="@GetMailProvider(TempData["UserEmail"].ToString())" target="_blank" class="btn btn-primary">
+                            📧 Ouvrir ma boîte mail
+                        </a>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    } *@
+
+
 <div class="container-fluid fade-in visible">
     <div class="row align-items-center">
         <div class="col">
@@ -235,8 +259,20 @@
                     </div>
                 </div>
             </div>
+
+            <div class="main-section">
+                <div class="left-section">
+                    <div class="section-container">
+                        <h5>Répartition des abonnements</h5>
+                        <div class="chart-container">
+                            <canvas id="abonnementsStatusChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
+<script src="https://cdn.jsdelivr.net/npm/chart.js" defer></script>
 
     <script>
     var revenusAnneeChart = null;
@@ -322,6 +358,94 @@
             }
         });
     });
+
+
+    //Chart pour le nbr d'abonnements par status et le clients
+    document.addEventListener("DOMContentLoaded", function () {
+    var abonnementsParUser = @Html.Raw(Json.Serialize(Model?.AbonnementStatViewModel?.AbonnementsParUser));
+
+    if (!abonnementsParUser || abonnementsParUser.length === 0) {
+        console.log("Aucune donnée pour le graphique.");
+        return;
+    }
+
+    var labels = [];
+    var data = [];
+    var backgroundColors = [];
+    
+    abonnementsParUser.forEach((user, index) => {
+        labels.push(`${user.user} - Actifs ${user.actifs}`);
+        labels.push(`${user.user} - En Attente ${user.attente}`);
+        labels.push(`${user.user} - Expirés ${user.expire}`);
+        
+        data.push(user.actifs);
+        data.push(user.attente);
+        data.push(user.expire);
+        
+        backgroundColors.push(`#${Math.floor(Math.random()*16777215).toString(16)}`);
+        backgroundColors.push(`#${Math.floor(Math.random()*16777215).toString(16)}`);
+        backgroundColors.push(`#${Math.floor(Math.random()*16777215).toString(16)}`);
+    });
+
+    var ctx = document.getElementById('abonnementsStatusChart');
+    
+    if (!ctx) {
+        console.error("Canvas non trouvé. Vérifiez l'ID.");
+        return;
+    }
+
+    new Chart(ctx, {
+        type: 'pie',
+        data: {
+            labels: labels,
+            datasets: [{
+                data: data,
+                backgroundColor: backgroundColors,
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                tooltip: {
+                    callbacks: {
+                        label: function (tooltipItem) {
+                            let dataset = tooltipItem.dataset;
+                            let index = tooltipItem.dataIndex;
+                            let value = dataset.data[index];
+                            return dataset.labels[index] + ': ' + value + ' abonnements' ;
+                        }
+                    }
+                },
+                legend: {
+                    position: 'right'
+                }
+            }
+        }
+    });
+});
+
+
+
+
+
+
+    @* document.addEventListener("DOMContentLoaded", function() {
+        var myModal = new bootstrap.Modal(document.getElementById('notificationModal'));
+        myModal.show();
+    }); *@
+      
+
     </script>
+    @* @functions {
+    public string GetMailProvider(string email)
+    {
+        if (string.IsNullOrEmpty(email)) return "#"; // Empêche erreur si l'email est vide
+        if (email.EndsWith("@gmail.com")) return "https://mail.google.com/mail/u/0/#inbox";
+        if (email.EndsWith("@yahoo.com")) return "https://mail.yahoo.com";
+        if (email.EndsWith("@outlook.com") || email.EndsWith("@hotmail.com")) return "https://outlook.live.com/mail/";
+        return "https://www.google.com/search?q=ouvrir+email"; // Redirige vers Google si inconnu
+    }
+} *@
 </body>
 </html>

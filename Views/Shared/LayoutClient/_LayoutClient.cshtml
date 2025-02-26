@@ -39,8 +39,8 @@
   * License: https://bootstrapmade.com/license/
   ======================================================== -->
   <style>
-    .blog-page{
-      font-family: Montserrat ,sans-serif !important;
+    .index-page{
+      font-family: 'Montserrat' ,sans-serif !important;
       background-color: #0d2d5a !important;
     }
 
@@ -293,19 +293,19 @@
         });
 
        connection.on("EmailSentNotification", (message) => {
-    console.log("📧 Email envoyé :", message);
-    showMessage(message);
-});
+            console.log("📧 Email envoyé :", message);
+            showMessage(message);
+        });
 
-function showMessage(message) {
-    let alertBox = document.getElementById("alertBox");
-    alertBox.innerText = message;
-    alertBox.style.display = "block";
+        function showMessage(message) {
+            let alertBox = document.getElementById("alertBox");
+            alertBox.innerText = message;
+            alertBox.style.display = "block";
 
-    setTimeout(() => {
-        alertBox.style.display = "none";
-    }, 5000);
-}
+            setTimeout(() => {
+                alertBox.style.display = "none";
+            }, 5000);
+        }
 
 
         function updateNotificationBadge(notificationCount) {

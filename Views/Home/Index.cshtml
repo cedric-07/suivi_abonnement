@@ -18,7 +18,31 @@
         </div>
       </div>
     </div><!-- End Page Title -->
+    <!---popup de message pour l'envoye de nottification par email-->
+    @if (TempData["Notification"] != null && TempData["UserEmail"] != null)
+    {
+        <div class="modal fade" id="notificationModal" tabindex="-1" aria-labelledby="notificationModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header" style="background-color: #0d2d5a;">
+                        <h5 class="modal-title" id="notificationModalLabel" style="color: white;">🔔 Notification</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p>@TempData["Notification"]</p>
+                    </div>
+                    <div class="modal-footer">
+                        <a href="@GetMailProvider(TempData["UserEmail"]?.ToString() ?? string.Empty)" target="_blank" class="btn btn-primary">
+                            📧 Consulter mon email
+                        </a>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
 
+    
     <!-- About Section -->
     <section id="about" class="about section">
 
@@ -468,6 +492,22 @@
 
   <!-- Main JS File -->
   <script src="../assetsUser/js/main.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+        var myModal = new bootstrap.Modal(document.getElementById('notificationModal'));
+        myModal.show();
+    });
+</script>
+
+  @functions {
+      public string GetMailProvider(string email)
+      {
+          if (email.Contains("@gmail.com")) return "https://mail.google.com";
+          if (email.Contains("@yahoo.com")) return "https://mail.yahoo.com";
+          if (email.Contains("@outlook.com") || email.Contains("@hotmail.com")) return "https://outlook.live.com";
+          return "https://www.google.com/search?q=ouvrir+email"; // Si l'email n'est pas reconnu, il redirige vers Google
+      }
+  }
     <style>
     .page-title {
       background: linear-gradient(to left, #0d2d5a, #d4d5dd) !important;

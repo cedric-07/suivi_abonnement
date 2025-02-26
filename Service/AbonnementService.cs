@@ -136,5 +136,18 @@ namespace suivi_abonnement.Service
         {
             return _abonnementRepository.GetNbrAbonnementPerFournisseur();
         }
+
+        public List<Dictionary<string, object>> CountNbrAbonnementExpirePerUser()
+        {
+            return _abonnementRepository.CountNbrAbonnementExpirePerUser();
+        }
+        public List<Dictionary<string, object>> CountNbrAbonnementActifPerUser()
+        {
+            return _abonnementRepository.CountNbrAbonnementActifPerUser();
+        }
+        public List<Dictionary<string, object>> CountNbrAbonnementAttentePerUser()
+        {
+            return _abonnementRepository.CountNbrAbonnementAttentePerUser();
+        }
     }
 }

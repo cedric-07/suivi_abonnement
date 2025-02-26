@@ -119,13 +119,14 @@ public class NotificationHub : Hub
         }
     }
 
-     public async Task SendEmailNotificationToUser(int userId, string subject, string message)
+    public async Task SendEmailNotificationToUser(int userId, string subject, string message)
     {
         try
         {
             Console.WriteLine($"📩 Préparation de l'envoi d'un email à {userId}...");
 
             string userEmail = GetUserEmail(userId);
+            Console.WriteLine($"📧 Email trouvé pour l'utilisateur {userId}: {userEmail}");
 
             if (string.IsNullOrEmpty(userEmail))
             {
@@ -139,7 +140,7 @@ public class NotificationHub : Hub
             // Envoyer un message à l'utilisateur connecté via SignalR
             if (ConnectedUsers.TryGetValue(userId, out var userInfo))
             {
-                await Clients.Client(userInfo.ConnectionId).SendAsync("EmailSentNotification", "📧 Email envoyé avec succès !");
+                await Clients.Client(userInfo.ConnectionId).SendAsync("EmailSentNotification", userId , message);
             }
         }
         catch (Exception ex)

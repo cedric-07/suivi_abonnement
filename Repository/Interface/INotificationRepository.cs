@@ -10,6 +10,7 @@ namespace suivi_abonnement.Repository.Interface
         List<Notification> GetNotificationsForAdmin();
         List<Notification> GetNotificationsForClient();
         Notification MarkNotificationAsRead(int notificationId);
+        List<Notification> GetUnreadNotifications(int userId);
         
     }
 }
