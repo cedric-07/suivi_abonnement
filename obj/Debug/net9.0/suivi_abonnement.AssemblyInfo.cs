@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("suivi_abonnement")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+84a702838bd91c2aa4bb545206b25fd6b37a0366")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+45b4b8637468dd54837c0b6c798253bea1b010e5")]
 [assembly: System.Reflection.AssemblyProductAttribute("suivi_abonnement")]
 [assembly: System.Reflection.AssemblyTitleAttribute("suivi_abonnement")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

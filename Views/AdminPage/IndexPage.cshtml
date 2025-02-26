@@ -86,7 +86,7 @@
             padding: 15px;
             height: auto;
             border: 1px solid #ccc;
-            width: 100%;
+            width: auto;
             border-radius: 8px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             background-color: #fff;
@@ -98,7 +98,7 @@
         }
         canvas {
             width: 100% !important;
-            max-height: 350px;
+            height: 100% !important;
         }
 
         .section-title {
@@ -124,6 +124,14 @@
             font-weight: bold;
             color: #2c3e50;
         }
+
+        .chart-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 400px; /* Augmente la hauteur pour plus de visibilité */
+        }
+
     </style>
 </head>
 <body>
@@ -244,7 +252,7 @@
             <div class="main-section">
                 <div class="left-section">
                     <div class="section-container">
-                        <h5>Revenus par année</h5>
+                        <h5 class="text-bold">Revenus par année</h5>
                         <div class="chart-container">
                             <canvas id="revenusAnneeChart"></canvas>
                         </div>
@@ -252,20 +260,19 @@
                 </div>
                 <div class="right-section">
                     <div class="section-container">
-                        <h5>Revenus par mois</h5>
+                        <h5 class="text-bold">Revenus par mois</h5>
                         <div class="chart-container">
                             <canvas id="revenusMoisChart"></canvas>
                         </div>
                     </div>
                 </div>
             </div>
-
             <div class="main-section">
                 <div class="left-section">
                     <div class="section-container">
-                        <h5>Répartition des abonnements</h5>
+                        <h5 class="text-bold">Comparaison des abonnements Actifs vs Expirés</h5>
                         <div class="chart-container">
-                            <canvas id="abonnementsStatusChart"></canvas>
+                            <canvas id="abonnementsChart"></canvas>
                         </div>
                     </div>
                 </div>
@@ -273,8 +280,7 @@
         </div>
     </div>
 <script src="https://cdn.jsdelivr.net/npm/chart.js" defer></script>
-
-    <script>
+<script>
     var revenusAnneeChart = null;
     var revenusMoisChart = null;
 
@@ -360,71 +366,48 @@
     });
 
 
-    //Chart pour le nbr d'abonnements par status et le clients
     document.addEventListener("DOMContentLoaded", function () {
-    var abonnementsParUser = @Html.Raw(Json.Serialize(Model?.AbonnementStatViewModel?.AbonnementsParUser));
+        var nbrAbonnementActif = @Model?.AbonnementStatViewModel?.NbrAbonnementActif;
+        var nbrAbonnementExpire = @Model?.AbonnementStatViewModel?.NbrAbonnementExpire;
 
-    if (!abonnementsParUser || abonnementsParUser.length === 0) {
-        console.log("Aucune donnée pour le graphique.");
-        return;
-    }
-
-    var labels = [];
-    var data = [];
-    var backgroundColors = [];
-    
-    abonnementsParUser.forEach((user, index) => {
-        labels.push(`${user.user} - Actifs ${user.actifs}`);
-        labels.push(`${user.user} - En Attente ${user.attente}`);
-        labels.push(`${user.user} - Expirés ${user.expire}`);
-        
-        data.push(user.actifs);
-        data.push(user.attente);
-        data.push(user.expire);
-        
-        backgroundColors.push(`#${Math.floor(Math.random()*16777215).toString(16)}`);
-        backgroundColors.push(`#${Math.floor(Math.random()*16777215).toString(16)}`);
-        backgroundColors.push(`#${Math.floor(Math.random()*16777215).toString(16)}`);
-    });
-
-    var ctx = document.getElementById('abonnementsStatusChart');
-    
-    if (!ctx) {
-        console.error("Canvas non trouvé. Vérifiez l'ID.");
-        return;
-    }
-
-    new Chart(ctx, {
-        type: 'pie',
-        data: {
-            labels: labels,
-            datasets: [{
-                data: data,
-                backgroundColor: backgroundColors,
-                borderWidth: 1
-            }]
-        },
-        options: {
-            responsive: true,
-            plugins: {
-                tooltip: {
-                    callbacks: {
-                        label: function (tooltipItem) {
-                            let dataset = tooltipItem.dataset;
-                            let index = tooltipItem.dataIndex;
-                            let value = dataset.data[index];
-                            return dataset.labels[index] + ': ' + value + ' abonnements' ;
+        var ctx3 = document.getElementById('abonnementsChart').getContext('2d');
+        var abonnementsChart = new Chart(ctx3, {
+            type: 'pie',
+            data: {
+                labels: ['Abonnement-Actifs', 'Abonnement-Expirés'],
+                datasets: [{
+                    data: [nbrAbonnementActif, nbrAbonnementExpire],
+                    backgroundColor: ['#2c3e50', '#e74c3c'], // Bleu foncé pour Actifs, Rouge pour Expirés
+                    borderColor: ['#fff', '#fff'],
+                    borderWidth: 2,
+                    hoverOffset: 30 // Ajout de l'effet d'agrandissement
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'right', // Déplace la légende à droite
+                        align: 'start', // Aligne verticalement
+                        labels: {
+                            padding: 20, // Ajoute un espacement entre les éléments de la légende
+                            font: {
+                                size: 14 // Augmente la taille du texte
+                            }
                         }
                     }
                 },
-                legend: {
-                    position: 'right'
+                animation: {
+                    animateScale: true, // Active l'effet de zoom
+                    animateRotate: true // Ajoute un effet de rotation léger
+                },
+                hover: {
+                    mode: 'nearest', // Active le mode de survol le plus proche
+                    intersect: true
                 }
             }
-        }
+        });
     });
-});
-
 
 
 
@@ -436,7 +419,7 @@
     }); *@
       
 
-    </script>
+</script>
     @* @functions {
     public string GetMailProvider(string email)
     {

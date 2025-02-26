@@ -51,21 +51,21 @@ INSERT INTO suivi_abonnement_omnis_db.abonnements (type, prix, date_debut, idfou
 -- Insérer plusieurs abonnements dont l'expiration est dans le premier mois
 INSERT INTO suivi_abonnement_omnis_db.abonnements (type, prix, date_debut, idfournisseur, idcategorie, expiration_date, description, nom, departement_id) 
 VALUES
-('Mensuel', 59.99, CURRENT_TIMESTAMP, 1, 1, DATE_ADD(CURRENT_TIMESTAMP, INTERVAL 1 MONTH), 'Abonnement Internet avec débit élevé', 'Internet Pro', 1),
-('Mensuel', 39.99, CURRENT_TIMESTAMP, 2, 2, DATE_ADD(CURRENT_TIMESTAMP, INTERVAL 1 MONTH), 'Abonnement TV HD avec 100 chaînes', 'TV Plus', 2),
-('Mensuel', 29.99, CURRENT_TIMESTAMP, 3, 3, DATE_ADD(CURRENT_TIMESTAMP, INTERVAL 1 MONTH), 'Abonnement Mobile 5 Go de données', 'Mobile Standard', 3),
-('Mensuel', 79.99, CURRENT_TIMESTAMP, 1, 1, DATE_ADD(CURRENT_TIMESTAMP, INTERVAL 1 MONTH), 'Abonnement fibre optique 1 Gb/s', 'Fibre Optique', 1),
-('Mensuel', 39.99, CURRENT_TIMESTAMP, 3, 3, DATE_ADD(CURRENT_TIMESTAMP, INTERVAL 1 MONTH), 'Abonnement mobile 10 Go de données', 'Mobile Plus', 5);
+('Mensuel', 59.99, CURRENT_TIMESTAMP, 1, 1, '2025-03-01 10:00:00' , 'Abonnement Internet avec débit élevé', 'Internet Pro', 1),
+('Mensuel', 39.99, CURRENT_TIMESTAMP, 2, 2, '2025-03-01 10:00:00', 'Abonnement TV HD avec 100 chaînes', 'TV Plus', 2),
+('Mensuel', 29.99, CURRENT_TIMESTAMP, 3, 3, '2025-03-01 10:00:00', 'Abonnement Mobile 5 Go de données', 'Mobile Standard', 3),
+('Mensuel', 79.99, CURRENT_TIMESTAMP, 1, 1, '2025-03-01 10:00:00', 'Abonnement fibre optique 1 Gb/s', 'Fibre Optique', 1),
+('Mensuel', 39.99, CURRENT_TIMESTAMP, 3, 3, '2025-03-01 10:00:00', 'Abonnement mobile 10 Go de données', 'Mobile Plus', 5);
 
 --Abonnement expirer User---
 
 -- Insérer plusieurs abonnements dont l'expiration est dans un mois
 INSERT INTO suivi_abonnement_omnis_db.abonnements (type, prix, date_debut, idfournisseur, idcategorie, expiration_date, description, nom, departement_id) 
 VALUES
-('Mensuel', 39.99, CURRENT_TIMESTAMP, 2, 2, DATE_ADD(CURRENT_TIMESTAMP, INTERVAL 1 MONTH), 'Abonnement TV HD avec 100 chaînes', 'TV Standard', 1),
-('Mensuel', 29.99, CURRENT_TIMESTAMP, 3, 3, DATE_ADD(CURRENT_TIMESTAMP, INTERVAL 1 MONTH), 'Abonnement Mobile 5 Go de données', 'Mobile Basic', 3),
-('Mensuel', 79.99, CURRENT_TIMESTAMP, 1, 1, DATE_ADD(CURRENT_TIMESTAMP, INTERVAL 1 MONTH), 'Abonnement fibre optique 1 Gb/s', 'Fibre Plus', 1),
-('Mensuel', 49.99, CURRENT_TIMESTAMP, 2, 2, DATE_ADD(CURRENT_TIMESTAMP, INTERVAL 1 MONTH), 'Abonnement TV 4K avec 150 chaînes', 'TV Premium', 2);
+('Mensuel', 39.99, CURRENT_TIMESTAMP, 2, 2, '2025-03-01 10:00:00', 'Abonnement TV HD avec 100 chaînes', 'TV Standard', 1),
+('Mensuel', 29.99, CURRENT_TIMESTAMP, 3, 3, '2025-03-01 10:00:00', 'Abonnement Mobile 5 Go de données', 'Mobile Basic', 3),
+('Mensuel', 79.99, CURRENT_TIMESTAMP, 1, 1, '2025-03-01 10:00:00', 'Abonnement fibre optique 1 Gb/s', 'Fibre Plus', 1),
+('Mensuel', 49.99, CURRENT_TIMESTAMP, 2, 2, '2025-03-01 10:00:00', 'Abonnement TV 4K avec 150 chaînes', 'TV Premium', 2);
 
 
 --Abonnement expirer 7 jours--

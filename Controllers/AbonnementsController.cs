@@ -87,7 +87,10 @@ namespace suivi_abonnement.Controllers
                 Console.WriteLine("${item.NomFournisseur} : {item.NbrAbonnement}");
             }
             int nbrlcient = _abonnementService.NbrClientAbonne();
-            
+            var stats = _abonnementService.CompareAbonnementStatus();
+            Console.WriteLine("Actifs : " + stats.Actifs);
+            Console.WriteLine("Expire : " + stats.Expire);
+
             
             //ViewBag pour le notification
             ViewBag.Notifications = notifications;
@@ -105,7 +108,9 @@ namespace suivi_abonnement.Controllers
                     RevenusMensuels = revenusMensuels,
                     Notifications = notifications ?? new List<Notification>(),
                     NbrClient = nbrlcient,
-                    Abonnements = abonnementfournisseur
+                    Abonnements = abonnementfournisseur,
+                    NbrAbonnementActif = stats.Actifs,
+                    NbrAbonnementExpire = stats.Expire
                 }
             };
 
@@ -113,72 +118,6 @@ namespace suivi_abonnement.Controllers
             // Retour de la vue avec le modèle
             return View("~/Views/AdminPage/IndexPage.cshtml", model);
         }
-
-
-        // public IActionResult Index()
-        // {
-        //     // Récupération des informations de session
-        //     int userId = HttpContext.Session.GetInt32("UserId") ?? 0;
-        //     var userRole = HttpContext.Session.GetString("UserRole");
-
-        //     if (string.IsNullOrEmpty(userRole) || userId == 0)
-        //     {
-        //         Console.WriteLine("Utilisateur non connecté");
-        //     }
-
-        //     _notificationService.SendNotification();
-
-        //     List<Notification> notifications = userRole == "admin" 
-        //         ? _notificationService.GetNotificationsForAdmin() 
-        //         : new List<Notification>();
-            
-        //     int notificationCount = notifications?.Count(n => n.Status == "non lu") ?? 0;
-        //     ViewBag.NotificationCount = notificationCount;
-        //     ViewBag.Notifications = notifications;
-        //     ViewBag.NbrNotifications = notificationCount;
-
-        //     int abonnementsActifs = _abonnementService.CountTotalAbonnementsActif();
-        //     int abonnementsExpirés = _abonnementService.CountTotalAbonnementsInactif();
-        //     int abonnementsSuspendus = _abonnementService.CountTotalAbonnementsEnAttente();
-
-        //     List<Dictionary<string, object>> revenusAnnuels = _abonnementService.RevenusFictifsParAnnee();
-        //     List<Dictionary<string, object>> revenusMensuels = _abonnementService.RevenusFictifsParMois();
-        //     List<Abonnement> abonnementfournisseur = _abonnementService.GetNbrAbonnementPerFournisseur();
-        //     int nbrlcient = _abonnementService.NbrClientAbonne();
-            
-        //     List<Dictionary<string, object>> abonnementsActifsParUser = _abonnementService.CountNbrAbonnementActifPerUser();
-        //     List<Dictionary<string, object>> abonnementsEnAttenteParUser = _abonnementService.CountNbrAbonnementAttentePerUser();
-        //     List<Dictionary<string, object>> abonnementsExpirésParUser = _abonnementService.CountNbrAbonnementExpirePerUser();
-            
-        //     List<Dictionary<string, object>> abonnementsParUser = abonnementsActifsParUser.Select(userActif => new Dictionary<string, object>
-        //     {
-        //         { "user", userActif["user"].ToString() },
-        //         { "actifs", Convert.ToInt32(userActif["actifs"]) },
-        //         { "attente", abonnementsEnAttenteParUser.FirstOrDefault(u => u["user"].ToString() == userActif["user"].ToString())?["attente"] ?? 0 },
-        //         { "expire", abonnementsExpirésParUser.FirstOrDefault(u => u["user"].ToString() == userActif["user"].ToString())?["expire"] ?? 0 }
-        //     }).ToList();
-
-        //     var model = new GlobalViewModel
-        //     {
-        //         AbonnementStatViewModel = new AbonnementStatViewModel
-        //         {
-        //             Actifs = abonnementsActifs,
-        //             Expirés = abonnementsExpirés,
-        //             Suspendus = abonnementsSuspendus,
-        //             RevenusAnnuels = revenusAnnuels,
-        //             RevenusMensuels = revenusMensuels,
-        //             Notifications = notifications ?? new List<Notification>(),
-        //             NbrClient = nbrlcient,
-        //             Abonnements = abonnementfournisseur,
-        //             NbrAbonnementActif = abonnementsParUser.Sum(a => Convert.ToInt32(a["actifs"])),
-        //             NbrAbonnementEnAttente = abonnementsParUser.Sum(a => Convert.ToInt32(a["attente"])),
-        //             NbrAbonnementExpire = abonnementsParUser.Sum(a => Convert.ToInt32(a["expire"])),
-        //             AbonnementsParUser = abonnementsParUser
-        //         }
-        //     };
-
-        //     return View("~/Views/AdminPage/IndexPage.cshtml", model);
-        // }
 
 
         // GET: AbonnementsController

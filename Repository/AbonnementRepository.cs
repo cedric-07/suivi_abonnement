@@ -1521,138 +1521,41 @@ namespace suivi_abonnement.Repository
             return abonnements;
         }
 
-        public List<Dictionary<string, object>> CountNbrAbonnementActifPerUser()
+        public (int Actifs, int Expire) CompareAbonnementStatus()
         {
-            var result = new List<Dictionary<string, object>>();
-            
+            int actifs = 0;
+            int expire = 0;
+
             try
             {
                 using (var connection = new MySqlConnection(_connectionString))
                 {
                     connection.Open();
                     string query = @"
-                        SELECT 
-                            u.username AS user,
-                            COUNT(a.abonnement_id) AS actifs
-                        FROM users u
-                        LEFT JOIN abonnements a ON u.id = a.idfournisseur
-                        WHERE a.expiration_date > NOW() AND a.date_debut < NOW() AND u.role = 'user'
-                        GROUP BY u.id, u.username
-                        ORDER BY actifs DESC";
-
+                        SELECT
+                            SUM(CASE WHEN expiration_date >= NOW() THEN 1 ELSE 0 END) AS actifs,
+                            SUM(CASE WHEN expiration_date < NOW() THEN 1 ELSE 0 END) AS expire
+                        FROM abonnements";
+                    
                     using (var command = new MySqlCommand(query, connection))
                     {
                         using (var reader = command.ExecuteReader())
                         {
-                            while (reader.Read())
+                            if (reader.Read())
                             {
-                                var userData = new Dictionary<string, object>
-                                {
-                                    { "user", reader["user"].ToString() },
-                                    { "actifs", Convert.ToInt32(reader["actifs"]) }
-                                };
-                                result.Add(userData);
+                                actifs = reader.GetInt32("actifs");
+                                expire = reader.GetInt32("expire");
                             }
                         }
                     }
+                    connection.Close();
                 }
             }
-            catch (Exception)
+            catch (System.Exception ex)
             {
-                throw new Exception("Erreur lors de la récupération du nombre d'abonnements actifs");
+                throw new Exception(ex.Message);
             }
-
-            return result;
-        }
-
-
-        public List<Dictionary<string, object>> CountNbrAbonnementAttentePerUser()
-        {
-            var result = new List<Dictionary<string, object>>();
-            
-            try
-            {
-                using (var connection = new MySqlConnection(_connectionString))
-                {
-                    connection.Open();
-                    string query = @"
-                        SELECT 
-                            u.username AS user,
-                            COUNT(a.abonnement_id) AS attente
-                        FROM users u
-                        LEFT JOIN abonnements a ON u.id = a.idfournisseur
-                        WHERE a.date_debut > NOW() AND u.role = 'user'
-                        GROUP BY u.id, u.username
-                        ORDER BY attente DESC";
-
-                    using (var command = new MySqlCommand(query, connection))
-                    {
-                        using (var reader = command.ExecuteReader())
-                        {
-                            while (reader.Read())
-                            {
-                                var userData = new Dictionary<string, object>
-                                {
-                                    { "user", reader["user"].ToString() },
-                                    { "attente", Convert.ToInt32(reader["attente"]) }
-                                };
-                                result.Add(userData);
-                            }
-                        }
-                    }
-                }
-            }
-            catch (Exception)
-            {
-                throw new Exception("Erreur lors de la récupération du nombre d'abonnements attente");
-            }
-
-            return result;
-        }
-
-
-        public List<Dictionary<string, object>> CountNbrAbonnementExpirePerUser()
-        {
-            var result = new List<Dictionary<string, object>>();
-            
-            try
-            {
-                using (var connection = new MySqlConnection(_connectionString))
-                {
-                    connection.Open();
-                    string query = @"
-                        SELECT 
-                            u.username AS user,
-                            COUNT(a.abonnement_id) AS expire
-                        FROM users u
-                        LEFT JOIN abonnements a ON u.id = a.idfournisseur
-                        WHERE a.expiration_date < NOW() AND u.role = 'user'
-                        GROUP BY u.id, u.username
-                        ORDER BY expire DESC";
-
-                    using (var command = new MySqlCommand(query, connection))
-                    {
-                        using (var reader = command.ExecuteReader())
-                        {
-                            while (reader.Read())
-                            {
-                                var userData = new Dictionary<string, object>
-                                {
-                                    { "user", reader["user"].ToString() },
-                                    { "expire", Convert.ToInt32(reader["expire"]) }
-                                };
-                                result.Add(userData);
-                            }
-                        }
-                    }
-                }
-            }
-            catch (Exception)
-            {
-                throw new Exception("Erreur lors de la récupération du nombre d'abonnements expire");
-            }
-
-            return result;
+            return (actifs, expire);
         }
 
     }

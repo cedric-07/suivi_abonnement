@@ -38,11 +38,8 @@ namespace suivi_abonnement.Service.Interface
         List<VAbonnementClient> getAbonnementsExpiredOnWeekClient();
 
         List<Abonnement> GetNbrAbonnementPerFournisseur();
-        public List<Dictionary<string, object>> CountNbrAbonnementExpirePerUser();
-        public List<Dictionary<string, object>> CountNbrAbonnementActifPerUser();
-        public List<Dictionary<string, object>> CountNbrAbonnementAttentePerUser();
 
-
+        (int Actifs , int Expire) CompareAbonnementStatus();
 
     }
 }
