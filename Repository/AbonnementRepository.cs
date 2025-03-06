@@ -136,6 +136,68 @@ namespace suivi_abonnement.Repository
             }
             return newAbonnement;
         }
+
+        // public Abonnement SaveAbonnement(Abonnement newAbonnement)
+        // {
+        //     try
+        //     {
+        //         using (var connection = new MySqlConnection(_connectionString))
+        //         {
+        //             connection.Open();
+
+        //             // Vérifier si le département a déjà une direction associée
+        //             string checkDirectionQuery = "SELECT direction_id FROM departements WHERE departement_id = @departement_id";
+        //             int existingDirectionId = 0;
+        //             using (var checkCommand = new MySqlCommand(checkDirectionQuery, connection))
+        //             {
+        //                 checkCommand.Parameters.AddWithValue("@departement_id", newAbonnement.idDepartement);
+        //                 var result = checkCommand.ExecuteScalar();
+        //                 if (result != null && result != DBNull.Value)
+        //                 {
+        //                     existingDirectionId = Convert.ToInt32(result);
+        //                 }
+        //             }
+
+        //             // Si la direction n'est pas définie, mettre à jour le département avec la bonne direction
+        //             if (existingDirectionId == 0 && newAbonnement.idDirection > 0)
+        //             {
+        //                 string updateDirectionQuery = "UPDATE departements SET direction_id = @direction_id WHERE departement_id = @departement_id";
+        //                 using (var updateCommand = new MySqlCommand(updateDirectionQuery, connection))
+        //                 {
+        //                     updateCommand.Parameters.AddWithValue("@direction_id", newAbonnement.idDirection);
+        //                     updateCommand.Parameters.AddWithValue("@departement_id", newAbonnement.idDepartement);
+        //                     updateCommand.ExecuteNonQuery();
+        //                 }
+        //             }
+
+        //             // Insérer l'abonnement
+        //             string query = @"
+        //                 INSERT INTO abonnements (nom, description, prix, date_debut, expiration_date, type, idfournisseur, idcategorie, departement_id)
+        //                 VALUES (@nom, @description, @prix, @date_debut, @expiration_date, @type, @idfournisseur, @idcategorie, @departement_id)";
+                    
+        //             using (var command = new MySqlCommand(query, connection))
+        //             {
+        //                 command.Parameters.AddWithValue("@nom", newAbonnement.Nom);
+        //                 command.Parameters.AddWithValue("@description", newAbonnement.Description);
+        //                 command.Parameters.AddWithValue("@prix", newAbonnement.Prix);
+        //                 command.Parameters.AddWithValue("@date_debut", newAbonnement.DateDebut);
+        //                 command.Parameters.AddWithValue("@expiration_date", newAbonnement.ExpirationDate);
+        //                 command.Parameters.AddWithValue("@type", newAbonnement.Type);
+        //                 command.Parameters.AddWithValue("@idfournisseur", newAbonnement.idfournisseur);
+        //                 command.Parameters.AddWithValue("@idcategorie", newAbonnement.idcategorie);
+        //                 command.Parameters.AddWithValue("@departement_id", newAbonnement.idDepartement);
+        //                 command.ExecuteNonQuery();
+        //             }
+
+        //             connection.Close();
+        //         }
+        //     }
+        //     catch (Exception ex)
+        //     {
+        //         Console.WriteLine(ex.Message);
+        //     }
+        //     return newAbonnement;
+        // }
         public Abonnement GetAbonnementById(int id)
         {
             Abonnement abonnement = new Abonnement(); // Initialisation à un nouvel objet Abonnement pour éviter les valeurs nulles.
@@ -1521,11 +1583,11 @@ namespace suivi_abonnement.Repository
             return abonnements;
         }
 
-        public (int Actifs, int Expire) CompareAbonnementStatus()
+        public (int Actifs, int Expire, int Attente) CompareAbonnementStatus()
         {
             int actifs = 0;
             int expire = 0;
-
+            int attente = 0;
             try
             {
                 using (var connection = new MySqlConnection(_connectionString))
@@ -1534,7 +1596,8 @@ namespace suivi_abonnement.Repository
                     string query = @"
                         SELECT
                             SUM(CASE WHEN expiration_date >= NOW() THEN 1 ELSE 0 END) AS actifs,
-                            SUM(CASE WHEN expiration_date < NOW() THEN 1 ELSE 0 END) AS expire
+                            SUM(CASE WHEN expiration_date < NOW() THEN 1 ELSE 0 END) AS expire,
+                            SUM(CASE WHEN date_debut > NOW() THEN 1 ELSE 0 END) AS attente
                         FROM abonnements";
                     
                     using (var command = new MySqlCommand(query, connection))
@@ -1555,7 +1618,7 @@ namespace suivi_abonnement.Repository
             {
                 throw new Exception(ex.Message);
             }
-            return (actifs, expire);
+            return (actifs, expire, attente);
         }
 
     }

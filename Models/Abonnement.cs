@@ -19,5 +19,6 @@ namespace suivi_abonnement.Models
         public int idDepartement { get; set; }
         public string? NomDepartement { get; set; }
         public int NbrAbonnements { get; set; }
+        public int idDirection { get; set; }
     }
 }

@@ -13,8 +13,11 @@ namespace suivi_abonnement.Service.Interface
         User GetUserById(int id);
         List<User> GetAdmin();
         void Logout(int userId);   
-        string GetUserEmail(int userId); 
-        
+        string GetUserEmail(int userId);
+        List<Dictionary<string, object>> GetLastinsertedUser();
+        User GetUserByEmailOrUsername(string email, string username);
+
+
 
     }
 }

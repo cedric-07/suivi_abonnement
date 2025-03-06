@@ -136,7 +136,7 @@ namespace suivi_abonnement.Service
         {
             return _abonnementRepository.GetNbrAbonnementPerFournisseur();
         }
-        public (int Actifs , int Expire) CompareAbonnementStatus()
+        public (int Actifs , int Expire, int Attente) CompareAbonnementStatus()
         {
             return _abonnementRepository.CompareAbonnementStatus();
         }

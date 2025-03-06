@@ -22,9 +22,13 @@ namespace suivi_abonnement.Service
         {
             _notificationRepository.SendNotificationByRoleUser();
         }
-        public void CreateNotification(int userId, int abonnementId, string message , string type)
+        //public void CreateNotification(int userId, int abonnementId, string message , string type)
+        //{
+        //     _notificationRepository.CreateNotification(userId, abonnementId, message , type);
+        //}
+        public void CreateNotification(int userId, int abonnementId, string message, string type, int joursRestants)
         {
-             _notificationRepository.CreateNotification(userId, abonnementId, message , type);
+            _notificationRepository.CreateNotification(userId, abonnementId, message, type, joursRestants);
         }
         public List<Notification> GetNotificationsForAdmin()
         {

@@ -60,8 +60,136 @@ namespace suivi_abonnement.Service
             }
         }
 
-        
 
+
+        //public void SendNotificationByRoleAdmin()
+        //{
+        //    try
+        //    {
+        //        using (var connection = new MySqlConnection(connectionString))
+        //        {
+        //            connection.Open();
+        //            string query = @"
+        //                            SELECT 
+        //                                a.abonnement_id, 
+        //                                a.nom, 
+        //                                u.id AS iduser, 
+        //                                u.username, 
+        //                                u.email, 
+        //                                DATEDIFF(a.expiration_date, CURDATE()) AS jours_restants 
+        //                            FROM abonnements a
+        //                            JOIN users u ON u.role = 'admin'  -- Suppression de 'u.id = a.user_id'
+        //                            WHERE a.expiration_date >= CURDATE()";
+        //            using (var command = new MySqlCommand(query, connection))
+        //            {
+        //                using (var reader = command.ExecuteReader())
+        //                {
+        //                    while (reader.Read())
+        //                    {
+        //                        int userId = reader.GetInt32("iduser");
+        //                        int abonnementId = reader.GetInt32("abonnement_id");
+        //                        int joursRestants = reader.GetInt32("jours_restants");
+        //                        string nomAbonnement = reader.GetString("nom");
+        //                        string nomClient = reader.GetString("username");
+        //                        string emailClient = reader.GetString("email");
+
+        //                        if (joursRestants >= 15 && joursRestants <= 30)
+        //                        {
+        //                            string type = "Rappel";
+        //                            string message = type + " : L'abonnement " + nomAbonnement + " va expirer dans " + joursRestants + " jours";
+        //                            CreateNotification(userId, abonnementId, message, type);
+        //                        }
+        //                        else if (joursRestants <= 7)
+        //                        {
+        //                            string type = "Alerte";
+        //                            string message = type + " : L'abonnement " + nomAbonnement + " va expirer dans " + joursRestants + " jours";
+        //                            CreateNotification(userId, abonnementId, message, type);
+        //                        }
+        //                    }
+        //                }
+        //            }
+        //        }
+        //    }
+        //    catch (Exception e)
+        //    {
+        //        throw new Exception("Erreur lors de l'envoi des notifications Admin : " + e.Message);
+        //    }
+        //}
+
+        // public void SendNotificationByRoleAdmin()
+        // {
+        //     try
+        //     {
+        //         using (var connection = new MySqlConnection(connectionString))
+        //         {
+        //             connection.Open();
+        //             // string query = @"
+        //             //         SELECT 
+        //             //             a.abonnement_id, 
+        //             //             a.nom, 
+        //             //             u.id AS iduser, 
+        //             //             u.username, 
+        //             //             u.email, 
+        //             //             DATEDIFF(a.expiration_date, CURDATE()) AS jours_restants 
+        //             //         FROM abonnements a
+        //             //         JOIN users u ON u.role = 'admin'  
+        //             //         WHERE a.expiration_date >= CURDATE()";
+
+        
+        //             string query = @"
+        //                             SELECT 
+        //                                 a.abonnement_id, 
+        //                                 a.nom, 
+        //                                 u.id AS iduser, 
+        //                                 u.username, 
+        //                                 u.email, 
+        //                                 DATEDIFF(a.expiration_date, CURDATE()) AS jours_restants 
+        //                             FROM abonnements a
+        //                             JOIN users u ON LOWER(u.role) = 'admin'  
+        //                             WHERE a.expiration_date >= CURDATE()
+        //                             AND a.expiration_date >= DATE_FORMAT(CURDATE(), '%Y-%m-01')";
+
+
+        //             using (var command = new MySqlCommand(query, connection))
+        //             {
+        //                 using (var reader = command.ExecuteReader())
+        //                 {
+        //                     while (reader.Read())
+        //                     {
+        //                         int userId = reader.GetInt32("iduser");
+        //                         int abonnementId = reader.GetInt32("abonnement_id");
+        //                         int joursRestants = reader.GetInt32("jours_restants");
+        //                         string nomAbonnement = reader.GetString("nom");
+
+        //                         if (joursRestants >= 15 && joursRestants <= 30)
+        //                         {
+        //                             string type = "Rappel";
+        //                             string message = type + " : L'abonnement " + nomAbonnement + " va expirer dans " + joursRestants + " jours";
+        //                             CreateNotification(userId, abonnementId, message, type, joursRestants);
+        //                         }
+        //                         else if (joursRestants <= 7)
+        //                         {
+        //                             string type = "Alerte";
+        //                             string message = type + " : L'abonnement " + nomAbonnement + " va expirer dans " + joursRestants + " jours";
+        //                             CreateNotification(userId, abonnementId, message, type, joursRestants);
+        //                         }
+        //                         else if (joursRestants == 0)
+        //                         {
+        //                             string type = "Alerte";
+        //                             string message = type + " : L'abonnement " + nomAbonnement + " expire aujourd'hui";
+        //                             CreateNotification(userId, abonnementId, message, type, joursRestants);
+        //                         }
+                                
+        //                     }
+        //                 }
+        //             }
+        //         }
+        //     }
+        //     catch (Exception e)
+        //     {
+        //         throw new Exception("Erreur lors de l'envoi des notifications Admin : " + e.Message);
+        //     }
+        // }
         public void SendNotificationByRoleAdmin()
         {
             try
@@ -70,16 +198,17 @@ namespace suivi_abonnement.Service
                 {
                     connection.Open();
                     string query = @"
-                                    SELECT 
-                                        a.abonnement_id, 
-                                        a.nom, 
-                                        u.id AS iduser, 
-                                        u.username, 
-                                        u.email, 
-                                        DATEDIFF(a.expiration_date, CURDATE()) AS jours_restants 
-                                    FROM abonnements a
-                                    JOIN users u ON u.role = 'admin'  -- Suppression de 'u.id = a.user_id'
-                                    WHERE a.expiration_date >= CURDATE()";
+                        SELECT 
+                            a.abonnement_id, 
+                            a.nom, 
+                            u.id AS iduser, 
+                            u.username, 
+                            u.email, 
+                            DATEDIFF(a.expiration_date, CURDATE()) AS jours_restants 
+                        FROM abonnements a
+                        JOIN users u ON LOWER(u.role) = 'admin'  
+                        ORDER BY a.expiration_date";
+
                     using (var command = new MySqlCommand(query, connection))
                     {
                         using (var reader = command.ExecuteReader())
@@ -90,20 +219,34 @@ namespace suivi_abonnement.Service
                                 int abonnementId = reader.GetInt32("abonnement_id");
                                 int joursRestants = reader.GetInt32("jours_restants");
                                 string nomAbonnement = reader.GetString("nom");
-                                string nomClient = reader.GetString("username");
-                                string emailClient = reader.GetString("email");
 
+                                // 🔵 Expiration Proche (15 à 30 jours)
                                 if (joursRestants >= 15 && joursRestants <= 30)
                                 {
                                     string type = "Rappel";
-                                    string message = type + " : L'abonnement " + nomAbonnement + " va expirer dans " + joursRestants + " jours";
-                                    CreateNotification(userId, abonnementId, message, type);
+                                    string message = $"{type} : {nomAbonnement} expire dans {joursRestants} jours.";
+                                    CreateNotification(userId, abonnementId, message, type , joursRestants);
                                 }
-                                else if (joursRestants <= 7)
+                                // 🟠 Expiration Très Bientôt (7 jours ou moins)
+                                else if (joursRestants <= 7 && joursRestants > 0)
                                 {
                                     string type = "Alerte";
-                                    string message = type + " : L'abonnement " + nomAbonnement + " va expirer dans " + joursRestants + " jours";
-                                    CreateNotification(userId, abonnementId, message, type);
+                                    string message = $"{type} : {nomAbonnement} expire dans {joursRestants} jours.";
+                                    CreateNotification(userId, abonnementId, message, type, joursRestants);
+                                }
+                                // 🔴 Expire Aujourd’hui
+                                else if (joursRestants == 0)
+                                {
+                                    string type = "Urgent";
+                                    string message = $"{type} : {nomAbonnement} expire aujourd'hui !";
+                                    CreateNotification(userId, abonnementId, message, type, joursRestants);
+                                }
+                                // ❌ Déjà Expiré
+                                else if (joursRestants < 0)
+                                {
+                                    string type = "Expiration";
+                                    string message = $"{type} : {nomAbonnement} est expiré depuis {Math.Abs(joursRestants)} jours.";
+                                    CreateNotification(userId, abonnementId, message, type, joursRestants);
                                 }
                             }
                         }
@@ -112,10 +255,59 @@ namespace suivi_abonnement.Service
             }
             catch (Exception e)
             {
-                throw new Exception("Erreur lors de l'envoi des notifications Admin : " + e.Message);
+                Console.WriteLine("Erreur lors de l'envoi des notifications Admin : " + e.Message);
             }
         }
 
+
+
+
+        //public void SendNotificationByRoleUser()
+        //{
+        //    try
+        //    {
+        //        using (var connection = new MySqlConnection(connectionString))
+        //        {
+        //            connection.Open();
+
+        //            string query = @"SELECT idclient , abonnement_id , nomabonnement , nomclient , emailclient , idclient , DATEDIFF(expiration_date, CURDATE()) AS jours_restants FROM v_abonnements_par_client WHERE roleclient = 'user' AND expiration_date >= CURDATE()";
+
+        //            using (var command = new MySqlCommand(query, connection))
+        //            {
+        //                using (var reader = command.ExecuteReader())
+        //                {
+        //                    while (reader.Read())
+        //                    {
+        //                        int userId = reader.GetInt32("idclient");
+        //                        int abonnementId = reader.GetInt32("abonnement_id");
+        //                        int joursRestants = reader.GetInt32("jours_restants");
+        //                        string nomAbonnement = reader.GetString("nomabonnement");
+        //                        string nomClient = reader.GetString("nomclient");
+        //                        string emailClient = reader.GetString("emailclient");
+
+        //                        if (joursRestants >= 15 && joursRestants <= 30)
+        //                        {
+        //                            string type = "Rappel";
+        //                            string message = type + " : Votre abonnement " + nomAbonnement + " va expirer dans " + joursRestants + " jours";
+        //                            CreateNotification(userId, abonnementId, message, type);
+        //                        }
+        //                        else if (joursRestants <= 7)
+        //                        {
+        //                            string type = "Alerte";
+        //                            string message = type + " : Votre abonnement " + nomAbonnement + " va expirer dans " + joursRestants + " jours";
+        //                            CreateNotification(userId, abonnementId, message, type);
+        //                        }
+        //                    }
+        //                }
+        //            }
+
+        //        }
+        //    }
+        //    catch (Exception e)
+        //    {
+        //        throw new Exception("Erreur lors de l'envoi des notifications User : " + e.Message);
+        //    }
+        //}
 
         public void SendNotificationByRoleUser()
         {
@@ -124,8 +316,15 @@ namespace suivi_abonnement.Service
                 using (var connection = new MySqlConnection(connectionString))
                 {
                     connection.Open();
-
-                    string query = @"SELECT idclient , abonnement_id , nomabonnement , nomclient , emailclient , idclient , DATEDIFF(expiration_date, CURDATE()) AS jours_restants FROM v_abonnements_par_client WHERE roleclient = 'user' AND expiration_date >= CURDATE()";
+                    // string query = @"SELECT idclient , abonnement_id , nomabonnement , nomclient , emailclient , idclient , DATEDIFF(expiration_date, CURDATE()) AS jours_restants FROM v_abonnements_par_client WHERE roleclient = 'user' AND expiration_date >= CURDATE()";
+                    // string query = @"
+                    //                 SELECT idclient, abonnement_id, nomabonnement, nomclient, emailclient, idclient, 
+                    //                     DATEDIFF(expiration_date, CURDATE()) AS jours_restants 
+                    //                 FROM v_abonnements_par_client 
+                    //                 WHERE roleclient = 'user' 
+                    //                 AND expiration_date >= CURDATE()
+                    //                 AND expiration_date >= DATE_FORMAT(CURDATE(), '%Y-%m-01')";
+                    string query = @"SELECT idclient , abonnement_id , nomabonnement , nomclient , emailclient , idclient , DATEDIFF(expiration_date, CURDATE()) AS jours_restants FROM v_abonnements_par_client WHERE roleclient = 'user' ORDER BY expiration_date";
 
                     using (var command = new MySqlCommand(query, connection))
                     {
@@ -137,25 +336,29 @@ namespace suivi_abonnement.Service
                                 int abonnementId = reader.GetInt32("abonnement_id");
                                 int joursRestants = reader.GetInt32("jours_restants");
                                 string nomAbonnement = reader.GetString("nomabonnement");
-                                string nomClient = reader.GetString("nomclient");
-                                string emailClient = reader.GetString("emailclient");
 
                                 if (joursRestants >= 15 && joursRestants <= 30)
                                 {
                                     string type = "Rappel";
-                                    string message = type + " : Votre abonnement " + nomAbonnement + " va expirer dans " + joursRestants + " jours";
-                                    CreateNotification(userId, abonnementId, message, type);
+                                    string message = type + " : L'abonnement " + nomAbonnement + " va expirer dans " + joursRestants + " jours";
+                                    CreateNotification(userId, abonnementId, message, type, joursRestants);
                                 }
                                 else if (joursRestants <= 7)
                                 {
                                     string type = "Alerte";
-                                    string message = type + " : Votre abonnement " + nomAbonnement + " va expirer dans " + joursRestants + " jours";
-                                    CreateNotification(userId, abonnementId, message, type);
+                                    string message = type + " : L'abonnement " + nomAbonnement + " va expirer dans " + joursRestants + " jours";
+                                    CreateNotification(userId, abonnementId, message, type, joursRestants);
                                 }
+                                else if(joursRestants == 0)
+                                {
+                                    string type = "Alerte";
+                                    string message = type + " : L'abonnement " + nomAbonnement + " expire aujourd'hui";
+                                    CreateNotification(userId, abonnementId, message, type, joursRestants);
+                                }
+                                
                             }
                         }
                     }
-
                 }
             }
             catch (Exception e)
@@ -164,55 +367,117 @@ namespace suivi_abonnement.Service
             }
         }
 
-            public void CreateNotification(int userId, int abonnementId, string message, string type)
+        //public void CreateNotification(int userId, int abonnementId, string message, string type)
+        //{
+        //    try
+        //    {
+        //        using (var connection = new MySqlConnection(connectionString))
+        //        {
+        //            connection.Open();
+
+        //            string checkAbonnementIsExist = "SELECT COUNT(*) FROM notifications WHERE idabonnement = @idabonnement AND iduser = @iduser";
+        //            using (var checkcommand = new MySqlCommand(checkAbonnementIsExist, connection))
+        //            {
+        //                checkcommand.Parameters.AddWithValue("@idabonnement", abonnementId);
+        //                checkcommand.Parameters.AddWithValue("@iduser", userId);
+
+        //                int existingCount = Convert.ToInt32(checkcommand.ExecuteScalar());
+
+        //                if (existingCount > 0)
+        //                {
+        //                    return;
+        //                }
+        //            }
+
+        //            string insertquery = "INSERT INTO notifications (message, type, status, idabonnement, iduser, created_at) " +
+        //                                "VALUES (@message, @type, 'non lu', @idabonnement, @iduser, NOW())";
+
+        //            using (var command = new MySqlCommand(insertquery, connection))
+        //            {
+        //                command.Parameters.AddWithValue("@message", message);
+        //                command.Parameters.AddWithValue("@type", type);
+        //                command.Parameters.AddWithValue("@idabonnement", abonnementId);
+        //                command.Parameters.AddWithValue("@iduser", userId);
+        //                command.ExecuteNonQuery();
+        //            }
+        //        }
+
+        //        // 🔥 Envoyer la notification en temps réel après l'insertion dans la base de données
+        //        var notificationCount = GetUnreadNotificationCount(userId);
+        //        _hubContext.Clients.User(userId.ToString()).SendAsync("ReceiveNotification", message, notificationCount);
+        //        Console.WriteLine($"📨 Notification en temps réel envoyée à {userId}");
+
+
+
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        Console.WriteLine($"❌ Erreur lors de la création de la notification : {ex.Message}");
+        //    }
+        //}
+
+        public void CreateNotification(int userId, int abonnementId, string message, string type, int joursRestants)
+        {
+            try
             {
-                try
+                using (var connection = new MySqlConnection(connectionString))
                 {
-                    using (var connection = new MySqlConnection(connectionString))
+                    connection.Open();
+
+                    // Vérifier si une notification existe déjà aujourd'hui pour cet abonnement
+                    string checkNotificationExist = "SELECT COUNT(*) FROM notifications WHERE idabonnement = @idabonnement AND iduser = @iduser AND DATE(created_at) = CURDATE()";
+
+                    using (var checkCommand = new MySqlCommand(checkNotificationExist, connection))
                     {
-                        connection.Open();
+                        checkCommand.Parameters.AddWithValue("@idabonnement", abonnementId);
+                        checkCommand.Parameters.AddWithValue("@iduser", userId);
 
-                        string checkAbonnementIsExist = "SELECT COUNT(*) FROM notifications WHERE idabonnement = @idabonnement AND iduser = @iduser";
-                        using (var checkcommand = new MySqlCommand(checkAbonnementIsExist, connection))
+                        int existingCount = Convert.ToInt32(checkCommand.ExecuteScalar());
+
+                        if (existingCount > 0)
                         {
-                            checkcommand.Parameters.AddWithValue("@idabonnement", abonnementId);
-                            checkcommand.Parameters.AddWithValue("@iduser", userId);
+                            // 🔄 Mettre à jour la notification existante pour refléter le nouveau nombre de jours restants
+                            string updateQuery = "UPDATE notifications SET message = @message, created_at = NOW() WHERE idabonnement = @idabonnement AND iduser = @iduser AND DATE(created_at) = CURDATE()";
 
-                            int existingCount = Convert.ToInt32(checkcommand.ExecuteScalar());
-
-                            if (existingCount > 0)
+                            using (var updateCommand = new MySqlCommand(updateQuery, connection))
                             {
-                                return;
+                                updateCommand.Parameters.AddWithValue("@message", message);
+                                updateCommand.Parameters.AddWithValue("@idabonnement", abonnementId);
+                                updateCommand.Parameters.AddWithValue("@iduser", userId);
+                                updateCommand.ExecuteNonQuery();
                             }
                         }
-
-                        string insertquery = "INSERT INTO notifications (message, type, status, idabonnement, iduser, created_at) " +
-                                            "VALUES (@message, @type, 'non lu', @idabonnement, @iduser, NOW())";
-
-                        using (var command = new MySqlCommand(insertquery, connection))
+                        else
                         {
-                            command.Parameters.AddWithValue("@message", message);
-                            command.Parameters.AddWithValue("@type", type);
-                            command.Parameters.AddWithValue("@idabonnement", abonnementId);
-                            command.Parameters.AddWithValue("@iduser", userId);
-                            command.ExecuteNonQuery();
+                            // 🆕 Insérer une nouvelle notification
+                            string insertQuery = "INSERT INTO notifications (message, type, status, idabonnement, iduser, created_at) " +
+                                                "VALUES (@message, @type, 'non lu', @idabonnement, @iduser, NOW())";
+
+                            using (var insertCommand = new MySqlCommand(insertQuery, connection))
+                            {
+                                insertCommand.Parameters.AddWithValue("@message", message);
+                                insertCommand.Parameters.AddWithValue("@type", type);
+                                insertCommand.Parameters.AddWithValue("@idabonnement", abonnementId);
+                                insertCommand.Parameters.AddWithValue("@iduser", userId);
+                                insertCommand.ExecuteNonQuery();
+                            }
                         }
                     }
-
-                    // 🔥 Envoyer la notification en temps réel après l'insertion dans la base de données
-                    var notificationCount = GetUnreadNotificationCount(userId);
-                    _hubContext.Clients.User(userId.ToString()).SendAsync("ReceiveNotification", message, notificationCount);
-                    Console.WriteLine($"📨 Notification en temps réel envoyée à {userId}");
-
-                    
-
                 }
-                catch (Exception ex)
-                {
-                    Console.WriteLine($"❌ Erreur lors de la création de la notification : {ex.Message}");
-                }
+
+                // 🔥 Envoyer la notification en temps réel
+                var notificationCount = GetUnreadNotificationCount(userId);
+                _hubContext.Clients.User(userId.ToString()).SendAsync("ReceiveNotification", message, notificationCount);
+                Console.WriteLine($"📨 Notification mise à jour/enregistrée pour {userId} : {message}");
+
             }
-            private int GetUnreadNotificationCount(int userId)
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        private int GetUnreadNotificationCount(int userId)
             {
                 using (var connection = new MySqlConnection(connectionString))
                 {
@@ -268,11 +533,6 @@ namespace suivi_abonnement.Service
             return notifications;
 
         }
-        
-
-
-
-
 
         public List<Notification> GetNotificationsForClient()
         {
@@ -414,18 +674,48 @@ namespace suivi_abonnement.Service
             return notification;
         }
 
-        protected async Task ExecuteAsync(CancellationToken stoppingToken)
+        //protected async Task ExecuteAsync(CancellationToken stoppingToken)
+        //{
+        //    while (!stoppingToken.IsCancellationRequested)
+        //    {
+        //        using (var scope = _serviceProvider.CreateScope())
+        //        {
+        //            var notificationRepo = scope.ServiceProvider.GetRequiredService<NotificationRepository>();
+        //        }
+
+        //        // Attendre 24h avant la prochaine exécution
+        //        await Task.Delay(TimeSpan.FromDays(1), stoppingToken);
+        //    }
+        //}
+
+        
+        protected  async Task ExecuteAsync(CancellationToken stoppingToken)
         {
             while (!stoppingToken.IsCancellationRequested)
             {
                 using (var scope = _serviceProvider.CreateScope())
                 {
                     var notificationRepo = scope.ServiceProvider.GetRequiredService<NotificationRepository>();
+
+                    try
+                    {
+                        Console.WriteLine("🔔 Exécution de la vérification des abonnements...");
+
+                        // Appel de la méthode qui envoie les notifications
+                        notificationRepo.SendNotification();
+
+                        Console.WriteLine("✅ Notifications envoyées !");
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine($"❌ Erreur lors de l'envoi des notifications : {ex.Message}");
+                    }
                 }
 
-                // Attendre 24h avant la prochaine exécution
+                // Attendre 24 heures avant la prochaine exécution
                 await Task.Delay(TimeSpan.FromDays(1), stoppingToken);
             }
         }
+
     }
 }

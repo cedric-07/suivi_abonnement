@@ -81,7 +81,7 @@
                         <th class="text-uppercase">Fournisseur</th>
                         <th class="text-uppercase">Email</th>
                         <th class="text-uppercase">Téléphone</th>
-                        <th class="text-uppercase">Actions</th>
+                        @* <th class="text-uppercase">Actions</th> *@
                     </tr>
                 </thead>
                 <tbody>
@@ -94,12 +94,12 @@
                                 <td>@fournisseur.Nom</td>
                                 <td>@fournisseur.Email</td>
                                 <td>@fournisseur.Telephone</td>
-                                <td>
-                                        <span class="action-icons">
-                                            <i class="fas fa-edit edit" title="Modifier" data-bs-toggle="modal" data-bs-target="#modalEdit-@fournisseur.Id"></i>
-                                            <i class="fas fa-trash delete" title="Supprimer" data-bs-toggle="modal" data-bs-target="#modalDelete-@fournisseur.Id"></i>
-                                        </span>
-                                    </td>
+                                @* <td> *@
+                                @*         <span class="action-icons"> *@
+                                @*             <i class="fas fa-edit edit" title="Modifier" data-bs-toggle="modal" data-bs-target="#modalEdit-@fournisseur.Id"></i> *@
+                                @*             <i class="fas fa-trash delete" title="Supprimer" data-bs-toggle="modal" data-bs-target="#modalDelete-@fournisseur.Id"></i> *@
+                                @*         </span> *@
+                                @*     </td> *@
                             </tr>
                         }
                     }

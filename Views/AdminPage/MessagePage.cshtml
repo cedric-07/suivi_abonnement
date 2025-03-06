@@ -229,7 +229,7 @@
             font-size: 10px;
             color: #007bff;
             text-decoration: none;
-            font-weight: sm all;
+            font-weight: normal;
         }
 
         .file-name:hover {
@@ -333,29 +333,28 @@
                         <input type="text" id="searchUser" class="form-control" placeholder="Rechercher un utilisateur...">
                     </div>
                 </form>
-                <ul id="userResults" class="list-group">
-                    @if (Model?.Users != null)
-                    {
+                 @if (Model?.Users != null)
+                 {
+                    <ul id="userResults" class="list-group">
+                   
                     
-                        @foreach (var user in Model.Users)
-                        {
-                            <li class="list-group-item d-flex align-items-center" onclick="selectUser(@user.Id, '@user.Username')">
-                                <div class="me-3">
-                                    <i class="fas fa-user-circle fa-2x"></i>
-                                </div>
-                                <span>@user.Username</span>
-                                <span class="user-status @(user.IsConnected ? "online" : "offline")"></span>
-                                <span id="notif-@user.Id" class="badge bg-danger ms-auto d-none"></span>
-                            </li>
-                        }
-                    }
-                    else
-                    {
-                        <p>Aucun utilisateur trouvé.</p>
-                    }
-                </ul>
-
-
+                            @foreach (var user in Model.Users)
+                            {
+                                <li class="list-group-item d-flex align-items-center" onclick="selectUser(@user.Id, '@user.Username')">
+                                    <div class="me-3">
+                                        <i class="fas fa-user-circle fa-2x"></i>
+                                    </div>
+                                    <span>@user.Username</span>
+                                    <span class="user-status @(user.IsConnected ? "online" : "offline")"></span>
+                                    <span id="notif-@user.Id" class="badge bg-danger ms-auto d-none"></span>
+                                </li>
+                            }
+                    </ul>
+                 }
+                 else
+                 {
+                    <p>Aucun utilisateur trouvé</p>
+                 }
             </div>
             <div class="chat-box">
                 <div class="chat-header">
@@ -753,7 +752,7 @@
         console.log("🔄 Ouverture de la conversation avec :", receiverId);
 
         $("#receiverId").val(receiverId);
-        $("#chatTitle").text("Discution avec " + receiverName);
+        $("#chatTitle").text("Discussion avec " + receiverName);
         $("#chatWindow").empty();
 
         var notifBadge = $("#notif-" + receiverId);

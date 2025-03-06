@@ -37,7 +37,7 @@ namespace suivi_abonnement.Repository.Interface
         List<Abonnement> getAbonnementsExpiredOnWeek();
         List<VAbonnementClient> getAbonnementsExpiredOnWeekClient();
         List<Abonnement> GetNbrAbonnementPerFournisseur();
-        (int Actifs , int Expire) CompareAbonnementStatus();
+        (int Actifs , int Expire, int Attente) CompareAbonnementStatus();
 
     }
 }

@@ -46,5 +46,35 @@ namespace suivi_abonnement.Repository
             return departements;
         }
 
+        public List<Departement> GetDepartementsByDirection(int idDirection)
+{
+    List<Departement> departements = new List<Departement>();
+
+    using (MySqlConnection conn = new MySqlConnection(connectionString))
+    {
+        conn.Open();
+        string query = "SELECT departement_id, nom FROM departements WHERE iddirection = @DirectionId";
+        
+        using (MySqlCommand cmd = new MySqlCommand(query, conn))
+        {
+            cmd.Parameters.AddWithValue("@DirectionId", idDirection);
+            using (MySqlDataReader reader = cmd.ExecuteReader())
+            {
+                while (reader.Read())
+                {
+                    departements.Add(new Departement
+                    {
+                        Id = reader.GetInt32(0),
+                        Nom = reader.GetString(1)
+                    });
+                }
+            }
+        }
+    }
+    
+    return departements;
+}
+
+
     }
 }

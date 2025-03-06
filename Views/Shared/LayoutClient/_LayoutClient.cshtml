@@ -48,7 +48,7 @@
       background: linear-gradient(to left, #0d2d5a, #d4d5dd) !important;
     }
 
-    #navmenu ul li a.notification .badge {
+    #navmenu  a.notification .badge {
         background-color: red;
         color: white;
         padding: 3px 7px;
@@ -59,20 +59,27 @@
         font-size: 12px;
     }
 
-    #navmenu ul li a.logout {
+    #navmenu  a.logout {
         color: #f44336; /* Rouge pour déconnexion */
         font-weight: bold;
     }
 
-    #navmenu ul li a:hover {
-        color: #4adb11; /* Couleur d'effet de survol */
-    }
     .logo-custom {
         max-width: 100px !important;
         max-height: 100px !important;
         margin-left: 30px !important;
     }
-  
+
+   .link a {
+        text-decoration: none; /* Supprime le soulignement */
+        color: #ffffff; /* Couleur du lien */
+        font-weight: bold; /* Texte en gras */
+        transition: color 0.3s ease;
+    }
+
+    .link a:hover {
+        color: #084298; /* Change de couleur au survol */
+    }
 
 
   </style>
@@ -88,12 +95,11 @@
 
         <nav id="navmenu" class="navmenu">
           <ul>
-                <li><a href="@Url.Action("Index", "Home")">Accueil</a></li>
-                <li class="dropdown"><a href="@Url.Action("IndexPage", "Home")"><span>Liste Abonnement</span></a></li>
-                <li><a href="@Url.Action("ContactPage", "Home")">Contact</a></li>
-                <li><a href="@Url.Action("Index", "Message")">Boite Messages</a></li>
+                <li class="link"><a href="@Url.Action("IndexPage", "Home")"><span>Vos abonnements</span></a></li>
+                <li class="link"><a href="@Url.Action("ContactPage", "Home")">Contact</a></li>
+                <li class="link"><a href="@Url.Action("Index", "Message")">Boite Messages</a></li>
                 <!-- Menu déroulant des notifications -->
-                <li class="dropdown">
+                <li class="link dropdown">
                   <a href="#" class="notification" data-bs-toggle="dropdown" aria-expanded="false">
                       <span>Notifications</span>
                       <span id="notifBadge" class="badge" style="display:none;">0</span>
@@ -110,7 +116,7 @@
                   </ul>
                 </li>
 
-                <li><a href="#logoutModal" data-bs-toggle="modal" class="logout">Déconnexion</a></li>
+                <li class="link"><a href="#logoutModal" data-bs-toggle="modal" class="logout">Déconnexion</a></li>
             </ul>
           <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
         </nav>

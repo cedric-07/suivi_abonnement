@@ -135,7 +135,7 @@
     </style>
 </head>
 <body>
-    @* @if (TempData["Notification"] != null && TempData["UserEmail"] != null)
+    @if (TempData["Notification"] != null && TempData["UserEmail"] != null)
     {
         <div class="modal fade" id="notificationModal" tabindex="-1" aria-labelledby="notificationModalLabel" aria-hidden="true">
             <div class="modal-dialog">
@@ -156,7 +156,7 @@
                 </div>
             </div>
         </div>
-    } *@
+    }
 
 
 <div class="container-fluid fade-in visible">
@@ -369,16 +369,17 @@
     document.addEventListener("DOMContentLoaded", function () {
         var nbrAbonnementActif = @Model?.AbonnementStatViewModel?.NbrAbonnementActif;
         var nbrAbonnementExpire = @Model?.AbonnementStatViewModel?.NbrAbonnementExpire;
+        var nbrAbonnementAttente = @Model?.AbonnementStatViewModel?.NbrAbonnementEnAttente;
 
         var ctx3 = document.getElementById('abonnementsChart').getContext('2d');
         var abonnementsChart = new Chart(ctx3, {
             type: 'pie',
             data: {
-                labels: ['Abonnement-Actifs', 'Abonnement-Expirés'],
+                labels: ['Abonnement-Actifs', 'Abonnement-Expirés' , 'Abonnement-Attente'],
                 datasets: [{
-                    data: [nbrAbonnementActif, nbrAbonnementExpire],
-                    backgroundColor: ['#2c3e50', '#e74c3c'], // Bleu foncé pour Actifs, Rouge pour Expirés
-                    borderColor: ['#fff', '#fff'],
+                    data: [nbrAbonnementActif, nbrAbonnementExpire, nbrAbonnementAttente],
+                            backgroundColor: ['#2c3e50', '#e74c3c' , '#808080 '], // Bleu foncé pour Actifs, Rouge pour Expirés
+                    borderColor: ['#fff', '#fff', '#fff'],
                     borderWidth: 2,
                     hoverOffset: 30 // Ajout de l'effet d'agrandissement
                 }]
@@ -413,22 +414,23 @@
 
 
 
-    @* document.addEventListener("DOMContentLoaded", function() {
+     document.addEventListener("DOMContentLoaded", function() {
         var myModal = new bootstrap.Modal(document.getElementById('notificationModal'));
         myModal.show();
-    }); *@
+    }); 
       
 
 </script>
-    @* @functions {
-    public string GetMailProvider(string email)
-    {
-        if (string.IsNullOrEmpty(email)) return "#"; // Empêche erreur si l'email est vide
-        if (email.EndsWith("@gmail.com")) return "https://mail.google.com/mail/u/0/#inbox";
-        if (email.EndsWith("@yahoo.com")) return "https://mail.yahoo.com";
-        if (email.EndsWith("@outlook.com") || email.EndsWith("@hotmail.com")) return "https://outlook.live.com/mail/";
-        return "https://www.google.com/search?q=ouvrir+email"; // Redirige vers Google si inconnu
-    }
-} *@
+     @functions 
+     {
+            public string GetMailProvider(string email)
+            {
+                if (string.IsNullOrEmpty(email)) return "#"; // Empêche erreur si l'email est vide
+                if (email.EndsWith("@gmail.com")) return "https://mail.google.com/mail/u/0/#inbox";
+                if (email.EndsWith("@yahoo.com")) return "https://mail.yahoo.com";
+                if (email.EndsWith("@outlook.com") || email.EndsWith("@hotmail.com")) return "https://outlook.live.com/mail/";
+                return "https://www.google.com/search?q=ouvrir+email"; // Redirige vers Google si inconnu
+            }
+      }
 </body>
 </html>

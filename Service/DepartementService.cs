@@ -17,5 +17,9 @@ namespace suivi_abonnement.Service
         {
             return _departementRepository.getDepartements();
         }
+        public List<Departement> GetDepartementsByDirection(int idDirection)
+        {
+            return _departementRepository.GetDepartementsByDirection(idDirection);
+        }
     }
 }

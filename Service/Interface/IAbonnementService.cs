@@ -39,7 +39,7 @@ namespace suivi_abonnement.Service.Interface
 
         List<Abonnement> GetNbrAbonnementPerFournisseur();
 
-        (int Actifs , int Expire) CompareAbonnementStatus();
+        (int Actifs , int Expire , int Attente) CompareAbonnementStatus();
 
     }
 }

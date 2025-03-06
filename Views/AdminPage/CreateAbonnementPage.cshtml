@@ -148,21 +148,31 @@
                         </select>
                     </div>
                 </div>
-                <div class="row">
+                <div class="row mb-3">
                     <div class="col-md-6">
-                        <label for="idDepartement" class="form-label fw-bold">Département</label>
-                        <select class="form-select input-custom text-muted text-sm" id="idDepartement" name="idDepartement" required>
-                            <option disabled selected hidden>--Choisir un département--</option>
-                            @if (Model?.AbonnementViewModel?.Departements != null)
+                        <label for="idDirection" class="form-label fw-bold">Direction</label>
+                        <select class="form-select input-custom text-muted text-sm" id="idDirection" name="idDirection" required>
+                            <option disabled selected hidden>--Choisir une direction--</option>
+                            @if (Model?.AbonnementViewModel?.Directions != null)
                             {
-                                @foreach (var departement in Model.AbonnementViewModel.Departements)
+                                @foreach (var direction in Model.AbonnementViewModel.Directions)
                                 {
-                                    <option value="@departement.Id">@departement.Nom</option>
+                                    <option value="@direction.Id">@direction.Nom</option>
                                 }
                             }
                         </select>
                     </div>
+
+                    <!-- Section où les départements seront affichés sous forme de checkboxes -->
+                    <div class="col-md-6">
+                        <label class="form-label fw-bold">Départements</label>
+                        <div id="departementsContainer" style="display: none; border: 1px solid #ced4da; padding: 10px; border-radius: 5px;">
+                            <p class="text-muted" id="noDepartementMsg">Veuillez choisir une direction.</p>
+                        </div>
+                    </div>
                 </div>
+
+
 
                 <!-- Bouton d'enregistrement -->
               <div class="text-start mt-4">
@@ -252,7 +262,7 @@
         color: #0d2d5a;
     }
 </style>
-
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         // Ajouter la classe "visible" à toutes les sections du formulaire lorsque la page est chargée
@@ -272,4 +282,39 @@
             errorModal.show();
         }
     });
+
+    $(document).ready(function () {
+        $("#idDirection").change(function () {
+            var directionId = $(this).val();
+            var departementsContainer = $("#departementsContainer");
+            departementsContainer.empty().hide(); // Vider et masquer la section des départements
+
+            if (directionId) {
+                $.ajax({
+                    url: '@Url.Action("GetDepartementsByDirection", "Abonnement")',
+                    type: 'GET',
+                    data: { idDirection: directionId },
+                    success: function (data) {
+                        if (data.message) {
+                            departementsContainer.html("<p class='text-muted'>" + data.message + "</p>").show();
+                        } else if (data.length > 0) {
+                            $.each(data, function (index, item) {
+                                var checkbox = `
+                                    <div class="form-check">
+                                        <input type="checkbox" class="form-check-input" id="departement_${item.id}" name="idDepartement" value="${item.id}">
+                                        <label class="form-check-label" for="departement_${item.id}">${item.nom}</label>
+                                    </div>`;
+                                departementsContainer.append(checkbox);
+                            });
+                            departementsContainer.show();
+                        }
+                    },
+                    error: function () {
+                        departementsContainer.html("<p class='text-danger'>Erreur lors du chargement des départements.</p>").show();
+                    }
+                });
+            }
+        });
+    });
+
 </script>

@@ -2,26 +2,33 @@
     ViewData["Title"] = "Acceuil";
     Layout = "~/Views/Shared/LayoutClient/_LayoutClient.cshtml";
 }
+<!-- Bootstrap Bundle avec Popper.js -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+
+
 <body class="index-page">
-  <main class="main">
-      <!-- Page Title -->
-    <div class="page-title">
-      <div class="heading">
-        <div class="container">
-          <div class="row d-flex justify-content-center text-center">
-            <div class="col-lg-8">
-              <h1>Listes des Abonnements</h1>
-                <p>Retrouvez ici la liste des abonnements disponibles.</p>
+    <main class="main">
+        <!-- Page Title -->
+        <div class="page-title">
+            <div class="heading">
+                <div class="container">
+                    <div class="row d-flex justify-content-center text-center">
+                        <div class="col-lg-8">
+                            <h1>Listes des Abonnements</h1>
+                            <p>Retrouvez ici la liste des abonnements disponibles.</p>
+                        </div>
+                    </div>
+                </div>
             </div>
-          </div>
-        </div>
-      </div>
-    </div><!-- End Page Title -->
-    <!-- Contact Section -->
-    <section id="blog-posts" class="blog-posts section">
-        <div class="container">
-            <div class="row gy-4">
-                <div class="row my-3">
+        </div><!-- End Page Title -->
+        <!-- Contact Section -->
+        <section id="blog-posts" class="blog-posts section">
+            <div class="container">
+                <div class="row gy-4">
+                    <div class="row my-3">
                         <!-- Modal pour le message de succès -->
                         <div class="modal fade" id="successModal" tabindex="-1" aria-labelledby="successModalLabel" aria-hidden="true">
                             <div class="modal-dialog modal-dialog-centered">
@@ -61,242 +68,198 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-4">
-                            <form asp-action="IndexPage" method="get">
-                                <div class="input-group">
-                                    <span class="input-group-text"><i class="bi bi-search"></i></span>
-                                    <input type="text" class="form-control" placeholder="Recherche..." name="keyword">
-                                </div>
-                            </form>
-                        </div>
-
-                        <div class="col-md-4">
-                            <div class="dropdown">
-                                <button class="btn dropdown-toggle text-uppercase fw-bold shadow-sm"
-                                        type="button"
-                                        id="filterDropdown"
-                                        data-bs-toggle="dropdown"
-                                        aria-expanded="false"
-                                        style="background-color: white; color: #0d2d5a; padding: 8px 15px; border: 1px solid #0d2d5a; border-radius: 50px; font-size: 14px;">
-                                    <i class="bi bi-funnel" style="font-size: 1.2rem; margin-right: 8px; color: #0d2d5a;"></i> Filtrer
-                                </button>
-                                <ul class="dropdown-menu p-3 rounded border-0 shadow-lg" aria-labelledby="filterDropdown" style="width: 300px;">
-                                    <form asp-action="IndexPage" method="get">
-                                    <li class="mb-3">
-                                        <label for="dateDebutFilter" class="form-label text-dark fw-bold" style="font-size: 13px;">Date de début</label>
-                                        <input type="datetime-local" class="form-control form-control-sm rounded-pill shadow-sm" id="dateDebutFilter" name="DateDebut" style="font-size: 12px;">
-                                    </li>
-                                    <li class="mb-3">
-                                        <label for="dateExpirationFilter" class="form-label text-dark fw-bold" style="font-size: 13px;">Date d'expiration</label>
-                                        <input type="datetime-local" class="form-control form-control-sm rounded-pill shadow-sm" id="dateExpirationFilter" name="ExpirationDate" style="font-size: 12px;">
-                                    </li>
-                                    <li class="mb-3">
-                                        <label for="categoryFilter" class="form-label text-dark fw-bold" style="font-size: 13px;">Catégorie</label>
-                                        <select class="form-select form-select-sm rounded-pill shadow-sm" id="categoryFilter" name="idcategorie" style="font-size: 12px;">
-                                                @if (Model?.Categories != null)
-                                                {
-                                                    @foreach (var categorie in Model.Categories)
-                                                    {
-                                                    <option value="@categorie.Id">@categorie.Nom</option>
-                                                    }
-                                                }
-                                        </select>
-                                    </li>
-                                    <li class="mb-3">
-                                        <label for="TypeFilter" class="form-label text-dark fw-bold" style="font-size: 13px;">Type</label>
-                                        <select class="form-select form-select-sm rounded-pill shadow-sm" id="TypeFilter" name="type" style="font-size: 12px;">
-                                            <option disabled selected>--Choisir une type--</option>
-                                                @if (Model?.Abonnements != null)
-                                                {
-                                                    @foreach (var abonnement in Model.Abonnements)
-                                                    {
-                                                    <option value="@abonnement.Type">@abonnement.Type</option>
-                                                    }
-                                                }
-                                        </select>
-                                    </li>
-                                    <li>
-                                        <button type="submit" class="btn btn-outline-success w-100 rounded-pill text-uppercase fw-bold" style="font-size: 13px; padding: 8px;">Appliquer</button>
-                                    </li>
-                                    </form>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                <div class="container py-4">
-                    @foreach (var abonnement in Model.Abonnements)
-                    {
-                        <div class="card mb-4 shadow-lg rounded" style="border: none;">
-                            <div class="row g-0">
-                                <!-- Section principale -->
-                                <div class="col-md-4 d-flex align-items-center justify-content-center" style="background-color: #f1f3f5;">
-                                    <div class="text-center p-4">
-                                        <h4 class="text-primary">@abonnement.Nom</h4>
-                                        <h6 class="text-muted">(@abonnement.Type)</h6>
-                                        <p class="fw-bold text-success" style="font-size: 1.5rem;">
-                                            @abonnement.Prix.ToString("N2") Ariary
-                                        </p>
-                                        @if (abonnement.DateDebut > DateTime.Now)
-                                        {
-                                            <span class="badge bg-warning">En attente</span>
-                                        }
-                                        else if (abonnement.ExpirationDate < DateTime.Now)
-                                        {
-                                            <span class="badge bg-danger">Expiré</span>
-                                        }
-                                        else
-                                        {
-                                            <span class="badge bg-success">Actif</span>
-                                        }
+                        <div class="row my-3">
+                            <div class="col-md-4">
+                                <form asp-action="IndexPage" method="get">
+                                    <div class="input-group">
+                                        <span class="input-group-text"><i class="bi bi-search"></i></span>
+                                        <input type="text" class="form-control" placeholder="Recherche..." name="keyword">
                                     </div>
-                                </div>
+                                </form>
+                            </div>
 
-                                <!-- Section de détails -->
-                                <div class="col-md-8">
-                                    <div class="card-body">
-                                        <h5 class="card-title text-uppercase text-secondary">Détails :</h5>
-                                        <div class="row mb-3">
-                                            <div class="col-md-6">
-                                                <ul class="list-unstyled">
-                                                    <li><strong>Catégorie :</strong> @abonnement.NomCategorie</li>
-                                                    <li><strong>Fournisseur :</strong> @abonnement.NomFournisseur</li>
-                                                    <li><strong>Département :</strong> @abonnement.NomDepartement</li>
-                                                </ul>
-                                            </div>
-                                            <div class="col-md-6">
-                                                <ul class="list-unstyled">
-                                                    <li><strong>Date de début :</strong> @abonnement.DateDebut.ToString("d MMM yyyy")</li>
-                                                    <li><strong>Date d'expiration :</strong> @abonnement.ExpirationDate.ToString("d MMM yyyy")</li>
-                                                </ul>
-                                            </div>
-                                            
-                                        </div>
+                            <div class="col-md-4">
+                                <div class="dropdown">
+                                    <button class="btn dropdown-toggle text-uppercase fw-bold shadow-sm d-flex align-items-center gap-2"
+                                            type="button"
+                                            id="filterDropdown"
+                                            data-bs-toggle="dropdown"
+                                            aria-expanded="false"
+                                            style="
+                                            color: #0d2d5a;
+                                            font-size: 14px;
+                                            transition: all 0.3s ease;">
+                                        <i class="fas fa-filter" style="font-size: 1.4rem; color: #0d2d5a;"></i> Filtrer
+                                    </button>
 
-                                        <div class="text-end">
-                                            <button type="button" 
-                                                    class="btn btn-outline-primary rounded-pill px-4" 
-                                                    data-bs-toggle="modal" 
-                                                    data-bs-target="#detailModal" 
-                                                    data-id="@abonnement.Id"
-                                                    data-nom="@abonnement.Nom"
-                                                    data-type="@abonnement.Type"
-                                                    data-prix="@abonnement.Prix"
-                                                    data-description="@abonnement.Description"
-                                                    data-categorie="@abonnement.NomCategorie"
-                                                    data-fournisseur="@abonnement.NomFournisseur"
-                                                    data-departement="@abonnement.NomDepartement"
-                                                    data-datedebut="@abonnement.DateDebut.ToString("d MMM yyyy")"
-                                                    data-expiration="@abonnement.ExpirationDate.ToString("d MMM yyyy")">
-                                                Voir plus
+                                    <ul class="dropdown-menu p-4 rounded border-0 shadow-lg" aria-labelledby="filterDropdown"
+                                        style="width: 320px; border-top: 4px solid #0d2d5a;">
+
+                                        <form asp-action="IndexPage" method="get">
+                                            <!-- 📅 Date de début -->
+                                        <li class="mb-3">
+                                            <label for="dateDebutFilter" class="form-label fw-bold text-secondary small">
+                                                <i class="bi bi-calendar-check me-2"></i> Date de début
+                                            </label>
+                                            <input type="datetime-local" class="form-control form-control-sm rounded-3 shadow-sm"
+                                                   id="dateDebutFilter" name="DateDebut" style="font-size: 12px;">
+                                        </li>
+
+                                        <!-- ⏳ Date d'expiration -->
+                                        <li class="mb-3">
+                                            <label for="dateExpirationFilter" class="form-label fw-bold text-secondary small">
+                                                <i class="bi bi-calendar-x me-2"></i> Date d'expiration
+                                            </label>
+                                            <input type="datetime-local" class="form-control form-control-sm rounded-3 shadow-sm"
+                                                   id="dateExpirationFilter" name="ExpirationDate" style="font-size: 12px;">
+                                        </li>
+
+                                        <!-- 🔖 Catégorie -->
+                                        <li class="mb-3">
+                                            <label for="categoryFilter" class="form-label fw-bold text-secondary small">
+                                                <i class="bi bi-tags me-2"></i> Catégorie
+                                            </label>
+                                            <select class="form-select form-select-sm rounded-3 shadow-sm" id="categoryFilter" name="idcategorie" style="font-size: 12px;">
+                                                <option disabled selected hidden>--Choisir une catégorie--</option>
+                                                    @if (Model?.Categories != null)
+                                                    {
+                                                        @foreach (var categorie in Model.Categories)
+                                                        {
+                                                        <option value="@categorie.Id">@categorie.Nom</option>
+                                                        }
+                                                    }
+                                            </select>
+                                        </li>
+
+                                        <!-- 🏷️ Type -->
+                                        <li class="mb-3">
+                                            <label for="TypeFilter" class="form-label fw-bold text-secondary small">
+                                                <i class="bi bi-list-stars me-2"></i> Type
+                                            </label>
+                                            <select class="form-select form-select-sm rounded-3 shadow-sm" id="TypeFilter" name="type" style="font-size: 12px;">
+                                                <option disabled selected hidden>--Choisir un type--</option>
+                                                    @if (Model?.Abonnements != null)
+                                                    {
+                                                        @foreach (var abonnement in Model.Abonnements)
+                                                        {
+                                                        <option value="@abonnement.Type">@abonnement.Type</option>
+                                                        }
+                                                    }
+                                            </select>
+                                        </li>
+
+                                        <!-- ✅ Bouton Appliquer -->
+                                        <li>
+                                            <button type="submit" class="btn btn-success w-100 rounded-pill fw-bold text-uppercase shadow-sm"
+                                                    style="font-size: 13px; padding: 10px;">
+                                                <i class="bi bi-check-circle me-2"></i> Appliquer
                                             </button>
-                                        </div>
-                                    </div>
+                                        </li>
+                                        </form>
+                                    </ul>
                                 </div>
-                            </div>
-                        </div>
-                    }
-                    @if (Model.Abonnements.Count == 0)
-                    {
-                        <div class="alert text-center" style="color: red;" role="alert">
-                            Aucun abonnement trouvé.
-                        </div>
-                    }
-                </div>
-                <div class="modal fade" id="detailModal" tabindex="-1" aria-labelledby="detailModalLabel" aria-hidden="true">
-                    <div class="modal-dialog modal-dialog-centered modal-lg">
-                        <div class="modal-content">
-                            <!-- En-tête -->
-                            <div class="modal-header bg-primary text-white">
-                                <h5 class="modal-title" id="detailModalLabel">
-                                    <i class="fas fa-info-circle me-2"></i> Détails de l'abonnement
-                                </h5>
-                            </div>
 
-                            <!-- Contenu -->
-                            <div class="modal-body p-4">
-                                <div class="row">
-                                    <!-- Partie gauche : Informations principales -->
-                                    <div class="col-md-6">
-                                        <h4 id="modalNom" class="text-primary"></h4>
-                                        <h6 id="modalType" class="text-muted"></h6>
-                                        <p id="modalPrix" class="fs-5 fw-bold text-success"></p>
-
-                                        <hr>
-                                        <p>
-                                            <strong>Description :</strong> <span id="modalDescription"></span>
-                                        </p>
-                                    </div>
-
-                                    <!-- Partie droite : Informations complémentaires -->
-                                    <div class="col-md-6">
-                                        <ul class="list-unstyled">
-                                            <li class="mb-3">
-                                                <strong><i class="fas fa-tags me-2 text-secondary"></i> Catégorie :</strong>
-                                                <span id="modalCategorie"></span>
-                                            </li>
-                                            <li class="mb-3">
-                                                <strong><i class="fas fa-truck me-2 text-secondary"></i> Fournisseur :</strong>
-                                                <span id="modalFournisseur"></span>
-                                            </li>
-                                            <li class="mb-3">
-                                                <strong><i class="fas fa-building me-2 text-secondary"></i> Département :</strong>
-                                                <span id="modalDepartement"></span>
-                                            </li>
-                                        </ul>
-                                        <hr>
-                                        <ul class="list-unstyled">
-                                            <li class="mb-3">
-                                                <strong><i class="fas fa-calendar-alt me-2 text-secondary"></i> Date de début :</strong>
-                                                <span id="modalDateDebut"></span>
-                                            </li>
-                                            <li>
-                                                <strong><i class="fas fa-hourglass-end me-2 text-secondary"></i> Date d'expiration :</strong>
-                                                <span id="modalExpiration"></span>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Pied de page -->
-                            <div class="modal-footer justify-content-center">
-                                <button type="button" class="btn btn-secondary rounded-pill px-4" data-bs-dismiss="modal">
-                                    <i class="fas fa-times me-1"></i> Fermer
-                                </button>
                             </div>
                         </div>
                     </div>
+                    <div class="container py-4">
+                        <div class="row">
+                            @foreach (var abonnement in Model.Abonnements)
+                            {
+                                <div class="col-lg-3 col-md-6 col-12 mb-4">
+                                    <div class="card shadow-lg rounded overflow-hidden" style="border: none;">
+                                        <!-- Section principale -->
+                                        <div class="text-center p-4" style="background-color: #f1f3f5;">
+                                            <h4 class="text-primary fw-bold"><i class="fas fa-cube me-2"></i> @abonnement.Nom</h4>
+                                            <h6 class="text-muted"><i class="fas fa-list-alt me-2"></i> (@abonnement.Type)</h6>
+                                            <p class="fw-bold text-success" style="font-size: 1.5rem;">
+                                                <i class="fas fa-money-bill-wave me-2"></i> @abonnement.Prix.ToString("N2") Ariary
+                                            </p>
+                                            @if (abonnement.DateDebut > DateTime.Now)
+                                            {
+                                                <span class="badge bg-warning"><i class="fas fa-hourglass-half me-1"></i> En attente</span>
+                                            }
+                                            else if (abonnement.ExpirationDate < DateTime.Now)
+                                            {
+                                                <span class="badge bg-danger"><i class="fas fa-times-circle me-1"></i> Expiré</span>
+                                            }
+                                            else
+                                            {
+                                                <span class="badge bg-success"><i class="fas fa-check-circle me-1"></i> Actif</span>
+                                            }
+                                        </div>
+
+                                        <!-- Section Détails -->
+                                        <div class="card-body">
+                                            <!-- 📝 Description -->
+                                            <div class="mb-3 pb-2 border-bottom">
+                                                <h6 class="text-secondary"><i class="fas fa-align-left me-2"></i> Description :</h6>
+                                                <p class="text-muted">@abonnement.Description</p>
+                                            </div>
+
+                                            <!-- 🔖 Informations générales -->
+                                            <div class="mb-3 pb-2 border-bottom">
+                                                <h6 class="text-secondary"><i class="fas fa-info-circle me-2"></i> Informations générales :</h6>
+                                                <ul class="list-unstyled">
+                                                    <li><i class="fas fa-tags me-2 text-secondary"></i><strong>Catégorie :</strong> @abonnement.NomCategorie</li>
+                                                    <li><i class="fas fa-layer-group me-2 text-secondary"></i><strong>Type :</strong> @abonnement.Type</li>
+                                                    <li><i class="fas fa-truck me-2 text-secondary"></i><strong>Fournisseur :</strong> @abonnement.NomFournisseur</li>
+                                                    <li><i class="fas fa-building me-2 text-secondary"></i><strong>Département :</strong> @abonnement.NomDepartement</li>
+                                                </ul>
+                                            </div>
+
+                                            <!-- 📅 Dates -->
+                                            <div class="mb-3">
+                                                <h6 class="text-secondary"><i class="fas fa-calendar-alt me-2"></i> Dates :</h6>
+                                                <ul class="list-unstyled">
+                                                    <li><i class="fas fa-play-circle me-2 text-secondary"></i><strong>Date de début :</strong> @abonnement.DateDebut.ToString("d MMM yyyy")</li>
+                                                    <li><i class="fas fa-hourglass-end me-2 text-secondary"></i><strong>Date d'expiration :</strong> @abonnement.ExpirationDate.ToString("d MMM yyyy")</li>
+                                                </ul>
+                                            </div>
+
+                                            <div class="text-center mt-auto">
+                                                <!-- Bouton action possible ici -->
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            }
+                        </div>
+                        @if (Model.Abonnements.Count == 0)
+                        {
+                            <div class="alert text-center" style="color: red;" role="alert">
+                                Aucun abonnement trouvé.
+                            </div>
+                        }
+                    </div>
                 </div>
+        </section><!-- /Blog Posts Section -->
 
+    </main><!-- End #main -->
+    <!-- Scroll Top -->
+    <a href="#" id="scroll-top" class="scroll-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
 
-        </div>
-    </section><!-- /Blog Posts Section -->
+    <!-- Preloader -->
+    <!-- Vendor JS Files -->
+    <script src="../assetsUser/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="../assetsUser/vendor/php-email-form/validate.js"></script>
+    <script src="../assetsUser/vendor/aos/aos.js"></script>
+    <script src="../assetsUser/vendor/glightbox/js/glightbox.min.js"></script>
+    <script src="../assetsUser/vendor/swiper/swiper-bundle.min.js"></script>
+    <script src="../assetsUser/vendor/purecounter/purecounter_vanilla.js"></script>
+    <script src="../assetsUser/vendor/imagesloaded/imagesloaded.pkgd.min.js"></script>
+    <script src="../assetsUser/vendor/isotope-layout/isotope.pkgd.min.js"></script>
 
-  </main><!-- End #main -->
-  <!-- Scroll Top -->
-  <a href="#" id="scroll-top" class="scroll-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
-
-  <!-- Preloader -->
-
-  <!-- Vendor JS Files -->
-  <script src="../assetsUser/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-  <script src="../assetsUser/vendor/php-email-form/validate.js"></script>
-  <script src="../assetsUser/vendor/aos/aos.js"></script>
-  <script src="../assetsUser/vendor/glightbox/js/glightbox.min.js"></script>
-  <script src="../assetsUser/vendor/swiper/swiper-bundle.min.js"></script>
-  <script src="../assetsUser/vendor/purecounter/purecounter_vanilla.js"></script>
-  <script src="../assetsUser/vendor/imagesloaded/imagesloaded.pkgd.min.js"></script>
-  <script src="../assetsUser/vendor/isotope-layout/isotope.pkgd.min.js"></script>
-
-  <!-- Main JS File -->
-  <script src="../assetsUser/js/main.js"></script>
-<style>
-    .page-title {
-      background: linear-gradient(to left, #0d2d5a, #d4d5dd) !important;
-      color: #fff;
-      padding: 50px 0;
-  }
-</style>
+    <!-- Main JS File -->
+    <script src="../assetsUser/js/main.js"></script>
+    <style>
+        .page-title {
+            background: linear-gradient(to left, #0d2d5a, #d4d5dd) !important;
+            color: #fff;
+            padding: 50px 0;
+        }
+    </style>
 </body>
 
 

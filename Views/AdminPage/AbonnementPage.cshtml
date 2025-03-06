@@ -16,7 +16,7 @@
                     </div>
                 </div>
                 <h4 class="text-success fw-bold">Succès</h4>
-                <p class="text-muted fs-6 mt-3">@TempData["Message"]</p>
+                <p class="text-muted fs-6 mt-3">@TempData["MessageNotify"]</p>
                 <button type="button" class="btn btn-dark px-5 py-2 rounded-pill text-uppercase mt-4" data-bs-dismiss="modal">
                     OK
                 </button>
@@ -36,7 +36,7 @@
                     </div>
                 </div>
                 <h4 class="text-danger fw-bold">Erreur</h4>
-                <p class="text-muted fs-6 mt-3">@TempData["Error"]</p>
+                <p class="text-muted fs-6 mt-3">@TempData["ErrorPage"]</p>
                 <button type="button" class="btn btn-dark px-5 py-2 rounded-pill text-uppercase mt-4" data-bs-dismiss="modal">
                     OK
                 </button>
@@ -81,10 +81,10 @@
                         id="filterDropdown" 
                         data-bs-toggle="dropdown" 
                         aria-expanded="false" 
-                        style="background-color: white; color: #0d2d5a; padding: 8px 15px; border: 1px solid #0d2d5a; border-radius: 50px; font-size: 14px;">
-                    <i class="bi bi-funnel" style="font-size: 1.2rem; margin-right: 8px; color: #0d2d5a;"></i> Filtrer
+                        style="background-color: white; color: #0d2d5a; padding: 8px 15px;font-size: 14px; border:none !important;">
+                    <i class="fas fa-filter" style="font-size: 1.2rem; margin-right: 8px; color: #0d2d5a;"></i> Filtrer
                 </button>
-                <ul class="dropdown-menu p-3 rounded border-0 shadow-lg" aria-labelledby="filterDropdown" style="width: 300px;">
+                <ul class="dropdown-menu p-3 rounded border-0 shadow-lg" aria-labelledby="filterDropdown" style="width: 250px;">
                     <form asp-action="AbonnementPage" method="get">
                         <li class="mb-3">
                             <label for="dateDebutFilter" class="form-label text-dark fw-bold" style="font-size: 13px;">Date de début</label>
@@ -254,12 +254,12 @@
                                                 <!-- Section 3: Dates -->
                                                 <div class="row mb-3">
                                                     <div class="col-md-6">
-                                                        <label for="expirationDate-@abonnement.Id" class="form-label">Date d'expiration</label>
-                                                        <input type="datetime-local" class="form-control" id="expirationDate-@abonnement.Id" name="ExpirationDate" value="@abonnement.ExpirationDate.ToString("yyyy-MM-ddTHH:mm")" required>
-                                                    </div>
-                                                    <div class="col-md-6">
                                                         <label for="dateDebut-@abonnement.Id" class="form-label">Date de début</label>
                                                         <input type="datetime-local" class="form-control" id="dateDebut-@abonnement.Id" name="DateDebut" value="@abonnement.DateDebut.ToString("yyyy-MM-ddTHH:mm")" required>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <label for="expirationDate-@abonnement.Id" class="form-label">Date d'expiration</label>
+                                                        <input type="datetime-local" class="form-control" id="expirationDate-@abonnement.Id" name="ExpirationDate" value="@abonnement.ExpirationDate.ToString("yyyy-MM-ddTHH:mm")" required>
                                                     </div>
                                                 </div>
                                                 <!-- Section 4 : categorie , fournisseurs , departement-->
@@ -308,7 +308,7 @@
                                                         </select>
                                                     </div>
                                                 </div>
-                                                <div class="d-flex justify-content-start gap-3 mt-3">
+                                                <div class="d-flex justify-content-end gap-3 mt-3">
                                                     <button type="submit" class="btn" style="background-color: #0b3d91; color: white; padding: 6px 15px; font-size: 13px; border-radius: 5px;">
                                                         MODIFIER
                                                     </button>

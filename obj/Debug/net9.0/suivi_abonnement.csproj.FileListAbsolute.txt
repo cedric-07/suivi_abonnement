@@ -8,8 +8,10 @@ D:\STAGE_L3\suivi_abonnement\bin\Debug\net9.0\suivi_abonnement.runtimeconfig.jso
 D:\STAGE_L3\suivi_abonnement\bin\Debug\net9.0\suivi_abonnement.dll
 D:\STAGE_L3\suivi_abonnement\bin\Debug\net9.0\suivi_abonnement.pdb
 D:\STAGE_L3\suivi_abonnement\bin\Debug\net9.0\BCrypt.Net-Next.dll
+D:\STAGE_L3\suivi_abonnement\bin\Debug\net9.0\BouncyCastle.Cryptography.dll
 D:\STAGE_L3\suivi_abonnement\bin\Debug\net9.0\Google.Protobuf.dll
 D:\STAGE_L3\suivi_abonnement\bin\Debug\net9.0\Humanizer.dll
+D:\STAGE_L3\suivi_abonnement\bin\Debug\net9.0\MailKit.dll
 D:\STAGE_L3\suivi_abonnement\bin\Debug\net9.0\Microsoft.AspNetCore.Razor.Language.dll
 D:\STAGE_L3\suivi_abonnement\bin\Debug\net9.0\Microsoft.Bcl.AsyncInterfaces.dll
 D:\STAGE_L3\suivi_abonnement\bin\Debug\net9.0\Microsoft.Build.dll
@@ -35,6 +37,7 @@ D:\STAGE_L3\suivi_abonnement\bin\Debug\net9.0\Microsoft.VisualStudio.Web.CodeGen
 D:\STAGE_L3\suivi_abonnement\bin\Debug\net9.0\Microsoft.VisualStudio.Web.CodeGeneration.Utils.dll
 D:\STAGE_L3\suivi_abonnement\bin\Debug\net9.0\Microsoft.VisualStudio.Web.CodeGenerators.Mvc.dll
 D:\STAGE_L3\suivi_abonnement\bin\Debug\net9.0\Microsoft.Win32.SystemEvents.dll
+D:\STAGE_L3\suivi_abonnement\bin\Debug\net9.0\MimeKit.dll
 D:\STAGE_L3\suivi_abonnement\bin\Debug\net9.0\MySql.Data.dll
 D:\STAGE_L3\suivi_abonnement\bin\Debug\net9.0\Newtonsoft.Json.dll
 D:\STAGE_L3\suivi_abonnement\bin\Debug\net9.0\NuGet.Common.dll
@@ -825,6 +828,3 @@ D:\STAGE_L3\suivi_abonnement\obj\Debug\net9.0\refint\suivi_abonnement.dll
 D:\STAGE_L3\suivi_abonnement\obj\Debug\net9.0\suivi_abonnement.pdb
 D:\STAGE_L3\suivi_abonnement\obj\Debug\net9.0\suivi_abonnement.genruntimeconfig.cache
 D:\STAGE_L3\suivi_abonnement\obj\Debug\net9.0\ref\suivi_abonnement.dll
-D:\STAGE_L3\suivi_abonnement\bin\Debug\net9.0\BouncyCastle.Cryptography.dll
-D:\STAGE_L3\suivi_abonnement\bin\Debug\net9.0\MailKit.dll
-D:\STAGE_L3\suivi_abonnement\bin\Debug\net9.0\MimeKit.dll

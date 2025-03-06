@@ -1,23 +1,15 @@
-@model suivi_abonnement.Models.AbonnementViewModel
-
 @{
-    ViewData["Title"] = "Liste des Abonnements";
+    ViewData["Title"] = "Acceuil";
     Layout = "~/Views/Shared/LayoutClient/_LayoutClient.cshtml";
 }
-
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Boîte de Messages</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
-    <style>
+<!-- Bootstrap Bundle avec Popper.js -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+<style>
         body {
             background-color: #f0f2f5;
-            padding-top: 10%;
         }
         .chat-container {
             height: 85vh;
@@ -195,7 +187,7 @@
         .file-name {
             font-size: 14px;
             color: #007bff;
-            font-weight: small;
+            font-weight: normal;
         }
 
         /* ❌ Bouton d'annulation */
@@ -305,96 +297,128 @@
             color: #840741;
         }
     </style>
-</head>
-<body>
-    <div class="container">
-        <div class="chat-container">
-            <div class="chat-list p-3">
-                <h5 class="mb-3">Conversations</h5>
-                
-                <ul class="list-group" id="userList">
-                    @if (Model?.MessageViewModel?.Users != null)
-                    {
-                        @foreach (var user in Model.MessageViewModel.Users)
-                        {
-                            <li class="list-group-item d-flex align-items-center" onclick="selectUser(@user.Id, '@user.Username')">
-                                <div class="me-3">
-                                    <i class="fas fa-user-circle fa-2x"></i>
-                                </div>
-                                <span>@user.Username</span>
-                                <span class="user-status @(user.IsConnected ? "online" : "offline")"></span>
-                                <span id="notif-@user.Id" class="badge bg-danger ms-auto d-none">0</span>
-                            </li>
-                        }
-                    }
-                </ul>
 
-
-            </div>
-            <div class="chat-box">
-                <div class="chat-header">
-                    <h5 id="chatTitle">Sélectionnez un utilisateur</h5>
-                </div>
-                <div id="chatWindow" class="message-list">
-                    @if (Model?.MessageViewModel?.Messages != null)
-                    {
-                        @foreach (var message in Model.MessageViewModel.Messages)
-                        {
-                            if (message.SenderId == Model.MessageViewModel.CurrentUserId)
-                            {
-                                <div class="message-row sent">
-                                    <div class="avatar-sender">
-                                        <i class="fas fa-user-circle user-icon"></i>
-                                    </div>
-                                    <div class="sent">
-                                        <p>@message.MessageText</p>
-                                        <span class="message-date">@message.DateEnvoi</span>
-                                    </div>
-                                </div>
-                            }
-                            else
-                            {
-                                <div class="message-row received">
-                                    <div class="avatar-receiver">
-                                        <i class="fas fa-user-circle user-icon"></i>
-                                    </div>
-                                    <div class="message received">
-                                        <p>@message.MessageText</p>
-                                        <span class="message-date">@message.DateEnvoi</span>
-                                    </div>
-                                </div>
-                            }
-                        }
-                    }
-                </div>
-                <div class="message-input d-flex align-items-center">
-                    <input type="hidden" id="receiverId" value="@Model?.MessageViewModel?.ReceiverId">
-
-                    <!-- Bouton d'attachement -->
-                    <button id="attachButton" class=" attach-btn me-2">
-                        <i class="fas fa-paperclip"></i>
-                    </button>
-
-                    <!-- Champ de sélection de fichier caché -->
-                    <input type="file" id="fileInput" accept=".jpg,.jpeg,.png,.gif,.pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx" style="display: none;">
-
-                    <!-- Zone de texte pour le message -->
-                    <textarea id="messageText" class="form-control me-2" placeholder="Écrivez un message..."></textarea>
-
-                    <!-- Bouton d'envoi -->
-                    <button id="sendButton" class="send-btn ">
-                        <i class="fas fa-paper-plane"></i>
-                    </button>
-                </div>
-
-                <!-- Zone de prévisualisation du fichier avant envoi -->
-                <div id="filePreviewContainer" class="file-preview-container" style="display: none;">
-                    <div id="filePreview"></div>
-                    <button id="removeFile" class="btn btn-danger btn-sm">❌ Annuler</button>
+<body class="index-page">
+    <main class="main">
+        <!-- Page Title -->
+        <div class="page-title">
+            <div class="heading">
+                <div class="container">
+                    <div class="row d-flex justify-content-center text-center">
+                        <div class="col-lg-8">
+                            <h1>Discussion et réclamation</h1>
+                            <p>Discuterez et laissez-nous votre avis.</p>
+                        </div>
+                    </div>
                 </div>
             </div>
-        </div>
-    </div>
+        </div><!-- End Page Title -->
+        <!-- Contact Section -->
+        <section id="blog-posts" class="blog-posts section">
+            <div class="container">
+                <div class="chat-container">
+                    <div class="chat-list p-3">
+                        <h5 class="mb-3">Conversations</h5>
+                        
+                        <ul class="list-group" id="userList">
+                            @if (Model?.MessageViewModel?.Users != null)
+                            {
+                                @foreach (var user in Model.MessageViewModel.Users)
+                                {
+                                    <li class="list-group-item d-flex align-items-center" onclick="selectUser(@user.Id, '@user.Username')">
+                                        <div class="me-3">
+                                            <i class="fas fa-user-circle fa-2x"></i>
+                                        </div>
+                                        <span>@user.Username</span>
+                                        <span class="user-status @(user.IsConnected ? "online" : "offline")"></span>
+                                        <span id="notif-@user.Id" class="badge bg-danger ms-auto d-none">0</span>
+                                    </li>
+                                }
+                            }
+                        </ul>
+
+
+                    </div>
+                    <div class="chat-box">
+                        <div class="chat-header">
+                            <h5 id="chatTitle">Sélectionnez un utilisateur</h5>
+                        </div>
+                        <div id="chatWindow" class="message-list">
+                            @if (Model?.MessageViewModel?.Messages != null)
+                            {
+                                @foreach (var message in Model.MessageViewModel.Messages)
+                                {
+                                    if (message.SenderId == Model.MessageViewModel.CurrentUserId)
+                                    {
+                                        <div class="message-row sent">
+                                            <div class="avatar-sender">
+                                                <i class="fas fa-user-circle user-icon"></i>
+                                            </div>
+                                            <div class="sent">
+                                                <p>@message.MessageText</p>
+                                                <span class="message-date">@message.DateEnvoi</span>
+                                            </div>
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <div class="message-row received">
+                                            <div class="avatar-receiver">
+                                                <i class="fas fa-user-circle user-icon"></i>
+                                            </div>
+                                            <div class="message received">
+                                                <p>@message.MessageText</p>
+                                                <span class="message-date">@message.DateEnvoi</span>
+                                            </div>
+                                        </div>
+                                    }
+                                }
+                            }
+                        </div>
+                        <div class="message-input d-flex align-items-center">
+                            <input type="hidden" id="receiverId" value="@Model?.MessageViewModel?.ReceiverId">
+
+                            <!-- Bouton d'attachement -->
+                            <button id="attachButton" class=" attach-btn me-2">
+                                <i class="fas fa-paperclip"></i>
+                            </button>
+
+                            <!-- Champ de sélection de fichier caché -->
+                            <input type="file" id="fileInput" accept=".jpg,.jpeg,.png,.gif,.pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx" style="display: none;">
+
+                            <!-- Zone de texte pour le message -->
+                            <textarea id="messageText" class="form-control me-2" placeholder="Écrivez un message..."></textarea>
+
+                            <!-- Bouton d'envoi -->
+                            <button id="sendButton" class="send-btn ">
+                                <i class="fas fa-paper-plane"></i>
+                            </button>
+                        </div>
+
+                        <!-- Zone de prévisualisation du fichier avant envoi -->
+                        <div id="filePreviewContainer" class="file-preview-container" style="display: none;">
+                            <div id="filePreview"></div>
+                            <button id="removeFile" class="btn btn-danger btn-sm">❌ Annuler</button>
+                        </div>
+                    </div>
+                </div>
+            </div>              
+        </section><!-- /Blog Posts Section -->
+
+    </main><!-- End #main -->
+    <!-- Scroll Top -->
+    <a href="#" id="scroll-top" class="scroll-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+
+    <!-- Preloader -->
+    <!-- Vendor JS Files -->
+    <script src="../assetsUser/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="../assetsUser/vendor/php-email-form/validate.js"></script>
+    <script src="../assetsUser/vendor/aos/aos.js"></script>
+    <script src="../assetsUser/vendor/glightbox/js/glightbox.min.js"></script>
+    <script src="../assetsUser/vendor/swiper/swiper-bundle.min.js"></script>
+    <script src="../assetsUser/vendor/purecounter/purecounter_vanilla.js"></script>
+    <script src="../assetsUser/vendor/imagesloaded/imagesloaded.pkgd.min.js"></script>
+    <script src="../assetsUser/vendor/isotope-layout/isotope.pkgd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/3.1.20/signalr.min.js"></script>
     <script>
@@ -755,7 +779,7 @@
     console.log("🔄 Ouverture de la conversation avec :", receiverId);
 
     $("#receiverId").val(receiverId);
-    $("#chatTitle").text("Chat avec " + receiverName);
+    $("#chatTitle").text("Discussion avec " + receiverName);
     $("#chatWindow").empty();
 
     var notifBadge = $("#notif-" + receiverId);
@@ -876,8 +900,17 @@
     }
 </script>
 
-
-
+    <!-- Main JS File -->
+    <script src="../assetsUser/js/main.js"></script>
+    <style>
+        .page-title {
+            background: linear-gradient(to left, #0d2d5a, #d4d5dd) !important;
+            color: #fff;
+            padding: 50px 0;
+        }
+    </style>
 </body>
+
+
 
 </html>

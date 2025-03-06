@@ -47,6 +47,8 @@ builder.Services.AddScoped<IMessageRepository, MessageRepository>();
 builder.Services.AddScoped<IMessageService, MessageService>();
 builder.Services.AddScoped<INotifyEmailRepository, NotifyEmailRepository>();
 builder.Services.AddScoped<INotifyEmailService, NotifyEmailService>();
+builder.Services.AddScoped<IDirectionRepository, DirectionRepository>();
+builder.Services.AddScoped<IDirectionService, DirectionService>();
 
 
 // Configurer les services nécessaires

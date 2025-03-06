@@ -53,111 +53,34 @@ namespace suivi_abonnement_omnis.Controllers.Authentification
                     // Stockage de l'utilisateur dans la session ou tout autre système de gestion d'état si nécessaire
                     HttpContext.Session.SetString("UserRole", user.Role);
                     HttpContext.Session.SetInt32("UserId", user.Id);
-                    // var notifications = _notificationService.GetUnreadNotifications(user.Id);
-
-                    // if (notifications.Any())
-                    // {
-                    //     string subject = "🔔 Vous avez de nouvelles notifications";
-
-                    //     string message = $@"
+                    //var notifications = _notificationService.GetUnreadNotifications(user.Id);
+                    //var userLast = _userService.GetLastinsertedUser();
+                    //if (userLast != null && userLast.Count > 0)
+                    //{
+                    //    var users = userLast[0];
+                    //    string username = users.ContainsKey("username") ? users["username"].ToString() : "Utilisateur inconnu";
+                    //    string emails = users.ContainsKey("email") ? users["email"].ToString() : "";
+                    //    var subject = "Nouvel utilisateur inscrit !";
+                    //    string message = $@"
                     //     <html>
-                    //     <head>
-                    //         <style>
-                    //             body {{
-                    //                 font-family: Arial, sans-serif;
-                    //                 background-color: #f4f4f4;
-                    //                 margin: 0;
-                    //                 padding: 0;
-                    //             }}
-                    //             .container {{
-                    //                 max-width: 600px;
-                    //                 margin: 20px auto;
-                    //                 background: #ffffff;
-                    //                 padding: 20px;
-                    //                 border-radius: 8px;
-                    //                 box-shadow: 0px 0px 10px rgba(0,0,0,0.1);
-                    //             }}
-                    //             .header {{
-                    //                 text-align: center;
-                    //                 padding: 10px;
-                    //                 background-color: #007bff;
-                    //                 color: white;
-                    //                 font-size: 18px;
-                    //                 font-weight: bold;
-                    //                 border-top-left-radius: 8px;
-                    //                 border-top-right-radius: 8px;
-                    //             }}
-                    //             .content {{
-                    //                 padding: 20px;
-                    //                 text-align: left;
-                    //                 color: #333;
-                    //             }}
-                    //             .notification-list {{
-                    //                 background: #f9f9f9;
-                    //                 padding: 10px;
-                    //                 border-radius: 5px;
-                    //                 margin-top: 10px;
-                    //             }}
-                    //             .notification-item {{
-                    //                 padding: 10px;
-                    //                 border-bottom: 1px solid #ddd;
-                    //             }}
-                    //             .notification-item:last-child {{
-                    //                 border-bottom: none;
-                    //             }}
-                    //             .footer {{
-                    //                 text-align: center;
-                    //                 padding: 10px;
-                    //                 font-size: 14px;
-                    //                 color: #777;
-                    //             }}
-                    //             .button {{
-                    //                 display: inline-block;
-                    //                 padding: 10px 15px;
-                    //                 margin-top: 10px;
-                    //                 background-color: #007bff;
-                    //                 color: #fff;
-                    //                 text-decoration: none;
-                    //                 border-radius: 5px;
-                    //                 font-weight: bold;
-                    //             }}
-                    //             .button:hover {{
-                    //                 background-color: #0056b3;
-                    //             }}
-                    //         </style>
-                    //     </head>
                     //     <body>
-                    //         <div class='container'>
-                    //             <div class='header'>📢 Nouvelle(s) Notification(s)</div>
-                    //             <div class='content'>
-                    //                 <p>Bonjour <strong>{user.Username}</strong>,</p>
-                    //                 <p>Vous avez <strong>{notifications.Count}</strong> notifications non lues :</p>
-                    //                 <div class='notification-list'>";
-
-                    //     foreach (var notif in notifications)
-                    //     {
-                    //         message += $"<div class='notification-item'>🔔 {notif.Message}</div>";
-                    //     }
-
-                    //     message += $@"
-                    //                 </div>
-                    //                 <p><a href='https://votre-site.com/notifications' class='button'>Voir mes notifications</a></p>
-                    //             </div>
-                    //             <div class='footer'>Ceci est un email automatique, merci de ne pas répondre.</div>
-                    //         </div>
+                    //         <h2>Nouvel utilisateur inscrit !</h2>
+                    //         <p><strong>Nom d'utilisateur :</strong> {username}</p>
+                    //         <p><strong>Email :</strong> {emails}</p>
+                    //         <p><a href='https://votre-site.com/admin/utilisateurs'>Voir les utilisateurs</a></p>
                     //     </body>
                     //     </html>";
 
-                    //     // 🔥 Envoyer un e-mail automatique avec le template amélioré
-                    //     if (!string.IsNullOrEmpty(user.Email))
-                    //     {
-                    //         _notifyEmailService.SendEmailAsync(user.Email, subject, message).Wait();
-                    //         TempData["Notification"] = "Vous avez des notifications non lues. Vérifiez votre boîte de réception dans vos emails !";
-                    //         TempData["UserEmail"] = user.Email;
-                    //     }
-                    //     Console.WriteLine($"📧 Email automatique envoyé à {user.Email}");
-                    // }
-               
+                    //    // 🔥 Envoyer un e-mail automatique avec le template amélioré
+                    //    if (!string.IsNullOrEmpty(user.Email))
+                    //    {
+                    //        _notifyEmailService.SendEmailAsync(user.Email, subject, message).Wait();
+                    //        TempData["Notification"] = "Vous avez une notification par email" + user.Email.ToString();
+                    //        TempData["UserEmail"] = user.Email;
+                    //    }
+                    //}
+
+
                     switch (user.Role)
                     {
                         case "admin":
@@ -181,6 +104,8 @@ namespace suivi_abonnement_omnis.Controllers.Authentification
                 return View(new User());
             }
         }
+
+       
 
 
 

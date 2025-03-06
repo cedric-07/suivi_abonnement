@@ -15,12 +15,6 @@ namespace suivi_abonnement.Controllers
             this._categorieService = categorie;
             this._notificationService = notificationService;
         }
-        
-       
-
-
-
-
         // POST: AbonnementsController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]

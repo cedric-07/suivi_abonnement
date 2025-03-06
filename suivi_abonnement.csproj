@@ -21,4 +21,11 @@
     <Folder Include="Database\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Content Update="Views\Home\IndexPage - Copier.cshtml">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+  </ItemGroup>
+
 </Project>

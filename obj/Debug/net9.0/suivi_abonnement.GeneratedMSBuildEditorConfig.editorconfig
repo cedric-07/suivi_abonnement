@@ -96,12 +96,16 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxDb250YWN0UGFnZS5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
+[D:/STAGE_L3/suivi_abonnement/Views/Home/InboxPage copy.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxJbmJveFBhZ2UgY29weS5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
 [D:/STAGE_L3/suivi_abonnement/Views/Home/InboxPage.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxJbmJveFBhZ2UuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/STAGE_L3/suivi_abonnement/Views/Home/Index.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxJbmRleC5jc2h0bWw=
+[D:/STAGE_L3/suivi_abonnement/Views/Home/IndexPage - Copier.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxJbmRleFBhZ2UgLSBDb3BpZXIuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
 [D:/STAGE_L3/suivi_abonnement/Views/Home/IndexPage.cshtml]

@@ -54,5 +54,13 @@ namespace suivi_abonnement.Service
         {
             return _userRepository.GetUserEmail(userId);
         }
+        public List<Dictionary<string, object>> GetLastinsertedUser()
+        {
+            return _userRepository.GetLastinsertedUser();
+        }
+        public User GetUserByEmailOrUsername(string email, string username)
+        {
+            return _userRepository.GetUserByEmailOrUsername(email, username);
+        }
     }
 }

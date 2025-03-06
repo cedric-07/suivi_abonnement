@@ -1,6 +1,7 @@
 using MySql.Data.MySqlClient;
 using suivi_abonnement.Repository.Interface;
 using suivi_abonnement.Models;
+using Microsoft.AspNetCore.SignalR;
 
 namespace suivi_abonnement.Repository
 {
@@ -214,8 +215,8 @@ namespace suivi_abonnement.Repository
                         try
                         {
                             string query = @"
-        INSERT INTO messages (senderid, receiverid, messagetext, sentat, isread, idconversation, file_path, message_type)
-        VALUES (@senderId, @receiverId, @messageText, NOW(), false, @conversationId, @filePath, @messageType)";
+                                INSERT INTO messages (senderid, receiverid, messagetext, sentat, isread, idconversation, file_path, message_type)
+                                VALUES (@senderId, @receiverId, @messageText, NOW(), false, @conversationId, @filePath, @messageType)";
 
                             using (var command = new MySqlCommand(query, connection, transaction))
                             {

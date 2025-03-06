@@ -18,5 +18,7 @@ namespace suivi_abonnement.Repository.Interface
         List<User> GetAdmin();
         void Logout(int userId);
         string GetUserEmail(int userId);
+        List<Dictionary<string, object>> GetLastinsertedUser();
+        User GetUserByEmailOrUsername(string email, string username);
     }
 }

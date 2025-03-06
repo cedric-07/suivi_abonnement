@@ -450,5 +450,70 @@ namespace suivi_abonnement.Repository
             }
             return email;
         }
+
+       public List<Dictionary<string, object>> GetLastinsertedUser()
+        {
+            List<Dictionary<string, object>> lastInsertedUser = new List<Dictionary<string, object>>();
+            try
+            {
+                using (var connection = new MySqlConnection(connectionString))
+                {
+                    connection.Open();
+                    string query = "SELECT * FROM users ORDER BY id DESC LIMIT 1";
+                    using (var command = new MySqlCommand(query, connection))
+                    {
+                        using (var reader = command.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                Dictionary<string, object> user = new Dictionary<string, object>();
+                                user.Add("id", reader["id"]);
+                                user.Add("username", reader["username"]);
+                                user.Add("email", reader["email"]);
+                                user.Add("role", reader["role"]);
+                                lastInsertedUser.Add(user);
+                            }
+                        }
+                    }
+                }
+            }
+            catch (System.Exception)
+            {
+
+                throw new System.Exception("Utilisateur introuvable");
+            }
+            return lastInsertedUser;
+        }
+
+        public User GetUserByEmailOrUsername(string email, string username)
+        {
+            User user = null;
+            using (var connection = new MySqlConnection(connectionString))
+            {
+                connection.Open();
+                string query = "SELECT * FROM users WHERE email = @Email OR username = @Username LIMIT 1";
+                using (var command = new MySqlCommand(query, connection))
+                {
+                    command.Parameters.AddWithValue("@Email", email);
+                    command.Parameters.AddWithValue("@Username", username);
+                    using (var reader = command.ExecuteReader())
+                    {
+                        if (reader.Read())
+                        {
+                            user = new User
+                            {
+                                Id = Convert.ToInt32(reader["id"]),
+                                Username = reader["username"].ToString(),
+                                Email = reader["email"].ToString(),
+                                Password = reader["password"].ToString()
+                            };
+                        }
+                    }
+                }
+            }
+            return user;
+        }
+
     }
+
 }

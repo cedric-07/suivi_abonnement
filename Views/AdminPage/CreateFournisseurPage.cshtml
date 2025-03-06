@@ -4,7 +4,44 @@
     Layout = "~/Views/Shared/Index.cshtml";
 }
 <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+<div class="modal fade" id="successModal" tabindex="-1" aria-labelledby="successModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content shadow border-0 rounded-4">
+            <div class="modal-body text-center py-5">
+                <div class="icon-container mb-4">
+                    <div class="icon-circle bg-light d-flex align-items-center justify-content-center mx-auto" style="width: 80px; height: 80px; border-radius: 50%;">
+                        <i class="bi bi-check-circle-fill" style="font-size: 40px; color: #28a745;"></i>
+                    </div>
+                </div>
+                <h4 class="text-success fw-bold">Succès</h4>
+                <p class="text-muted fs-6 mt-3">@TempData["Message"]</p>
+                <button type="button" class="btn btn-dark px-5 py-2 rounded-pill text-uppercase mt-4" data-bs-dismiss="modal">
+                    OK
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
 
+<!-- Modal pour le message d'erreur -->
+<div class="modal fade" id="errorModal" tabindex="-1" aria-labelledby="errorModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content shadow border-0 rounded-4">
+            <div class="modal-body text-center py-5">
+                <div class="icon-container mb-4">
+                    <div class="icon-circle bg-light d-flex align-items-center justify-content-center mx-auto" style="width: 80px; height: 80px; border-radius: 50%;">
+                        <i class="bi bi-x-circle-fill" style="font-size: 40px; color: #dc3545;"></i>
+                    </div>
+                </div>
+                <h4 class="text-danger fw-bold">Erreur</h4>
+                <p class="text-muted fs-6 mt-3">@TempData["Error"]</p>
+                <button type="button" class="btn btn-dark px-5 py-2 rounded-pill text-uppercase mt-4" data-bs-dismiss="modal">
+                    OK
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
 <div class="container-fluid  fade-in visible">
     <div class="row align-items-center">
         <div class="col">
@@ -33,7 +70,7 @@
     <!-- Card pour le formulaire -->
     <div class="card shadow-lg">
         <div class="card-header text-white" style="background-color: #0d2d5a;">
-            <h5 class="title-card mb-0">Nouvel Fournisseur</h5>
+            <h5 class="title-card mb-0">Formulaire de fournisseur</h5>
         </div>
         <div class="card-body">
             <form method="post" asp-action="Create" class="needs-validation" novalidate>
@@ -80,7 +117,7 @@
                         <label for="CategoryName" class="form-label">Nom de nouvau catégorie</label>
                         <input type="text" class="form-control input-custom" id="CategoryName" name="Nom" required />
                     </div>
-                    <div class="d-flex justify-content-start gap-3 mt-3">
+                    <div class="d-flex justify-content-end gap-3 mt-3">
                         <button type="submit" class="btn" style="background-color: #0d2d5a; color: white; padding: 6px 15px; font-size: 13px; border-radius: 5px;">
                             ENREGISTRER
                         </button>

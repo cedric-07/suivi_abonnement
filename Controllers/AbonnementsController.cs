@@ -12,12 +12,13 @@ namespace suivi_abonnement.Controllers
         private readonly IFournisseurService _fournisseurService;
         private readonly ICategorieService _categorieService;
         private readonly INotificationService _notificationService;
+        private readonly IDirectionService _directionService;
         private readonly AbonnementViewModel abonnementViewModel = new AbonnementViewModel();
         private readonly AbonnementStatViewModel abonnementStatViewModel = new AbonnementStatViewModel();
         private readonly IHttpContextAccessor _httpContextAccessor;        
         private readonly IDepartementService _departementService;
         private readonly User user = new User();
-        public AbonnementsController(IAbonnementService abonnementService, IFournisseurService fournisseurService, ICategorieService categorieService, IDepartementService departementService , INotificationService notificationService , IHttpContextAccessor httpContextAccessor ):base(notificationService)
+        public AbonnementsController(IAbonnementService abonnementService, IFournisseurService fournisseurService, ICategorieService categorieService, IDepartementService departementService , INotificationService notificationService , IHttpContextAccessor httpContextAccessor , IDirectionService directionService ):base(notificationService)
         {
             _abonnementService = abonnementService;
             _fournisseurService = fournisseurService;
@@ -25,14 +26,8 @@ namespace suivi_abonnement.Controllers
             _departementService = departementService;
             _notificationService = notificationService;
             _httpContextAccessor = httpContextAccessor;
+            _directionService = directionService;
         }
-
-        //Controller de notifications
-
-        
-
-
-
 
         // GET: AbonnementsController
         
@@ -110,7 +105,8 @@ namespace suivi_abonnement.Controllers
                     NbrClient = nbrlcient,
                     Abonnements = abonnementfournisseur,
                     NbrAbonnementActif = stats.Actifs,
-                    NbrAbonnementExpire = stats.Expire
+                    NbrAbonnementExpire = stats.Expire,
+                    NbrAbonnementEnAttente = stats.Attente
                 }
             };
 
@@ -225,6 +221,7 @@ namespace suivi_abonnement.Controllers
             List<Fournisseur> fournisseurs = _fournisseurService.GetFournisseurs();
             List<Categorie> categories = _categorieService.GetCategories();
             List<Departement> departements = _departementService.getDepartements();
+            List<Direction> directions = _directionService.GetDirections();
 
             var fournisseursList = fournisseurs;
             var categoriesList = categories;
@@ -236,7 +233,8 @@ namespace suivi_abonnement.Controllers
                 {
                     Fournisseurs = fournisseursList,
                     Categories = categoriesList,
-                    Departements = departementsList
+                    Departements = departementsList,
+                    Directions = directions
                 }
             };
             
@@ -260,7 +258,7 @@ namespace suivi_abonnement.Controllers
             }
             catch(Exception ex)
             {
-                TempData["Error"] = "Une erreur s'est produite lors de la création de l'abonnement : " + ex.Message;
+                TempData["Error"] = "Une erreur s'est produite lors de la création de l'abonnement";
                 return RedirectToAction("CreateAbonnementPage");
             }
 
@@ -294,7 +292,7 @@ namespace suivi_abonnement.Controllers
             }
             catch (Exception ex)
             {
-                TempData["Error"] = "Une erreur s'est produite lors de la mise à jour : " + ex.Message;
+                TempData["Error"] = "Une erreur s'est produite lors de la mise à jour";
                 return RedirectToAction("AbonnementPage");
             }
         }
@@ -322,7 +320,6 @@ namespace suivi_abonnement.Controllers
             catch (Exception ex)
             {
                 Console.WriteLine("Erreur lors de la suppression : " + ex.Message);
-                TempData["Error"] = "Une erreur inattendue s'est produite.";
                 return RedirectToAction("AbonnementPage");
             }
         }
@@ -369,7 +366,6 @@ namespace suivi_abonnement.Controllers
             }
             catch (Exception ex)
             {
-                TempData["Error"] = "Une erreur s'est produite : " + ex.Message;
                 return RedirectToAction("Index");
             }
         }
@@ -435,7 +431,6 @@ namespace suivi_abonnement.Controllers
             }
             catch (Exception ex)
             {
-                TempData["Error"] = "Une erreur s'est produite : " + ex.Message;
                 return RedirectToAction("Index");
             }
         }
@@ -455,5 +450,17 @@ namespace suivi_abonnement.Controllers
             };
             
         }
+
+       [HttpGet("Abonnement/GetDepartementsByDirection")]
+        public JsonResult GetDepartementsByDirection(int idDirection)
+        {
+            var departements = _departementService.GetDepartementsByDirection(idDirection);
+            if (departements == null || departements.Count == 0)
+            {
+                return Json(new { message = "Aucun département trouvé." });
+            }
+            return Json(departements);
+        }
+
     }
 }

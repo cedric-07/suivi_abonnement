@@ -165,7 +165,7 @@ namespace suivi_abonnement_omnis.Controllers.Authentification
                     switch (user.Role)
                     {
                         case "user":
-                            return RedirectToAction("Index", "Home");
+                            return RedirectToAction("IndexPage", "Home");
                         default:
                             TempData["Error"] = "Vous n'êtes pas autorisé à accéder à cette page, veuillez contacter l'administrateur.";
                             return View(new User());
@@ -203,26 +203,30 @@ namespace suivi_abonnement_omnis.Controllers.Authentification
         {
             if (ModelState.IsValid)
             {
-                // Vérifier si l'email existe déjà
+                // Vérification de l'email vide
                 if (string.IsNullOrWhiteSpace(user.Email))
                 {
                     TempData["Error"] = "L'email ne peut pas être vide.";
                     return View(user);
                 }
 
-                var userByEmail = _userService.GetUserByEmail(user.Email);
-                if (userByEmail != null)
+                // Vérifier si l'email existe déjà
+                var existingUser = _userService.GetUserByEmailOrUsername(user.Email, user.Username);
+                if (existingUser != null)
                 {
-                    TempData["Error"] = "Un utilisateur avec cet email existe déjà.";
+                    TempData["Error"] = "L'email ou le nom d'utilisateur est déjà pris.";
                     return RedirectToAction("Register", "AuthClient");
                 }
-                //Le mot de passe doit contenir au moins 8 caractères, une lettre majuscule, une lettre minuscule, un chiffre et un caractère spécial.
+
+
+                // Vérification du mot de passe fort (8+ caractères, 1 majuscule, 1 minuscule, 1 chiffre, 1 caractère spécial)
                 string password = user.Password ?? string.Empty;
                 if (!Regex.IsMatch(password, @"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^\da-zA-Z]).{8,}$"))
                 {
                     TempData["Error"] = "Le mot de passe doit contenir au moins 8 caractères, une lettre majuscule, une lettre minuscule, un chiffre et un caractère spécial.";
                     return View(user);
                 }
+
                 // Appeler la méthode Register du modèle User avec idDepartement
                 var result = _userService.Register(user, idDepartement);
                 if (result == "Registration successful.")
@@ -237,6 +241,7 @@ namespace suivi_abonnement_omnis.Controllers.Authentification
             }
             return View(user);
         }
+
 
 
         // GET: AuthClientController/ForgotPassword
